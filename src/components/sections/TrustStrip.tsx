@@ -30,7 +30,7 @@ export function TrustStrip() {
   const rowB = [...clients.slice(half), ...clients.slice(half)];
 
   return (
-    <section className="border-b border-line bg-void py-16">
+    <section className="border-b border-line py-16">
       <Container>
         <p className="mb-10 flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
           <SpinStar />

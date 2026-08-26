@@ -1,17 +1,27 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { insights } from "@/lib/content";
+import { pages } from "@/lib/sitemap";
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { Container } from "@/components/ui/Container";
 import { SpinStar } from "@/components/fx/Adornments";
 
-export function Insights() {
+/** Reused on service pages, so the section index and DevTools label are
+ *  parameterised. Defaults are the homepage's own values. */
+export function Insights({
+  index = "08",
+  label = "Insights",
+}: {
+  index?: string;
+  label?: string;
+} = {}) {
   return (
-    <section id="insights" className="relative py-24 sm:py-32">
+    <section id="insights" data-section={label} className="relative py-24 sm:py-32">
       <Container>
       <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
-        <span className="text-brand">(08)</span> Our insights <SpinStar />
+        <span className="text-brand">({index})</span> Our insights <SpinStar />
       </p>
       <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <h2 className="font-display display-xl font-extrabold uppercase text-snow">
@@ -19,13 +29,13 @@ export function Insights() {
           <span className="block text-stroke"><Chars text="from the climb." delay={0.15} /></span>
         </h2>
         <Rise delay={0.2}>
-          <a
-            href="#"
+          <Link
+            href={pages.insights.href}
             className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em] text-snow"
           >
             All insights
             <span className="h-px w-8 bg-brand transition-all duration-300 group-hover:w-14" />
-          </a>
+          </Link>
         </Rise>
       </div>
 

@@ -18,7 +18,7 @@ export function Voices() {
   const t = testimonials[active];
 
   return (
-    <section className="relative overflow-hidden border-y border-line bg-ink py-24 sm:py-32">
+    <section className="relative overflow-hidden border-y border-line py-24 sm:py-32">
       {/* Giant marquee */}
       <div className="pointer-events-none absolute inset-x-0 top-10 select-none opacity-[0.07]">
         <div className="animate-marquee flex w-max items-center gap-12">

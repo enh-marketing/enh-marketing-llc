@@ -100,7 +100,7 @@ export function Manifesto() {
   }, []);
 
   return (
-    <section ref={root} id="story" className="relative bg-void">
+    <section ref={root} id="story" className="relative">
       {/* Tall runway; the stage inside pins while the scene plays */}
       <div ref={runway} className="relative h-[340vh]">
         <div className="sticky top-0 h-svh overflow-hidden">

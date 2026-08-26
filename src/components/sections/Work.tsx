@@ -11,7 +11,15 @@ import { RouteLine } from "@/components/fx/Adornments";
 const CARD_GAP = 20;
 
 /** Drag carousel of all 22 live case studies — 3–4 visible, drag or arrows for the rest. */
-export function Work() {
+/** Reused on service pages, so the section index and DevTools label are
+ *  parameterised. Defaults are the homepage's own values. */
+export function Work({
+  index = "03",
+  label = "Summits Reached",
+}: {
+  index?: string;
+  label?: string;
+} = {}) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -36,12 +44,12 @@ export function Work() {
   };
 
   return (
-    <section id="work" className="relative overflow-hidden bg-ink py-24 sm:py-32">
+    <section id="work" data-section={label} className="relative overflow-hidden py-24 sm:py-32">
       <Container className="mb-12">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
-              <span className="text-brand">(03)</span> The proof — {work.length} client stories
+              <span className="text-brand">({index})</span> The proof — {work.length} client stories
             </p>
             <h2 className="font-display display-xl font-extrabold uppercase text-snow">
               <Chars text="Summits reached." />

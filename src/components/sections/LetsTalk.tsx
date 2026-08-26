@@ -6,6 +6,12 @@ import { brand, consultationServices } from "@/lib/content";
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { Container } from "@/components/ui/Container";
 import { SpinStar } from "@/components/fx/Adornments";
+import {
+  Field,
+  SelectField,
+  ConsentField,
+  SubmitButton,
+} from "@/components/ui/Field";
 
 function MagneticOrb() {
   const x = useMotionValue(0);
@@ -48,7 +54,7 @@ export function LetsTalk() {
   const [done, setDone] = useState(false);
 
   return (
-    <section id="contact" className="relative overflow-hidden border-t border-line bg-void py-24 sm:py-32">
+    <section id="contact" className="relative overflow-hidden border-t border-line py-24 sm:py-32">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -122,17 +128,26 @@ export function LetsTalk() {
 
           {/* Right — consultation form */}
           <Rise delay={0.2} className="self-start">
-            <div className="rounded-3xl border border-line bg-ink-2 p-7 sm:p-9">
+            {/* Same panel and field system as the Performance Marketing quote
+                form: one form language across the site. */}
+            <div className="group relative overflow-hidden rounded-2xl border border-line bg-ink-2 p-8 sm:p-10">
+              <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-line" />
+              <span
+                aria-hidden
+                className="absolute left-0 top-0 h-px w-0 bg-brand transition-[width] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full"
+              />
+
               <AnimatePresence mode="wait">
                 {done ? (
                   <motion.div
                     key="ok"
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     className="flex min-h-80 flex-col items-center justify-center text-center"
                   >
                     <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand/15 text-brand">
-                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
                         <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
@@ -150,45 +165,32 @@ export function LetsTalk() {
                       e.preventDefault();
                       setDone(true);
                     }}
-                    className="space-y-4"
                   >
-                    <h3 className="font-display text-lg font-bold text-snow">
+                    <h3 className="font-display mb-9 max-w-sm text-lg font-bold leading-snug text-snow">
                       Book a free digital marketing consultation with our strategists
                     </h3>
-                    <Field id="lt-name" label="Full name" placeholder="Your name" />
-                    <Field id="lt-email" label="Email address" type="email" placeholder="you@company.com" />
-                    <Field id="lt-phone" label="Phone number" type="tel" placeholder="+971 ..." />
-                    <div>
-                      <label htmlFor="lt-service" className="mb-1.5 block text-sm text-fog">
-                        Service required
-                      </label>
-                      <select
+
+                    <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
+                      <Field id="lt-name" label="Full name" autoComplete="name" required />
+                      <Field id="lt-email" label="Email address" type="email" autoComplete="email" required />
+                      <Field id="lt-phone" label="Phone number" type="tel" autoComplete="tel" required />
+                      <SelectField
                         id="lt-service"
+                        label="Service required"
+                        placeholder="Select a service"
+                        options={consultationServices}
                         required
-                        defaultValue=""
-                        className="w-full rounded-xl border border-line bg-ink px-4 py-3.5 text-sm text-snow focus:border-brand focus:outline-none"
-                      >
-                        <option value="" disabled>
-                          Select a service…
-                        </option>
-                        {consultationServices.map((s) => (
-                          <option key={s} value={s}>
-                            {s}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
-                    <label className="flex items-start gap-2.5 text-xs leading-relaxed text-fog">
-                      <input type="checkbox" required className="mt-0.5 accent-brand" />
-                      I agree with the terms of the Privacy Policy. Your information is
-                      100% secure and confidential.
-                    </label>
-                    <button
-                      type="submit"
-                      className="w-full rounded-full bg-brand py-4 text-sm font-semibold text-white transition-colors hover:bg-brand-deep"
-                    >
-                      Submit
-                    </button>
+
+                    <div className="mt-9">
+                      <ConsentField id="lt-consent">
+                        I agree with the terms of the Privacy Policy. Your information is
+                        100% secure and confidential.
+                      </ConsentField>
+                    </div>
+
+                    <SubmitButton className="mt-8 w-full sm:w-auto">Submit</SubmitButton>
                   </motion.form>
                 )}
               </AnimatePresence>
@@ -197,32 +199,5 @@ export function LetsTalk() {
         </div>
       </Container>
     </section>
-  );
-}
-
-function Field({
-  id,
-  label,
-  type = "text",
-  placeholder,
-}: {
-  id: string;
-  label: string;
-  type?: string;
-  placeholder?: string;
-}) {
-  return (
-    <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm text-fog">
-        {label}
-      </label>
-      <input
-        id={id}
-        type={type}
-        required
-        placeholder={placeholder}
-        className="w-full rounded-xl border border-line bg-ink px-4 py-3.5 text-sm text-snow placeholder:text-ash focus:border-brand focus:outline-none"
-      />
-    </div>
   );
 }

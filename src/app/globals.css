@@ -10,10 +10,17 @@
   --color-brand-hot: #ff2e3a;
   --color-brand-deep: #9c000a;
 
+  /* Brand red as *small text*. #e8000d is the brand, but at label sizes it
+     measures 3.7-4.3:1 against our surfaces in light mode and needs 4.5:1, so
+     small red type gets a token that flips with the theme: brighter on dark,
+     deeper on light. Large display red still uses --color-brand, which only
+     needs 3:1 and clears it. */
+  --color-brand-text: #ff2e3a;
+
   --color-void: #060606;
-  --color-ink: #0a0a0a;
-  --color-ink-2: #131313;
-  --color-ink-3: #1d1d1d;
+  --color-ink: #101010;
+  --color-ink-2: #171717;
+  --color-ink-3: #222222;
   --color-line: #262626;
 
   --color-snow: #f7f7f5;
@@ -44,7 +51,7 @@ html.light .logo-theme {
 html.light {
   color-scheme: light;
   --color-void: #f5f3ef;
-  --color-ink: #edeae4;
+  --color-ink: #e8e3da;
   --color-ink-2: #ffffff;
   --color-ink-3: #dcd8d0;
   --color-line: #d8d3ca;
@@ -54,6 +61,7 @@ html.light {
   --cursor-ring: rgba(21, 18, 15, 0.45);
   --grid-line: rgba(0, 0, 0, 0.55);
   --stroke-c: rgba(21, 18, 15, 0.3);
+  --color-brand-text: #9c000a;
 }
 html.light .grain::after {
   opacity: 0.035;
@@ -65,6 +73,15 @@ html.light .aurora-b {
 
 html {
   -webkit-font-smoothing: antialiased;
+  /* Keeps hash targets clear of the fixed header on in-page navigation. */
+  scroll-padding-top: 96px;
+}
+
+/* Keyboard focus must stay visible: the custom cursor hides the pointer. */
+:focus-visible {
+  outline: 2px solid var(--color-brand-hot);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 body {
@@ -106,6 +123,12 @@ body {
   font-size: clamp(2.75rem, 7vw, 6.5rem);
   line-height: 0.92;
   letter-spacing: -0.045em;
+}
+/* Inner-page hero: below the homepage's .mega, above section .display-xl. */
+.display-2xl {
+  font-size: clamp(2.4rem, 5.2vw, 4.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
 }
 .display-xl {
   font-size: clamp(1.9rem, 4.2vw, 3.8rem);
@@ -179,6 +202,20 @@ body {
   animation-duration: 60s;
 }
 
+/* Creative feed — vertical marquee for the Meta Ads hero. The strip holds two
+   copies of its frames, so translating a full -50% lands exactly back on the
+   start and the scroll never seams. */
+@keyframes feed-scroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+.animate-feed {
+  animation: feed-scroll 30s linear infinite;
+  will-change: transform;
+}
+.feed-slow { animation-duration: 44s; }
+.feed-reverse { animation-direction: reverse; }
+
 /* Outlined giant text */
 .text-stroke {
   -webkit-text-stroke: 1.5px var(--stroke-c);
@@ -187,6 +224,25 @@ body {
 .text-stroke-red {
   -webkit-text-stroke: 1.5px var(--color-brand);
   color: transparent;
+}
+
+/* Slim scrollbar for panels that scroll inside their own container. */
+.scroll-slim {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+.scroll-slim::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-slim::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-slim::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 999px;
+}
+.scroll-slim::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ash);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -199,6 +255,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
+  .animate-feed,
   .aurora-a,
   .aurora-b,
   .grain::after {
@@ -209,5 +266,68 @@ body {
   *::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---- Channel glyphs ---- */
+@keyframes glyph-scan {
+  0%, 100% { transform: translateY(-3px); opacity: 0; }
+  40%      { opacity: 1; }
+  60%      { transform: translateY(3px); opacity: 1; }
+  80%      { opacity: 0; }
+}
+@keyframes glyph-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.35; }
+  50%      { transform: scale(1.25); opacity: 0.9; }
+}
+@keyframes glyph-rise {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2.5px); }
+}
+@keyframes glyph-draw {
+  to { stroke-dashoffset: 0; }
+}
+.glyph-scan  { animation: glyph-scan 2.2s ease-in-out infinite; }
+.glyph-pulse { animation: glyph-pulse 2.4s ease-in-out infinite; }
+.glyph-rise  { animation: glyph-rise 2.6s ease-in-out infinite; }
+.glyph-draw  { stroke-dasharray: 44; stroke-dashoffset: 44; }
+.group:hover .glyph-draw { animation: glyph-draw 0.7s var(--ease-expo) forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .glyph-scan, .glyph-pulse, .glyph-rise { animation: none !important; }
+  .glyph-draw { stroke-dashoffset: 0; }
+}
+
+/* ---- Form fields ----
+   Underline that wipes red on focus. Written as plain CSS rather than a
+   peer-* utility: Tailwind was not emitting the peer-focus variant here, and
+   :focus-within is both simpler and covers the textarea identically. */
+.field-underline {
+  transform-origin: left;
+  scale: 0 1;
+  transition: scale 0.5s var(--ease-expo);
+}
+.field:focus-within .field-underline {
+  scale: 1 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field-underline { transition: none; }
+}
+
+/* ---- Section banding ----
+   Consecutive sections alternate surface so the seam between them is visible
+   without a hard divider everywhere.
+
+   Must live in @layer base, not unlayered: unlayered CSS beats anything in a
+   cascade layer regardless of specificity, and Tailwind puts utilities in
+   @layer utilities. Unlayered, this silently overrode every explicit bg-*
+   on a section, including the red AuditStrip band. */
+@layer base {
+  main > section:nth-child(even) {
+    background-color: var(--color-ink);
+  }
+  main > section + section {
+    border-top: 1px solid var(--color-line);
   }
 }

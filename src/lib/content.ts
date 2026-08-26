@@ -15,14 +15,14 @@ export const brand = {
   address: "#207, Arcade Building, Al Garhoud, Dubai, UAE",
 };
 
-export const nav = [
-  { label: "Story", href: "#story" },
-  { label: "Craft", href: "#craft" },
-  { label: "Work", href: "#work" },
-  { label: "Why ENH", href: "#why" },
-  { label: "AI", href: "#ai" },
-  { label: "Insights", href: "#insights" },
-  { label: "Contact", href: "#contact" },
+// Site structure lives in @/lib/sitemap. This file is content only.
+
+// TODO(client): swap in the real profile URLs.
+export const social = [
+  { label: "Facebook", href: "#" },
+  { label: "Instagram", href: "#" },
+  { label: "LinkedIn", href: "#" },
+  { label: "YouTube", href: "#" },
 ];
 
 export const heroWords = ["EXPLORE", "NEW", "HEIGHTS"];
@@ -508,19 +508,3 @@ export const workImages: Record<string, string> = {
   "Venesta": "https://images.unsplash.com/photo-1531834685032-c34bf0d84c77?w=600&h=400&fit=crop&auto=format&q=80",
 };
 
-export const footerLinks = {
-  services: [
-    "Digital Marketing",
-    "Search Engine Optimization",
-    "Social Media Marketing",
-    "Search Advertising",
-    "B2B Lead Generation",
-    "Website Design & Development",
-    "Corporate Video Production",
-    "Content Creation",
-    "Website Support Services",
-  ],
-  industries: ["Ecommerce", "Hospitality", "Automotive", "Logistics", "Healthcare"],
-  company: ["Home", "About Us", "Case Studies", "Portfolio", "Insights", "Privacy Policy", "Terms of Use", "Contact Us"],
-  social: ["Facebook", "Instagram", "LinkedIn", "YouTube"],
-};
