@@ -73,7 +73,7 @@ export default function MetaAdsPage() {
           secondary={c.hero.secondary}
           phoneHref={brand.phoneHref}
           breadcrumbs={<Breadcrumbs key="crumbs" href={HREF} />}
-          footer={<TrustStrip key="trust" id="trust" credentials={false} compact />}
+          footer={<TrustStrip key="trust" id="trust" compact />}
           formTitle={`${c.finalCta.title} ${c.finalCta.strokeTitle}`}
           formFields={c.formFields}
           formSubmitLabel="Request a Quote"

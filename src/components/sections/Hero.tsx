@@ -120,7 +120,7 @@ export function Hero({ started, badges = [] }: { started: boolean; badges?: Part
         transition={{ delay: 1.2 }}
         className="relative z-10"
       >
-        <TrustStrip id="trust" credentials={false} compact />
+        <TrustStrip id="trust" compact />
       </motion.div>
     </section>
   );

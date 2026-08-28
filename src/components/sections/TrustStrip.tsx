@@ -1,4 +1,4 @@
-import { clients, recognition } from "@/lib/content";
+import { clients } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/cn";
 import { SpinStar } from "@/components/fx/Adornments";
@@ -24,14 +24,13 @@ function LogoChip({ name }: { name: string }) {
   );
 }
 
-/** Client logo wall + industry recognition.
+/** Client logo wall.
  *
  *  Shared with the service pages, so the section handle is parameterised the
  *  same way Work and Insights are. Defaults keep the homepage unchanged. */
 export function TrustStrip({
   id,
   label = "Trusted By",
-  credentials = true,
   compact = false,
 }: {
   id?: string;
@@ -40,10 +39,6 @@ export function TrustStrip({
    *  viewport with it: tighter padding and a single logo row instead of two,
    *  which is what actually makes it fit above the fold. */
   compact?: boolean;
-  /** The "Recognized by" panel. Kept on the homepage, dropped
-   *  on the service pages, where the strip only needs to establish trust in
-   *  passing rather than run to a second block of its own. */
-  credentials?: boolean;
 } = {}) {
   const half = Math.ceil(clients.length / 2);
   // One row carries every client when compact; two rows split them otherwise.
@@ -95,33 +90,6 @@ export function TrustStrip({
         )}
       </div>
 
-      {/* Recognition panel. Homepage only.
-       *
-       *  The issued Google and Meta badges used to sit here under a second
-       *  "Certified" label. They now lead the hero instead, where the hardest
-       *  trust signal on the page belongs, and they are deliberately not
-       *  repeated down here — one page, one place for each credential. What is
-       *  left is the directory listings, which is what this aligned grid was
-       *  always good at. */}
-      {credentials && (
-        <Container className="mt-16">
-          <div className="grid items-center gap-6 rounded-2xl border border-line px-7 py-6 sm:grid-cols-[170px_1fr]">
-            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-ash">
-              Recognized by
-            </span>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">
-              {recognition.map((r) => (
-                <span
-                  key={r}
-                  className="font-display text-center text-sm font-bold text-fog transition-colors duration-300 hover:text-snow sm:text-base"
-                >
-                  {r}
-                </span>
-              ))}
-            </div>
-          </div>
-        </Container>
-      )}
     </section>
   );
 }

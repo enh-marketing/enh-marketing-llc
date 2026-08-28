@@ -1,6 +1,6 @@
 // ENH V3 — flagship narrative copy + the complete live content of enhmedia.com.
 // All 22 case studies, 8 services, 7 testimonials, 6 FAQs, 30 clients,
-// recognition platforms, certifications and footer links are included.
+// partner badges and footer links are included.
 
 export const brand = {
   name: "ENH",
@@ -59,13 +59,6 @@ export const partnerBadges: PartnerBadge[] = [
   { src: "/badges/shopping-ads.png", alt: "Shopping Ads Certified", w: 500, h: 500 },
 ];
 
-export const certifications = [
-  "Google Partner",
-  "Meta Business Partner",
-  "Google Ads Certified",
-  "Shopping Ads Certified",
-];
-
 export const manifesto =
   "Every brand has a height it hasn't reached yet. A market it hasn't moved. A story it hasn't told loudly enough. We exist for that gap — between where you are and where you refuse to stop short of. We are ENH. And we climb with you.";
 
@@ -83,10 +76,6 @@ export const clients = [
   "Supercad", "Texol", "Saifee Computers", "Top Shelf", "Trosten",
   "TTC", "Allday", "TRCpamco", "Atlas", "Bin Dasmal Group",
   "Dubai Duty Free", "Dubai Islamic Bank", "Procat", "RHS Logistics", "Venesta",
-];
-
-export const recognition = [
-  "Clutch", "Trustpilot", "Agency Spotter", "DesignRush", "Goodfirms", "Sortlist",
 ];
 
 export type Craft = {
