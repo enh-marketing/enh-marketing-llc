@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import type { PartnerBadge } from "@/lib/content";
 import { Preloader } from "@/components/fx/Preloader";
 import { Hero } from "@/components/sections/Hero";
 import { Manifesto } from "@/components/sections/Manifesto";
-import { TrustStrip } from "@/components/sections/TrustStrip";
 import { Craft } from "@/components/sections/Craft";
 import { Work } from "@/components/sections/Work";
 import { AuditStrip } from "@/components/sections/AuditStrip";
@@ -16,16 +16,15 @@ import { Insights } from "@/components/sections/Insights";
 import { FAQ } from "@/components/sections/FAQ";
 import { LetsTalk } from "@/components/sections/LetsTalk";
 
-export function Experience() {
+export function Experience({ badges = [] }: { badges?: PartnerBadge[] }) {
   const [started, setStarted] = useState(false);
 
   return (
     <>
       <Preloader onDone={() => setStarted(true)} />
       <main>
-        <Hero started={started} />
+        <Hero started={started} badges={badges} />
         <Manifesto />
-        <TrustStrip />
         <Craft />
         <Work />
         <AuditStrip />

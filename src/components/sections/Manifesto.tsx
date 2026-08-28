@@ -101,6 +101,25 @@ export function Manifesto() {
 
   return (
     <section ref={root} id="story" className="relative">
+      {/* Stats open the chapter */}
+      <div className="border-y border-line">
+        <Container className="px-0 sm:px-0">
+          <dl className="grid grid-cols-2 lg:grid-cols-4">
+            {stats.map((s, i) => (
+              <div
+                key={s.label}
+                className={`group px-6 py-12 sm:px-10 ${i < stats.length - 1 ? "lg:border-r lg:border-line" : ""} ${i % 2 === 0 ? "border-r border-line lg:border-r" : ""} ${i < 2 ? "border-b border-line lg:border-b-0" : ""}`}
+              >
+                <Sparkline className="mb-4" />
+                <dt className="font-display text-[clamp(2.1rem,3.6vw,3.2rem)] font-extrabold leading-none text-snow transition-colors duration-500 group-hover:text-brand">
+                  <Counter value={s.value} suffix={s.suffix} />
+                </dt>
+                <dd className="mt-3 text-sm text-fog">{s.label}</dd>
+              </div>
+            ))}
+          </dl>
+        </Container>
+      </div>
       {/* Tall runway; the stage inside pins while the scene plays */}
       <div ref={runway} className="relative h-[340vh]">
         <div className="sticky top-0 h-svh overflow-hidden">
@@ -147,25 +166,6 @@ export function Manifesto() {
         </div>
       </div>
 
-      {/* Stats land the chapter */}
-      <div className="border-y border-line">
-        <Container className="px-0 sm:px-0">
-          <dl className="grid grid-cols-2 lg:grid-cols-4">
-            {stats.map((s, i) => (
-              <div
-                key={s.label}
-                className={`group px-6 py-12 sm:px-10 ${i < stats.length - 1 ? "lg:border-r lg:border-line" : ""} ${i % 2 === 0 ? "border-r border-line lg:border-r" : ""} ${i < 2 ? "border-b border-line lg:border-b-0" : ""}`}
-              >
-                <Sparkline className="mb-4" />
-                <dt className="font-display text-[clamp(2.1rem,3.6vw,3.2rem)] font-extrabold leading-none text-snow transition-colors duration-500 group-hover:text-brand">
-                  <Counter value={s.value} suffix={s.suffix} />
-                </dt>
-                <dd className="mt-3 text-sm text-fog">{s.label}</dd>
-              </div>
-            ))}
-          </dl>
-        </Container>
-      </div>
     </section>
   );
 }

@@ -120,7 +120,11 @@ body {
 
 /* Fluid display sizes — restrained for readability on desktop/tablet */
 .mega {
-  font-size: clamp(2.75rem, 7vw, 6.5rem);
+  /* Height-aware, like .display-2xl: the homepage hero is sized to the viewport
+     and now carries a certification row and a logo strip below the copy, so on
+     a short screen the headline has to give way rather than push them under the
+     fold. min() lets whichever axis is scarcer win. */
+  font-size: clamp(2.5rem, min(6.3vw, 10svh), 5.9rem);
   line-height: 0.92;
   letter-spacing: -0.045em;
 }

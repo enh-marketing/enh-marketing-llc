@@ -30,6 +30,35 @@ export const heroWords = ["EXPLORE", "NEW", "HEIGHTS"];
 export const heroSub =
   "Top digital marketing agency in Dubai, UAE. For fifteen years we've turned ambition into market share — with craft, data and a little bit of theatre.";
 
+/** Partner and certification badges shown in the homepage hero.
+ *
+ *  `src` points at the official artwork issued by Meta and Google. These are
+ *  deliberately NOT drawn by hand: they are third-party trademarks and, more to
+ *  the point, credentials. Google's badge guidelines require approved files
+ *  only and forbid distorting, recolouring or animating the mark, so a
+ *  redrawn approximation would be both off-brand and a fabricated credential.
+ *
+ *  Drop the four files into /public/badges and fill in `src` below. A badge
+ *  with an empty `src` is skipped, so the hero stays clean until the artwork
+ *  is in place. PNG is safest — next/image needs an extra config flag to serve
+ *  SVG. `w`/`h` are the file's intrinsic pixel size and only set the aspect
+ *  ratio, so they need to be in proportion rather than exact.
+ *
+ *  Full colour on a white plate is the compliant treatment on a dark page:
+ *  Meta allows full colour on white and monochrome white on dark, and the
+ *  plate keeps the required clear space around each mark. */
+export type PartnerBadge = { src: string; alt: string; w: number; h: number };
+
+/** Issued partner and certification badges. Alt text is the wording printed on
+ *  each mark, not a paraphrase — these are credentials, so the accessible name
+ *  has to match what the badge actually says. */
+export const partnerBadges: PartnerBadge[] = [
+  { src: "/badges/google-partner.jpg", alt: "Google Partner", w: 500, h: 274 },
+  { src: "/badges/meta-business-partner.webp", alt: "Meta Business Partner", w: 500, h: 286 },
+  { src: "/badges/google-ads.png", alt: "Google Ads AI-Powered Performance Certified", w: 380, h: 379 },
+  { src: "/badges/shopping-ads.png", alt: "Shopping Ads Certified", w: 500, h: 500 },
+];
+
 export const certifications = [
   "Google Partner",
   "Meta Business Partner",
