@@ -69,7 +69,15 @@ export function TrustStrip({
       {/* Logo marquee: one row when compact, two counter-rotating rows when not. */}
       <div className="space-y-4">
         <div className="relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
-          <div className="animate-marquee flex w-max items-center gap-4 pr-4">
+          {/* Duration is set here rather than on .animate-marquee, which the
+              Voices section also uses. Compact packs every client into this one
+              row, so a cycle covers twice the chips a split row does and runs
+              visually twice as fast at the same duration — hence the longer
+              time here. */}
+          <div
+            className="animate-marquee flex w-max items-center gap-4 pr-4"
+            style={{ animationDuration: compact ? "45s" : "30s" }}
+          >
             {rowA.map((name, i) => (
               <LogoChip key={`a-${name}-${i}`} name={name} />
             ))}

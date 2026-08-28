@@ -208,9 +208,6 @@ body {
   animation: marquee 30s linear infinite;
   will-change: transform;
 }
-.marquee-slow {
-  animation-duration: 60s;
-}
 
 /* Creative feed — vertical marquee for the Meta Ads hero. The strip holds two
    copies of its frames, so translating a full -50% lands exactly back on the
