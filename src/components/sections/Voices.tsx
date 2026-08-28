@@ -96,7 +96,10 @@ export function Voices() {
               aria-label={`Show testimonial ${i + 1}`}
               onClick={() => setActive(i)}
               className={cn(
-                "h-1.5 rounded-full transition-all duration-400",
+                // The bar stays 6px; py-2.5 lifts the pointer target to 26px
+                // tall without changing what is drawn. background-clip keeps the
+                // padding transparent so the bar does not visually grow.
+                "h-1.5 box-content rounded-full bg-clip-content px-0.5 py-2.5 transition-all duration-400",
                 i === active ? "w-10 bg-brand" : "w-5 bg-line hover:bg-fog",
               )}
             />

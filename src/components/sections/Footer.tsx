@@ -6,7 +6,10 @@ import { BackToTop } from "@/components/fx/Adornments";
 import { Logo } from "@/components/ui/Logo";
 import { FooterCurve } from "@/components/fx/FooterCurve";
 
-const LINK = "text-sm text-fog transition-colors hover:text-snow";
+// inline-block + vertical padding: these sat at 16-20px tall, under the 24px
+// minimum for a pointer target. The padding grows the hit area only — the type
+// and the visual rhythm are unchanged.
+const LINK = "inline-block py-1 text-sm text-fog transition-colors hover:text-snow";
 
 function FooterLink({ node }: { node: NavNode }) {
   // Pending destinations read as text, not as a link that goes nowhere.
@@ -35,7 +38,7 @@ function FooterCol({ title, items }: { title: string; items: NavNode[] }) {
   return (
     <div>
       <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-ash">{title}</h4>
-      <ul className="space-y-2.5">
+      <ul className="space-y-1">
         {items.map((item) => (
           <li key={item.label}>
             <FooterLink node={item} />
@@ -63,11 +66,11 @@ export function Footer() {
               {brand.growthLine}. A digital growth studio in {brand.city} — fifteen years
               of climbs, and we&apos;re still looking up.
             </p>
-            <div className="mt-6 space-y-1.5 text-sm text-fog">
-              <a href={`mailto:${brand.email}`} className="block transition-colors hover:text-snow">
+            <div className="mt-6 space-y-0.5 text-sm text-fog">
+              <a href={`mailto:${brand.email}`} className="block py-1 transition-colors hover:text-snow">
                 {brand.email}
               </a>
-              <a href={`tel:${brand.phoneHref}`} className="block transition-colors hover:text-snow">
+              <a href={`tel:${brand.phoneHref}`} className="block py-1 transition-colors hover:text-snow">
                 {brand.phone}
               </a>
               <p>{brand.address}</p>
@@ -89,7 +92,7 @@ export function Footer() {
           </div>
           <div className="flex flex-wrap gap-5">
             {pages.legal.map((l) => (
-              <Link key={l.href} href={l.href} className="transition-colors hover:text-snow">
+              <Link key={l.href} href={l.href} className="inline-block py-1.5 transition-colors hover:text-snow">
                 {l.label}
               </Link>
             ))}

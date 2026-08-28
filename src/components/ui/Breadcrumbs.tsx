@@ -1,10 +1,18 @@
 import Link from "next/link";
 import { trailFor } from "@/lib/sitemap";
-import { Container } from "@/components/ui/Container";
+import { cn } from "@/lib/cn";
 
-/** Derived from the sitemap, so it can never drift from the real IA.
- *  Emits BreadcrumbList JSON-LD alongside the visible trail. */
-export function Breadcrumbs({ href }: { href: string }) {
+/** Trail derived from the sitemap, so it can never drift from the real IA, plus
+ *  the BreadcrumbList JSON-LD that earns the trail in search results.
+ *
+ *  Placement-agnostic on purpose: no Container and no page padding of its own,
+ *  because it now sits inside the hero rather than in a bar above it. The hero
+ *  is sized to the viewport so the trust strip clears the fold, and a
+ *  self-positioning breadcrumb would have pushed that strip under.
+ *
+ *  Renders nothing for a trail shorter than two, so a top-level page never
+ *  shows a lone "Home". */
+export function Breadcrumbs({ href, className }: { href: string; className?: string }) {
   const trail = trailFor(href);
   if (trail.length < 2) return null;
 
@@ -20,31 +28,66 @@ export function Breadcrumbs({ href }: { href: string }) {
   };
 
   return (
-    <Container className="pt-28">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <nav aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-2 text-xs text-ash">
-          {trail.map((node, i) => {
-            const last = i === trail.length - 1;
-            return (
-              <li key={node.href} className="flex items-center gap-2">
-                {last ? (
-                  <span className="text-fog" aria-current="page">
+    <>
+      {/* Kept outside the <nav>: script text still counts toward the element's
+          textContent, and the trail's URLs would otherwise sit inside the
+          landmark. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <nav aria-label="Breadcrumb" className={cn(className)}>
+        <ol className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs">
+        {trail.map((node, i) => {
+          const last = i === trail.length - 1;
+          // Small screens show only the parent and the current page. A
+          // four-level trail wraps to two lines at 375px, and the hero is sized
+          // to the viewport, so that second line pushes the trust strip under
+          // the fold. The JSON-LD above still carries the complete trail, which
+          // is what search engines read.
+          const foldsAway = i < trail.length - 2;
+          return (
+            <li
+              key={node.href}
+              className={cn("items-center gap-2.5", foldsAway ? "hidden sm:flex" : "flex")}
+            >
+              {last ? (
+                // The current page is a label, not a link.
+                <span aria-current="page" className="font-medium text-snow">
+                  {node.label}
+                </span>
+              ) : (
+                <>
+                  {/* text-fog, not text-ash: ash measures 2.88:1 on these
+                      surfaces and fails the 4.5 minimum for body text. */}
+                  <Link
+                    href={node.href}
+                    className="inline-block py-1 text-fog transition-colors duration-300 hover:text-brand"
+                  >
                     {node.label}
-                  </span>
-                ) : (
-                  <>
-                    <Link href={node.href} className="transition-colors hover:text-snow">
-                      {node.label}
-                    </Link>
-                    <span aria-hidden>/</span>
-                  </>
-                )}
-              </li>
-            );
+                  </Link>
+                  {/* Chevron rather than a typed slash: it reads as direction
+                      rather than punctuation, and it cannot be picked up as
+                      text by a screen reader or a copy-paste. */}
+                  <svg
+                    aria-hidden
+                    viewBox="0 0 24 24"
+                    className="h-3 w-3 shrink-0 text-ash"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M9 6l6 6-6 6" />
+                  </svg>
+                </>
+              )}
+            </li>
+          );
           })}
         </ol>
       </nav>
-    </Container>
+    </>
   );
 }

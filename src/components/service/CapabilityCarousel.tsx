@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,6 +10,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MetaMark } from "@/components/service/MetaMark";
 import { CapabilityGlyph, type GlyphVariant } from "@/components/service/CapabilityGlyph";
 import { getLenis } from "@/components/fx/SmoothScroll";
+import { useEnhanced } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 
 gsap.registerPlugin(ScrollTrigger, Draggable);
@@ -55,25 +56,6 @@ const FADE = 0.28;
 /** Scroll distance the pin holds for, per step through the run. */
 const PX_PER_STEP = 280;
 
-/** True only where the pinned stack should run. Read through
- *  useSyncExternalStore rather than state-in-an-effect, so there is no
- *  cascading render and the server gets a definite `false`. */
-const QUERY = "(min-width: 1024px) and (prefers-reduced-motion: no-preference)";
-
-function subscribe(onChange: () => void) {
-  const mq = window.matchMedia(QUERY);
-  mq.addEventListener("change", onChange);
-  return () => mq.removeEventListener("change", onChange);
-}
-
-function useStackEnabled() {
-  return useSyncExternalStore(
-    subscribe,
-    () => window.matchMedia(QUERY).matches,
-    () => false,
-  );
-}
-
 export function CapabilityCarousel({
   id,
   label,
@@ -90,7 +72,7 @@ export function CapabilityCarousel({
   strokeTitle?: string;
   items: Capability[];
 }) {
-  const enabled = useStackEnabled();
+  const enabled = useEnhanced();
   const stageRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const proxyRef = useRef<HTMLDivElement>(null);
@@ -287,7 +269,7 @@ export function CapabilityCarousel({
                 {item.href && (
                   <Link
                     href={item.href}
-                    className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-snow transition-colors hover:text-brand"
+                    className="mt-6 inline-flex items-center gap-2 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-snow transition-colors hover:text-brand"
                   >
                     See how <span aria-hidden>↓</span>
                   </Link>

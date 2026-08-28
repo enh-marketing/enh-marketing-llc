@@ -1,18 +1,23 @@
 import type { Metadata } from "next";
 import { brand } from "@/lib/content";
 import { Work } from "@/components/sections/Work";
+import { TrustStrip } from "@/components/sections/TrustStrip";
 import { Insights } from "@/components/sections/Insights";
 import * as c from "@/content/services/performance-marketing";
 
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { ChannelOrbit } from "@/components/service/ChannelOrbit";
 import { Narrative } from "@/components/service/Narrative";
 import { ReasonList } from "@/components/service/ReasonList";
 import { ChannelScroller } from "@/components/service/ChannelScroller";
 import { StageTimeline } from "@/components/service/StageTimeline";
+import { BenchmarkReadout } from "@/components/service/BenchmarkReadout";
 import { ComparisonTable } from "@/components/service/ComparisonTable";
 import { IndustryList } from "@/components/service/IndustryList";
 import { Caveat } from "@/components/service/Caveat";
+import { GrowthCta } from "@/components/service/GrowthCta";
+import { ResultStats } from "@/components/service/ResultStats";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
@@ -68,10 +73,11 @@ export default function PerformanceMarketingPage() {
           primary={c.hero.primary}
           secondary={c.hero.secondary}
           phoneHref={brand.phoneHref}
+          breadcrumbs={<Breadcrumbs key="crumbs" href={HREF} />}
+          footer={<TrustStrip key="trust" id="trust" credentials={false} compact />}
           formTitle={c.headings.cta.join(" ")}
           formFields={c.formFields}
           formSubmitLabel="Request a Quote"
-          ticker={c.channels.map((ch) => ch.name)}
           // Keyed because this element crosses the server/client boundary into
           // ServiceHero, where React reconciles it as a list child.
           visual={<ChannelOrbit key="orbit" channels={c.channels.map((ch) => ch.name)} />}
@@ -86,6 +92,8 @@ export default function PerformanceMarketingPage() {
           body={c.narrative.body}
           highlight={c.narrative.highlight}
         />
+
+        <ResultStats id="results" label="Results" stats={c.results} />
 
         <ReasonList
           id="why-enh"
@@ -119,6 +127,14 @@ export default function PerformanceMarketingPage() {
           outro={c.processOutro}
         />
 
+        <BenchmarkReadout
+          id="benchmarks"
+          label="Benchmark Readout"
+          columns={c.benchmarkColumns}
+          intro={c.benchmarkIntro}
+          items={c.benchmarks}
+        />
+
         <ComparisonTable
           id="comparison"
           label="Performance vs Digital Marketing"
@@ -147,6 +163,15 @@ export default function PerformanceMarketingPage() {
           lead={c.caveat.lead}
           emphasis={c.caveat.emphasis}
           commitment={c.caveat.commitment}
+        />
+
+        <GrowthCta
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
+          formTitle={c.headings.cta.join(" ")}
+          formFields={c.formFields}
+          formSubmitLabel="Request a Quote"
         />
 
         <Work index="06" label="Summits Reached" />

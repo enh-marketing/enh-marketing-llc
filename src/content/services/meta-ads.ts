@@ -332,3 +332,16 @@ export const formFields = [
   { id: "platforms", label: "Current platforms" },
   { id: "referral", label: "How did you hear about us?", wide: true },
 ];
+
+/** Mid-page CTA band, above the work section.
+ *
+ *  Supplied directly by the client on 2026-08-28 — this copy is NOT from the
+ *  Meta Ads document, unlike everything else in this file. Stored in sentence
+ *  case and split across two lines for typesetting; the band uppercases it and
+ *  sets the second line in brand red, which is the one accent it allows itself. */
+export const growthCta = {
+  heading: ["Ready to turn Meta Ads", "into real results?"] as [string, string],
+  support:
+    "Reach Your Ideal Audience, Generate Quality Leads & Maximise Your ROI With High-Performance Meta Advertising",
+  button: "Get a Free Meta Ads Audit",
+};

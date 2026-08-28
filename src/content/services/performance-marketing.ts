@@ -304,3 +304,100 @@ export const formFields = [
   { id: "help", label: "What do you need help with?", wide: true, textarea: true },
   { id: "referral", label: "How did you hear about us?", wide: true },
 ];
+
+/** Mid-page CTA strip, above the work section.
+ *
+ *  Supplied directly by the client on 2026-08-28 — this copy is NOT from the
+ *  Performance Marketing document, unlike everything else in this file. Stored
+ *  in sentence case and split across two lines for typesetting; the page
+ *  uppercases it, which is how every other heading on the site is handled. */
+export const growthCta = {
+  heading: ["Ready to scale your", "business growth?"] as [string, string],
+  support: "Drive More Leads, Sales & ROI With Our Performance Marketing Experts",
+  button: "Get a Free Performance Marketing Strategy",
+};
+
+/** Results strip. Supplied directly by the client on 2026-08-28 — NOT from the
+ *  Performance Marketing document. These are the agency's own first-party
+ *  claims about its own results, so they carry no external citation.
+ *
+ *  Supplied as "ROAs Achieved", "Conversation Rate", "Ad Spent", "50000+" and
+ *  "12-15%". The client approved correcting all five on 2026-08-28: ROAS is the
+ *  standard casing for Return On Ad Spend, "Conversation" was a misspelling of
+ *  "Conversion", "Spent" of "Spend", plus a thousands separator and an en dash
+ *  for the range. The figures themselves are unchanged.
+ *
+ *  `figure` and `unit` are split so the unit can take the brand colour without
+ *  the value being re-typed anywhere. */
+export const results = [
+  { figure: "3.5", unit: "x", label: "ROAS Achieved" },
+  { figure: "12–15", unit: "%", label: "Conversion Rate" },
+  { figure: "50,000", unit: "+", label: "Qualified Leads" },
+  { figure: "1M", unit: "+", label: "Ad Spend" },
+];
+
+/** Benchmark readout — the six things optimisation actually moves.
+ *
+ *  Client-supplied on 2026-08-28, verbatim, including the em-dash ranges and
+ *  "AED". NOT from the Performance Marketing document.
+ *
+ *  Supplied as a three-column table. It is deliberately not rendered as one:
+ *  the very next section on the page is a comparison table, and two tables back
+ *  to back would read as one long spreadsheet.
+ *
+ *  `figure` names the substring of `benchmark` to lift to display scale. It is
+ *  a pointer into the sentence, not a second copy of the number, so the two can
+ *  never drift apart. */
+export const benchmarkColumns = {
+  area: "What improved",
+  benchmark: "Performance benchmark",
+  meaning: "What it means commercially",
+};
+
+export const benchmarkIntro = {
+  heading: ["The Numbers Behind Our", "Performance Marketing Results"] as [string, string],
+  lede: "Headline figures show scale. This table goes deeper into what changed after optimisation from our experts.",
+  footnote:
+    "Results vary according to the industry, offer, budget, sales process and attribution setup.",
+};
+
+export const benchmarks = [
+  {
+    area: "Acquisition cost",
+    benchmark: "15–25% reduction in qualified CPL or CPA",
+    figure: "15–25%",
+    meaning: "More qualified opportunities or customers from the same budget",
+  },
+  {
+    area: "Qualified lead or sales volume",
+    benchmark: "20–30% increase at a comparable level of ad spend",
+    figure: "20–30%",
+    meaning:
+      "More enquiries, purchases or bookings without relying on clicks and impressions",
+  },
+  {
+    area: "Lead quality",
+    benchmark: "25–35% of paid leads becoming marketing-qualified leads",
+    figure: "25–35%",
+    meaning: "A greater proportion of leads fit the agreed customer profile",
+  },
+  {
+    area: "Sales qualification",
+    benchmark: "13–26% of marketing-qualified leads progressing to sales-qualified leads",
+    figure: "13–26%",
+    meaning: "More leads become genuine opportunities for the sales team",
+  },
+  {
+    area: "Revenue efficiency",
+    benchmark: "Customer lifetime value of at least 3× the acquisition cost",
+    figure: "3×",
+    meaning:
+      "Every AED 1 spent acquiring a customer produces at least AED 3 in customer value",
+  },
+  {
+    area: "Profitable budget scaling",
+    benchmark: "1.5–2× budget growth while CPL, CPA or ROAS remains within 10–15% of target",
+    figure: "1.5–2×",
+    meaning: "Campaigns can absorb more spend without losing commercial efficiency",
+  },
+];

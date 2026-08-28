@@ -31,7 +31,7 @@ export function Insights({
         <Rise delay={0.2}>
           <Link
             href={pages.insights.href}
-            className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em] text-snow"
+            className="group inline-flex items-center gap-3 py-1.5 text-sm font-semibold uppercase tracking-[0.18em] text-snow"
           >
             All insights
             <span className="h-px w-8 bg-brand transition-all duration-300 group-hover:w-14" />

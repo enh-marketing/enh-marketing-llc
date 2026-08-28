@@ -135,7 +135,7 @@ export function SelectField({
 export function ConsentField({ id, children }: { id: string; children: ReactNode }) {
   return (
     <label htmlFor={id} className="flex items-start gap-3 text-xs leading-relaxed text-fog">
-      <input id={id} name={id} type="checkbox" required className="mt-0.5 accent-brand" />
+      <input id={id} name={id} type="checkbox" required className="mt-0.5 h-[18px] w-[18px] shrink-0 accent-brand" />
       <span>{children}</span>
     </label>
   );

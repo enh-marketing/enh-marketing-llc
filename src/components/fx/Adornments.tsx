@@ -173,6 +173,12 @@ export function Radar({ className, color = "rgba(255,255,255,0.85)" }: { classNa
           r="10"
           stroke={color}
           strokeWidth="1.5"
+          // Explicit start values. With only a keyframe array, motion has to
+          // infer the current value of the SVG `r` attribute and resolves it as
+          // undefined on a frame, which the browser rejects:
+          // `<circle> attribute r: Expected length, "undefined"` — three of
+          // them, one per ring.
+          initial={{ r: 10, opacity: 0.8 }}
           animate={{ r: [10, 36], opacity: [0.8, 0] }}
           transition={{ duration: 2.6, repeat: Infinity, ease: "easeOut", delay: i * 0.85 }}
         />

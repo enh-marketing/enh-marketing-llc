@@ -60,7 +60,7 @@ export function AuditStrip() {
                 </button>
               </div>
               <label className="flex items-center gap-2 text-xs text-white/80">
-                <input type="checkbox" required className="accent-white" />
+                <input type="checkbox" required className="h-[18px] w-[18px] shrink-0 accent-white" />
                 I agree with the terms of the Privacy Policy — your information is 100%
                 secure and confidential.
               </label>

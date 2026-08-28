@@ -1,14 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
-import {
-  motion,
-  useMotionValueEvent,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MetaMark } from "@/components/service/MetaMark";
@@ -55,17 +50,51 @@ export function StageLadder({
   tail?: boolean;
 }) {
   const listRef = useRef<HTMLOListElement>(null);
+  const railRef = useRef<HTMLSpanElement>(null);
+  const meterRef = useRef<HTMLSpanElement>(null);
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
+  /** Last index pushed to React, so scrolling does not re-render every frame. */
+  const lastPushed = useRef(0);
 
-  const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 0.7", "end 0.8"] });
-  const meter = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.4 });
-  const railHeight = useTransform(meter, (v) => `${Math.min(1, Math.max(0, v)) * 100}%`);
+  const count = stages.length;
 
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const i = Math.min(stages.length - 1, Math.max(0, Math.floor(v * stages.length)));
-    setActive(i);
-  });
+  // Tracked with ScrollTrigger rather than motion's useScroll, deliberately.
+  // This section sits below a section that pins and adds ~1700px of scroll
+  // distance at hydration, and the FAQ accordions change the page height later
+  // still. motion caches the target's offsets and only re-measures on a window
+  // resize, so a layout shift underneath it leaves the progress stuck. GSAP is
+  // refreshed by SmoothScroll's ResizeObserver whenever the document height
+  // moves, and it is already the clock Lenis drives, so the whole page reads
+  // scroll from one source instead of two that can disagree.
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+
+    const ctx = gsap.context(() => {
+      const trigger = ScrollTrigger.create({
+        trigger: list,
+        start: "top 70%",
+        end: "bottom 80%",
+        invalidateOnRefresh: true,
+        onUpdate(self) {
+          const p = self.progress;
+          // Written straight to the DOM: no React work per frame.
+          if (railRef.current) railRef.current.style.height = `${p * 100}%`;
+          if (meterRef.current) meterRef.current.style.transform = `scaleX(${p})`;
+
+          const i = Math.min(count - 1, Math.max(0, Math.floor(p * count)));
+          if (i !== lastPushed.current) {
+            lastPushed.current = i;
+            setActive(i);
+          }
+        },
+      });
+      return () => trigger.kill();
+    }, list);
+
+    return () => ctx.revert();
+  }, [count]);
 
   const lastIndex = stages.length - 1;
   const isTailIndex = (i: number) => tail && i === lastIndex;
@@ -117,8 +146,9 @@ export function StageLadder({
             {/* Meter: how far through the run the reader is. */}
             <div className="mt-8 lg:mt-10">
               <span className="block h-px w-full bg-line">
-                <motion.span
-                  style={{ scaleX: reduced ? 1 : meter }}
+                <span
+                  ref={meterRef}
+                  style={{ transform: reduced ? "scaleX(1)" : "scaleX(0)" }}
                   className="block h-px w-full origin-left bg-brand"
                 />
               </span>
@@ -144,9 +174,10 @@ export function StageLadder({
               aria-hidden
               className="absolute left-[11px] top-2 bottom-2 w-px bg-line sm:left-[15px]"
             />
-            <motion.span
+            <span
+              ref={railRef}
               aria-hidden
-              style={{ height: reduced ? "100%" : railHeight }}
+              style={{ height: reduced ? "100%" : "0%" }}
               className="absolute left-[11px] top-2 w-px origin-top bg-brand sm:left-[15px]"
             />
 

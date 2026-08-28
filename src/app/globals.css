@@ -125,8 +125,14 @@ body {
   letter-spacing: -0.045em;
 }
 /* Inner-page hero: below the homepage's .mega, above section .display-xl. */
+/* Service-page hero heading — the only user of this size.
+   Sized on both axes, not width alone. That hero is exactly one viewport tall
+   and ends with a trust strip that has to stay above the fold, so on a short
+   screen a width-sized heading is what pushes the strip under. The svh term
+   only bites when height is the scarce axis: at 900px tall it stays clamped at
+   4.6rem and nothing changes, and it gives ground as the viewport shortens. */
 .display-2xl {
-  font-size: clamp(2.4rem, 5.2vw, 4.6rem);
+  font-size: clamp(2.4rem, min(5.2vw, 8.2svh), 4.6rem);
   line-height: 0.95;
   letter-spacing: -0.04em;
 }
@@ -216,6 +222,50 @@ body {
 .feed-slow { animation-duration: 44s; }
 .feed-reverse { animation-direction: reverse; }
 
+/* ---- Cursor spotlight ----
+   A field of dots that only exists where the pointer is. Both layers read the
+   same --mx/--my custom properties, written straight to the element on
+   pointermove so nothing re-renders per frame. They default to the centre, so
+   with no pointer at all (touch, keyboard, SSR) the band still shows a soft
+   glow rather than nothing. */
+.dot-field {
+  background-image: radial-gradient(circle, var(--color-line) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+.spotlight-mask {
+  -webkit-mask-image: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    #000 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    #000 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    transparent 72%
+  );
+}
+.spotlight-warm {
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(232, 0, 13, 0.13),
+    transparent 68%
+  );
+}
+
+/* Benchmark readout — each line is replaced behind a mask when the entry
+   changes. The parent clips, so the line rises in from below its own box
+   rather than fading in place. Keyed on the active index in React, so the
+   animation restarts per entry without a timeline to manage. */
+@keyframes readout-in {
+  from { transform: translateY(105%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.animate-readout {
+  animation: readout-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 /* Outlined giant text */
 .text-stroke {
   -webkit-text-stroke: 1.5px var(--stroke-c);
@@ -256,6 +306,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-feed,
+  .animate-readout,
   .aurora-a,
   .aurora-b,
   .grain::after {

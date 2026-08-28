@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { brand } from "@/lib/content";
 import { Work } from "@/components/sections/Work";
+import { TrustStrip } from "@/components/sections/TrustStrip";
 import { Insights } from "@/components/sections/Insights";
 import * as c from "@/content/services/meta-ads";
 
 import { Container } from "@/components/ui/Container";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
@@ -19,6 +21,7 @@ import { StageLadder } from "@/components/service/StageLadder";
 import { IndustryRun } from "@/components/service/IndustryRun";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
 const HREF = "/services/performance-marketing/meta-ads";
@@ -69,10 +72,11 @@ export default function MetaAdsPage() {
           primary={c.hero.primary}
           secondary={c.hero.secondary}
           phoneHref={brand.phoneHref}
+          breadcrumbs={<Breadcrumbs key="crumbs" href={HREF} />}
+          footer={<TrustStrip key="trust" id="trust" credentials={false} compact />}
           formTitle={`${c.finalCta.title} ${c.finalCta.strokeTitle}`}
           formFields={c.formFields}
           formSubmitLabel="Request a Quote"
-          ticker={["Facebook", "Instagram", "Click-to-WhatsApp", "Catalogue", "Retargeting"]}
           visual={<CreativeFeed key="feed" />}
         />
 
@@ -218,6 +222,15 @@ export default function MetaAdsPage() {
           title={c.industries.title}
           strokeTitle={c.industries.strokeTitle}
           items={c.industries.items}
+        />
+
+        <GrowthCta
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
+          formTitle={`${c.finalCta.title} ${c.finalCta.strokeTitle}`}
+          formFields={c.formFields}
+          formSubmitLabel="Request a Quote"
         />
 
         <Work index="06" label="Summits Reached" />

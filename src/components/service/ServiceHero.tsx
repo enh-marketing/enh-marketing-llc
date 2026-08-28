@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Rise } from "@/components/fx/Reveal";
 import { Container } from "@/components/ui/Container";
 import { ArrowRight } from "@/components/ui/Button";
@@ -8,7 +8,7 @@ import { Modal } from "@/components/ui/Modal";
 import { LeadForm, type FormField } from "@/components/service/LeadForm";
 
 /** Service hero. Mirrors the homepage hero: mega-scale type stacked over three
- *  lines, solid / stroked / brand, with a ticker pinned to the base.
+ *  lines, solid / stroked / brand, with a slot pinned to the base.
  *
  *  The h1 renders statically with no entrance animation because it is the LCP
  *  element and must paint on the first frame. */
@@ -23,7 +23,8 @@ export function ServiceHero({
   formTitle,
   formFields,
   formSubmitLabel,
-  ticker,
+  breadcrumbs,
+  footer,
   visual,
 }: {
   /** DevTools handle: id anchors the section, data-section names it. */
@@ -39,7 +40,13 @@ export function ServiceHero({
   formTitle: string;
   formFields: FormField[];
   formSubmitLabel: string;
-  ticker: string[];
+  /** Trail, rendered above the heading inside the hero rather than in a bar of
+   *  its own. A bar above a viewport-height hero would push the footer strip
+   *  under the fold, and this way the trail never collides with the fixed
+   *  header either. */
+  breadcrumbs?: ReactNode;
+  /** Rendered in flow at the base of the hero, inside the first viewport. */
+  footer?: ReactNode;
   visual?: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -48,7 +55,7 @@ export function ServiceHero({
     <section
       id={id}
       data-section={label}
-      className="relative isolate flex min-h-svh flex-col justify-center overflow-hidden pt-28 pb-16"
+      className="relative isolate flex min-h-svh flex-col overflow-hidden pt-24"
     >
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="aurora-a absolute left-[6%] top-[10%] h-[42vw] w-[42vw] rounded-full bg-brand/20 blur-[150px]" />
@@ -66,7 +73,9 @@ export function ServiceHero({
 
       {visual}
 
-      <Container className="relative z-10">
+      <Container className="relative z-10 flex flex-1 flex-col justify-center py-3">
+        {breadcrumbs && <div className="mb-5">{breadcrumbs}</div>}
+
         {/* Whitespace between the lines is deliberate: the spans are block, so
             it never renders, but without it textContent concatenates to
             "PerformanceMarketingin Dubai" for crawlers and assistive tech. */}
@@ -81,7 +90,15 @@ export function ServiceHero({
             wrap inside max-w-lg. */}
         <div className="mt-12 max-w-xl lg:max-w-lg">
           <Rise delay={0.15}>
-            <p className="text-lg leading-relaxed text-fog sm:text-xl">{sub}</p>
+            {/* Also height-aware, for the same reason as the heading: this
+                paragraph runs to five lines on the longer hero and is the
+                second-largest block in the fold. */}
+            <p
+              className="leading-relaxed text-fog"
+              style={{ fontSize: "clamp(1rem, min(1.25rem, 2.45svh), 1.25rem)" }}
+            >
+              {sub}
+            </p>
           </Rise>
         </div>
 
@@ -115,16 +132,7 @@ export function ServiceHero({
         </Rise>
       </Container>
 
-      <div className="absolute inset-x-0 bottom-0 overflow-hidden border-t border-line/60 py-3">
-        <div className="animate-marquee marquee-slow flex w-max items-center gap-10 text-xs uppercase tracking-[0.3em] text-ash">
-          {/* Doubled so the -50% marquee loops seamlessly. */}
-          {[...ticker, ...ticker].map((w, i) => (
-            <span key={i} className="flex items-center gap-10">
-              {w} <span className="text-brand">✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
+      {footer && <div className="relative z-10">{footer}</div>}
 
       <Modal open={open} onClose={() => setOpen(false)} title={formTitle}>
         <LeadForm fields={formFields} submitLabel={formSubmitLabel} />
