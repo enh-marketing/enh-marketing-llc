@@ -12,12 +12,12 @@ import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { CreativeFeed } from "@/components/service/CreativeFeed";
 import { MetaMark } from "@/components/service/MetaMark";
-import { BudgetSplit } from "@/components/service/BudgetSplit";
+import { Narrative } from "@/components/service/Narrative";
 import { ComparisonTable } from "@/components/service/ComparisonTable";
 import { PathCompare } from "@/components/service/PathCompare";
 import { SetupFlow } from "@/components/service/SetupFlow";
 import { CapabilityCarousel } from "@/components/service/CapabilityCarousel";
-import { StageLadder } from "@/components/service/StageLadder";
+import { PinnedExplorer } from "@/components/service/PinnedExplorer";
 import { IndustryRun } from "@/components/service/IndustryRun";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
@@ -80,18 +80,15 @@ export default function MetaAdsPage() {
           visual={<CreativeFeed key="feed" />}
         />
 
-        <BudgetSplit
+        <Narrative
           id="story"
           label="Budget Split"
           headline={c.narrative.headline}
-          lead={c.narrative.questionLead}
-          splitPrefix={c.narrative.splitPrefix}
-          splitA={c.narrative.splitA}
-          splitConjunction={c.narrative.splitConjunction}
-          splitB={c.narrative.splitB}
+          question={c.narrative.question}
+          questionEmphasis={c.narrative.questionEmphasis}
           body={c.narrative.body}
-          closing={c.narrative.oneBudget}
           highlight={c.narrative.highlight}
+          outro={[c.narrative.oneBudget]}
         />
 
         <ComparisonTable
@@ -111,7 +108,7 @@ export default function MetaAdsPage() {
         <section
           id="click-to-whatsapp"
           data-section="Click-to-WhatsApp"
-          className="relative overflow-hidden py-24 sm:py-32"
+          className="relative overflow-hidden py-16 sm:py-20"
         >
           <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
             <div className="aurora-a absolute left-[-8%] top-[8%] h-[36vw] w-[36vw] rounded-full bg-brand/[0.10] blur-[150px]" />
@@ -134,7 +131,7 @@ export default function MetaAdsPage() {
               }
             />
 
-            <Rise delay={0.1} className="max-w-3xl">
+            <Rise delay={0.1} className="">
               <p className="leading-relaxed text-fog sm:text-lg">{c.whatsapp.body}</p>
             </Rise>
 
@@ -183,13 +180,13 @@ export default function MetaAdsPage() {
                 <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-text">
                   {c.whatsapp.caution.label}
                 </p>
-                <p className="mt-5 max-w-3xl leading-relaxed text-fog sm:text-lg">
+                <p className="mt-5 leading-relaxed text-fog sm:text-lg">
                   {c.whatsapp.caution.lead}{" "}
                   <strong className="font-semibold text-snow">
                     {c.whatsapp.caution.emphasis}
                   </strong>
                 </p>
-                <p className="mt-4 max-w-3xl leading-relaxed text-fog">
+                <p className="mt-4  leading-relaxed text-fog">
                   {c.whatsapp.caution.commitment}
                 </p>
               </div>
@@ -206,13 +203,20 @@ export default function MetaAdsPage() {
           items={c.capabilities}
         />
 
-        <StageLadder
+        {/* The same track as the Performance Marketing process: the two are the
+            same content shape and now share one drawing. The diagram sits on
+            the right here so the two pages do not read as the same section. */}
+        <PinnedExplorer
           id="process"
           label="How Meta Ads Management Works"
           index="04"
           title="How Meta Ads"
           strokeTitle="Management Works"
-          stages={c.stages}
+          items={c.stages}
+          tone="ink-2"
+          diagramSide="right"
+          mark={{ variant: "progression", label: "Five stages, the last one ongoing" }}
+          diagram={{ kind: "track" }}
         />
 
         <IndustryRun

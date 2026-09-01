@@ -11,7 +11,8 @@ import { ChannelOrbit } from "@/components/service/ChannelOrbit";
 import { Narrative } from "@/components/service/Narrative";
 import { ReasonList } from "@/components/service/ReasonList";
 import { ChannelScroller } from "@/components/service/ChannelScroller";
-import { StageTimeline } from "@/components/service/StageTimeline";
+import { Rise } from "@/components/fx/Reveal";
+import { PinnedExplorer } from "@/components/service/PinnedExplorer";
 import { BenchmarkReadout } from "@/components/service/BenchmarkReadout";
 import { ComparisonTable } from "@/components/service/ComparisonTable";
 import { IndustryList } from "@/components/service/IndustryList";
@@ -116,16 +117,31 @@ export default function PerformanceMarketingPage() {
           note={c.organicNote}
         />
 
-        <StageTimeline
+        {/* The programme, drawn as a track the reader can point at. Same
+            component as the Meta Ads process — identical content shape, so one
+            drawing rather than two — with this page's own axis and stages. */}
+        <PinnedExplorer
           id="process"
           label="The First 90 Days"
           index="03"
           title={c.headings.process[0]}
           strokeTitle={c.headings.process[1]}
-          lede={c.processIntro}
-          stages={c.stages}
-          outro={c.processOutro}
-        />
+          items={c.stages}
+          tone="ink-2"
+          diagramSide="left"
+          aside={
+            <Rise key="lede">
+              <p className="font-display text-[clamp(1.15rem,2.1vw,1.7rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+                {c.processIntro}
+              </p>
+            </Rise>
+          }
+          diagram={{ kind: "track", axis: ["Day 0", "Day 90"] }}
+        >
+          <Rise delay={0.12} className="mt-10 border-t border-line pt-8">
+            <p className="max-w-3xl leading-relaxed text-fog sm:text-lg">{c.processOutro}</p>
+          </Rise>
+        </PinnedExplorer>
 
         <BenchmarkReadout
           id="benchmarks"
