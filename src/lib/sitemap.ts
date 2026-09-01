@@ -216,9 +216,65 @@ export const footerNav: NavNode[] = [
 
 /* ------------------------------------------------------------------ helpers */
 
-/** No destination yet. Render as a plain link, never with target="_blank". */
+/** The internal routes that actually exist under src/app. Every other node in
+ *  this file is a page still to be built.
+ *
+ *  This list is the reason isPending is not just an `href === "#"` check. The
+ *  sitemap is the plan for the finished site, so it names all 69 destinations,
+ *  and for most of the build only a minority of them resolve. Measured against
+ *  the dev server, 52 of the 69 returned 404 while the navbar and footer went
+ *  on presenting every one of them as a live link: a visitor clicking About or
+ *  Contact from any page landed on an error. Marking the unbuilt ones pending
+ *  keeps the menus honest without hiding what the agency offers, and both the
+ *  navbar and the footer already know how to render a pending node.
+ *
+ *  INVARIANT: one entry per page.tsx under src/app. Adding a route here is what
+ *  turns its menu entries back into links, so add the path when the page ships.
+ *  `npm run check:routes` fails the build if the two ever drift apart. */
+const BUILT = new Set([
+  "/",
+  "/services/lead-generation",
+  "/services/lead-generation/landing-page-development",
+  "/services/performance-marketing",
+  "/services/performance-marketing/linkedin-ads",
+  "/services/performance-marketing/meta-ads",
+  "/services/performance-marketing/snapchat-ads",
+  "/services/performance-marketing/youtube-ads",
+  "/services/seo/aeo-and-geo",
+  "/services/seo/on-page-seo",
+  "/services/seo/seo-audit",
+  "/services/social-media-marketing/content-creation",
+  "/services/social-media-marketing/influencer-marketing",
+  "/services/social-media-marketing/instagram-marketing",
+  "/services/social-media-marketing/linkedin-marketing",
+  "/services/social-media-marketing/tiktok-marketing",
+  "/services/web-design-development/ecommerce-website-development",
+]);
+
+/** Whether an internal path is served by a page that exists.
+ *
+ *  The link-rendering counterpart to isPending, for the places that hold a bare
+ *  href rather than a NavNode: breadcrumb trails, and the cross-links the
+ *  content files write into body copy. Both used to render every href as a
+ *  live link regardless, which is how sixteen distinct 404s were still reachable
+ *  from page content after the menus were fixed. */
+export function routeExists(href: string): boolean {
+  return BUILT.has(href);
+}
+
+/** No destination yet: either the node has no href at all, or it names a page
+ *  that has not been built. Render as a plain link, never with target="_blank".
+ *
+ *  Off-site nodes are never pending. Their destination lives on another host,
+ *  so BUILT has nothing to say about it. */
 export function isPending(node: NavNode): boolean {
-  return node.href === "#";
+  if (node.external) return false;
+  return node.href === "#" || !BUILT.has(node.href);
+}
+
+/** Routes named in this file that no page satisfies yet. */
+export function pendingPages(): string[] {
+  return buildablePages().filter((href) => !BUILT.has(href));
 }
 
 /** Every internal URL that needs a page built, deduped and depth-first. */

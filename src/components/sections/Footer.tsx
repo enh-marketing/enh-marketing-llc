@@ -91,11 +91,21 @@ export function Footer() {
             </span>
           </div>
           <div className="flex flex-wrap gap-5">
-            {pages.legal.map((l) => (
-              <Link key={l.href} href={l.href} className="inline-block py-1.5 transition-colors hover:text-snow">
-                {l.label}
-              </Link>
-            ))}
+            {/* Pending-checked like every other menu entry. These bypassed the
+                check and shipped two more links to pages that do not exist.
+                Set here rather than through FooterLink so the legal row keeps
+                its own text-xs scale against the copyright line beside it. */}
+            {pages.legal.map((l) =>
+              isPending(l) ? (
+                <span key={l.href} aria-disabled="true" className="inline-block py-1.5">
+                  {l.label}
+                </span>
+              ) : (
+                <Link key={l.href} href={l.href} className="inline-block py-1.5 transition-colors hover:text-snow">
+                  {l.label}
+                </Link>
+              ),
+            )}
           </div>
         </div>
       </Container>

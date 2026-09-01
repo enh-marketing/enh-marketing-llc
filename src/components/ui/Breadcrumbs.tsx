@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { trailFor } from "@/lib/sitemap";
+import { trailFor, routeExists } from "@/lib/sitemap";
 import { cn } from "@/lib/cn";
 
 /** Trail derived from the sitemap, so it can never drift from the real IA, plus
@@ -19,11 +19,16 @@ export function Breadcrumbs({ href, className }: { href: string; className?: str
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    // `item` only where a page answers the URL. The pillar routes in this
+    // trail ("/services", "/services/seo") are still unbuilt, and declaring a
+    // 404 as a breadcrumb URL invites search engines to crawl it and devalues
+    // the trail. schema.org allows a name-only ListItem, which describes the
+    // level truthfully without pointing anywhere.
     itemListElement: trail.map((node, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: node.label,
-      item: `https://enhmedia.com${node.href}`,
+      ...(routeExists(node.href) ? { item: `https://enhmedia.com${node.href}` } : {}),
     })),
   };
 
@@ -59,13 +64,23 @@ export function Breadcrumbs({ href, className }: { href: string; className?: str
               ) : (
                 <>
                   {/* text-fog, not text-ash: ash measures 2.88:1 on these
-                      surfaces and fails the 4.5 minimum for body text. */}
-                  <Link
-                    href={node.href}
-                    className="inline-block py-1 text-fog transition-colors duration-300 hover:text-brand"
-                  >
-                    {node.label}
-                  </Link>
+                      surfaces and fails the 4.5 minimum for body text.
+
+                      A crumb whose page is not built yet keeps its place in the
+                      trail and drops the link. The trail's job is to say where
+                      you are, and it can do that without every level being
+                      reachable; sending someone to a 404 from the breadcrumb is
+                      strictly worse than a level that simply does not respond. */}
+                  {routeExists(node.href) ? (
+                    <Link
+                      href={node.href}
+                      className="inline-block py-1 text-fog transition-colors duration-300 hover:text-brand"
+                    >
+                      {node.label}
+                    </Link>
+                  ) : (
+                    <span className="inline-block py-1 text-fog">{node.label}</span>
+                  )}
                   {/* Chevron rather than a typed slash: it reads as direction
                       rather than punctuation, and it cannot be picked up as
                       text by a screen reader or a copy-paste. */}

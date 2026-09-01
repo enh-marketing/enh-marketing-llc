@@ -22,6 +22,18 @@ const subscribeHover = (cb: () => void) => {
   return () => mq.removeEventListener("change", cb);
 };
 
+/** Where the header's three calls to action point.
+ *
+ *  All three pointed at /contact, which the sitemap names but no page serves,
+ *  so the site's primary CTA returned a 404 from every page in the build. The
+ *  destination it wanted is already on the current page either way: the
+ *  homepage closes on LetsTalk (#contact) and all sixteen service pages close
+ *  on CtaBand (#quote), so the button now scrolls to the form that is there.
+ *  Point this back at pages.contact.href once /contact is built. */
+function ctaTarget(pathname: string): string {
+  return pathname === "/" ? "#contact" : "#quote";
+}
+
 /** Renders the right element for the node: Link internally, anchor off-site,
  *  and an inert anchor while a destination is still "#". */
 function NavLink({
@@ -204,7 +216,7 @@ export function Navbar() {
           <div className="flex items-center gap-3 sm:gap-4">
             <ThemeToggle />
             <Link
-              href="/contact"
+              href={ctaTarget(pathname)}
               className="hidden rounded-full border border-line px-5 py-2.5 text-sm font-medium text-snow transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-white sm:block"
             >
               Start the climb
@@ -371,7 +383,7 @@ export function Navbar() {
                             Fifteen years turning ambition into market share.
                           </p>
                           <Link
-                            href="/contact"
+                            href={ctaTarget(pathname)}
                             onClick={close}
                             className="mt-7 inline-flex items-center gap-3 self-start rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-brand-deep"
                           >
@@ -419,7 +431,7 @@ export function Navbar() {
                 className="mt-10 flex flex-col gap-4 border-t border-line pt-7 text-sm text-fog sm:flex-row sm:items-center sm:justify-between"
               >
                 <Link
-                  href="/contact"
+                  href={ctaTarget(pathname)}
                   onClick={close}
                   className="rounded-full bg-brand px-6 py-3 text-center font-semibold text-white sm:hidden"
                 >
