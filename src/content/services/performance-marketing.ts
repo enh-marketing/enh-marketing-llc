@@ -8,7 +8,14 @@ export type Reason = { no: string; title: string; body: string };
 export type Channel = { name: string; href: string; body: string };
 export type Stage = { no: string; title: string; body: string };
 export type CompareRow = { area: string; performance: string; digital: string };
-export type Faq = { q: string; a: string };
+export type Faq = {
+  q: string;
+  a: string;
+  /** A phrase inside `a` to render as a link. The answer text stays complete
+   *  and unbracketed either way, so the FAQ structured data is unaffected and a
+   *  page that omits this simply gets prose. */
+  aLink?: { label: string; href: string };
+};
 
 export const meta = {
   title: "Performance Marketing Agency in Dubai | ENH Marketing",

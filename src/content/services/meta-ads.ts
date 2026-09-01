@@ -316,8 +316,12 @@ export const organicNote = {
 export const finalCta = {
   title: "Ready to Fix Your",
   strokeTitle: "Meta Campaigns?",
-  // TODO(client): the document leaves the response time as "[X] hours".
-  body: "Tell us your objective and your current monthly spend. We will come back within [X] hours with a view on what is working, what is not, and a scoped proposal.",
+  /** The source reads "We will come back within [X] hours with a view..." and
+   *  the client has not filled the figure in. Dropping the time clause is the
+   *  same call taken on the Snapchat page: shipping a literal "[X]" to readers
+   *  is worse than losing a detail, and inventing a number is not an option.
+   *  Restore the clause verbatim once the client supplies the figure. */
+  body: "Tell us your objective and your current monthly spend. We will come back with a view on what is working, what is not, and a scoped proposal.",
 };
 
 /** Form fields this page's document specifies (differs from Performance
