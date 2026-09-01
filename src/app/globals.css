@@ -199,6 +199,13 @@ body {
   animation: dash-march 1.1s linear infinite;
 }
 
+/* Progress line under the active item of a PinnedExplorer, sized to its own
+   autoplay interval. Suppressed with everything else under reduced motion. */
+@keyframes pin-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
 /* Marquee */
 @keyframes marquee {
   from { transform: translateX(0); }
@@ -308,6 +315,10 @@ body {
   .animate-marquee,
   .animate-feed,
   .animate-readout,
+  /* Tailwind's own looping utility. The search caret on the TikTok page uses
+     it, and a caret that never stops blinking is the standard example of what
+     this query exists to switch off. */
+  .animate-pulse,
   .aurora-a,
   .aurora-b,
   .grain::after {
@@ -347,6 +358,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .glyph-scan, .glyph-pulse, .glyph-rise { animation: none !important; }
+  /* The autoplay progress line is set inline, so it needs an explicit stop. */
+  [style*="pin-progress"] { animation: none !important; }
   .glyph-draw { stroke-dashoffset: 0; }
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { faqs } from "@/lib/content";
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { cn } from "@/lib/cn";
@@ -10,9 +10,10 @@ import { RippleEmblem } from "@/components/fx/Adornments";
 
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
+  const panelBase = "home-faq";
 
   return (
-    <section id="faq" className="relative border-t border-line py-24 sm:py-32">
+    <section id="faq" className="relative border-t border-line py-16 sm:py-20">
       <Container>
       <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div>
@@ -42,6 +43,8 @@ export function FAQ() {
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
                   aria-expanded={isOpen}
+                  aria-controls={`${panelBase}-${i}`}
+                  id={`${panelBase}-q-${i}`}
                   className="flex w-full items-start gap-5 py-6 text-left"
                 >
                   <span className="font-display mt-1 text-sm font-bold text-brand">
@@ -60,19 +63,21 @@ export function FAQ() {
                     <span className="absolute top-1/2 left-0 h-0.5 w-4 -translate-y-1/2 bg-snow" />
                   </span>
                 </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <p className="max-w-2xl pb-7 pl-10 leading-relaxed text-fog">{f.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* Kept mounted while collapsed, so every answer is in the
+                    served HTML rather than only the open one. Mirrors
+                    service/FaqList.tsx exactly. */}
+                <motion.div
+                  id={`${panelBase}-${i}`}
+                  role="region"
+                  aria-labelledby={`${panelBase}-q-${i}`}
+                  inert={!isOpen}
+                  initial={false}
+                  animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden"
+                >
+                  <p className="max-w-2xl pb-7 pl-10 leading-relaxed text-fog">{f.a}</p>
+                </motion.div>
               </div>
             );
           })}

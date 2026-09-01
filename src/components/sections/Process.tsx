@@ -13,7 +13,7 @@ export function Process() {
   const lineScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
-    <section id="process" className="relative py-24 sm:py-32">
+    <section id="process" className="relative py-16 sm:py-20">
       <Container>
       <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
         <span className="text-brand">(06)</span> The route

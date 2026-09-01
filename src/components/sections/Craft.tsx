@@ -60,7 +60,7 @@ function Card({ craft, index, total }: { craft: CraftType; index: number; total:
 
 export function Craft() {
   return (
-    <section id="craft" className="relative py-24 sm:py-32">
+    <section id="craft" className="relative py-16 sm:py-20">
       <Container className="mb-16">
         <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
           <span className="text-brand">(02)</span> The craft

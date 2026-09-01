@@ -44,7 +44,7 @@ export function Work({
   };
 
   return (
-    <section id="work" data-section={label} className="relative overflow-hidden py-24 sm:py-32">
+    <section id="work" data-section={label} className="relative overflow-hidden py-16 sm:py-20">
       <Container className="mb-12">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>

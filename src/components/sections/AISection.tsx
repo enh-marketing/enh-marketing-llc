@@ -13,7 +13,7 @@ export function AISection() {
   const y = useTransform(scrollYProgress, [0, 1], [90, -90]);
 
   return (
-    <section id="ai" ref={ref} className="relative overflow-hidden py-24 sm:py-32">
+    <section id="ai" ref={ref} className="relative overflow-hidden py-16 sm:py-20">
       <motion.div style={{ y }} className="pointer-events-none absolute -right-1/4 top-0 h-[70vh] w-[70vw]">
         <div
           className="h-full w-full"
