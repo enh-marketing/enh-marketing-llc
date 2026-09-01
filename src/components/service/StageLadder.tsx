@@ -101,7 +101,7 @@ export function StageLadder({
   const activeStage = stages[active];
 
   return (
-    <section id={id} data-section={label} className="relative overflow-x-clip py-24 sm:py-32">
+    <section id={id} data-section={label} className="relative overflow-x-clip py-16 sm:py-20">
       <Container>
         <SectionHeader
           index={index}
@@ -169,7 +169,11 @@ export function StageLadder({
           </div>
 
           {/* The run itself. */}
-          <ol ref={listRef} className="relative">
+          {/* The rail sits outside the list. A <span> as a direct child of <ol>
+              is invalid markup, and it put two of them there on every page
+              using this ladder; the wrapper keeps the same positioning context
+              and the same bounds, so the rail geometry is unchanged. */}
+          <div className="relative">
             <span
               aria-hidden
               className="absolute left-[11px] top-2 bottom-2 w-px bg-line sm:left-[15px]"
@@ -181,6 +185,7 @@ export function StageLadder({
               className="absolute left-[11px] top-2 w-px origin-top bg-brand sm:left-[15px]"
             />
 
+          <ol ref={listRef} className="relative">
             {stages.map((stage, i) => {
               const isTail = isTailIndex(i);
               const isActive = i === active;
@@ -191,7 +196,7 @@ export function StageLadder({
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "0px 0px -12% 0px" }}
                   transition={{ duration: 0.65, ease: EASE }}
-                  className="relative pb-5 pl-12 last:pb-0 sm:pl-16"
+                  className="relative pb-4 pl-12 last:pb-0 sm:pl-16"
                 >
                   {/* Node */}
                   <span
@@ -214,7 +219,7 @@ export function StageLadder({
                       its colours, so nothing dims below readable contrast. */}
                   <div
                     className={cn(
-                      "relative overflow-hidden rounded-2xl border p-7 transition-colors duration-500 sm:p-8",
+                      "relative overflow-hidden rounded-2xl border p-6 transition-colors duration-500 sm:p-7",
                       isActive ? "border-brand/40 bg-ink-2" : "border-line bg-transparent",
                     )}
                   >
@@ -245,6 +250,7 @@ export function StageLadder({
               );
             })}
           </ol>
+          </div>
         </div>
       </Container>
     </section>

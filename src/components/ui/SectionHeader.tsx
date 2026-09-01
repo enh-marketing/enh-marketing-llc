@@ -62,7 +62,7 @@ export function SectionHeader({
         </h2>
         {lede && (
           <Rise delay={0.25} className="mt-7">
-            <p className="max-w-xl text-base leading-relaxed text-fog sm:text-lg">{lede}</p>
+            <p className=" text-base leading-relaxed text-fog sm:text-lg">{lede}</p>
           </Rise>
         )}
         {children}

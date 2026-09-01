@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { routeExists } from "@/lib/sitemap";
+import { Crosslink } from "@/components/ui/Crosslink";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Container } from "@/components/ui/Container";
@@ -125,7 +127,7 @@ export function ChannelScroller({
   }, []);
 
   return (
-    <section id={id} data-section={label} className="relative overflow-hidden py-24 sm:py-32">
+    <section id={id} data-section={label} className="relative overflow-hidden py-16 sm:py-20">
       <Container className="mb-16">
         <SectionHeader
           index={index}
@@ -141,16 +143,20 @@ export function ChannelScroller({
           ref={track}
           className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 sm:px-10 lg:px-[calc((100vw-1320px)/2+2.5rem)]"
         >
-          {channels.map((channel) => (
-            // The whole card is the link, so without this its accessible name
-            // is the heading plus the entire body plus "Know More". Pointing at
-            // the heading makes the name exactly the visible channel name.
-            <Link
-              key={channel.href}
-              href={channel.href}
-              aria-labelledby={`ch-${channel.href}`}
-              className="group relative flex w-[80vw] shrink-0 snap-start flex-col justify-between overflow-hidden border-t border-line pt-8 transition-colors duration-500 hover:border-brand sm:w-[54vw] lg:h-[26rem] lg:w-[27rem]"
-            >
+          {channels.map((channel) => {
+            // The whole card is the link, so without aria-labelledby its
+            // accessible name is the heading plus the entire body plus "Know
+            // More". Pointing at the heading makes the name exactly the visible
+            // channel name.
+            //
+            // A channel whose page is unbuilt renders the same card as a plain
+            // container: the channel is still part of the offering, it just has
+            // nowhere to send you yet.
+            const live = routeExists(channel.href);
+            const shell =
+              "group relative flex w-[80vw] shrink-0 snap-start flex-col justify-between overflow-hidden border-t border-line pt-8 transition-colors duration-500 hover:border-brand sm:w-[54vw] lg:h-[26rem] lg:w-[27rem]";
+            const inner = (
+              <>
               <div className="relative">
                 <ChannelIconBadge name={channel.name} />
                 <h3
@@ -164,15 +170,34 @@ export function ChannelScroller({
                 </p>
               </div>
 
-              <span className="relative mt-8 inline-flex items-center gap-3 self-start rounded-full border border-line px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-snow transition-colors duration-300 group-hover:border-brand group-hover:text-brand">
-                Know More
-                <span className="relative flex h-4 w-4 items-center justify-center overflow-hidden">
-                  <ArrowRight className="absolute transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-5" />
-                  <ArrowRight className="absolute -translate-x-5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
+              {/* The pill is the card's promise of a destination, so it goes
+                  with the link rather than sitting there inert. */}
+              {live && (
+                <span className="relative mt-8 inline-flex items-center gap-3 self-start rounded-full border border-line px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-snow transition-colors duration-300 group-hover:border-brand group-hover:text-brand">
+                  Know More
+                  <span className="relative flex h-4 w-4 items-center justify-center overflow-hidden">
+                    <ArrowRight className="absolute transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-5" />
+                    <ArrowRight className="absolute -translate-x-5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
+                  </span>
                 </span>
-              </span>
-            </Link>
-          ))}
+              )}
+              </>
+            );
+            return live ? (
+              <Link
+                key={channel.href}
+                href={channel.href}
+                aria-labelledby={`ch-${channel.href}`}
+                className={shell}
+              >
+                {inner}
+              </Link>
+            ) : (
+              <div key={channel.href} className={shell}>
+                {inner}
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -194,12 +219,13 @@ export function ChannelScroller({
             {note.body}{" "}
             {note.links.map((link, i) => (
               <span key={link.href}>
-                <Link
+                <Crosslink
                   href={link.href}
                   className="text-snow underline decoration-brand decoration-1 underline-offset-4 transition-colors hover:text-brand"
+                  pendingClassName="text-snow"
                 >
                   {link.label}
-                </Link>
+                </Crosslink>
                 {i < note.links.length - 2 ? ", " : i === note.links.length - 2 ? " and " : " "}
               </span>
             ))}

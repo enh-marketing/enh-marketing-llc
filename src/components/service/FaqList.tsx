@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { cn } from "@/lib/cn";
 import { Container } from "@/components/ui/Container";
 import { RippleEmblem } from "@/components/fx/Adornments";
 
-type Faq = { q: string; a: string };
+import { Crosslink } from "@/components/ui/Crosslink";
+
+type Faq = { q: string; a: string; aLink?: { label: string; href: string } };
 
 /** Mirrors src/components/sections/FAQ.tsx exactly: same section chrome, grid
  *  ratio, emblem, numerals, question scale, plus/cross icon and disclosure
@@ -31,6 +33,7 @@ export function FaqList({
   faqs: Faq[];
 }) {
   const [open, setOpen] = useState<number | null>(0);
+  const panelBase = "faq";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -43,7 +46,7 @@ export function FaqList({
   };
 
   return (
-    <section id="faq" data-section={label} className="relative border-t border-line py-24 sm:py-32">
+    <section id="faq" data-section={label} className="relative border-t border-line py-16 sm:py-20">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
@@ -79,6 +82,8 @@ export function FaqList({
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
                     aria-expanded={isOpen}
+                    aria-controls={`${panelBase}-${i}`}
+                    id={`${panelBase}-q-${i}`}
                     className="flex w-full items-start gap-5 py-6 text-left"
                   >
                     <span className="font-display mt-1 text-sm font-bold text-brand">
@@ -98,19 +103,47 @@ export function FaqList({
                       <span className="absolute left-0 top-1/2 h-0.5 w-4 -translate-y-1/2 bg-snow" />
                     </span>
                   </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <p className="max-w-2xl pb-7 pl-10 leading-relaxed text-fog">{f.a}</p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {/* The answer stays in the DOM when collapsed, and only its
+                      height animates. Mounting it on open — which is what
+                      AnimatePresence was doing — kept every closed answer out
+                      of the served HTML, so crawlers and the assistants that
+                      read rendered text only ever saw the one open answer.
+                      `inert` keeps the hidden copy out of the tab order and
+                      off the accessibility tree while it is closed. */}
+                  <motion.div
+                    id={`${panelBase}-${i}`}
+                    role="region"
+                    aria-labelledby={`${panelBase}-q-${i}`}
+                    inert={!isOpen}
+                    initial={false}
+                    animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <p className="max-w-2xl pb-7 pl-10 leading-relaxed text-fog">
+                      {/* Where the source names another page, the phrase links.
+                          The surrounding sentence is untouched, so the answer
+                          reads the same with or without the link. */}
+                      {f.aLink && f.a.includes(f.aLink.label)
+                        ? (() => {
+                            const at = f.a.indexOf(f.aLink.label);
+                            return (
+                              <>
+                                {f.a.slice(0, at)}
+                                <Crosslink
+                                  href={f.aLink.href}
+                                  className="text-snow underline decoration-line underline-offset-4 transition-colors duration-300 hover:text-brand hover:decoration-brand"
+                                  pendingClassName="text-snow"
+                                >
+                                  {f.aLink.label}
+                                </Crosslink>
+                                {f.a.slice(at + f.aLink.label.length)}
+                              </>
+                            );
+                          })()
+                        : f.a}
+                    </p>
+                  </motion.div>
                 </div>
               );
             })}

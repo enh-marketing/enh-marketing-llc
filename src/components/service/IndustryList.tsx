@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
+import { routeExists } from "@/lib/sitemap";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { cn } from "@/lib/cn";
@@ -55,7 +56,9 @@ function RowInner({ item, i, active }: { item: Item; i: number; active: boolean 
 const ROW = "flex flex-wrap items-baseline gap-x-8 gap-y-2 py-6 transition-colors duration-300 sm:py-7";
 
 function Row({ item, i, active }: { item: Item; i: number; active: boolean }) {
-  if (!item.href) {
+  // No href, or one whose page is not built yet. The sector belongs in the list
+  // either way; only the link has to wait for the page.
+  if (!item.href || !routeExists(item.href)) {
     return (
       <div className={ROW}>
         <RowInner item={item} i={i} active={active} />
@@ -77,6 +80,8 @@ export function IndustryList({
   strokeTitle,
   lede,
   items,
+  mark = "Sectors of different weight, connected",
+  footer,
 }: {
   /** DevTools handle: id anchors the section, data-section names it. */
   id: string;
@@ -87,18 +92,23 @@ export function IndustryList({
   /** Omit where the source document has no intro paragraph. */
   lede?: string;
   items: Item[];
+  /** The section mark. Defaults to the paid-media page's wording; a document
+   *  that argues the opposite about its sectors needs to say so. */
+  mark?: string;
+  /** A closing statement under the index, where the source has one. */
+  footer?: ReactNode;
 }) {
   const [active, setActive] = useState<number | null>(null);
 
   return (
-    <section id={id} data-section={label} className="relative py-24 sm:py-32">
+    <section id={id} data-section={label} className="relative py-16 sm:py-20">
       <Container>
         <SectionHeader
           index={index}
           title={title}
           strokeTitle={strokeTitle}
           lede={lede}
-          mark={{ variant: "ecosystem", label: "Sectors of different weight, connected" }}
+          mark={{ variant: "ecosystem", label: mark }}
           className="mb-16"
         />
 
@@ -114,6 +124,8 @@ export function IndustryList({
             </li>
           ))}
         </ul>
+
+        {footer}
       </Container>
     </section>
   );

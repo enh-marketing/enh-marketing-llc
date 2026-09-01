@@ -124,7 +124,7 @@ export function BenchmarkReadout({
       />
 
       <Container className="relative pt-20 sm:pt-24">
-        <h2 className="font-display display-xl max-w-4xl font-extrabold uppercase text-snow">
+        <h2 className="font-display display-xl font-extrabold uppercase text-snow">
           <span className="block">
             <Chars text={intro.heading[0]} />
           </span>{" "}
@@ -133,7 +133,7 @@ export function BenchmarkReadout({
           </span>
         </h2>
         <Rise delay={0.18}>
-          <p className="mt-6 max-w-2xl leading-relaxed text-fog sm:text-lg">{intro.lede}</p>
+          <p className="mt-6  leading-relaxed text-fog sm:text-lg">{intro.lede}</p>
         </Rise>
       </Container>
 

@@ -50,7 +50,7 @@ export function ComparisonTable({
   markNode?: ReactNode;
 }) {
   return (
-    <section id={id} data-section={label} className="relative py-24 sm:py-32">
+    <section id={id} data-section={label} className="relative py-16 sm:py-20">
       <Container>
         <SectionHeader
           index={index}

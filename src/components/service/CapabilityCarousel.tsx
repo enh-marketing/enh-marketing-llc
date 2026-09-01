@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
+import { routeExists } from "@/lib/sitemap";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
@@ -198,7 +199,7 @@ export function CapabilityCarousel({
   }, [enabled]);
 
   return (
-    <section id={id} data-section={label} className="relative overflow-x-clip py-24 sm:py-32">
+    <section id={id} data-section={label} className="relative overflow-x-clip py-16 sm:py-20">
       <Container>
         <SectionHeader
           index={index}
@@ -266,7 +267,10 @@ export function CapabilityCarousel({
                 </h3>
                 <p className="mt-4 flex-1 leading-relaxed text-fog">{item.body}</p>
 
-                {item.href && (
+                {/* "See how" is nothing but an affordance, so unlike a named
+                    cross-reference there is no text worth keeping when the page
+                    it points at does not exist yet. */}
+                {item.href && routeExists(item.href) && (
                   <Link
                     href={item.href}
                     className="mt-6 inline-flex items-center gap-2 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-snow transition-colors hover:text-brand"

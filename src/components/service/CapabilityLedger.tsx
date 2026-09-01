@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { routeExists } from "@/lib/sitemap";
 import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -36,7 +37,7 @@ export function CapabilityLedger({
   items: Capability[];
 }) {
   return (
-    <section id={id} data-section={label} className="relative py-24 sm:py-32">
+    <section id={id} data-section={label} className="relative py-16 sm:py-20">
       <Container>
         <SectionHeader
           index={index}
@@ -84,7 +85,7 @@ export function CapabilityLedger({
                 className="group relative border-b border-line"
               >
                 {/* Row wash and left rule, both on hover. */}
-                {item.href ? (
+                {item.href && routeExists(item.href) ? (
                   <Link
                     href={item.href}
                     className={`${shell} transition-colors duration-500 hover:bg-ink-2/60`}

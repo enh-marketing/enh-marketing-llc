@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { routeExists } from "@/lib/sitemap";
 import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -35,7 +36,7 @@ export function IndustryRun({
   items: Item[];
 }) {
   return (
-    <section id={id} data-section={label} className="relative py-24 sm:py-32">
+    <section id={id} data-section={label} className="relative py-16 sm:py-20">
       <Container>
         <SectionHeader
           index={index}
@@ -55,13 +56,20 @@ export function IndustryRun({
               transition={{ duration: 0.5, delay: i * 0.06, ease: EASE }}
               className="inline-flex items-baseline"
             >
-              {item.href ? (
+              {/* Three states, not two. A sector the document names but whose
+                  page is unbuilt keeps text-snow and loses only the link: it is
+                  as much a sector as the linked ones, and dropping it to the
+                  text-fog treatment reserved for unnamed items would dim most
+                  of the sentence for a reason the reader cannot see. */}
+              {item.href && routeExists(item.href) ? (
                 <Link
                   href={item.href}
                   className="text-snow transition-colors duration-300 hover:text-brand"
                 >
                   {item.label}
                 </Link>
+              ) : item.href ? (
+                <span className="text-snow">{item.label}</span>
               ) : (
                 <span className="text-fog">{item.label}</span>
               )}

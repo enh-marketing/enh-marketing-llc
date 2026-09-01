@@ -14,6 +14,7 @@ export function CtaBand({
   title,
   strokeTitle,
   body,
+  note,
   formFields,
   formSubmitLabel,
   whatsapp,
@@ -25,13 +26,16 @@ export function CtaBand({
   title: string;
   strokeTitle: string;
   body: string;
+  /** A second, quieter line under the body. Optional because only the pages
+   *  whose document supplies one pass it — nothing is invented to fill it. */
+  note?: string;
   formFields: FormField[];
   formSubmitLabel: string;
   whatsapp: string;
   whatsappLabel: string;
 }) {
   return (
-    <section id="quote" data-section={label} className="relative overflow-hidden border-t border-line py-24 sm:py-32">
+    <section id="quote" data-section={label} className="relative overflow-hidden border-t border-line py-16 sm:py-20">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="aurora-b absolute right-[-12%] top-0 h-[40vw] w-[40vw] rounded-full bg-brand/12 blur-[160px]" />
       </div>
@@ -57,6 +61,14 @@ export function CtaBand({
             <Rise delay={0.25} className="mt-8">
               <p className="max-w-md text-base leading-relaxed text-fog sm:text-lg">{body}</p>
             </Rise>
+
+            {note && (
+              <Rise delay={0.3} className="mt-5">
+                <p className="max-w-md border-l-2 border-brand/40 pl-5 text-sm leading-relaxed text-fog">
+                  {note}
+                </p>
+              </Rise>
+            )}
 
             <Rise delay={0.35} className="mt-10">
               <a

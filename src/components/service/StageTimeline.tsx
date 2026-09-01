@@ -55,7 +55,7 @@ export function StageTimeline({
   // overflow-x-clip, not overflow-hidden: the latter creates a scroll
   // container and silently disables the sticky counter below.
   return (
-    <section id={id} data-section={label} className="relative overflow-x-clip py-24 sm:py-32">
+    <section id={id} data-section={label} className="relative overflow-x-clip py-16 sm:py-20">
       <Container>
         <SectionHeader
           index={index}
