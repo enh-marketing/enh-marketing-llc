@@ -46,6 +46,13 @@ const services: NavNode = {
       ],
     },
     {
+      label: "AI",
+      href: "/services/ai",
+      children: [
+        { label: "AI & Automation", href: "/services/ai/ai-automation" },
+      ],
+    },
+    {
       label: "Performance Marketing",
       href: "/services/performance-marketing",
       children: [
@@ -135,14 +142,18 @@ const industries: NavNode = {
 
 /* -------------------------------------------------------------------- ai hub */
 
-// Every node here leaves the site. No pages are built for this branch.
+// Almost every node here leaves the site, and AI_HUB_HREF is a placeholder the
+// AI Hub property has not been wired to yet. The one exception is
+// "AI & Automation", which now has a real page under Services: it is marked
+// crossLink so it appears in this menu without being counted as a second page
+// or claiming the breadcrumb trail, which is what crossLink exists for.
 const aiHub: NavNode = {
   label: "AI Hub",
   href: AI_HUB_HREF,
   external: true,
   children: [
     { label: "AI Search Visibility (AEO & GEO)", href: AI_HUB_HREF, external: true },
-    { label: "AI & Automation", href: AI_HUB_HREF, external: true },
+    { label: "AI & Automation", href: "/services/ai/ai-automation", crossLink: true },
     { label: "AI Creative Production", href: AI_HUB_HREF, external: true },
     { label: "Campaign Intelligence", href: AI_HUB_HREF, external: true },
     { label: "Intelligent Web", href: AI_HUB_HREF, external: true },
@@ -235,6 +246,7 @@ const BUILT = new Set([
   "/",
   "/services/lead-generation",
   "/services/lead-generation/landing-page-development",
+  "/services/ai/ai-automation",
   "/services/performance-marketing",
   "/services/performance-marketing/linkedin-ads",
   "/services/performance-marketing/meta-ads",

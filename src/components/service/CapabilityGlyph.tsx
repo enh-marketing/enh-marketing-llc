@@ -31,7 +31,29 @@ export type GlyphVariant =
   | "fanout"
   | "offsite"
   | "entity"
-  | "schema";
+  | "schema"
+  /* ---- automation. The AI & Automation page needs twenty distinct marks
+     across its three sections, and the AEO set above is about crawlers,
+     entities and offsite mentions: borrowing those would put an SEO icon on a
+     document-processing card. Same 48-unit box, same stroke, same keyframes. */
+  | "agent"
+  | "workflow"
+  | "extract"
+  | "triage"
+  | "watch"
+  | "reconcile"
+  | "tool"
+  | "diagnose"
+  | "recommend"
+  | "testcase"
+  | "golive"
+  | "improve"
+  | "heartbeat"
+  | "alert"
+  | "repair"
+  | "reseat"
+  | "support"
+  | "ledger";
 
 const S = {
   fill: "none",
@@ -243,6 +265,236 @@ function Schema() {
   );
 }
 
+/* --------------------------------------------------------------- automation */
+
+/** An agent: takes work in, checks it against rules, and hands the exception
+ *  to a person. The whole argument of the page in one mark. */
+function Agent() {
+  return (
+    <>
+      <path d="M6 24h8" {...S} opacity="0.5" />
+      <rect x="14" y="15" width="18" height="18" rx="4" {...S} />
+      <path d="M19 24l3 3 6-7" {...S} className="glyph-scan" />
+      <path d="M32 20h4M32 28h4" {...S} opacity="0.5" />
+      <circle cx="40" cy="20" r="3" {...S} className="glyph-pulse" />
+      <circle cx="40" cy="28" r="3" {...S} opacity="0.4" />
+    </>
+  );
+}
+
+/** Workflow: systems already in place, and data moving between them. */
+function Workflow() {
+  return (
+    <>
+      <rect x="5" y="18" width="11" height="12" rx="3" {...S} />
+      <rect x="32" y="18" width="11" height="12" rx="3" {...S} />
+      <rect x="18.5" y="6" width="11" height="11" rx="3" {...S} opacity="0.5" />
+      <path d="M16 24h16M24 17v7" {...S} opacity="0.55" />
+      <circle cx="24" cy="24" r="2.5" {...S} className="glyph-scan" />
+    </>
+  );
+}
+
+/** Document processing: fields lifted off a page and placed in order. */
+function Extract() {
+  return (
+    <>
+      <path d="M8 8h16l6 6v10" {...S} opacity="0.5" />
+      <path d="M8 8v32h10" {...S} opacity="0.5" />
+      <path d="M13 17h9M13 24h7" {...S} opacity="0.45" />
+      <rect x="24" y="27" width="18" height="5" rx="2" {...S} className="glyph-rise" />
+      <rect x="24" y="35" width="13" height="5" rx="2" {...S} className="glyph-rise" style={d(1)} />
+    </>
+  );
+}
+
+/** Enquiry handling: one inbound stream sorted into the right lanes. */
+function Triage() {
+  return (
+    <>
+      <path d="M6 24h8" {...S} opacity="0.5" />
+      <path d="M14 24c8 0 5-12 13-12M14 24h13M14 24c8 0 5 12 13 12" {...S} opacity="0.55" />
+      <rect x="30" y="8" width="12" height="8" rx="2.5" {...S} className="glyph-pulse" />
+      <rect x="30" y="20" width="12" height="8" rx="2.5" {...S} className="glyph-pulse" style={d(1)} />
+      <rect x="30" y="32" width="12" height="8" rx="2.5" {...S} className="glyph-pulse" style={d(2)} />
+    </>
+  );
+}
+
+/** Monitoring and automated actions: a watched threshold, and the one event
+ *  that crosses it. */
+function Watch() {
+  return (
+    <>
+      <path d="M6 30h36" {...S} strokeDasharray="3 3" opacity="0.45" />
+      <path d="M6 38h8l5 0 4-14 5 22 4-16h10" {...S} className="animate-dash" />
+      <circle cx="28" cy="16" r="3.5" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
+/** Reporting and reconciliation: two sources compared, one difference flagged. */
+function Reconcile() {
+  return (
+    <>
+      <path d="M9 10h12M9 18h12M9 26h12M9 34h12" {...S} opacity="0.45" />
+      <path d="M27 10h12M27 18h12M27 34h12" {...S} opacity="0.45" />
+      <path d="M27 26h12" {...S} className="glyph-scan" />
+      <circle cx="24" cy="26" r="3" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
+/** Custom tools: built only where nothing off the shelf fits the socket. */
+function Tool() {
+  return (
+    <>
+      <path d="M8 40l12-12" {...S} />
+      <path d="M18 30l-4-4 8-8 4 4" {...S} opacity="0.55" />
+      <path d="M26 22l6-6-4-4 6-4 6 6-4 6-4-4-6 6" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
+/** Process diagnostic: the current process, measured. */
+function Diagnose() {
+  return (
+    <>
+      <rect x="7" y="16" width="9" height="9" rx="2.5" {...S} opacity="0.6" />
+      <rect x="20" y="16" width="9" height="9" rx="2.5" {...S} opacity="0.6" />
+      <rect x="33" y="16" width="8" height="9" rx="2.5" {...S} opacity="0.6" />
+      <path d="M16 20.5h4M29 20.5h4" {...S} opacity="0.45" />
+      <path d="M7 33v6h34v-6" {...S} className="glyph-scan" />
+      <path d="M24 33v6" {...S} opacity="0.4" />
+    </>
+  );
+}
+
+/** Scope and recommendation: what you receive in writing. */
+function Recommend() {
+  return (
+    <>
+      <path d="M11 7h18l7 7v27H11z" {...S} opacity="0.55" />
+      <path d="M16 18h14M16 25h10" {...S} opacity="0.45" />
+      <circle cx="30" cy="33" r="7" {...S} className="glyph-pulse" />
+      <path d="M27 33l2.4 2.4L34 30" {...S} className="glyph-scan" />
+    </>
+  );
+}
+
+/** Development and testing: the agreed scenarios, and the exceptions. */
+function TestCase() {
+  return (
+    <>
+      <rect x="7" y="9" width="34" height="30" rx="3" {...S} opacity="0.5" />
+      <path d="M13 18l2.6 2.6L20 16" {...S} className="glyph-scan" />
+      <path d="M13 27l2.6 2.6L20 25" {...S} className="glyph-scan" style={d(1)} />
+      <path d="M25 17h11M25 26h8" {...S} opacity="0.4" />
+      <path d="M31 33l5 5M36 33l-5 5" {...S} className="glyph-pulse" style={d(2)} />
+    </>
+  );
+}
+
+/** Controlled launch: opened in stages, not all at once. */
+function GoLive() {
+  return (
+    <>
+      <path d="M6 24h11" {...S} opacity="0.5" />
+      <path d="M31 24h11" {...S} opacity="0.5" />
+      <path d="M17 14v20" {...S} />
+      <path d="M31 14v20" {...S} opacity="0.4" strokeDasharray="3 3" />
+      <path d="M17 24h9" {...S} className="glyph-scan" />
+      <circle cx="24" cy="9" r="3" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
+/** Monitoring and improvement: the same round, a little higher each time. */
+function Improve() {
+  return (
+    <>
+      <path d="M13 34a13 13 0 1 1 22-9" {...S} opacity="0.5" />
+      <path d="M31 25h5v-5" {...S} opacity="0.5" />
+      <path d="M11 40h6V31" {...S} className="glyph-rise" />
+      <path d="M21 40h6V25" {...S} className="glyph-rise" style={d(1)} />
+      <path d="M31 40h6V19" {...S} className="glyph-rise" style={d(2)} />
+    </>
+  );
+}
+
+/** Monitoring the connections: a pulse running the whole chain. */
+function Heartbeat() {
+  return (
+    <>
+      <circle cx="7" cy="24" r="3" {...S} opacity="0.55" />
+      <circle cx="41" cy="24" r="3" {...S} opacity="0.55" />
+      <path d="M10 24h4l3-7 4 14 4-11 3 4h9" {...S} className="animate-dash" />
+      <circle cx="24" cy="24" r="2" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
+/** Reviewing errors: the one action in the run that failed. */
+function Alert() {
+  return (
+    <>
+      <path d="M8 13h13M8 21h10M8 35h13" {...S} opacity="0.4" />
+      <path d="M24 20l9 15H15z" {...S} className="glyph-pulse" />
+      <path d="M24 26v4" {...S} />
+      <circle cx="24" cy="32.5" r="0.9" {...S} />
+    </>
+  );
+}
+
+/** Fixing within scope: a broken link rejoined. */
+function Repair() {
+  return (
+    <>
+      <path d="M18 16l-6 6a7 7 0 0010 10l3-3" {...S} />
+      <path d="M30 32l6-6a7 7 0 00-10-10l-3 3" {...S} />
+      <path d="M22 26l4-4" {...S} className="glyph-pulse" />
+      <path d="M8 10l4 4M40 38l-4-4" {...S} opacity="0.4" />
+    </>
+  );
+}
+
+/** Adjusting integrations: two connectors re-seated after one end changed. */
+function Reseat() {
+  return (
+    <>
+      <path d="M6 24h10" {...S} opacity="0.5" />
+      <path d="M32 24h10" {...S} opacity="0.5" />
+      <path d="M16 17v14h4v-14z" {...S} />
+      <path d="M32 17v14h-4v-14z" {...S} className="glyph-pulse" />
+      <path d="M20 21h8M20 27h8" {...S} className="glyph-scan" />
+    </>
+  );
+}
+
+/** Technical support: a hand on the automation when it needs one. */
+function Support() {
+  return (
+    <>
+      <circle cx="24" cy="20" r="8" {...S} opacity="0.55" />
+      <path d="M24 12v8l5 3" {...S} className="glyph-scan" />
+      <path d="M10 40c0-6 6-9 14-9s14 3 14 9" {...S} className="glyph-rise" />
+    </>
+  );
+}
+
+/** Maintaining records: every change kept, newest on top. */
+function Ledger() {
+  return (
+    <>
+      <rect x="8" y="30" width="32" height="8" rx="2.5" {...S} opacity="0.4" />
+      <rect x="8" y="20" width="32" height="8" rx="2.5" {...S} opacity="0.6" />
+      <rect x="8" y="10" width="32" height="8" rx="2.5" {...S} className="glyph-rise" />
+      <path d="M13 14h6" {...S} className="glyph-rise" style={d(1)} />
+      <circle cx="35" cy="14" r="1.6" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
 const GLYPHS: Record<GlyphVariant, () => React.JSX.Element> = {
   structure: Structure,
   creative: Creative,
@@ -260,6 +512,24 @@ const GLYPHS: Record<GlyphVariant, () => React.JSX.Element> = {
   offsite: Offsite,
   entity: Entity,
   schema: Schema,
+  agent: Agent,
+  workflow: Workflow,
+  extract: Extract,
+  triage: Triage,
+  watch: Watch,
+  reconcile: Reconcile,
+  tool: Tool,
+  diagnose: Diagnose,
+  recommend: Recommend,
+  testcase: TestCase,
+  golive: GoLive,
+  improve: Improve,
+  heartbeat: Heartbeat,
+  alert: Alert,
+  repair: Repair,
+  reseat: Reseat,
+  support: Support,
+  ledger: Ledger,
 };
 
 export function CapabilityGlyph({
