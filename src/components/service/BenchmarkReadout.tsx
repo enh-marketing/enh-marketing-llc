@@ -154,13 +154,13 @@ export function BenchmarkReadout({
 
               <div className="relative grid gap-y-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-x-16">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-fog">
+                  <p className="text-xs font-semibold uppercase text-fog">
                     {columns.area}
                   </p>
                   <div className="mt-5 overflow-hidden">
                     <p
                       key={`a-${active}`}
-                      className="font-display animate-readout text-[clamp(1.6rem,3.4vw,2.9rem)] font-extrabold uppercase leading-[1.05] tracking-tight text-snow"
+                      className="font-display animate-readout text-[clamp(1.6rem,3.4vw,2.9rem)] font-extrabold uppercase leading-[1.05] text-snow"
                     >
                       {items[active].area}
                     </p>
@@ -168,7 +168,7 @@ export function BenchmarkReadout({
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-fog">
+                  <p className="text-xs font-semibold uppercase text-fog">
                     {columns.benchmark}
                   </p>
                   <div className="mt-5 overflow-hidden">
@@ -181,7 +181,7 @@ export function BenchmarkReadout({
                         return (
                           <>
                             {before}
-                            <span className="font-display text-[1.35em] font-extrabold tracking-tight text-brand">
+                            <span className="font-display text-[1.35em] font-extrabold text-brand">
                               {figure}
                             </span>
                             {after}
@@ -192,7 +192,7 @@ export function BenchmarkReadout({
                   </div>
 
                   <div className="mt-9 border-t border-line pt-6">
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-fog">
+                    <p className="text-xs font-semibold uppercase text-fog">
                       {columns.meaning}
                     </p>
                     <div className="mt-4 overflow-hidden">
@@ -250,7 +250,7 @@ export function BenchmarkReadout({
                   key={item.area}
                   className="grid gap-x-10 gap-y-3 border-b border-line py-7 sm:grid-cols-[minmax(0,14rem)_1fr]"
                 >
-                  <dt className="font-display text-lg font-extrabold uppercase leading-tight tracking-tight text-snow">
+                  <dt className="font-display text-lg font-extrabold uppercase leading-tight text-snow">
                     {item.area}
                   </dt>
                   <dd>

@@ -173,7 +173,7 @@ export function ChannelScroller({
               {/* The pill is the card's promise of a destination, so it goes
                   with the link rather than sitting there inert. */}
               {live && (
-                <span className="relative mt-8 inline-flex items-center gap-3 self-start rounded-full border border-line px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-snow transition-colors duration-300 group-hover:border-brand group-hover:text-brand">
+                <span className="relative mt-8 inline-flex items-center gap-3 self-start rounded-full border border-line px-5 py-2.5 text-xs font-semibold uppercase text-snow transition-colors duration-300 group-hover:border-brand group-hover:text-brand">
                   Know More
                   <span className="relative flex h-4 w-4 items-center justify-center overflow-hidden">
                     <ArrowRight className="absolute transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-5" />

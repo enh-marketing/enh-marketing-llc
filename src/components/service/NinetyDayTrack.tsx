@@ -83,7 +83,7 @@ export function NinetyDayTrack({
           className="mb-12"
           aside={
             <Rise key="lede">
-              <p className="font-display text-[clamp(1.15rem,2.1vw,1.7rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+              <p className="font-display text-[clamp(1.15rem,2.1vw,1.7rem)] font-extrabold uppercase leading-[1.18] text-snow">
                 {lede}
               </p>
             </Rise>
@@ -92,11 +92,11 @@ export function NinetyDayTrack({
 
         {/* The frame, and the one dated commitment inside it. */}
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-y border-line py-4">
-          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+          <span className="text-[0.65rem] font-semibold uppercase text-ash">
             {frame}
           </span>
           <span aria-hidden className="h-px flex-1 bg-line" />
-          <span className="flex items-center gap-2.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+          <span className="flex items-center gap-2.5 text-[0.65rem] font-semibold uppercase text-brand-text">
             <span className="h-1.5 w-1.5 rounded-full bg-brand" />
             {milestone}
           </span>
@@ -145,14 +145,14 @@ export function NinetyDayTrack({
                 {/* When the document says this happens, where it says so. */}
                 <p
                   className={cn(
-                    "text-[0.65rem] font-semibold uppercase tracking-[0.2em]",
+                    "text-[0.65rem] font-semibold uppercase",
                     stage.when ? "text-brand-text" : "text-ash",
                   )}
                 >
                   {stage.when ?? stage.no}
                 </p>
 
-                <h3 className="font-display mt-3 text-base font-extrabold uppercase leading-tight tracking-tight text-snow lg:text-[0.95rem] xl:text-base">
+                <h3 className="font-display mt-3 text-base font-extrabold uppercase leading-tight text-snow lg:text-[0.95rem] xl:text-base">
                   {stage.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-fog">{stage.body}</p>
@@ -160,10 +160,10 @@ export function NinetyDayTrack({
                 {/* What closes the span. */}
                 {stage.deliverable ? (
                   <div className="mt-5 border-t border-line pt-4">
-                    <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                    <p className="text-[0.6rem] font-semibold uppercase text-ash">
                       {deliverableLabel}
                     </p>
-                    <p className="font-display mt-2 text-sm font-bold leading-snug tracking-tight text-snow">
+                    <p className="font-display mt-2 text-sm font-bold leading-snug text-snow">
                       {stage.deliverable}
                     </p>
                   </div>

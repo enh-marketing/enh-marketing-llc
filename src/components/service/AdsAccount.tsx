@@ -41,7 +41,7 @@ export function AdsAccount({
       <span
         aria-hidden
         className={cn(
-          "font-display shrink-0 text-[0.6rem] font-bold tabular-nums tracking-[0.18em] transition-colors duration-500",
+          "font-display shrink-0 text-[0.6rem] font-bold tabular-nums transition-colors duration-500",
           on(i) ? "text-brand-text" : "text-ash",
         )}
       >

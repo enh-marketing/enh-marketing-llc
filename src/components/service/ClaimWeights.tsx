@@ -35,10 +35,10 @@ export function ClaimWeights({ items }: { items: WeightedClaim[] }) {
             <li key={claim.title} className="border-b border-line py-8">
               <Rise delay={Math.min(i, 4) * 0.05}>
                 <div className="rounded-[1.25rem] border border-brand/45 bg-brand/[0.06] p-7 sm:p-9">
-                  <span className="font-display block text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+                  <span className="font-display block text-[0.58rem] font-semibold uppercase text-brand-text">
                     The one that costs us
                   </span>
-                  <h3 className="font-display mt-4 max-w-3xl text-[clamp(1.35rem,3vw,2.3rem)] font-extrabold uppercase leading-[1.1] tracking-tight text-brand">
+                  <h3 className="font-display mt-4 max-w-3xl text-[clamp(1.35rem,3vw,2.3rem)] font-extrabold uppercase leading-[1.1] text-brand">
                     {claim.title}
                   </h3>
                   {claim.body && (
@@ -77,7 +77,7 @@ export function ClaimWeights({ items }: { items: WeightedClaim[] }) {
                       "font-display font-extrabold uppercase text-snow",
                       terse
                         ? "display-xl leading-[1.04]"
-                        : "text-[clamp(1.25rem,2.8vw,2.1rem)] leading-[1.14] tracking-tight",
+                        : "text-[clamp(1.25rem,2.8vw,2.1rem)] leading-[1.14]",
                     )}
                   >
                     {claim.title}
@@ -102,7 +102,7 @@ export function ClaimWeights({ items }: { items: WeightedClaim[] }) {
                   "lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-baseline",
                 )}
               >
-                <h3 className="font-display text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+                <h3 className="font-display text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.18] text-snow">
                   {claim.title}
                 </h3>
                 <p className="leading-relaxed text-fog sm:text-lg">{claim.body}</p>

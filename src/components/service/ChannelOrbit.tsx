@@ -95,7 +95,7 @@ export function ChannelOrbit({ channels }: { channels: string[] }) {
                 >
                   <ChannelIcon name={name} size={18} />
                 </motion.span>
-                <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.18em] text-ash">
+                <span className="whitespace-nowrap text-[10px] font-semibold uppercase text-ash">
                   {name.replace(" Ads", "")}
                 </span>
               </motion.div>

@@ -64,7 +64,7 @@ export function ResultStats({
               )}
             >
               <dd className="order-first">
-                <span className="font-display display-xl block font-extrabold leading-[0.9] tracking-tight text-snow">
+                <span className="font-display display-xl block font-extrabold leading-[0.9] text-snow">
                   {stat.figure}
                   {stat.unit && <span className="text-brand">{stat.unit}</span>}
                 </span>
@@ -80,7 +80,7 @@ export function ResultStats({
                 />
               </dd>
 
-              <dt className="mt-4 text-xs font-semibold uppercase leading-relaxed tracking-[0.2em] text-fog">
+              <dt className="mt-4 text-xs font-semibold uppercase leading-relaxed text-fog">
                 {stat.label}
               </dt>
             </motion.div>

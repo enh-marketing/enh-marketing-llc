@@ -57,7 +57,7 @@ export function Hero({ started, badges = [] }: { started: boolean; badges?: Part
         className="relative z-10 flex flex-1 flex-col justify-center py-3"
       >
         <Container>
-        <Rise delay={0.1} className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+        <Rise delay={0.1} className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
           <span className="h-1.5 w-1.5 rounded-full bg-brand" />
           Digital Growth Studio — Dubai, est. 15 years ago
         </Rise>

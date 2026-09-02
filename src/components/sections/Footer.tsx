@@ -37,7 +37,7 @@ function FooterLink({ node }: { node: NavNode }) {
 function FooterCol({ title, items }: { title: string; items: NavNode[] }) {
   return (
     <div>
-      <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-ash">{title}</h4>
+      <h4 className="mb-4 text-xs font-semibold uppercase text-ash">{title}</h4>
       <ul className="space-y-1">
         {items.map((item) => (
           <li key={item.label}>

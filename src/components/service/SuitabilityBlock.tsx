@@ -83,10 +83,10 @@ export function SuitabilityBlock({
 
       {/* The consequences, as one block rather than eight rows. */}
       <Rise delay={0.12} className="mt-14">
-        <p className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+        <p className="font-display text-[0.62rem] font-semibold uppercase text-brand-text">
           {ledeTail}
         </p>
-        <p className="font-display mt-6 flex flex-wrap items-baseline gap-x-1 gap-y-2 text-[clamp(1.1rem,2.5vw,1.9rem)] font-extrabold uppercase leading-[1.16] tracking-tight">
+        <p className="font-display mt-6 flex flex-wrap items-baseline gap-x-1 gap-y-2 text-[clamp(1.1rem,2.5vw,1.9rem)] font-extrabold uppercase leading-[1.16]">
           {items.map((item, i) => (
             <span key={item} className="inline-flex items-baseline">
               <span className="text-snow transition-colors duration-300 hover:text-brand">
@@ -110,7 +110,7 @@ export function SuitabilityBlock({
             <p className="leading-relaxed text-snow sm:text-lg">{limitOne}</p>
             <p className="mt-4 leading-relaxed text-fog sm:text-lg">{limitTwo}</p>
           </div>
-          <p className="font-display text-[clamp(1.2rem,2.6vw,2rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-brand">
+          <p className="font-display text-[clamp(1.2rem,2.6vw,2rem)] font-extrabold uppercase leading-[1.14] text-brand">
             {limitThree}
           </p>
         </div>

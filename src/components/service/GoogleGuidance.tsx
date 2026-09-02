@@ -120,7 +120,7 @@ export function GoogleGuidance({
         <div className="mt-14 grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
           <div>
             <Rise>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-fog">
+              <p className="text-sm font-semibold uppercase text-fog">
                 {eligibilityLead}
               </p>
             </Rise>
@@ -136,7 +136,7 @@ export function GoogleGuidance({
                       >
                         {i + 1}
                       </span>
-                      <p className="font-display text-[clamp(1.1rem,2vw,1.6rem)] font-extrabold uppercase leading-[1.15] tracking-tight text-snow">
+                      <p className="font-display text-[clamp(1.1rem,2vw,1.6rem)] font-extrabold uppercase leading-[1.15] text-snow">
                         {condition}
                       </p>
                     </div>
@@ -148,7 +148,7 @@ export function GoogleGuidance({
 
           {/* The point of the whole section, at the scale of the point. */}
           <Rise delay={0.16} className="flex items-center">
-            <p className="font-display border-l-2 border-brand pl-7 text-[clamp(1.5rem,3.2vw,2.6rem)] font-extrabold uppercase leading-[1.06] tracking-tight text-brand sm:pl-9">
+            <p className="font-display border-l-2 border-brand pl-7 text-[clamp(1.5rem,3.2vw,2.6rem)] font-extrabold uppercase leading-[1.06] text-brand sm:pl-9">
               {eligibilityVerdict}
             </p>
           </Rise>
@@ -169,7 +169,7 @@ export function GoogleGuidance({
             {at >= 0 ? (
               <>
                 {closing.slice(0, at)}
-                <strong className="font-display font-extrabold uppercase tracking-tight text-snow">
+                <strong className="font-display font-extrabold uppercase text-snow">
                   {closingEmphasis}
                 </strong>
                 {closing.slice(at + closingEmphasis!.length)}

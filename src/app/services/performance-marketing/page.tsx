@@ -131,7 +131,7 @@ export default function PerformanceMarketingPage() {
           diagramSide="left"
           aside={
             <Rise key="lede">
-              <p className="font-display text-[clamp(1.15rem,2.1vw,1.7rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+              <p className="font-display text-[clamp(1.15rem,2.1vw,1.7rem)] font-extrabold uppercase leading-[1.18] text-snow">
                 {c.processIntro}
               </p>
             </Rise>

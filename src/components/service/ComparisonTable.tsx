@@ -71,20 +71,20 @@ export function ComparisonTable({
             <thead>
               <tr>
                 <th scope="col" className="w-[17%] pb-6 pr-8 align-bottom">
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ash">
+                  <span className="text-[11px] font-semibold uppercase text-ash">
                     Area
                   </span>
                 </th>
                 <th scope="col" className="w-[41.5%] px-8 pb-6 align-bottom">
                   <span className="flex items-center gap-2.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-                    <span className="font-display text-base font-extrabold uppercase tracking-tight text-brand">
+                    <span className="font-display text-base font-extrabold uppercase text-brand">
                       {columns[0]}
                     </span>
                   </span>
                 </th>
                 <th scope="col" className="w-[41.5%] pb-6 pl-8 align-bottom">
-                  <span className="font-display text-base font-extrabold uppercase tracking-tight text-fog">
+                  <span className="font-display text-base font-extrabold uppercase text-fog">
                     {columns[1]}
                   </span>
                 </th>
@@ -108,7 +108,7 @@ export function ComparisonTable({
                       <span className="font-display block text-[11px] font-bold tabular-nums text-ash transition-colors duration-300 group-hover:text-brand">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span className="font-display mt-2 block text-sm font-bold uppercase tracking-wide text-snow">
+                      <span className="font-display mt-2 block text-sm font-bold uppercase text-snow">
                         {row.area}
                       </span>
                     </th>
@@ -154,13 +154,13 @@ export function ComparisonTable({
                 <span className="font-display text-[11px] font-bold tabular-nums text-brand">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="font-display text-sm font-bold uppercase tracking-wide text-snow">
+                <h3 className="font-display text-sm font-bold uppercase text-snow">
                   {row.area}
                 </h3>
               </div>
 
               <div className="mt-4 rounded-2xl border-l-2 border-brand bg-ink-2 p-5">
-                <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+                <p className="flex items-center gap-2 text-[11px] font-semibold uppercase text-brand">
                   <span className="h-1 w-1 rounded-full bg-brand" />
                   {columns[0]}
                 </p>
@@ -168,7 +168,7 @@ export function ComparisonTable({
               </div>
 
               <div className="mt-3 pl-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ash">
+                <p className="text-[11px] font-semibold uppercase text-ash">
                   {columns[1]}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-fog">{row.digital}</p>

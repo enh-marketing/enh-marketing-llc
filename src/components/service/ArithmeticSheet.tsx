@@ -40,7 +40,7 @@ function markFigures(text: string, figures: string[]) {
   if (!pattern.length) return text;
   return text.split(new RegExp(`(${pattern.join("|")})`)).map((part, i) =>
     figures.includes(part) ? (
-      <span key={i} className="font-display font-bold tracking-tight text-brand">
+      <span key={i} className="font-display font-bold text-brand">
         {part}
       </span>
     ) : (
@@ -108,12 +108,12 @@ export function ArithmeticSheet({
                 <div className="flex gap-5">
                   <span
                     aria-hidden
-                    className="font-display shrink-0 pt-1 text-xs font-bold tabular-nums tracking-[0.1em] text-brand-text"
+                    className="font-display shrink-0 pt-1 text-xs font-bold tabular-nums text-brand-text"
                   >
                     {step.no}
                   </span>
                   <div>
-                    <p className="font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+                    <p className="font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18] text-snow">
                       {step.ask}
                     </p>
                     <p className="mt-3.5 max-w-xl leading-relaxed text-fog">

@@ -46,7 +46,7 @@ export function DeliveryLadder({
               <div className="flex items-baseline gap-5">
                 <span
                   className={cn(
-                    "font-display shrink-0 text-xs font-bold uppercase tabular-nums tracking-[0.22em] transition-colors duration-500",
+                    "font-display shrink-0 text-xs font-bold uppercase tabular-nums transition-colors duration-500",
                     stage.no
                       ? "text-ash group-hover:text-brand-text"
                       : "text-brand-text",
@@ -54,7 +54,7 @@ export function DeliveryLadder({
                 >
                   {badge(stage)}
                 </span>
-                <h3 className="font-display text-[clamp(1.1rem,2vw,1.5rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                <h3 className="font-display text-[clamp(1.1rem,2vw,1.5rem)] font-extrabold uppercase leading-[1.16] text-snow">
                   {stage.title}
                 </h3>
               </div>
@@ -70,10 +70,10 @@ export function DeliveryLadder({
           filling up from. */}
       <div className="lg:sticky lg:top-28">
         <div className="rounded-[1.75rem] border border-brand/40 bg-brand/[0.06] p-6 sm:p-7">
-          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+          <p className="text-[0.65rem] font-semibold uppercase text-ash">
             {span}
           </p>
-          <p className="font-display mt-3 text-[clamp(1.05rem,1.9vw,1.35rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-brand">
+          <p className="font-display mt-3 text-[clamp(1.05rem,1.9vw,1.35rem)] font-extrabold uppercase leading-[1.18] text-brand">
             {promise}
           </p>
 
@@ -87,7 +87,7 @@ export function DeliveryLadder({
                   <span className="flex gap-4">
                     <span
                       aria-hidden
-                      className="font-display mt-0.5 shrink-0 text-[0.6rem] font-bold uppercase tabular-nums tracking-[0.2em] text-brand-text"
+                      className="font-display mt-0.5 shrink-0 text-[0.6rem] font-bold uppercase tabular-nums text-brand-text"
                     >
                       {badge(stage)}
                     </span>

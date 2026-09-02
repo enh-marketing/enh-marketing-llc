@@ -84,7 +84,7 @@ export function TierScale({
             <p
               key={head}
               className={cn(
-                "text-[0.65rem] font-semibold uppercase tracking-[0.2em]",
+                "text-[0.65rem] font-semibold uppercase",
                 i === 2 ? "text-ash" : "text-fog",
               )}
             >
@@ -115,7 +115,7 @@ export function TierScale({
                     />
                   ))}
                 </div>
-                <h3 className="font-display mt-4 text-[clamp(1.35rem,2.6vw,2rem)] font-extrabold uppercase leading-none tracking-tight text-snow">
+                <h3 className="font-display mt-4 text-[clamp(1.35rem,2.6vw,2rem)] font-extrabold uppercase leading-none text-snow">
                   {row.name}
                 </h3>
               </div>

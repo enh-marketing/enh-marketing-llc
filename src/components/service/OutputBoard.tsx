@@ -42,7 +42,7 @@ export function OutputBoard({
       <span
         aria-hidden
         className={cn(
-          "font-display text-[0.58rem] font-bold tabular-nums tracking-[0.18em] transition-colors duration-500",
+          "font-display text-[0.58rem] font-bold tabular-nums transition-colors duration-500",
           on(i) ? "text-brand-text" : "text-ash",
         )}
       >

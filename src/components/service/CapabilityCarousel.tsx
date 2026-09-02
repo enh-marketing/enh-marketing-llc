@@ -262,7 +262,7 @@ export function CapabilityCarousel({
                   {item.glyph && <CapabilityGlyph variant={item.glyph} />}
                 </span>
 
-                <h3 className="font-display mt-7 text-2xl font-extrabold uppercase leading-[1.1] tracking-tight text-snow">
+                <h3 className="font-display mt-7 text-2xl font-extrabold uppercase leading-[1.1] text-snow">
                   {item.title}
                 </h3>
                 <p className="mt-4 flex-1 leading-relaxed text-fog">{item.body}</p>
@@ -273,7 +273,7 @@ export function CapabilityCarousel({
                 {item.href && routeExists(item.href) && (
                   <Link
                     href={item.href}
-                    className="mt-6 inline-flex items-center gap-2 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-snow transition-colors hover:text-brand"
+                    className="mt-6 inline-flex items-center gap-2 py-1.5 text-xs font-semibold uppercase text-snow transition-colors hover:text-brand"
                   >
                     See how <span aria-hidden>↓</span>
                   </Link>

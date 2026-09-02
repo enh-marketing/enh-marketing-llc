@@ -57,7 +57,7 @@ export function ScopeSheet({
           ].map((c) => (
             <div key={c.tempo}>
               <div className="flex items-center gap-4">
-                <span className="font-display shrink-0 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+                <span className="font-display shrink-0 text-[0.62rem] font-semibold uppercase text-brand-text">
                   {c.tempo}
                 </span>
                 {/* The axis. Solid where the tempo is high, and thinning to a
@@ -71,7 +71,7 @@ export function ScopeSheet({
                   }
                 />
               </div>
-              <p className="font-display mt-4 text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-snow">
+              <p className="font-display mt-4 text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.2] text-snow">
                 {c.line}
               </p>
             </div>
@@ -85,14 +85,14 @@ export function ScopeSheet({
       <Rise delay={0.16} className="mt-10">
         <div className="rounded-[1.25rem] border border-line bg-ink-2 p-6 sm:p-8">
           <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 border-b border-line pb-4">
-            <p className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+            <p className="font-display text-[0.62rem] font-semibold uppercase text-brand-text">
               {factorsLead}
             </p>
             {/* Names the empty column, so the blanks read as a form to be
                 completed rather than as missing content. */}
             <p
               aria-hidden
-              className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ash"
+              className="font-display text-[0.62rem] font-semibold uppercase text-ash"
             >
               Your business
             </p>
@@ -104,7 +104,7 @@ export function ScopeSheet({
                 <div className="flex items-baseline gap-3 py-3 sm:gap-5">
                   <span
                     aria-hidden
-                    className="font-display shrink-0 text-[0.6rem] font-bold tabular-nums tracking-[0.2em] text-ash transition-colors duration-500 group-hover:text-brand-text"
+                    className="font-display shrink-0 text-[0.6rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text"
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -129,14 +129,14 @@ export function ScopeSheet({
           {/* The total line: where the number would be. */}
           <div className="mt-3 border-t-2 border-line pt-5">
             <div className="flex flex-wrap items-baseline gap-x-5 gap-y-3">
-              <span className="font-display shrink-0 text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-none tracking-tight text-snow">
+              <span className="font-display shrink-0 text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-none text-snow">
                 Monthly output
               </span>
               <span
                 aria-hidden
                 className="hidden min-w-8 flex-1 translate-y-[-0.35em] border-b border-dotted border-ash/50 sm:block"
               />
-              <span className="font-display shrink-0 text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-none tracking-tight text-brand">
+              <span className="font-display shrink-0 text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-none text-brand">
                 Stated in your proposal
               </span>
             </div>

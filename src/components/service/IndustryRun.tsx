@@ -46,7 +46,7 @@ export function IndustryRun({
           className="mb-14"
         />
 
-        <p className="font-display flex flex-wrap items-baseline gap-x-1 gap-y-2 text-[clamp(1.35rem,3.1vw,2.5rem)] font-extrabold uppercase leading-[1.15] tracking-tight">
+        <p className="font-display flex flex-wrap items-baseline gap-x-1 gap-y-2 text-[clamp(1.35rem,3.1vw,2.5rem)] font-extrabold uppercase leading-[1.15]">
           {items.map((item, i) => (
             <motion.span
               key={item.label}

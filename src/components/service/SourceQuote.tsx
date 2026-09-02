@@ -45,7 +45,7 @@ export function SourceQuote({
         initial={reduced ? false : { opacity: 0, y: 14 }}
         animate={play ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, delay, ease: EASE }}
-        className="text-sm font-semibold uppercase tracking-[0.16em] text-fog"
+        className="text-sm font-semibold uppercase text-fog"
       >
         {lead}
       </motion.p>
@@ -64,12 +64,12 @@ export function SourceQuote({
           &ldquo;
         </span>
 
-        <p className="font-display text-[clamp(1.25rem,2.6vw,2.05rem)] font-bold leading-[1.3] tracking-tight text-snow">
+        <p className="font-display text-[clamp(1.25rem,2.6vw,2.05rem)] font-bold leading-[1.3] text-snow">
           {quote}
         </p>
 
         <footer className="mt-5">
-          <cite className="text-xs font-semibold uppercase not-italic tracking-[0.2em] text-brand-text">
+          <cite className="text-xs font-semibold uppercase not-italic text-brand-text">
             {source}
           </cite>
         </footer>

@@ -137,7 +137,7 @@ export function StageLadder({
                 initial={reduced ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: 0.05, ease: EASE }}
-                className="font-display block pb-2 text-lg font-extrabold uppercase leading-[1.15] tracking-tight text-snow lg:mt-6 lg:pb-0 lg:text-2xl"
+                className="font-display block pb-2 text-lg font-extrabold uppercase leading-[1.15] text-snow lg:mt-6 lg:pb-0 lg:text-2xl"
               >
                 {activeStage?.title}
               </motion.span>
@@ -233,14 +233,14 @@ export function StageLadder({
                     <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                       <span
                         className={cn(
-                          "font-display text-xs font-bold uppercase tracking-[0.22em] transition-colors duration-500",
+                          "font-display text-xs font-bold uppercase transition-colors duration-500",
                           isActive || isTail ? "text-brand-text" : "text-fog",
                         )}
                       >
                         {/* The tail's label is the document's own word, not a numeral. */}
                         {isTail ? "Ongoing" : stage.no}
                       </span>
-                      <h3 className="font-display text-xl font-extrabold uppercase leading-[1.12] tracking-tight text-snow sm:text-2xl">
+                      <h3 className="font-display text-xl font-extrabold uppercase leading-[1.12] text-snow sm:text-2xl">
                         {stage.title}
                       </h3>
                     </div>

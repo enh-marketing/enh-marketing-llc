@@ -79,7 +79,7 @@ export function CycleTrack({
             >
               <span
                 className={cn(
-                  "font-display text-[0.55rem] font-bold tabular-nums tracking-[0.1em] transition-colors duration-500",
+                  "font-display text-[0.55rem] font-bold tabular-nums transition-colors duration-500",
                   on ? "text-brand-text" : "text-ash",
                 )}
               >

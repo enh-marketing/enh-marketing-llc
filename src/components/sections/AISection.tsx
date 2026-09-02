@@ -23,7 +23,7 @@ export function AISection() {
 
       <Container className="relative">
         <NodeWeb className="absolute -top-6 right-0 hidden opacity-80 lg:block" />
-        <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+        <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
           <span className="text-brand">(05)</span> Explore New Heights
         </p>
 

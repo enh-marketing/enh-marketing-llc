@@ -117,7 +117,7 @@ function SubMenu({ node, onNavigate }: { node: NavNode; onNavigate: () => void }
             <NavLink
               node={pillar}
               onNavigate={onNavigate}
-              className="font-display text-[13px] font-bold uppercase leading-tight tracking-[0.06em] text-snow transition-colors duration-200 hover:text-brand"
+              className="font-display text-[13px] font-bold uppercase leading-tight text-snow transition-colors duration-200 hover:text-brand"
             >
               {pillar.label}
             </NavLink>
@@ -289,7 +289,7 @@ export function Navbar() {
                             node={item}
                             onNavigate={close}
                             className={cn(
-                              "font-display flex-1 text-[clamp(1.35rem,2.9vw,2.3rem)] font-extrabold uppercase leading-none tracking-tight transition-colors duration-300 hover:text-brand",
+                              "font-display flex-1 text-[clamp(1.35rem,2.9vw,2.3rem)] font-extrabold uppercase leading-none transition-colors duration-300 hover:text-brand",
                               isActive(item) || isOpen ? "text-brand" : "text-snow",
                             )}
                           >
@@ -361,7 +361,7 @@ export function Navbar() {
                             <NavLink
                               node={panel}
                               onNavigate={close}
-                              className="group/all font-display inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-snow transition-colors duration-200 hover:text-brand"
+                              className="group/all font-display inline-flex items-center gap-3 text-xs font-bold uppercase text-snow transition-colors duration-200 hover:text-brand"
                             >
                               All {panel.label}
                               <span className="h-px w-6 bg-brand transition-all duration-300 group-hover/all:w-10" />
@@ -376,7 +376,7 @@ export function Navbar() {
                         </>
                       ) : (
                         <>
-                          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+                          <p className="text-xs font-semibold uppercase text-fog">
                             Start the climb
                           </p>
                           <p className="font-display mt-5 max-w-sm text-2xl font-bold leading-snug text-snow">

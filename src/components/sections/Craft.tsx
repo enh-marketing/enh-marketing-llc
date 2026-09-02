@@ -29,7 +29,7 @@ function Card({ craft, index, total }: { craft: CraftType; index: number; total:
           <div>
             <div className="flex items-center justify-between">
               <span className="font-display text-base font-bold text-brand">({craft.no})</span>
-              <span className="rounded-full border border-line px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-fog">
+              <span className="rounded-full border border-line px-4 py-1.5 text-xs uppercase text-fog">
                 {craft.tag}
               </span>
             </div>
@@ -62,7 +62,7 @@ export function Craft() {
   return (
     <section id="craft" className="relative py-16 sm:py-20">
       <Container className="mb-16">
-        <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+        <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
           <span className="text-brand">(02)</span> The craft
         </p>
         <h2 className="font-display display-xl font-extrabold uppercase text-snow">

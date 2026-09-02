@@ -158,10 +158,10 @@ export function Caveat({
       <Container>
         {/* Layer 2 — the statement */}
         <div data-layer="statement" className="max-w-4xl">
-          <p className="font-display text-[clamp(1.25rem,2.9vw,2.4rem)] font-extrabold uppercase leading-[1.15] tracking-tight text-snow">
+          <p className="font-display text-[clamp(1.25rem,2.9vw,2.4rem)] font-extrabold uppercase leading-[1.15] text-snow">
             {words(lead)}
           </p>
-          <p className="font-display mt-3 text-[clamp(1.75rem,4vw,3.4rem)] font-extrabold uppercase leading-[1.05] tracking-tight text-brand">
+          <p className="font-display mt-3 text-[clamp(1.75rem,4vw,3.4rem)] font-extrabold uppercase leading-[1.05] text-brand">
             {words(emphasis)}
           </p>
         </div>

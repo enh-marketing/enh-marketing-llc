@@ -103,7 +103,7 @@ export function BuildGrid({
         {/* How people pay here, as its own rail. */}
         <Rise delay={0.1} className="mt-10 border-t border-line pt-8">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+            <p className="text-[0.65rem] font-semibold uppercase text-ash">
               {paymentsLabel}
             </p>
             <ul className="flex flex-wrap gap-2.5">

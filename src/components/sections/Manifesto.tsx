@@ -133,7 +133,7 @@ export function Manifesto() {
             }}
           />
 
-          <p className="absolute left-1/2 top-10 z-10 -translate-x-1/2 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+          <p className="absolute left-1/2 top-10 z-10 -translate-x-1/2 text-xs font-semibold uppercase text-fog">
             <span className="text-brand">(01)</span> The story
           </p>
 
@@ -144,7 +144,7 @@ export function Manifesto() {
               return (
                 <p
                   key={si}
-                  className="story-line pointer-events-none absolute mx-auto max-w-4xl text-center font-display text-[clamp(1.5rem,3.4vw,2.9rem)] font-bold leading-[1.25] tracking-tight text-snow will-change-[opacity,transform]"
+                  className="story-line pointer-events-none absolute mx-auto max-w-4xl text-center font-display text-[clamp(1.5rem,3.4vw,2.9rem)] font-bold leading-[1.25] text-snow will-change-[opacity,transform]"
                   style={{ opacity: 0 }}
                 >
                   {s.text.split(" ").map((w, wi) => (

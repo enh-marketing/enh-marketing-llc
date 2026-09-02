@@ -114,7 +114,7 @@ export function SearchSurface({
           it. Set as a lede, with the one clause the panel actually depicts
           picked out, the two read as a single move instead of two slabs. */}
       <Rise>
-        <p className="font-display text-[clamp(1.15rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+        <p className="font-display text-[clamp(1.15rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.18] text-snow">
           {markTyping(scene)}
         </p>
       </Rise>
@@ -142,7 +142,7 @@ export function SearchSurface({
                 so neither does the page. */}
             <span className="h-6 w-px animate-pulse bg-brand sm:h-7" />
             <span className="flex-1" />
-            <span className="font-display hidden text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-ash sm:block">
+            <span className="font-display hidden text-[0.58rem] font-semibold uppercase text-ash sm:block">
               TikTok search
             </span>
           </div>
@@ -183,7 +183,7 @@ export function SearchSurface({
 
           {/* What the brand publishes into that surface. */}
           <div className="border-t border-line bg-ink-3/40 px-6 py-6 sm:px-8 sm:py-7">
-            <p className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+            <p className="font-display text-[0.62rem] font-semibold uppercase text-brand-text">
               {examplesLead}
             </p>
             <ol className="mt-5 grid gap-x-12 sm:grid-cols-2">
@@ -218,10 +218,10 @@ export function SearchSurface({
       <Rise delay={0.18} className="mt-10">
         <div className="grid items-stretch gap-4 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1.35fr)] lg:gap-0">
           <div className="rounded-[1.25rem] border border-line bg-ink-2 p-6 lg:rounded-r-none">
-            <p className="font-display text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-ash">
+            <p className="font-display text-[0.58rem] font-semibold uppercase text-ash">
               Already
             </p>
-            <p className="font-display mt-3 text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+            <p className="font-display mt-3 text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18] text-snow">
               {google}
             </p>
           </div>
@@ -236,10 +236,10 @@ export function SearchSurface({
           </div>
 
           <div className="rounded-[1.25rem] border border-brand/45 bg-brand/[0.06] p-6 lg:rounded-l-none">
-            <p className="font-display text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+            <p className="font-display text-[0.58rem] font-semibold uppercase text-brand-text">
               And also
             </p>
-            <p className="font-display mt-3 text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+            <p className="font-display mt-3 text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18] text-snow">
               {adds}
             </p>
           </div>
@@ -268,7 +268,7 @@ export function SearchSurface({
                               : "mt-2 h-1.5 w-1.5 shrink-0 rotate-45 bg-ash transition-colors duration-500 group-hover:bg-brand"
                           }
                         />
-                        <p className="font-display text-[clamp(0.98rem,1.7vw,1.2rem)] font-bold uppercase leading-[1.22] tracking-tight text-snow">
+                        <p className="font-display text-[clamp(0.98rem,1.7vw,1.2rem)] font-bold uppercase leading-[1.22] text-snow">
                           {item}
                         </p>
                       </div>

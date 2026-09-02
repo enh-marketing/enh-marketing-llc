@@ -20,7 +20,7 @@ function RowInner({ item, i, active }: { item: Item; i: number; active: boolean 
       </span>
       <h3
         className={cn(
-          "font-display flex-1 text-2xl font-extrabold uppercase leading-none tracking-tight transition-colors duration-300 sm:text-[2rem]",
+          "font-display flex-1 text-2xl font-extrabold uppercase leading-none transition-colors duration-300 sm:text-[2rem]",
           // Red is reserved for rows that actually navigate. Unlinked rows still
           // reveal their detail on hover, but must not signal clickability.
           active && item.href ? "text-brand" : "text-snow",

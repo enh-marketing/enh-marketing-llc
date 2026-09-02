@@ -114,7 +114,7 @@ export function AnswerStream({ className }: { className?: string }) {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-60" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
           </span>
-          <span className="as-name text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-fog">
+          <span className="as-name text-[0.65rem] font-semibold uppercase text-fog">
             {names[turn % names.length]}
           </span>
         </div>

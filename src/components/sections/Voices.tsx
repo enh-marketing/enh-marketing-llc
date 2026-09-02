@@ -33,7 +33,7 @@ export function Voices() {
       </div>
 
       <Container className="relative text-center">
-        <p className="mb-10 flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+        <p className="mb-10 flex items-center justify-center gap-3 text-xs font-semibold uppercase text-fog">
           <span className="text-brand">(07)</span> The voices — don&apos;t take our word
         </p>
 
@@ -76,7 +76,7 @@ export function Voices() {
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="mx-auto max-w-3xl"
             >
-              <blockquote className="font-display text-[clamp(1.2rem,2.2vw,1.85rem)] font-bold leading-snug tracking-tight text-snow">
+              <blockquote className="font-display text-[clamp(1.2rem,2.2vw,1.85rem)] font-bold leading-snug text-snow">
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
               <figcaption className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm">

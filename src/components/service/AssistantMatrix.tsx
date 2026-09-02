@@ -131,7 +131,7 @@ export function AssistantMatrix({
                         : "border-transparent text-fog hover:border-line hover:text-snow",
                     )}
                   >
-                    <span className="font-display block text-base font-bold leading-snug tracking-tight sm:text-lg">
+                    <span className="font-display block text-base font-bold leading-snug sm:text-lg">
                       {r.name}
                     </span>
                   </button>
@@ -172,7 +172,7 @@ export function AssistantMatrix({
             {rows.map((r, i) => (
               <li key={r.name}>
                 <SurfaceCard index={String(i + 1).padStart(2, "0")} delay={(i % 2) * 0.06} padding="tight">
-                  <h3 className="font-display text-lg font-extrabold leading-tight tracking-tight text-snow">
+                  <h3 className="font-display text-lg font-extrabold leading-tight text-snow">
                     {r.name}
                   </h3>
                   <div className="mt-5 space-y-5">
@@ -222,7 +222,7 @@ function Field({ label, value, accent }: { label: string; value: string; accent?
     <div>
       <p
         className={cn(
-          "text-[0.68rem] font-semibold uppercase tracking-[0.18em]",
+          "text-[0.68rem] font-semibold uppercase",
           accent ? "text-brand-text" : "text-fog",
         )}
       >

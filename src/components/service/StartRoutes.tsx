@@ -44,14 +44,14 @@ export function StartRoutes({
       {/* The axis, once, above every route. */}
       <div className="hidden lg:block">
         <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,2.15fr)] gap-x-12">
-          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+          <p className="text-[0.65rem] font-semibold uppercase text-ash">
             {startHere}
           </p>
           <div className="relative h-5">
             {axis.map((moment, i) => (
               <span
                 key={moment}
-                className="absolute top-0 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-brand-text"
+                className="absolute top-0 text-[0.65rem] font-semibold uppercase text-brand-text"
                 style={{ left: `${AT[i]}%`, transform: "translateX(-50%)" }}
               >
                 {moment}
@@ -74,7 +74,7 @@ export function StartRoutes({
               <div className="grid gap-x-12 gap-y-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,2.15fr)]">
                 <p
                   className={cn(
-                    "font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.16] tracking-tight",
+                    "font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.16]",
                     option.recommended ? "text-brand" : "text-snow",
                   )}
                 >
@@ -114,7 +114,7 @@ export function StartRoutes({
 
                   <dl className="grid gap-x-12 gap-y-4 sm:grid-cols-2 lg:mt-4">
                     <div>
-                      <dt className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                      <dt className="text-[0.65rem] font-semibold uppercase text-ash">
                         {fitsLabel}
                       </dt>
                       <dd
@@ -127,7 +127,7 @@ export function StartRoutes({
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                      <dt className="text-[0.65rem] font-semibold uppercase text-ash">
                         {expectLabel}
                       </dt>
                       <dd

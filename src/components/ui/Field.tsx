@@ -15,7 +15,7 @@ import { cn } from "@/lib/cn";
  *  form so the two can never drift apart. */
 
 export const FIELD_LABEL =
-  "mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-ash";
+  "mb-2 block text-[11px] font-semibold uppercase text-ash";
 const CONTROL =
   "w-full border-b border-line bg-transparent py-3 text-base text-snow placeholder:text-ash/60";
 const UNDERLINE =

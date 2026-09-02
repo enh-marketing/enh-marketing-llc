@@ -51,7 +51,7 @@ export function ExclusionBand({ items, rule }: { items: Disqualifier[]; rule: st
   return (
     <div>
       <Rise>
-        <p className="font-display mb-5 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+        <p className="font-display mb-5 text-[0.62rem] font-semibold uppercase text-brand-text">
           Ruled out
         </p>
       </Rise>
@@ -81,7 +81,7 @@ export function ExclusionBand({ items, rule }: { items: Disqualifier[]; rule: st
                 >
                   <path d="M5 5l14 14M19 5L5 19" />
                 </svg>
-                <h3 className="font-display text-[clamp(1.05rem,1.9vw,1.35rem)] font-extrabold uppercase leading-[1.15] tracking-tight text-snow">
+                <h3 className="font-display text-[clamp(1.05rem,1.9vw,1.35rem)] font-extrabold uppercase leading-[1.15] text-snow">
                   {item.title}
                 </h3>
               </div>

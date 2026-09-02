@@ -116,14 +116,14 @@ export function AttributionPaths({
           <div className="border-t border-line py-9">
             <div className="grid gap-6 lg:grid-cols-[minmax(0,11rem)_1fr] lg:gap-10">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-text">
+                <p className="text-xs font-semibold uppercase text-brand-text">
                   {visibleLabel}
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-fog">{visibleLead}</p>
               </div>
 
               <div>
-                <p className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+                <p className="mb-4 text-[0.65rem] font-semibold uppercase text-brand-text">
                   {visibleActor}
                 </p>
                 <ol className="grid gap-3 sm:grid-cols-3">
@@ -152,7 +152,7 @@ export function AttributionPaths({
                     transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
                     className="h-px flex-1 origin-left bg-brand/50"
                   />
-                  <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+                  <span className="text-[0.65rem] font-semibold uppercase text-brand-text">
                     {visibleTail}
                   </span>
                 </div>
@@ -164,14 +164,14 @@ export function AttributionPaths({
           <div className="border-y border-line py-9">
             <div className="grid gap-6 lg:grid-cols-[minmax(0,11rem)_1fr] lg:gap-10">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ash">
+                <p className="text-xs font-semibold uppercase text-ash">
                   {hiddenLabel}
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-fog">{hiddenLead}</p>
               </div>
 
               <div>
-                <p className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                <p className="mb-4 text-[0.65rem] font-semibold uppercase text-ash">
                   {hiddenActor}
                 </p>
                 <div className="grid items-stretch gap-3 sm:grid-cols-[1fr_auto_1fr]">
@@ -216,7 +216,7 @@ export function AttributionPaths({
                   </motion.div>
                 </div>
 
-                <p className="mt-4 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                <p className="mt-4 text-[0.65rem] font-semibold uppercase text-ash">
                   {hiddenTail}
                 </p>
               </div>
@@ -226,7 +226,7 @@ export function AttributionPaths({
 
         {/* The document's own resolution of the two. */}
         <Rise delay={0.12} className="mt-10">
-          <p className="font-display max-w-4xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+          <p className="font-display max-w-4xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.16] text-snow">
             {verdict}
           </p>
         </Rise>
@@ -234,7 +234,7 @@ export function AttributionPaths({
         {/* What can be tracked. */}
         <div className="mt-10 grid gap-8 border-t border-line pt-8 lg:grid-cols-[minmax(0,13rem)_1fr] lg:gap-14">
           <Rise>
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+            <p className="text-[0.65rem] font-semibold uppercase text-ash">
               {signalsLead}
             </p>
           </Rise>

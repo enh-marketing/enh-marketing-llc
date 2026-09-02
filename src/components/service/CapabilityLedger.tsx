@@ -56,7 +56,7 @@ export function CapabilityLedger({
                   {item.no}
                 </span>
 
-                <dt className="font-display text-lg font-extrabold uppercase leading-[1.15] tracking-tight text-snow sm:text-xl">
+                <dt className="font-display text-lg font-extrabold uppercase leading-[1.15] text-snow sm:text-xl">
                   {item.title}
                   {item.href && (
                     <span

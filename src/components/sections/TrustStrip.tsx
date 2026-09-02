@@ -14,7 +14,7 @@ function initials(name: string): string {
 function LogoChip({ name }: { name: string }) {
   return (
     <span className="flex shrink-0 items-center gap-3 rounded-2xl border border-line bg-ink-2 px-5 py-3.5 transition-colors duration-300 hover:border-brand/50">
-      <span className="font-display flex h-9 w-9 items-center justify-center rounded-lg bg-ink-3 text-xs font-extrabold tracking-tight text-snow">
+      <span className="font-display flex h-9 w-9 items-center justify-center rounded-lg bg-ink-3 text-xs font-extrabold text-snow">
         {initials(name)}
       </span>
       <span className="font-display whitespace-nowrap text-base font-bold text-fog">
@@ -58,7 +58,7 @@ export function TrustStrip({
           hero needs to keep this strip above the fold. */}
       {!compact && (
         <Container>
-          <p className="mb-10 flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+          <p className="mb-10 flex items-center justify-center gap-3 text-xs font-semibold uppercase text-fog">
             <SpinStar />
             Trusted by 4200+ brands across the UAE
             <SpinStar />

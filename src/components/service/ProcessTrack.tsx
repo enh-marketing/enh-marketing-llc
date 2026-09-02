@@ -40,7 +40,7 @@ export function ProcessTrack({
       {axis && (
         <p
           aria-hidden
-          className="mb-6 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-ash"
+          className="mb-6 text-[0.6rem] font-semibold uppercase text-ash"
         >
           {axis[0]}
         </p>
@@ -109,7 +109,7 @@ export function ProcessTrack({
       {axis && (
         <p
           aria-hidden
-          className="mt-6 text-right text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-ash"
+          className="mt-6 text-right text-[0.6rem] font-semibold uppercase text-ash"
         >
           {axis[1]}
         </p>

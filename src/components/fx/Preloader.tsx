@@ -69,7 +69,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
           <Container className="flex h-full flex-col justify-between">
           <div className="flex items-center justify-between">
             <Logo className="h-6" />
-            <span className="text-xs uppercase tracking-[0.3em] text-fog hidden sm:block">Dubai, UAE</span>
+            <span className="text-xs uppercase text-fog hidden sm:block">Dubai, UAE</span>
           </div>
 
           <div className="overflow-hidden">
@@ -85,7 +85,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
           </div>
 
           <div className="flex items-end justify-between">
-            <span className="text-xs uppercase tracking-[0.3em] text-fog">
+            <span className="text-xs uppercase text-fog">
               Loading the climb
             </span>
             <span className="font-display text-5xl font-extrabold tabular-nums text-snow sm:text-6xl">

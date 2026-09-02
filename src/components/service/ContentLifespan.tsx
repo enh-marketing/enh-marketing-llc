@@ -81,7 +81,7 @@ export function ContentLifespan({
           className="mb-12"
           aside={
             <Rise key="problem">
-              <p className="font-display text-[clamp(1.15rem,2.1vw,1.65rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+              <p className="font-display text-[clamp(1.15rem,2.1vw,1.65rem)] font-extrabold uppercase leading-[1.18] text-snow">
                 {problemLead}
               </p>
               <p className="mt-5 leading-relaxed text-fog">{problem}</p>
@@ -93,7 +93,7 @@ export function ContentLifespan({
           {/* Track one: publishes, stops. */}
           <div className="border-t border-line py-8">
             <div className="grid gap-5 lg:grid-cols-[minmax(0,13rem)_1fr] lg:items-center lg:gap-10">
-              <p className="text-xs font-semibold uppercase leading-relaxed tracking-[0.18em] text-ash">
+              <p className="text-xs font-semibold uppercase leading-relaxed text-ash">
                 {originalOnly}
               </p>
 
@@ -119,7 +119,7 @@ export function ContentLifespan({
           {/* Track two: the same asset, still working. */}
           <div className="border-y border-line py-8">
             <div className="grid gap-6 lg:grid-cols-[minmax(0,13rem)_1fr] lg:gap-10">
-              <p className="text-xs font-semibold uppercase leading-relaxed tracking-[0.18em] text-brand-text">
+              <p className="text-xs font-semibold uppercase leading-relaxed text-brand-text">
                 {destinationsLead}
               </p>
 
@@ -178,11 +178,11 @@ export function ContentLifespan({
                     <li key={dest} className="flex items-baseline gap-4 border-t border-line py-3.5 first:border-t-0 first:pt-0">
                       <span
                         aria-hidden
-                        className="font-display shrink-0 text-xs font-bold tabular-nums tracking-[0.1em] text-brand-text"
+                        className="font-display shrink-0 text-xs font-bold tabular-nums text-brand-text"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span className="font-display text-base font-bold leading-snug tracking-tight text-snow">
+                      <span className="font-display text-base font-bold leading-snug text-snow">
                         {dest}
                       </span>
                     </li>
@@ -202,7 +202,7 @@ export function ContentLifespan({
           </Rise>
 
           <Rise delay={0.08}>
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+            <p className="text-[0.65rem] font-semibold uppercase text-ash">
               {termsLead}
             </p>
             <ul className="mt-5 flex flex-wrap gap-2.5">

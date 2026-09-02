@@ -155,11 +155,11 @@ export function ClaimLedger({
                 <div className="flex items-start gap-5">
                   <span
                     aria-hidden
-                    className="font-display mt-1.5 shrink-0 text-xs font-bold tabular-nums tracking-[0.1em] text-ash transition-colors duration-500 group-hover:text-brand-text"
+                    className="font-display mt-1.5 shrink-0 text-xs font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text"
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="font-display text-[clamp(0.98rem,1.6vw,1.2rem)] font-extrabold uppercase leading-[1.22] tracking-tight text-snow">
+                  <h3 className="font-display text-[clamp(0.98rem,1.6vw,1.2rem)] font-extrabold uppercase leading-[1.22] text-snow">
                     {isFigure && ev?.kind === "figure" ? (
                       // Split around the figure rather than recomposing the
                       // sentence, so the document's wording and its full stop
@@ -173,7 +173,7 @@ export function ClaimLedger({
                         return (
                           <>
                             {before}
-                            <span className="text-[clamp(1.9rem,3.4vw,2.8rem)] leading-none tracking-tight text-brand">
+                            <span className="text-[clamp(1.9rem,3.4vw,2.8rem)] leading-none text-brand">
                               {ev.figure}
                             </span>
                             {after}
@@ -191,7 +191,7 @@ export function ClaimLedger({
                   <div className="lg:border-l lg:border-line lg:pl-12">
                     {ev?.kind === "chips" && (
                       <Rise>
-                        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                        <p className="text-[0.65rem] font-semibold uppercase text-ash">
                           {ev.lead}
                         </p>
                         <ul className="mt-3 flex flex-wrap items-center gap-2">
@@ -199,7 +199,7 @@ export function ClaimLedger({
                             <li
                               key={chip}
                               className={cn(
-                                "font-display rounded-lg px-3 py-1.5 text-sm font-bold tracking-tight text-snow",
+                                "font-display rounded-lg px-3 py-1.5 text-sm font-bold text-snow",
                                 ev.accent
                                   ? "border border-brand/45 bg-brand/[0.08]"
                                   : "border border-line bg-ink-2 transition-colors duration-500 hover:border-brand/50",
@@ -209,7 +209,7 @@ export function ClaimLedger({
                             </li>
                           ))}
                           {ev.struck && (
-                            <li className="font-display rounded-lg border border-line px-3 py-1.5 text-sm font-bold tracking-tight text-ash line-through decoration-brand/70 decoration-2">
+                            <li className="font-display rounded-lg border border-line px-3 py-1.5 text-sm font-bold text-ash line-through decoration-brand/70 decoration-2">
                               {ev.struck}
                             </li>
                           )}
@@ -237,7 +237,7 @@ export function ClaimLedger({
             <div className="relative mt-6 overflow-hidden rounded-[1.5rem] border border-brand/45 bg-brand/[0.06] p-7 sm:p-8">
               <span
                 aria-hidden
-                className="font-display pointer-events-none absolute -right-4 -top-8 text-[7rem] font-extrabold leading-none tracking-tight text-brand/[0.14] sm:text-[9rem]"
+                className="font-display pointer-events-none absolute -right-4 -top-8 text-[7rem] font-extrabold leading-none text-brand/[0.14] sm:text-[9rem]"
               >
                 {String(accentAt + 1).padStart(2, "0")}
               </span>
@@ -251,7 +251,7 @@ export function ClaimLedger({
                     "lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center",
                 )}
               >
-                <h3 className="font-display text-[clamp(1.2rem,2.3vw,1.8rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+                <h3 className="font-display text-[clamp(1.2rem,2.3vw,1.8rem)] font-extrabold uppercase leading-[1.14] text-snow">
                   {accent.title}
                 </h3>
                 {accent.body && (

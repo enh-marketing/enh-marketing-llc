@@ -45,7 +45,7 @@ export function CtaBand({
           {/* Ask */}
           <div className="lg:sticky lg:top-32 lg:h-fit lg:self-start">
             {index && (
-              <p className="mb-7 text-xs font-semibold uppercase tracking-[0.3em] text-brand">
+              <p className="mb-7 text-xs font-semibold uppercase text-brand">
                 ({index})
               </p>
             )}
@@ -75,7 +75,7 @@ export function CtaBand({
                 href={whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-3 border-b border-line pb-2 text-sm font-semibold uppercase tracking-[0.18em] text-snow transition-colors duration-300 hover:border-brand hover:text-brand"
+                className="group inline-flex items-center gap-3 border-b border-line pb-2 text-sm font-semibold uppercase text-snow transition-colors duration-300 hover:border-brand hover:text-brand"
               >
                 <span className="h-px w-8 bg-brand transition-all duration-500 group-hover:w-14" />
                 {whatsappLabel}

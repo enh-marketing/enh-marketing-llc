@@ -85,7 +85,7 @@ export function StageTimeline({
             </div>
 
             <div className="mt-10">
-              <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.24em] text-ash">
+              <div className="flex items-center justify-between text-[10px] font-semibold uppercase text-ash">
                 <span>{axis[0]}</span>
                 <span>{axis[1]}</span>
               </div>

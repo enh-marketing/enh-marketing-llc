@@ -76,7 +76,7 @@ function MagneticCta({
       onPointerMove={track}
       onPointerLeave={release}
       style={reduced ? undefined : { x: sx, y: sy }}
-      className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-brand px-9 py-4 text-center text-xs font-bold uppercase leading-tight tracking-[0.14em] text-white sm:text-sm sm:tracking-[0.12em]"
+      className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-brand px-9 py-4 text-center text-xs font-bold uppercase leading-tight text-white sm:text-sm sm:"
     >
       {/* Fill sweep, behind the label. */}
       <span

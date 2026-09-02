@@ -17,7 +17,7 @@ export function FAQ() {
       <Container>
       <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div>
-          <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+          <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
             <span className="text-brand">(09)</span> FAQ
           </p>
           <RippleEmblem className="mb-8">

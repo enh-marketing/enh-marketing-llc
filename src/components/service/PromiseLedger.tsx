@@ -87,7 +87,7 @@ export function PromiseLedger({
             <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-brand/35 bg-brand/[0.06] p-7 sm:p-8">
               <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-brand" />
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-text">
+                <p className="text-xs font-semibold uppercase text-brand-text">
                   How it is measured
                 </p>
                 <p className="mt-6 leading-relaxed text-snow">{method}</p>
@@ -138,7 +138,7 @@ function Column({
       >
         <p
           className={cn(
-            "text-xs font-semibold uppercase tracking-[0.22em]",
+            "text-xs font-semibold uppercase",
             affirm ? "text-brand-text" : "text-ash",
           )}
         >
@@ -178,7 +178,7 @@ function Column({
               </span>
               <span
                 className={cn(
-                  "font-display text-base font-bold leading-snug tracking-tight sm:text-lg",
+                  "font-display text-base font-bold leading-snug sm:text-lg",
                   affirm ? "text-snow" : "text-fog",
                 )}
               >

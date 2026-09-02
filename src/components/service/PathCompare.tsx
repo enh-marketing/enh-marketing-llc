@@ -39,7 +39,7 @@ function Node({
       data-node
       data-last={last ? "" : undefined}
       className={cn(
-        "inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.14em]",
+        "inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-4 py-2.5 text-xs font-semibold uppercase",
         tone === "origin" && "border-line bg-ink-2 text-snow",
         tone === "dim" && "border-line/70 text-fog",
         tone === "bright" && "border-brand bg-brand/10 text-snow",

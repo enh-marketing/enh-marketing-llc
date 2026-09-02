@@ -58,7 +58,7 @@ export function StageStair({ items }: { items: StairStage[] }) {
                 <span
                   aria-hidden
                   className={cn(
-                    "font-display font-extrabold leading-[0.8] tabular-nums tracking-tighter transition-colors duration-500",
+                    "font-display font-extrabold leading-[0.8] tabular-nums transition-colors duration-500",
                     // The numeral grows as the work accumulates.
                     "text-[clamp(1.6rem,calc(1.1rem+2.2vw),3rem)]",
                     last ? "text-brand" : "text-stroke",
@@ -67,7 +67,7 @@ export function StageStair({ items }: { items: StairStage[] }) {
                   {stage.no}
                 </span>
 
-                <h3 className="font-display text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                <h3 className="font-display text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.16] text-snow">
                   {stage.title}
                 </h3>
 
@@ -91,7 +91,7 @@ export function StageStair({ items }: { items: StairStage[] }) {
                         >
                           <span
                             aria-hidden
-                            className="font-display block text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-ash"
+                            className="font-display block text-[0.58rem] font-semibold uppercase text-ash"
                           >
                             {b === 0 ? "Develops" : "Redirects"}
                           </span>

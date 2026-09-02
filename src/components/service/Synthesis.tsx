@@ -72,7 +72,7 @@ export function Synthesis({
         initial={{ opacity: 0, y: 18 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7, ease: EASE }}
-        className="font-display max-w-2xl text-[clamp(1.15rem,2.1vw,1.75rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-snow"
+        className="font-display max-w-2xl text-[clamp(1.15rem,2.1vw,1.75rem)] font-extrabold uppercase leading-[1.2] text-snow"
       >
         {premise}
       </motion.p>
