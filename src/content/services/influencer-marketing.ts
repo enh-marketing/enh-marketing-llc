@@ -341,19 +341,8 @@ export const finalCta = {
   note: "We will review the brief and outline how we can help. Influencer fees and our management fee will be shown separately, so you can see exactly how the proposed budget is structured.",
 };
 
-/** Form fields. The document names what it wants from an enquiry — what you
- *  want to promote, who you need to reach, the budget — so those are the
- *  fields, rather than the ad-spend set the paid-media pages use. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "promote", label: "What you want to promote" },
-  { id: "audience", label: "Who you need to reach" },
-  { id: "budget", label: "Budget you have in mind" },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band, above the work section. Supplied in the document under
  *  "Influencer Marketing Agency in Dubai Page CTA". Stored in sentence case and

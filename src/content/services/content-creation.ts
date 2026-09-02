@@ -262,16 +262,8 @@ export const finalCta = {
   note: "We will recommend a practical mix of video, photography, design and copy, with the monthly output and production requirements stated clearly before work begins.",
 };
 
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "platforms", label: "Which platforms you use" },
-  { id: "show", label: "What you want to show" },
-  { id: "shoot", label: "How often your team can support a shoot", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 export const growthCta = {
   heading: ["Ready to create content", "that gets noticed?"] as [string, string],

@@ -9,6 +9,7 @@ import { SpinStar } from "@/components/fx/Adornments";
 import {
   Field,
   SelectField,
+  TextareaField,
   ConsentField,
   SubmitButton,
 } from "@/components/ui/Field";
@@ -22,7 +23,6 @@ function MagneticOrb() {
   return (
     <motion.a
       href={`mailto:${brand.email}`}
-      data-cursor="link"
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect();
         x.set((e.clientX - (r.left + r.width / 2)) * 0.35);
@@ -64,7 +64,7 @@ export function LetsTalk() {
       />
 
       <Container className="relative">
-        <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+        <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
           <span className="text-brand">(10)</span> Let&apos;s talk <SpinStar />
         </p>
 
@@ -171,16 +171,22 @@ export function LetsTalk() {
                     </h3>
 
                     <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
-                      <Field id="lt-name" label="Full name" autoComplete="name" required />
-                      <Field id="lt-email" label="Email address" type="email" autoComplete="email" required />
-                      <Field id="lt-phone" label="Phone number" type="tel" autoComplete="tel" required />
+                      {/* The site's standard set: Name, Email, Phone, Company,
+                          Services, Message. Team direction, 2026-09-02. This
+                          form had no Company or Message before. */}
+                      <Field id="lt-name" label="Name" autoComplete="name" required />
+                      <Field id="lt-email" label="Email" type="email" autoComplete="email" required />
+                      <Field id="lt-phone" label="Phone" type="tel" autoComplete="tel" required />
+                      <Field id="lt-company" label="Company" autoComplete="organization" />
                       <SelectField
                         id="lt-service"
-                        label="Service required"
+                        label="Services"
                         placeholder="Select a service"
                         options={consultationServices}
                         required
+                        className="sm:col-span-2"
                       />
+                      <TextareaField id="lt-message" label="Message" className="sm:col-span-2" />
                     </div>
 
                     <div className="mt-9">

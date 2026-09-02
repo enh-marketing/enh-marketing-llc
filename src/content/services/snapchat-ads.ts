@@ -198,16 +198,8 @@ export const finalCta = {
   note: "We will come back with a straight view on whether Snapchat deserves budget, and where it should sit if it does.",
 };
 
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "customer", label: "Who your customer is" },
-  { id: "age", label: "How old they are" },
-  { id: "saudi", label: "Whether Saudi is on your roadmap", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 export const growthCta = {
   heading: ["Ready to reach the next", "generation of customers?"] as [string, string],

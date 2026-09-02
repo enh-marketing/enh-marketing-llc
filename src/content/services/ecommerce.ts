@@ -256,18 +256,8 @@ export const finalCta = {
   note: "If a full build is not the right move yet, we will say so and tell you what we would do instead.",
 };
 
-/** Form fields. The document names what it wants from an enquiry — what you
- *  sell, how many products, what you are using now — so those are the fields. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "sell", label: "What you sell" },
-  { id: "products", label: "How many products" },
-  { id: "current", label: "What you are using now", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band, above the work section. Supplied in the document under
  *  "E-Commerce Website Development Page CTA". Stored in sentence case and split

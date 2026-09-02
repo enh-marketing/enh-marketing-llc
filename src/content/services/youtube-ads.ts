@@ -215,16 +215,8 @@ export const finalCta = {
   note: "We will come back within 3 hours with a view on whether it is usable, what it would cost to adapt, and whether YouTube is the right next channel.",
 };
 
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "sell", label: "What you sell" },
-  { id: "video", label: "What video you already have" },
-  { id: "google", label: "Do you already run Google Ads?", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 export const growthCta = {
   heading: ["Ready to turn YouTube views", "into real results?"] as [string, string],

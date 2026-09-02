@@ -313,18 +313,8 @@ export const finalCta = {
   note: "No charge for the first read. If you are already showing up well, we will tell you that and leave you alone.",
 };
 
-/** Form fields. The document names what it wants from an enquiry — "your
- *  category and the questions your customers ask before they buy" — so those
- *  two are here rather than the ad-spend fields the paid-media pages use. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "category", label: "Your category" },
-  { id: "questions", label: "Questions your customers ask", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band, above the work section. Supplied in the document under
  *  "AEO & GEO Services in Dubai Page CTA". Stored in sentence case and split

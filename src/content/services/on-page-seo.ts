@@ -278,18 +278,8 @@ export const finalCta = {
   note: "You will get a straight read on what is holding it back, whether or not you hire us for the fix.",
 };
 
-/** Form fields. The document asks for a page link and nothing else, so the
- *  page link is the field that matters here. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "page", label: "The page you want us to read", wide: true },
-  { id: "term", label: "The term it should be performing for" },
-  { id: "cms", label: "Your CMS" },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** The two SEO pages carry the site field; see content/forms.ts. */
+export { seoFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band. Supplied under "On-Page SEO Services Page CTA". Stored in
  *  sentence case; the band uppercases it. */

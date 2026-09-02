@@ -343,18 +343,8 @@ export const finalCta = {
   note: "We will come back within 2-3 hours with a straight answer on whether Instagram is the right channel for you, and if it is, a scoped proposal with clear deliverables.",
 };
 
-/** Form fields. The document asks for the business and the audience, so those
- *  are the fields rather than the ad-spend set the paid-media pages use. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "business", label: "About your business" },
-  { id: "audience", label: "Who you are trying to reach" },
-  { id: "handle", label: "Instagram handle" },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band, above the work section. Supplied in the document under
  *  "Instagram Marketing Agency Page CTA". Stored in sentence case and split

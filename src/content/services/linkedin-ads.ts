@@ -362,18 +362,8 @@ export const finalCta = {
   note: "We will work through the arithmetic with you and give you a straight answer on whether LinkedIn earns its cost for your business.",
 };
 
-/** Form fields. The document asks for three specific things, so those are the
- *  fields rather than the generic set. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "sell", label: "What you sell" },
-  { id: "value", label: "What a client is worth" },
-  { id: "reach", label: "Who you need to reach", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band. Supplied under "LinkedIn Ads Page CTA". Stored in
  *  sentence case and split for typesetting; the band uppercases it. */

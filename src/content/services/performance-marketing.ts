@@ -300,17 +300,8 @@ export const headings = {
 export const faqLede =
   "Everything you need to know about working with Dubai\u2019s result-driven digital marketing agency.";
 
-/** The eight fields this page's document specifies. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "industry", label: "Industry" },
-  { id: "spend", label: "Current monthly ad spend" },
-  { id: "help", label: "What do you need help with?", wide: true, textarea: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA strip, above the work section.
  *

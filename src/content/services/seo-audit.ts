@@ -263,17 +263,8 @@ export const finalCta = {
   note: "If your problem is obvious enough that you do not need one, we will say that instead.",
 };
 
-/** Form fields. The document asks for three specific things. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "website", label: "Your website" },
-  { id: "pages", label: "Roughly how many pages" },
-  { id: "why", label: "What made you look into this", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** The two SEO pages carry the site field; see content/forms.ts. */
+export { seoFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band. Supplied under "SEO Audit Services Page CTA". Stored in
  *  sentence case; the band uppercases it. */

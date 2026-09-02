@@ -361,16 +361,8 @@ export const finalCta = {
   note: "If it makes sense, you will receive a scoped proposal with the recommended monthly output, production requirements and fees.",
 };
 
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "business", label: "About your business" },
-  { id: "reach", label: "The people you want to reach" },
-  { id: "goal", label: "What you want TikTok to achieve", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 export const growthCta = {
   heading: ["Ready to make your brand", "go viral on TikTok?"] as [string, string],

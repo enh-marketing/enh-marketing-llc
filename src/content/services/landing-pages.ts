@@ -254,17 +254,8 @@ export const finalCta = {
   note: "If your current page is fine and something else is the problem, you will hear that too.",
 };
 
-/** Form fields. The document asks for the campaign and where the clicks land,
- *  so those are the fields rather than the ad-spend set. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "campaign", label: "The campaign you are running, or planning" },
-  { id: "destination", label: "Where the clicks currently land", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band, above the work section. Supplied in the document under
  *  "Landing Page Development Page CTA". Stored in sentence case and split

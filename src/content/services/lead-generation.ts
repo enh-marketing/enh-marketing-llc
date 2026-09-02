@@ -311,18 +311,8 @@ export const finalCta = {
   note: "You will hear back within 3 to 4 hours with a straight answer on where you are losing money, and a scoped proposal if we can fix it.",
 };
 
-/** Form fields. The document asks for three specific things, so those are the
- *  fields rather than the generic ad-spend set. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "sell", label: "What you sell" },
-  { id: "sources", label: "Where your enquiries come from now" },
-  { id: "after", label: "What happens to them after they arrive", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band, above the work section. Supplied in the document under
  *  "Lead Generation Company Page CTA". Stored in sentence case and split across

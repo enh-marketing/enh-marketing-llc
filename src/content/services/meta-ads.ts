@@ -324,18 +324,8 @@ export const finalCta = {
   body: "Tell us your objective and your current monthly spend. We will come back with a view on what is working, what is not, and a scoped proposal.",
 };
 
-/** Form fields this page's document specifies (differs from Performance
- *  Marketing: budget range and current platforms instead of ad spend). */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "industry", label: "Industry" },
-  { id: "budget", label: "Monthly ad budget range" },
-  { id: "platforms", label: "Current platforms" },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band, above the work section.
  *

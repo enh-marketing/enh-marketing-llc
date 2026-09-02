@@ -372,17 +372,8 @@ export const finalCta = {
   note: "We will come back within 2 hours with a straight answer on whether LinkedIn is the right channel for you, and if it is, a scoped proposal with clear deliverables and pricing.",
 };
 
-/** Form fields. The document asks for the business and who you need to reach. */
-export const formFields = [
-  { id: "name", label: "Name", required: true, autoComplete: "name" },
-  { id: "email", label: "Work email", type: "email", required: true, autoComplete: "email" },
-  { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
-  { id: "company", label: "Company", autoComplete: "organization" },
-  { id: "business", label: "About your business" },
-  { id: "reach", label: "Who you need to reach" },
-  { id: "profiles", label: "Profiles you want managed", wide: true },
-  { id: "referral", label: "How did you hear about us?", wide: true },
-];
+/** One standard set across the site; see content/forms.ts. */
+export { standardFormFields as formFields } from "@/content/forms";
 
 /** Mid-page CTA band. Supplied under "LinkedIn Marketing Agency Page CTA".
  *  Stored in sentence case; the band uppercases it. */
