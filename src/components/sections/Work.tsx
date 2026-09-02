@@ -48,7 +48,7 @@ export function Work({
       <Container className="mb-12">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+            <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
               <span className="text-brand">({index})</span> The proof — {work.length} client stories
             </p>
             <h2 className="font-display display-xl font-extrabold uppercase text-snow">
@@ -71,7 +71,6 @@ export function Work({
             style={{ x }}
             dragConstraints={viewportRef}
             dragElastic={0.06}
-            data-cursor="drag"
             className="flex w-max cursor-grab items-stretch gap-5 active:cursor-grabbing"
           >
             {work.map((w, i) => (
@@ -92,7 +91,7 @@ export function Work({
                     <div className="absolute inset-0 bg-ink-3" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-ink-2 via-ink-2/40 to-transparent" />
-                  <span className="font-display absolute right-4 top-4 rounded-full bg-void/60 px-2.5 py-1 text-[10px] font-bold tracking-wider text-ash backdrop-blur-sm">
+                  <span className="font-display absolute right-4 top-4 rounded-full bg-void/60 px-2.5 py-1 text-[10px] font-bold text-ash backdrop-blur-sm">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                 </div>
@@ -117,10 +116,9 @@ export function Work({
             {/* End card */}
             <a
               href="#contact"
-              data-cursor="link"
               className="group flex w-[280px] shrink-0 flex-col items-center justify-center gap-5 rounded-3xl border border-dashed border-line p-6 text-center transition-colors duration-500 hover:border-brand sm:w-[300px]"
             >
-              <span className="font-display text-2xl font-extrabold uppercase leading-tight text-stroke transition-all duration-500 group-hover:text-brand group-hover:[-webkit-text-stroke:0px]">
+              <span className="font-display text-2xl font-extrabold uppercase leading-tight text-stroke">
                 Your story
                 <br />
                 next?
@@ -140,7 +138,7 @@ export function Work({
               style={{ transform: `scaleX(${progress})` }}
             />
           </div>
-          <span className="text-xs uppercase tracking-[0.25em] text-ash">Drag to explore</span>
+          <span className="text-xs uppercase text-ash">Drag to explore</span>
         </div>
       </Container>
     </section>

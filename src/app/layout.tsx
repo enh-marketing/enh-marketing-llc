@@ -3,7 +3,6 @@ import { Inter, Poppins } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { SmoothScroll } from "@/components/fx/SmoothScroll";
-import { Cursor } from "@/components/fx/Cursor";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { FloatingContact } from "@/components/sections/FloatingContact";
@@ -55,12 +54,11 @@ export default function RootLayout({
       </head>
       <body className="min-h-full bg-void text-snow antialiased">
         <Script id="enh-theme-init" strategy="beforeInteractive">
-          {`try{if(localStorage.getItem("enh-theme")==="light")document.documentElement.classList.add("light")}catch(e){}`}
+          {`try{if(localStorage.getItem("enh-theme")==="dark")document.documentElement.classList.add("dark")}catch(e){}`}
         </Script>
         {/* Site chrome lives here so every route gets it, not just the homepage. */}
         <SmoothScroll>
           <div className="grain">
-            <Cursor />
             <Navbar />
             {children}
             <Footer />

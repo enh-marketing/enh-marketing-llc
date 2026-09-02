@@ -11,8 +11,8 @@ import { SpinStar } from "@/components/fx/Adornments";
  *  Rebuilt from three equal photo cards for two reasons, both measured rather
  *  than felt.
  *
- *  The first is honesty. Every card was an `<a href="#">` carrying
- *  data-cursor="view", so the section promised three articles and delivered
+ *  The first is honesty. Every card was an `<a href="#">` styled as
+ *  interactive, so the section promised three articles and delivered
  *  nothing on click, on all eighteen pages that mount it. The posts have no
  *  routes yet and their bodies do not exist, so the titles now set as text.
  *  Adding a `href` to a post in content.ts is all it takes to turn it back into
@@ -41,7 +41,7 @@ function iso(date: string): string | undefined {
 function Meta({ category, date }: { category: string; date: string }) {
   return (
     <div className="flex items-center gap-3 text-xs">
-      <span className="font-semibold uppercase tracking-[0.16em] text-brand">{category}</span>
+      <span className="font-semibold uppercase text-brand">{category}</span>
       <span aria-hidden className="h-px w-4 bg-line" />
       <time dateTime={iso(date)} className="text-ash">
         {date}
@@ -63,7 +63,7 @@ export function Insights({
   return (
     <section id="insights" data-section={label} className="relative py-16 sm:py-20">
       <Container>
-        <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+        <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
           <span className="text-brand">({index})</span> Our insights <SpinStar />
         </p>
 
@@ -72,6 +72,9 @@ export function Insights({
             <span className="block">
               <Chars text="Field notes" />
             </span>
+            {/* Real space: the two spans otherwise concatenate in textContent
+                and the accessible name reads "Field notesfrom the climb." */}
+            {" "}
             <span className="block text-stroke">
               <Chars text="from the climb." delay={0.15} />
             </span>
@@ -83,7 +86,7 @@ export function Insights({
             <Rise delay={0.2}>
               <Link
                 href={pages.insights.href}
-                className="group inline-flex items-center gap-3 py-1.5 text-sm font-semibold uppercase tracking-[0.18em] text-snow"
+                className="group inline-flex items-center gap-3 py-1.5 text-sm font-semibold uppercase text-snow"
               >
                 All insights
                 <span className="h-px w-8 bg-brand transition-all duration-300 group-hover:w-14" />
