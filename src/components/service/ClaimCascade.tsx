@@ -87,8 +87,8 @@ export function ClaimCascade({ items }: { items: CascadeClaim[] }) {
                   <span
                     aria-hidden
                     className={cn(
-                      "font-display shrink-0 text-[clamp(2.2rem,5vw,3.6rem)] font-extrabold leading-[0.8] tabular-nums tracking-tighter transition-colors duration-500",
-                      last ? "text-brand" : "text-stroke group-hover:text-stroke-red",
+                      "font-display shrink-0 text-[clamp(2.2rem,5vw,3.6rem)] font-extrabold leading-[0.8] tabular-nums transition-colors duration-500",
+                      last ? "text-brand" : "text-stroke",
                     )}
                   >
                     {claim.no}
@@ -97,7 +97,7 @@ export function ClaimCascade({ items }: { items: CascadeClaim[] }) {
                   <div className="min-w-0">
                     <h3
                       className={cn(
-                        "font-display text-[clamp(1.15rem,2.3vw,1.6rem)] font-extrabold uppercase leading-[1.16] tracking-tight",
+                        "font-display text-[clamp(1.15rem,2.3vw,1.6rem)] font-extrabold uppercase leading-[1.16]",
                         last ? "text-brand" : "text-snow",
                       )}
                     >

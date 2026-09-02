@@ -9,7 +9,7 @@ export function WhyENH() {
   return (
     <section id="why" className="relative py-16 sm:py-20">
       <Container>
-      <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+      <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
         <span className="text-brand">(04)</span> {whyENH.heading}
       </p>
 
@@ -31,7 +31,7 @@ export function WhyENH() {
         <div className="grid gap-px self-start overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2">
           {whyENH.pillars.map((p) => (
             <div key={p.no} className="group bg-ink-2 p-7 transition-colors duration-500 hover:bg-ink-3">
-              <span className="font-display text-2xl font-extrabold text-stroke transition-colors duration-500 group-hover:text-brand group-hover:[-webkit-text-stroke:0px]">
+              <span className="font-display text-2xl font-extrabold text-stroke">
                 {p.no}
               </span>
               <h3 className="font-display mt-5 text-lg font-bold text-snow">{p.title}</h3>

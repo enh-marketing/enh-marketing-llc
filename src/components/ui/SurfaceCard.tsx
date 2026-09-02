@@ -82,7 +82,7 @@ export function SurfaceCard({
       {(index || glyph) && (
         <div className="mb-8 flex items-start justify-between gap-6">
           {index ? (
-            <span className="font-display text-[3.25rem] font-extrabold leading-none text-stroke transition-colors duration-500 group-hover:text-brand group-hover:[-webkit-text-stroke:0]">
+            <span className="font-display text-[3.25rem] font-extrabold leading-none text-stroke">
               {index}
             </span>
           ) : (

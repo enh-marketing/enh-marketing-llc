@@ -3,30 +3,36 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
+/** Light is the site's default, so the toggle tracks the opt-in state: dark.
+ *  It starts false on the server and syncs on mount, because the class is set
+ *  by the pre-hydration script in the layout and is not knowable during
+ *  render. */
 export function ThemeToggle() {
-  const [light, setLight] = useState(false);
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
-    setLight(document.documentElement.classList.contains("light"));
+    setDark(document.documentElement.classList.contains("dark"));
   }, []);
 
   function toggle() {
-    const next = !light;
-    setLight(next);
-    document.documentElement.classList.toggle("light", next);
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
     try {
-      localStorage.setItem("enh-theme", next ? "light" : "dark");
+      // Both values are written, so a reader who picks light is not handed
+      // dark again the moment the default changes.
+      localStorage.setItem("enh-theme", next ? "dark" : "light");
     } catch {}
   }
 
   return (
     <button
-      aria-label={light ? "Switch to dark mode" : "Switch to light mode"}
+      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={toggle}
       className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-snow transition-colors duration-300 hover:border-brand"
     >
       <AnimatePresence mode="wait" initial={false}>
-        {light ? (
+        {dark ? (
           <motion.svg
             key="moon"
             initial={{ rotate: -90, opacity: 0, scale: 0.6 }}
