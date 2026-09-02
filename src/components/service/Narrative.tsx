@@ -91,12 +91,12 @@ export function Narrative({
 
       gsap.set(headWords, { yPercent: 112 });
       gsap.set(askWords, { opacity: 0.14 });
-      gsap.set(bodyWords, { opacity: 0.08 });
+      gsap.set(bodyWords, { opacity: 0.5 });
       // Blur on a container holding ~50 word spans is the costly part of this
       // effect. Large screens only; small screens get the word-by-word decode
       // on its own, which tells the same story for a fraction of the work.
       const useBlur = window.matchMedia("(min-width: 1024px)").matches;
-      if (useBlur) gsap.set(veil, { filter: "blur(7px)" });
+      if (useBlur) gsap.set(veil, { filter: "blur(2px)" });
       gsap.set(marks, { color: "var(--color-fog)" });
 
       const tl = gsap.timeline({
@@ -111,7 +111,7 @@ export function Narrative({
       }
       tl
         .to(bodyWords, { opacity: 1, duration: 0.32, stagger: 0.006, ease: "none" }, 0.3)
-        .to(marks, { color: "var(--color-brand)", duration: 0.18, stagger: 0.03, ease: "none" }, 0.66);
+        .to(marks, { color: "var(--color-brand)", duration: 0.01, stagger: 0.03, ease: "none" }, 0.66);
 
       return () => {
         tl.scrollTrigger?.kill();
@@ -179,8 +179,11 @@ export function Narrative({
 
       <Container>
         {/* The claim */}
+        {/* One continuous heading. The two halves were `block`, which broke the
+            line between them whatever room was left, so "What We Do" came out
+            as "WHAT" over "WE DO". The colour change still separates them. */}
         <h2 className="font-display display-xl max-w-4xl font-extrabold uppercase leading-[1.02]">
-          <span className="block text-snow">
+          <span className="text-snow">
             {headline[0].split(" ").map((w, i) => (
               <span key={i} data-head className="inline-block overflow-hidden align-bottom">
                 <span className="inline-block">{w}</span>
@@ -188,7 +191,8 @@ export function Narrative({
               </span>
             ))}
           </span>
-          <span className="block text-brand">
+          {" "}
+          <span className="text-brand">
             {headline[1].split(" ").map((w, i) => (
               <span key={i} data-head className="inline-block overflow-hidden align-bottom">
                 <span className="inline-block">{w}</span>
@@ -220,7 +224,7 @@ export function Narrative({
               silently dropped a caller's opening sentence, which is exactly the
               failure this slot exists to prevent. */}
           {bodyLead && (
-            <p className="mb-6 text-xs font-semibold uppercase tracking-[0.22em] text-brand-text">
+            <p className="mb-6 text-xs font-semibold uppercase text-brand-text">
               {bodyLead}
             </p>
           )}
@@ -273,7 +277,7 @@ export function Narrative({
                 <li key={line} className="flex gap-5">
                   <span
                     aria-hidden
-                    className="font-display mt-1 shrink-0 text-xs font-bold tabular-nums tracking-[0.1em] text-brand-text"
+                    className="font-display mt-1 shrink-0 text-xs font-bold tabular-nums text-brand-text"
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -303,7 +307,7 @@ export function Narrative({
         )}
 
         {closing && (
-          <p className="font-display mt-10 text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+          <p className="font-display mt-10 text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.16] text-snow">
             {closing}
           </p>
         )}
