@@ -125,7 +125,7 @@ export default function ContentCreationPage() {
           aside={
             <Rise key="handle-lead">
               <p className="leading-relaxed text-fog sm:text-lg">{c.handle.lead}</p>
-              <p className="mt-5 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+              <p className="mt-5 text-[0.62rem] font-semibold uppercase text-brand-text">
                 {c.handle.ledeTail}
               </p>
             </Rise>
@@ -223,11 +223,11 @@ export default function ContentCreationPage() {
                         <div className="flex items-baseline gap-5">
                           <span
                             aria-hidden
-                            className="font-display shrink-0 text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-brand-text"
+                            className="font-display shrink-0 text-[0.62rem] font-bold tabular-nums text-brand-text"
                           >
                             {stage.no}
                           </span>
-                          <h3 className="font-display text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+                          <h3 className="font-display text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.18] text-snow">
                             {stage.title}
                           </h3>
                         </div>
@@ -240,7 +240,7 @@ export default function ContentCreationPage() {
             </div>
 
             <Rise delay={0.14} className="mt-9">
-              <p className="font-display max-w-4xl text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+              <p className="font-display max-w-4xl text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-brand">
                 {c.stages.point}
               </p>
             </Rise>
@@ -287,7 +287,7 @@ export default function ContentCreationPage() {
 
         <Work index="05" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="06" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="06" faqs={c.faqs} />
 
         <CtaBand
           label="Turn What Your Business Does Into Content"

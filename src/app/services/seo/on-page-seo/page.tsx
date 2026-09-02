@@ -141,7 +141,7 @@ export default function OnPageSeoPage() {
               className="mb-10"
               aside={
                 <Rise key="split">
-                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
                     {c.control.lead}
                   </p>
                 </Rise>
@@ -156,7 +156,7 @@ export default function OnPageSeoPage() {
                     <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1 py-4">
                       <span
                         aria-hidden
-                        className="font-display shrink-0 text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-ash"
+                        className="font-display shrink-0 text-[0.62rem] font-bold tabular-nums text-ash"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
@@ -174,14 +174,14 @@ export default function OnPageSeoPage() {
             <Rise delay={0.14} className="mt-10">
               <span
                 aria-hidden
-                className="font-display block text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-brand-text"
+                className="font-display block text-[0.62rem] font-bold tabular-nums text-brand-text"
               >
                 03
               </span>
               {/* Part three is the label; the sentence after it is the point, so
                   only one of the two takes the display size. Two stacked
                   display-xl blocks competed and cost 120px saying it twice. */}
-              <h3 className="font-display mt-4 max-w-3xl text-[clamp(1.15rem,2.2vw,1.65rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+              <h3 className="font-display mt-4 max-w-3xl text-[clamp(1.15rem,2.2vw,1.65rem)] font-extrabold uppercase leading-[1.16] text-snow">
                 {c.control.parts[2].what}
               </h3>
               <p className="font-display display-xl mt-5  font-extrabold uppercase text-brand">
@@ -189,7 +189,7 @@ export default function OnPageSeoPage() {
               </p>
 
               {/* What it does not need, as a run rather than three pills. */}
-              <p className="font-display mt-9 flex flex-wrap items-baseline text-[clamp(0.95rem,1.7vw,1.2rem)] font-extrabold uppercase leading-[1.3] tracking-tight text-snow">
+              <p className="font-display mt-9 flex flex-wrap items-baseline text-[clamp(0.95rem,1.7vw,1.2rem)] font-extrabold uppercase leading-[1.3] text-snow">
                 {c.control.nos.map((no, i) => (
                   <Fragment key={no}>
                     {i > 0 && (
@@ -246,11 +246,11 @@ export default function OnPageSeoPage() {
                     >
                       <span
                         aria-hidden
-                        className="font-display shrink-0 text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-ash transition-colors duration-500 group-hover:text-brand-text lg:ml-[var(--step)]"
+                        className="font-display shrink-0 text-[0.62rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text lg:ml-[var(--step)]"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <p className="font-display text-[clamp(1.05rem,2vw,1.5rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-snow transition-colors duration-500 group-hover:text-brand">
+                      <p className="font-display text-[clamp(1.05rem,2vw,1.5rem)] font-extrabold uppercase leading-[1.2] text-snow transition-colors duration-500 group-hover:text-brand">
                         {event}
                       </p>
                     </div>
@@ -290,7 +290,7 @@ export default function OnPageSeoPage() {
               className="mb-12"
               aside={
                 <Rise key="tension">
-                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-snow">
                     {c.words.tension}
                   </p>
                 </Rise>
@@ -300,7 +300,7 @@ export default function OnPageSeoPage() {
             <div className="grid gap-x-10 gap-y-12 lg:grid-cols-2 lg:items-start">
               {/* What the company calls it. */}
               <Rise>
-                <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                <p className="text-[0.62rem] font-semibold uppercase text-ash">
                   {c.words.internalLead}
                 </p>
                 <p className="font-display display-xl mt-5 font-extrabold uppercase text-ash">
@@ -311,7 +311,7 @@ export default function OnPageSeoPage() {
               {/* What gets typed. Offset down and to the right: the two are
                   pulling apart, which is the sentence above them. */}
               <Rise delay={0.1} className="lg:pt-20">
-                <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+                <p className="text-[0.62rem] font-semibold uppercase text-brand-text">
                   {c.words.searcherLead}
                 </p>
 
@@ -336,7 +336,7 @@ export default function OnPageSeoPage() {
                       strokeLinecap="round"
                     />
                   </svg>
-                  <p className="font-display text-[clamp(1.05rem,2.1vw,1.7rem)] font-extrabold leading-[1.15] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.05rem,2.1vw,1.7rem)] font-extrabold leading-[1.15] text-snow">
                     {c.words.searcher}
                   </p>
                   <span
@@ -349,8 +349,8 @@ export default function OnPageSeoPage() {
 
             {/* Where the second one goes. */}
             <Rise delay={0.16} className="mt-14 border-t border-line pt-9">
-              <p className="font-display flex flex-wrap items-baseline text-[clamp(1rem,1.8vw,1.3rem)] font-extrabold uppercase leading-[1.3] tracking-tight text-snow">
-                <span className="mr-3 text-[0.62rem] font-semibold tracking-[0.2em] text-ash sm:mr-4">
+              <p className="font-display flex flex-wrap items-baseline text-[clamp(1rem,1.8vw,1.3rem)] font-extrabold uppercase leading-[1.3] text-snow">
+                <span className="mr-3 text-[0.62rem] font-semibold text-ash sm:mr-4">
                   {c.words.usageLead}
                 </span>
                 {c.words.placements.map((place, i) => (
@@ -414,7 +414,7 @@ export default function OnPageSeoPage() {
               className="mb-10"
               aside={
                 <Rise key="instant">
-                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
                     {c.timing.notInstant}
                   </p>
                   <p className="mt-5 leading-relaxed text-fog sm:text-lg">{c.timing.recrawl}</p>
@@ -452,7 +452,7 @@ export default function OnPageSeoPage() {
 
                       <p
                         className={cn(
-                          "font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.16] tracking-tight",
+                          "font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.16]",
                           i === 0 ? "text-snow" : "text-ash",
                         )}
                       >
@@ -466,21 +466,21 @@ export default function OnPageSeoPage() {
 
             {/* The one thing the document will not promise. */}
             <Rise delay={0.14} className="mt-9">
-              <p className="font-display max-w-4xl border-l-2 border-brand pl-6 text-[clamp(1.3rem,2.7vw,2.15rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-brand sm:pl-8">
+              <p className="font-display max-w-4xl border-l-2 border-brand pl-6 text-[clamp(1.3rem,2.7vw,2.15rem)] font-extrabold uppercase leading-[1.14] text-brand sm:pl-8">
                 {c.timing.refusal}
               </p>
             </Rise>
 
             {/* And what it will. */}
             <Rise delay={0.18} className="mt-8 border-t border-line pt-7">
-              <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+              <p className="text-[0.65rem] font-semibold uppercase text-ash">
                 {c.timing.canTellLead}
               </p>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {c.timing.canTell.map((item) => (
                   <li
                     key={item}
-                    className="font-display rounded-lg border border-brand/45 bg-brand/[0.07] px-3.5 py-2 text-sm font-bold tracking-tight text-snow"
+                    className="font-display rounded-lg border border-brand/45 bg-brand/[0.07] px-3.5 py-2 text-sm font-bold text-snow"
                   >
                     {item}
                   </li>
@@ -518,11 +518,11 @@ export default function OnPageSeoPage() {
                     <div className="flex items-start gap-6 py-6">
                       <span
                         aria-hidden
-                        className="font-display shrink-0 text-[clamp(1.6rem,3vw,2.4rem)] font-extrabold leading-none tracking-tight text-snow/[0.14] transition-colors duration-500 group-hover:text-brand/40"
+                        className="font-display shrink-0 text-[clamp(1.6rem,3vw,2.4rem)] font-extrabold leading-none text-snow/[0.14] transition-colors duration-500 group-hover:text-brand/40"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <p className="font-display pt-1 text-[clamp(1rem,1.8vw,1.2rem)] font-bold uppercase leading-[1.3] tracking-tight text-fog transition-colors duration-500 group-hover:text-snow">
+                      <p className="font-display pt-1 text-[clamp(1rem,1.8vw,1.2rem)] font-bold uppercase leading-[1.3] text-fog transition-colors duration-500 group-hover:text-snow">
                         {item.text}
                       </p>
                     </div>
@@ -599,7 +599,7 @@ export default function OnPageSeoPage() {
 
                         <h3
                           className={cn(
-                            "font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18] tracking-tight",
+                            "font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18]",
                             refusal ? "text-brand" : "text-snow",
                           )}
                         >
@@ -642,7 +642,7 @@ export default function OnPageSeoPage() {
 
         <Work index="08" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="09" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="09" faqs={c.faqs} />
 
         <CtaBand
           label="Send Us a Page and We Will Tell You What Is Wrong With It"

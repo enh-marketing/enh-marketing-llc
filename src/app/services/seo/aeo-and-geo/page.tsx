@@ -139,7 +139,7 @@ export default function AeoGeoPage() {
             <Rise>
               <p className="leading-relaxed text-fog sm:text-lg">{c.acronyms.caveat}</p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                <span className="text-[0.65rem] font-semibold uppercase text-ash">
                   Not issued by
                 </span>
                 {["Google", "OpenAI"].map((name) => (
@@ -155,10 +155,10 @@ export default function AeoGeoPage() {
 
             <Rise delay={0.1}>
               <div className="border-l-2 border-brand pl-7 sm:pl-9">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-text">
+                <p className="text-xs font-semibold uppercase text-brand-text">
                   The real question
                 </p>
-                <p className="font-display mt-5 text-[clamp(1.25rem,2.3vw,1.9rem)] font-extrabold uppercase leading-[1.15] tracking-tight text-snow">
+                <p className="font-display mt-5 text-[clamp(1.25rem,2.3vw,1.9rem)] font-extrabold uppercase leading-[1.15] text-snow">
                   {c.acronyms.question}
                 </p>
               </div>
@@ -242,7 +242,7 @@ export default function AeoGeoPage() {
                   className="border-l-2 border-brand/40 pl-6 transition-colors duration-500 hover:border-brand sm:pl-7"
                 >
                   <Rise delay={(i % 2) * 0.07}>
-                    <p className="font-display text-lg font-bold leading-snug tracking-tight text-snow sm:text-xl">
+                    <p className="font-display text-lg font-bold leading-snug text-snow sm:text-xl">
                       {item}
                     </p>
                   </Rise>
@@ -288,7 +288,7 @@ export default function AeoGeoPage() {
 
         <Work index="08" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="09" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="09" faqs={c.faqs} />
 
         <CtaBand
           label="Find Out If AI Assistants Mention You"

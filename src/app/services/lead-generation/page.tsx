@@ -134,7 +134,7 @@ export default function LeadGenerationPage() {
               className="mb-12"
               aside={
                 <Rise key="routes-lede">
-                  <p className="font-display text-[clamp(1.25rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.25rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
                     {c.routes.lede}
                   </p>
                   <p className="mt-5 leading-relaxed text-fog sm:text-lg">
@@ -164,10 +164,10 @@ export default function LeadGenerationPage() {
           diagram={{ kind: "leadsystem" }}
           aside={
             <Rise key="threshold">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ash">
+              <p className="text-xs font-semibold uppercase text-ash">
                 {c.process.span}
               </p>
-              <p className="font-display mt-5 text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-brand">
+              <p className="font-display mt-5 text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold uppercase leading-[1.14] text-brand">
                 {c.process.threshold}
               </p>
             </Rise>
@@ -176,7 +176,7 @@ export default function LeadGenerationPage() {
           {/* The document leaves this phase unnumbered, so it closes the
               section rather than joining the run of stages. */}
           <Rise delay={0.12} className="mt-14 border-t border-line pt-9">
-            <p className="font-display max-w-3xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+            <p className="font-display max-w-3xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.16] text-snow">
               {c.process.closingLead}
             </p>
             <p className="mt-5 max-w-3xl leading-relaxed text-fog sm:text-lg">
@@ -297,7 +297,7 @@ export default function LeadGenerationPage() {
           }))}
           footer={
             <Rise delay={0.14} className="mt-14">
-              <p className="font-display text-[clamp(1.4rem,3vw,2.4rem)] font-extrabold uppercase leading-[1.12] tracking-tight text-brand">
+              <p className="font-display text-[clamp(1.4rem,3vw,2.4rem)] font-extrabold uppercase leading-[1.12] text-brand">
                 {c.sectors.closingLead}
               </p>
               <p className="mt-6 max-w-3xl leading-relaxed text-snow sm:text-lg">
@@ -318,7 +318,7 @@ export default function LeadGenerationPage() {
 
         <Work index="05" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="06" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="06" faqs={c.faqs} />
 
         <CtaBand
           label="Tell Us Where Your Enquiries Are Leaking"

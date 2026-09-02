@@ -120,7 +120,7 @@ export default function TikTokMarketingPage() {
           aside={
             <Rise key="handle-lead">
               <p className="leading-relaxed text-fog sm:text-lg">{c.handle.lead}</p>
-              <p className="mt-5 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+              <p className="mt-5 text-[0.62rem] font-semibold uppercase text-brand-text">
                 {c.handle.ledeTail}
               </p>
             </Rise>
@@ -148,7 +148,7 @@ export default function TikTokMarketingPage() {
               className="mb-10"
               aside={
                 <Rise key="fmt-lead">
-                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-snow">
                     {c.formats.lead}
                   </p>
                   <p className="mt-5 leading-relaxed text-fog">{c.formats.ledeTail}</p>
@@ -166,7 +166,7 @@ export default function TikTokMarketingPage() {
                         key={col}
                         scope="col"
                         className={cn(
-                          "border-b border-line px-6 py-5 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-ash",
+                          "border-b border-line px-6 py-5 text-[0.6rem] font-semibold uppercase text-ash",
                           i === 0 ? "w-[19%]" : "border-l w-[27%]",
                         )}
                       >
@@ -186,10 +186,10 @@ export default function TikTokMarketingPage() {
                         )}
                       >
                         <span className="flex items-baseline gap-3">
-                          <span className="font-display shrink-0 text-[0.6rem] font-bold tabular-nums tracking-[0.18em] text-brand-text">
+                          <span className="font-display shrink-0 text-[0.6rem] font-bold tabular-nums text-brand-text">
                             {f.no}
                           </span>
-                          <span className="font-display text-[clamp(0.95rem,1.6vw,1.15rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-snow">
+                          <span className="font-display text-[clamp(0.95rem,1.6vw,1.15rem)] font-extrabold uppercase leading-[1.2] text-snow">
                             {f.name}
                           </span>
                         </span>
@@ -219,16 +219,16 @@ export default function TikTokMarketingPage() {
                 <li key={f.no}>
                   <Rise delay={(i % 3) * 0.05}>
                     <div className="rounded-2xl border border-line bg-ink-2 p-6">
-                      <span className="font-display text-[0.6rem] font-bold tabular-nums tracking-[0.18em] text-brand-text">
+                      <span className="font-display text-[0.6rem] font-bold tabular-nums text-brand-text">
                         {f.no}
                       </span>
-                      <h3 className="font-display mt-3 text-base font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+                      <h3 className="font-display mt-3 text-base font-extrabold uppercase leading-[1.18] text-snow">
                         {f.name}
                       </h3>
                       <dl className="mt-5 space-y-4">
                         {([1, 2, 3] as const).map((k) => (
                           <div key={k}>
-                            <dt className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                            <dt className="text-[0.6rem] font-semibold uppercase text-ash">
                               {c.formats.columns[k]}
                             </dt>
                             <dd
@@ -271,7 +271,7 @@ export default function TikTokMarketingPage() {
               className="mb-10"
               aside={
                 <Rise key="notmore">
-                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-brand">
+                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-brand">
                     {c.rhythm.notMore}
                   </p>
                   <p className="mt-5 leading-relaxed text-fog sm:text-lg">{c.rhythm.bothWays}</p>
@@ -296,7 +296,7 @@ export default function TikTokMarketingPage() {
                     >
                       <p
                         className={cn(
-                          "font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18] tracking-tight",
+                          "font-display text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.18]",
                           i === 0 ? "text-snow" : "text-ash",
                         )}
                       >
@@ -309,7 +309,7 @@ export default function TikTokMarketingPage() {
             </ol>
 
             <Rise delay={0.14} className="mt-8">
-              <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+              <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-brand">
                 {c.rhythm.notSame}
               </p>
               <p className="mt-6 leading-relaxed text-fog sm:text-lg">{c.rhythm.agree}</p>
@@ -450,7 +450,7 @@ export default function TikTokMarketingPage() {
 
         <Work index="08" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="09" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="09" faqs={c.faqs} />
 
         <CtaBand
           label="See Whether TikTok Fits Your Brand"

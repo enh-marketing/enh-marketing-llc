@@ -139,10 +139,10 @@ export default function EcommercePage() {
           }))}
           aside={
             <Rise key="lede">
-              <p className="font-display text-[clamp(1.15rem,2.1vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+              <p className="font-display text-[clamp(1.15rem,2.1vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-snow">
                 {c.audience.lede}
               </p>
-              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-brand-text">
+              <p className="mt-5 text-xs font-semibold uppercase text-brand-text">
                 {c.audience.itemsLead}
               </p>
             </Rise>
@@ -152,7 +152,7 @@ export default function EcommercePage() {
           {/* And the case against one, which the document volunteers. */}
           <Rise delay={0.12} className="mt-10 border-t border-line pt-8">
             <div className="grid gap-6 lg:grid-cols-[minmax(0,14rem)_1fr] lg:gap-14">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ash">
+              <p className="text-xs font-semibold uppercase text-ash">
                 And when it is not
               </p>
               <p className="max-w-3xl leading-relaxed text-fog sm:text-lg">
@@ -215,7 +215,7 @@ export default function EcommercePage() {
 
         <Work index="04" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="05" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="05" faqs={c.faqs} />
 
         <CtaBand
           label="See What Your Store Should Cost to Build"

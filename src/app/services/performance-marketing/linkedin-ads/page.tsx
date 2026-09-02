@@ -140,7 +140,7 @@ export default function LinkedInAdsPage() {
               className="mb-10"
               aside={
                 <Rise key="cost">
-                  <p className="font-display text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-brand">
+                  <p className="font-display text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold uppercase leading-[1.14] text-brand">
                     {c.arithmetic.cost}
                   </p>
                   <p className="mt-5 leading-relaxed text-fog sm:text-lg">
@@ -152,13 +152,13 @@ export default function LinkedInAdsPage() {
 
             {/* The turn the section is built on. */}
             <Rise className="mb-8 max-w-3xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ash">
+              <p className="text-xs font-semibold uppercase text-ash">
                 {c.arithmetic.pivotLead}
               </p>
-              <p className="font-display mt-4 text-[clamp(1.2rem,2.5vw,1.95rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+              <p className="font-display mt-4 text-[clamp(1.2rem,2.5vw,1.95rem)] font-extrabold uppercase leading-[1.14] text-snow">
                 {c.arithmetic.pivot}
               </p>
-              <p className="mt-8 text-xs font-semibold uppercase tracking-[0.22em] text-brand-text">
+              <p className="mt-8 text-xs font-semibold uppercase text-brand-text">
                 {c.arithmetic.stepsLead}
               </p>
             </Rise>
@@ -178,7 +178,7 @@ export default function LinkedInAdsPage() {
                 {c.arithmetic.sectors.map((sector) => (
                   <li
                     key={sector}
-                    className="font-display rounded-lg border border-line bg-ink-2 px-3.5 py-2 text-sm font-bold tracking-tight text-snow transition-colors duration-500 hover:border-brand/50"
+                    className="font-display rounded-lg border border-line bg-ink-2 px-3.5 py-2 text-sm font-bold text-snow transition-colors duration-500 hover:border-brand/50"
                   >
                     {sector}
                   </li>
@@ -187,7 +187,7 @@ export default function LinkedInAdsPage() {
             </Rise>
 
             <Rise delay={0.16} className="mt-8">
-              <p className="font-display text-[clamp(1.25rem,2.6vw,2.05rem)] font-extrabold uppercase leading-[1.14] tracking-tight">
+              <p className="font-display text-[clamp(1.25rem,2.6vw,2.05rem)] font-extrabold uppercase leading-[1.14]">
                 <span className="text-brand">{c.arithmetic.closingA}</span>{" "}
                 <span className="text-snow">{c.arithmetic.closingB}</span>
               </p>
@@ -265,7 +265,7 @@ export default function LinkedInAdsPage() {
                       ))}
                       <span className="absolute left-1/2 top-1/2 h-16 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-fog/10 blur-xl" />
                     </div>
-                    <p className="font-display mt-6 text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-fog">
+                    <p className="font-display mt-6 text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.16] text-fog">
                       {c.targeting.inferred}
                     </p>
                   </div>
@@ -288,7 +288,7 @@ export default function LinkedInAdsPage() {
                         </span>
                       ))}
                     </div>
-                    <p className="font-display mt-6 text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                    <p className="font-display mt-6 text-[clamp(1.05rem,1.9vw,1.4rem)] font-extrabold uppercase leading-[1.16] text-snow">
                       {c.targeting.declared}
                     </p>
                   </div>
@@ -298,14 +298,14 @@ export default function LinkedInAdsPage() {
 
             {/* What that lets you target by. */}
             <Rise delay={0.12} className="mt-9 border-t border-line pt-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ash">
+              <p className="text-xs font-semibold uppercase text-ash">
                 {c.targeting.facetsLead}
               </p>
               <ul className="mt-5 flex flex-wrap gap-2">
                 {c.targeting.facets.map((facet) => (
                   <li
                     key={facet}
-                    className="font-display rounded-lg border border-line bg-ink-2 px-3.5 py-2 text-sm font-bold tracking-tight text-snow transition-colors duration-500 hover:border-brand/50"
+                    className="font-display rounded-lg border border-line bg-ink-2 px-3.5 py-2 text-sm font-bold text-snow transition-colors duration-500 hover:border-brand/50"
                   >
                     {facet}
                   </li>
@@ -317,7 +317,7 @@ export default function LinkedInAdsPage() {
             </Rise>
 
             <Rise delay={0.16} className="mt-8">
-              <p className="font-display border-l-2 border-brand pl-6 text-[clamp(1.15rem,2.3vw,1.8rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow sm:pl-7">
+              <p className="font-display border-l-2 border-brand pl-6 text-[clamp(1.15rem,2.3vw,1.8rem)] font-extrabold uppercase leading-[1.16] text-snow sm:pl-7">
                 {c.targeting.example}
               </p>
               <p className="mt-6 max-w-3xl leading-relaxed text-snow sm:text-lg">
@@ -344,7 +344,7 @@ export default function LinkedInAdsPage() {
               className="mb-10"
               aside={
                 <Rise key="problem">
-                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
                     {c.measurement.problem}
                   </p>
                 </Rise>
@@ -404,7 +404,7 @@ export default function LinkedInAdsPage() {
                             <Fragment key={j}>
                               {part}
                               {j < all.length - 1 && (
-                                <span className="font-display font-bold uppercase tracking-tight text-brand">
+                                <span className="font-display font-bold uppercase text-brand">
                                   {touch.month}
                                 </span>
                               )}
@@ -498,10 +498,10 @@ export default function LinkedInAdsPage() {
 
                   {/* Each claim sits under the mark it points at. */}
                   <div className="mt-4 flex items-start justify-between gap-10">
-                    <p className="font-display max-w-xs text-[clamp(1.1rem,2.1vw,1.6rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+                    <p className="font-display max-w-xs text-[clamp(1.1rem,2.1vw,1.6rem)] font-extrabold uppercase leading-[1.16] text-brand">
                       {c.measurement.verdictRight}
                     </p>
-                    <p className="font-display max-w-xs text-right text-[clamp(1.1rem,2.1vw,1.6rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-ash">
+                    <p className="font-display max-w-xs text-right text-[clamp(1.1rem,2.1vw,1.6rem)] font-extrabold uppercase leading-[1.16] text-ash">
                       {c.measurement.verdictWrong}
                     </p>
                   </div>
@@ -527,7 +527,7 @@ export default function LinkedInAdsPage() {
                           <Fragment key={j}>
                             {part}
                             {j < all.length - 1 && (
-                              <span className="font-display font-bold uppercase tracking-tight text-brand">
+                              <span className="font-display font-bold uppercase text-brand">
                                 {touch.month}
                               </span>
                             )}
@@ -539,10 +539,10 @@ export default function LinkedInAdsPage() {
                 ))}
               </ol>
               <div className="mt-7 space-y-3 border-t border-line pt-7">
-                <p className="font-display text-lg font-extrabold uppercase leading-[1.16] tracking-tight text-ash">
+                <p className="font-display text-lg font-extrabold uppercase leading-[1.16] text-ash">
                   {c.measurement.verdictWrong}
                 </p>
-                <p className="font-display text-lg font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+                <p className="font-display text-lg font-extrabold uppercase leading-[1.16] text-brand">
                   {c.measurement.verdictRight}
                 </p>
               </div>
@@ -552,7 +552,7 @@ export default function LinkedInAdsPage() {
                 replace, in the document's own words; three do not, and those
                 keep an empty counterpart rather than an invented one. */}
             <Rise delay={0.18} className="mt-9 border-t border-line pt-7">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-text">
+              <p className="text-xs font-semibold uppercase text-brand-text">
                 {c.measurement.remediesLead}
               </p>
               <ol className="mt-5 border-t border-line">
@@ -572,7 +572,7 @@ export default function LinkedInAdsPage() {
                     <div className="flex gap-5">
                       <span
                         aria-hidden
-                        className="font-display shrink-0 pt-1 text-xs font-bold tabular-nums tracking-[0.1em] text-ash transition-colors duration-500 group-hover:text-brand-text"
+                        className="font-display shrink-0 pt-1 text-xs font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
@@ -580,7 +580,7 @@ export default function LinkedInAdsPage() {
                     </div>
                     {remedy.instead && (
                       <p className="leading-relaxed text-ash lg:border-l lg:border-line lg:pl-10">
-                        <span className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-ash/70">
+                        <span className="text-[0.7rem] font-semibold uppercase text-ash/70">
                           rather than{" "}
                         </span>
                         <span className="line-through decoration-brand/50 decoration-2">
@@ -597,14 +597,14 @@ export default function LinkedInAdsPage() {
                 included and demoted. It is not struck through — the document
                 says it is reported, only that it is worth less. */}
             <Rise delay={0.22} className="mt-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ash">
+              <p className="text-xs font-semibold uppercase text-ash">
                 {c.measurement.reportsLead}
               </p>
               <ul className="mt-5 flex flex-wrap items-center gap-2.5">
                 {c.measurement.metrics.map((metric) => (
                   <li
                     key={metric}
-                    className="font-display rounded-xl border border-brand/50 bg-brand/[0.08] px-4 py-2.5 text-sm font-bold tracking-tight text-snow sm:text-base"
+                    className="font-display rounded-xl border border-brand/50 bg-brand/[0.08] px-4 py-2.5 text-sm font-bold text-snow sm:text-base"
                   >
                     {metric}
                   </li>
@@ -616,7 +616,7 @@ export default function LinkedInAdsPage() {
                   the document wrote it rather than as a chip with a fragment
                   stranded underneath. */}
               <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-line pt-6">
-                <span className="font-display rounded-xl border border-line bg-ink-2/60 px-4 py-2.5 text-sm font-bold tracking-tight text-ash">
+                <span className="font-display rounded-xl border border-line bg-ink-2/60 px-4 py-2.5 text-sm font-bold text-ash">
                   {c.measurement.demoted}
                 </span>
                 <p className="max-w-xl leading-relaxed text-fog">{c.measurement.demotedTail}</p>
@@ -696,7 +696,7 @@ export default function LinkedInAdsPage() {
                           >
                             <span className="h-1.5 w-1.5 rounded-full bg-brand" />
                           </span>
-                          <p className="font-display text-sm font-extrabold uppercase leading-[1.2] tracking-tight text-snow sm:text-base">
+                          <p className="font-display text-sm font-extrabold uppercase leading-[1.2] text-snow sm:text-base">
                             {industry}
                           </p>
                         </div>
@@ -720,7 +720,7 @@ export default function LinkedInAdsPage() {
 
         <Work index="07" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="08" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="08" faqs={c.faqs} />
 
         <CtaBand
           label="Not Sure LinkedIn Is Right for You"

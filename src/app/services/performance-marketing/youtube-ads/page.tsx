@@ -114,10 +114,10 @@ export default function YouTubeAdsPage() {
               className="mb-10"
               aside={
                 <Rise key="acct-lead">
-                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-snow">
                     {c.account.lead}
                   </p>
-                  <p className="mt-5 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+                  <p className="mt-5 text-[0.62rem] font-semibold uppercase text-brand-text">
                     {c.account.ledeTail}
                   </p>
                 </Rise>
@@ -164,7 +164,7 @@ export default function YouTubeAdsPage() {
                       <div className="flex items-start gap-5 py-4">
                         <span
                           aria-hidden
-                          className="font-display shrink-0 pt-1 text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-ash transition-colors duration-500 group-hover:text-brand-text"
+                          className="font-display shrink-0 pt-1 text-[0.62rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text"
                         >
                           {String(i + 1).padStart(2, "0")}
                         </span>
@@ -184,7 +184,7 @@ export default function YouTubeAdsPage() {
               <p className=" leading-relaxed text-snow sm:text-lg">
                 {c.account.implication}
               </p>
-              <p className="font-display mt-5 text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+              <p className="font-display mt-5 text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-brand">
                 {c.account.against}
               </p>
               <p className="mt-7 text-sm leading-relaxed text-fog">
@@ -234,7 +234,7 @@ export default function YouTubeAdsPage() {
               className="mb-10"
               aside={
                 <Rise key="audience">
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                  <p className="text-[0.62rem] font-semibold uppercase text-ash">
                     {c.earns.audienceLead}
                   </p>
                   <p className="font-display display-xl mt-3 font-extrabold uppercase text-snow">
@@ -248,7 +248,7 @@ export default function YouTubeAdsPage() {
             />
 
             <Rise>
-              <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+              <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-brand">
                 {c.earns.lead}
               </p>
             </Rise>
@@ -262,7 +262,7 @@ export default function YouTubeAdsPage() {
                   />
                   <Rise delay={i * 0.07}>
                     <div className="grid gap-x-14 gap-y-3 py-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-baseline">
-                      <h3 className="font-display text-[clamp(1.1rem,2.1vw,1.5rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+                      <h3 className="font-display text-[clamp(1.1rem,2.1vw,1.5rem)] font-extrabold uppercase leading-[1.18] text-snow">
                         {item.title}
                       </h3>
                       <p className="leading-relaxed text-fog sm:text-lg">{item.body}</p>
@@ -310,13 +310,13 @@ export default function YouTubeAdsPage() {
                     >
                       <span
                         aria-hidden
-                        className="font-display text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-ash"
+                        className="font-display text-[0.62rem] font-bold tabular-nums text-ash"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <h3
                         className={cn(
-                          "font-display mt-4 text-[clamp(1.05rem,1.9vw,1.35rem)] font-extrabold uppercase leading-[1.18] tracking-tight",
+                          "font-display mt-4 text-[clamp(1.05rem,1.9vw,1.35rem)] font-extrabold uppercase leading-[1.18]",
                           item.body ? "text-brand" : "text-snow",
                         )}
                       >
@@ -345,7 +345,7 @@ export default function YouTubeAdsPage() {
 
         <Work index="05" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="06" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="06" faqs={c.faqs} />
 
         <CtaBand
           label="See Whether Your Assets Are Ready for YouTube"

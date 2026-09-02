@@ -115,7 +115,7 @@ export default function InstagramMarketingPage() {
                 ninety pixels for one job. */}
             <div>
               <Rise>
-                <p className="font-display max-w-3xl text-[clamp(1.1rem,2vw,1.55rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-snow">
+                <p className="font-display max-w-3xl text-[clamp(1.1rem,2vw,1.55rem)] font-extrabold uppercase leading-[1.2] text-snow">
                   {c.narrative.marketLead}
                 </p>
               </Rise>
@@ -125,10 +125,10 @@ export default function InstagramMarketingPage() {
                   <li key={ex.place}>
                     <Rise delay={i * 0.07}>
                       <div className="h-full rounded-2xl border border-line bg-ink-2 p-6">
-                        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+                        <p className="text-[0.65rem] font-semibold uppercase text-brand-text">
                           {ex.place}
                         </p>
-                        <p className="font-display mt-4 text-lg font-extrabold uppercase leading-tight tracking-tight text-snow">
+                        <p className="font-display mt-4 text-lg font-extrabold uppercase leading-tight text-snow">
                           {ex.business}
                         </p>
                       </div>
@@ -217,7 +217,7 @@ export default function InstagramMarketingPage() {
               className="mb-12"
               aside={
                 <Rise key="lede">
-                  <p className="font-display text-[clamp(1.1rem,2vw,1.55rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.1rem,2vw,1.55rem)] font-extrabold uppercase leading-[1.2] text-snow">
                     {c.sectors.lede}
                   </p>
                 </Rise>
@@ -239,11 +239,11 @@ export default function InstagramMarketingPage() {
                     <div className="flex items-baseline gap-4">
                       <span
                         aria-hidden
-                        className="font-display shrink-0 text-xs font-bold tabular-nums tracking-[0.1em] text-ash transition-colors duration-500 group-hover:text-brand-text"
+                        className="font-display shrink-0 text-xs font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-fog transition-colors duration-500 group-hover:text-snow">
+                      <h3 className="text-[0.7rem] font-semibold uppercase text-fog transition-colors duration-500 group-hover:text-snow">
                         {sector.name}
                       </h3>
                     </div>
@@ -253,7 +253,7 @@ export default function InstagramMarketingPage() {
                         {sector.examples.map((ex) => (
                           <li
                             key={ex}
-                            className="font-display rounded-lg border border-line bg-ink-2 px-3.5 py-2 text-sm font-bold tracking-tight text-snow transition-colors duration-500 hover:border-brand/50"
+                            className="font-display rounded-lg border border-line bg-ink-2 px-3.5 py-2 text-sm font-bold text-snow transition-colors duration-500 hover:border-brand/50"
                           >
                             {ex}
                           </li>
@@ -300,7 +300,7 @@ export default function InstagramMarketingPage() {
 
         <Work index="05" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="06" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="06" faqs={c.faqs} />
 
         <CtaBand
           label="Ready to Make Instagram Work Properly"

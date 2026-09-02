@@ -132,7 +132,7 @@ export default function SnapchatAdsPage() {
               className="mb-10"
               aside={
                 <Rise key="audience">
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                  <p className="text-[0.62rem] font-semibold uppercase text-ash">
                     {c.fit.audienceLead}
                   </p>
                   <p className="font-display display-xl mt-3 font-extrabold uppercase text-snow">
@@ -146,7 +146,7 @@ export default function SnapchatAdsPage() {
             />
 
             <Rise>
-              <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+              <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-brand">
                 {c.fit.lead}
               </p>
             </Rise>
@@ -158,11 +158,11 @@ export default function SnapchatAdsPage() {
                     <div className="flex h-full flex-col gap-5 p-7 transition-colors duration-500 group-hover:bg-ink-3 sm:p-8">
                       <span
                         aria-hidden
-                        className="font-display text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-brand-text"
+                        className="font-display text-[0.62rem] font-bold tabular-nums text-brand-text"
                       >
                         {reason.no}
                       </span>
-                      <h3 className="font-display text-[clamp(1.1rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+                      <h3 className="font-display text-[clamp(1.1rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.18] text-snow">
                         {reason.title}
                       </h3>
                       <p className="leading-relaxed text-fog">{reason.body}</p>
@@ -204,7 +204,7 @@ export default function SnapchatAdsPage() {
             <p className="leading-relaxed text-fog sm:text-lg">
               {c.formats.argumentLead}
             </p>
-            <p className="font-display mt-6 text-[clamp(1.15rem,2.3vw,1.8rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+            <p className="font-display mt-6 text-[clamp(1.15rem,2.3vw,1.8rem)] font-extrabold uppercase leading-[1.16] text-brand">
               {c.formats.argument}
             </p>
             <p className="mt-6 border-l-2 border-brand pl-6 leading-relaxed text-snow sm:text-lg">
@@ -233,7 +233,7 @@ export default function SnapchatAdsPage() {
               className="mb-10"
               aside={
                 <Rise key="straight">
-                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-snow">
                     {c.notFor.lead}
                   </p>
                 </Rise>
@@ -256,7 +256,7 @@ export default function SnapchatAdsPage() {
 
         <Work index="04" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="05" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="05" faqs={c.faqs} />
 
         <CtaBand
           label="Find Out Whether Snapchat Earns a Place"

@@ -57,13 +57,13 @@ const serviceSchema = {
 function ApproachTitle({ claim }: { claim: c.Claim }) {
   if (!claim.not) {
     return (
-      <h3 className="font-display text-[clamp(1.15rem,2.2vw,1.6rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+      <h3 className="font-display text-[clamp(1.15rem,2.2vw,1.6rem)] font-extrabold uppercase leading-[1.16] text-snow">
         {claim.title}
       </h3>
     );
   }
   return (
-    <h3 className="font-display text-[clamp(1.15rem,2.2vw,1.6rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+    <h3 className="font-display text-[clamp(1.15rem,2.2vw,1.6rem)] font-extrabold uppercase leading-[1.16] text-snow">
       {claim.title}
       <span className="text-ash">, not </span>
       <span className="text-ash line-through decoration-brand/60 decoration-2">{claim.not}</span>
@@ -152,7 +152,7 @@ export default function SeoAuditPage() {
               className="mb-10"
               aside={
                 <Rise key="lead">
-                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
                     {c.reasons.lead}
                   </p>
                 </Rise>
@@ -178,11 +178,11 @@ export default function SeoAuditPage() {
                     <Rise delay={(i % 2) * 0.07}>
                       <span
                         aria-hidden
-                        className="font-display block text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-ash transition-colors duration-500 group-hover:text-brand-text"
+                        className="font-display block text-[0.62rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <p className="font-display mt-4 text-[clamp(1.1rem,2.1vw,1.5rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-snow transition-colors duration-500 group-hover:text-brand">
+                      <p className="font-display mt-4 text-[clamp(1.1rem,2.1vw,1.5rem)] font-extrabold uppercase leading-[1.2] text-snow transition-colors duration-500 group-hover:text-brand">
                         {item}
                       </p>
                     </Rise>
@@ -203,7 +203,7 @@ export default function SeoAuditPage() {
                 aria-hidden
                 className="mx-auto mb-5 hidden h-7 w-px bg-line sm:block"
               />
-              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ash">
+              <p className="text-[0.62rem] font-semibold uppercase text-ash">
                 {c.reasons.convergeLead}
               </p>
               <p className="font-display text-[clamp(1.3rem,2.7vw,2.15rem)] mt-4  font-extrabold uppercase text-brand">
@@ -248,7 +248,7 @@ export default function SeoAuditPage() {
           mark={{ variant: "ecosystem", label: "Five connected areas, one map" }}
           aside={
             <Rise key="areas-lead">
-              <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+              <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-snow">
                 {c.areas.lead}
               </p>
               <p className="mt-5 leading-relaxed text-fog sm:text-lg">{c.areas.ledeTail}</p>
@@ -274,7 +274,7 @@ export default function SeoAuditPage() {
               className="mb-10"
               aside={
                 <Rise key="crawler">
-                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-ash">
+                  <p className="font-display text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-ash">
                     {c.judgement.crawler}
                   </p>
                   <p className="mt-5 leading-relaxed text-fog sm:text-lg">
@@ -301,11 +301,11 @@ export default function SeoAuditPage() {
                     <div className="flex h-full flex-col gap-6 p-7 transition-colors duration-500 group-hover:bg-ink-2 sm:p-8">
                       <span
                         aria-hidden
-                        className="font-display text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-brand-text"
+                        className="font-display text-[0.62rem] font-bold tabular-nums text-brand-text"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <p className="font-display text-[clamp(1.1rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-snow">
+                      <p className="font-display text-[clamp(1.1rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.2] text-snow">
                         {question
                           .split(new RegExp(`(${c.judgement.figures.join("|")})`))
                           .map((part, j) =>
@@ -325,7 +325,7 @@ export default function SeoAuditPage() {
             </ol>
 
             <Rise delay={0.18} className="mt-9">
-              <p className="font-display max-w-3xl text-[clamp(1.15rem,2.2vw,1.65rem)] font-extrabold uppercase leading-[1.16] tracking-tight">
+              <p className="font-display max-w-3xl text-[clamp(1.15rem,2.2vw,1.65rem)] font-extrabold uppercase leading-[1.16]">
                 <span className="text-ash">{c.judgement.closing}</span>{" "}
                 <span className="text-brand">{c.judgement.closingTail}</span>
               </p>
@@ -361,7 +361,7 @@ export default function SeoAuditPage() {
                     <div className="flex items-baseline gap-5 py-4">
                       <span
                         aria-hidden
-                        className="font-display shrink-0 text-[0.68rem] font-bold tabular-nums tracking-[0.2em] text-ash transition-colors duration-500 group-hover:text-brand-text"
+                        className="font-display shrink-0 text-[0.68rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
@@ -415,7 +415,7 @@ export default function SeoAuditPage() {
 
             <div className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
               <Rise>
-                <span className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                <span className="text-[0.62rem] font-semibold uppercase text-ash">
                   {c.timing.spanLead}
                 </span>
                 <p className="font-display display-2xl mt-3 font-extrabold uppercase text-snow">
@@ -429,7 +429,7 @@ export default function SeoAuditPage() {
               {/* The thing that actually decides it. */}
               <Rise delay={0.1}>
                 <div className="rounded-2xl border border-brand/40 bg-brand/[0.06] p-7 sm:p-8">
-                  <p className="font-display text-[clamp(1.1rem,2.1vw,1.5rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+                  <p className="font-display text-[clamp(1.1rem,2.1vw,1.5rem)] font-extrabold uppercase leading-[1.16] text-brand">
                     {c.timing.access}
                   </p>
                   <p className="mt-4 leading-relaxed text-snow">{c.timing.accessBody}</p>
@@ -475,7 +475,7 @@ export default function SeoAuditPage() {
             {/* And when it is not. */}
             <Rise delay={0.16} className="mt-8">
               <div className="rounded-2xl border border-brand/40 bg-brand/[0.06] p-7 sm:p-8">
-                <p className="font-display text-[clamp(1.1rem,2.1vw,1.55rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+                <p className="font-display text-[clamp(1.1rem,2.1vw,1.55rem)] font-extrabold uppercase leading-[1.16] text-brand">
                   {c.worth.notLead}
                 </p>
                 <p className="mt-4 max-w-2xl leading-relaxed text-snow sm:text-lg">
@@ -507,7 +507,7 @@ export default function SeoAuditPage() {
             {/* Everything the reader needs to know, briefly. */}
             <Rise>
               <div className="grid gap-x-14 gap-y-5 border-b border-line pb-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-                <p className="font-display text-[clamp(1.1rem,2.1vw,1.5rem)] font-extrabold uppercase leading-[1.18] tracking-tight text-snow">
+                <p className="font-display text-[clamp(1.1rem,2.1vw,1.5rem)] font-extrabold uppercase leading-[1.18] text-snow">
                   {c.fixing.standalone}
                 </p>
                 <div>
@@ -582,7 +582,7 @@ export default function SeoAuditPage() {
 
         <Work index="09" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="10" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="10" faqs={c.faqs} />
 
         <CtaBand
           label="Get a Straight Read on Your Site"

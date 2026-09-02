@@ -15,18 +15,29 @@ type Faq = { q: string; a: string; aLink?: { label: string; href: string } };
  *  ratio, emblem, numerals, question scale, plus/cross icon and disclosure
  *  animation. Only the copy differs, and it comes from the page's own content.
  *  Emits FAQPage JSON-LD from the same array it renders. */
+/** The homepage FAQ heading, which is the one every page should carry: the
+ *  question mark emblem, "Questions," over "answered." in brand, and the same
+ *  standing line underneath. Performance Marketing was passing all three from
+ *  its content file; the other sixteen pages passed title="FAQs" and got a
+ *  bare word where the heading should be. Defaults live here so the treatment
+ *  is defined once and a new page gets it without being told. */
+const FAQ_TITLE = "Questions,";
+const FAQ_BRAND = "answered.";
+const FAQ_LEDE =
+  "Everything you need to know about working with Dubai\u2019s result-driven digital marketing agency.";
+
 export function FaqList({
   label,
   index,
-  title,
-  brandTitle,
-  lede,
+  title = FAQ_TITLE,
+  brandTitle = FAQ_BRAND,
+  lede = FAQ_LEDE,
   faqs,
 }: {
   /** DevTools handle: names the section in data-section. */
   label: string;
   index?: string;
-  title: string;
+  title?: string;
   /** Second line, set in brand red to match the homepage heading. */
   brandTitle?: string;
   lede?: string;
@@ -51,7 +62,7 @@ export function FaqList({
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div>
-            <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-fog">
+            <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
               {index && <span className="text-brand">({index})</span>} FAQ
             </p>
             <RippleEmblem className="mb-8">
@@ -61,6 +72,10 @@ export function FaqList({
               <span className="block">
                 <Chars text={title} />
               </span>
+              {/* Real space, not decoration: without it the two spans
+                  concatenate in textContent and the accessible name reads
+                  "Questions,answered." */}
+              {brandTitle && " "}
               {brandTitle && (
                 <span className="block text-brand">
                   <Chars text={brandTitle} delay={0.15} />

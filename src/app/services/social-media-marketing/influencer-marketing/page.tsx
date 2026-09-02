@@ -135,7 +135,7 @@ export default function InfluencerMarketingPage() {
               className="mb-12"
               aside={
                 <Rise key="lede">
-                  <p className="font-display text-[clamp(1.2rem,2.2vw,1.75rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.2rem,2.2vw,1.75rem)] font-extrabold uppercase leading-[1.16] text-snow">
                     {c.shortlist.lede}
                   </p>
                 </Rise>
@@ -147,7 +147,7 @@ export default function InfluencerMarketingPage() {
               <div className="grid items-center gap-8 lg:grid-cols-[auto_1fr] lg:gap-14">
                 <p
                   aria-hidden
-                  className="font-display text-[clamp(3rem,7vw,5.5rem)] font-extrabold leading-none tracking-tight text-stroke"
+                  className="font-display text-[clamp(3rem,7vw,5.5rem)] font-extrabold leading-none text-stroke"
                 >
                   {c.shortlist.exampleFigure}
                 </p>
@@ -259,7 +259,7 @@ export default function InfluencerMarketingPage() {
 
         <Work index="07" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="08" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="08" faqs={c.faqs} />
 
         <CtaBand
           label="Talk to Us About Influencer Marketing"

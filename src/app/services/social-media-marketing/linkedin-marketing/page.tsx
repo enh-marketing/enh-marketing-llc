@@ -136,7 +136,7 @@ export default function LinkedInMarketingPage() {
               {/* The workforce, as three statements. */}
               <div>
                 <Rise>
-                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.7rem)] font-extrabold uppercase leading-[1.14] text-snow">
                     {c.why.workforceLead}
                   </p>
                 </Rise>
@@ -148,11 +148,11 @@ export default function LinkedInMarketingPage() {
                         <div className="flex items-baseline gap-5">
                           <span
                             aria-hidden
-                            className="font-display shrink-0 text-xs font-bold tabular-nums tracking-[0.2em] text-brand-text"
+                            className="font-display shrink-0 text-xs font-bold tabular-nums text-brand-text"
                           >
                             {String(i + 1).padStart(2, "0")}
                           </span>
-                          <p className="font-display text-[clamp(1.1rem,2.1vw,1.55rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow transition-colors duration-500 group-hover:text-brand">
+                          <p className="font-display text-[clamp(1.1rem,2.1vw,1.55rem)] font-extrabold uppercase leading-[1.14] text-snow transition-colors duration-500 group-hover:text-brand">
                             {trait}
                           </p>
                         </div>
@@ -169,10 +169,10 @@ export default function LinkedInMarketingPage() {
               {/* The same fact, read twice. */}
               <div>
                 <Rise delay={0.08}>
-                  <p className="font-display text-[clamp(1.25rem,2.5vw,2rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.25rem,2.5vw,2rem)] font-extrabold uppercase leading-[1.14] text-snow">
                     {c.why.reach}
                   </p>
-                  <p className="font-display mt-5 text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-brand">
+                  <p className="font-display mt-5 text-[clamp(1.05rem,2vw,1.45rem)] font-extrabold uppercase leading-[1.16] text-brand">
                     {c.why.noOther}
                   </p>
                 </Rise>
@@ -185,7 +185,7 @@ export default function LinkedInMarketingPage() {
                 </div>
 
                 <Rise delay={0.14}>
-                  <p className="font-display text-[clamp(1.25rem,2.5vw,2rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-ash">
+                  <p className="font-display text-[clamp(1.25rem,2.5vw,2rem)] font-extrabold uppercase leading-[1.14] text-ash">
                     {c.why.busy}
                   </p>
                   <p className="mt-5 max-w-xl border-l-2 border-brand pl-6 leading-relaxed text-snow sm:text-lg">
@@ -219,7 +219,7 @@ export default function LinkedInMarketingPage() {
           mark={{ variant: "ecosystem", label: "Six services, one setup" }}
           aside={
             <Rise key="svc-lede">
-              <p className="font-display text-[clamp(1.15rem,2.2vw,1.75rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+              <p className="font-display text-[clamp(1.15rem,2.2vw,1.75rem)] font-extrabold uppercase leading-[1.16] text-snow">
                 {c.services.lede}
               </p>
               <p className="mt-5 leading-relaxed text-fog sm:text-lg">{c.services.ledeTail}</p>
@@ -230,14 +230,14 @@ export default function LinkedInMarketingPage() {
           {/* The ad formats the third service names, and where the work reaches
               past the platform. */}
           <Rise delay={0.12} className="mt-10 border-t border-line pt-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-text">
+            <p className="text-xs font-semibold uppercase text-brand-text">
               {c.services.items[2].chipsLead}
             </p>
             <ul className="mt-5 flex flex-wrap gap-8">
               {c.services.items[2].chips?.map((format) => (
                 <li
                   key={format}
-                  className="font-display rounded-lg border border-line bg-ink-3 px-3.5 py-2 text-sm font-bold tracking-tight text-snow transition-colors duration-500 hover:border-brand/50"
+                  className="font-display rounded-lg border border-line bg-ink-3 px-3.5 py-2 text-sm font-bold text-snow transition-colors duration-500 hover:border-brand/50"
                 >
                   {format}
                 </li>
@@ -267,7 +267,7 @@ export default function LinkedInMarketingPage() {
               className="mb-10"
               aside={
                 <Rise key="start-lede">
-                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.75rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.15rem,2.2vw,1.75rem)] font-extrabold uppercase leading-[1.16] text-snow">
                     {c.start.lede}
                   </p>
                   <p className="mt-5 leading-relaxed text-fog sm:text-lg">{c.start.ledeTail}</p>
@@ -333,7 +333,7 @@ export default function LinkedInMarketingPage() {
 
             {/* All three have to hold. */}
             <Rise>
-              <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ash">
+              <p className="text-[0.65rem] font-semibold uppercase text-ash">
                 {c.audience.criteriaLead}
               </p>
             </Rise>
@@ -348,7 +348,7 @@ export default function LinkedInMarketingPage() {
                       >
                         <span className="h-1.5 w-1.5 rounded-full bg-brand" />
                       </span>
-                      <p className="font-display text-[clamp(0.98rem,1.7vw,1.2rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-snow">
+                      <p className="font-display text-[clamp(0.98rem,1.7vw,1.2rem)] font-extrabold uppercase leading-[1.2] text-snow">
                         {condition}
                       </p>
                     </div>
@@ -359,7 +359,7 @@ export default function LinkedInMarketingPage() {
 
             {/* The sectors, as context rather than the point. */}
             <Rise delay={0.1} className="mt-10 border-t border-line pt-7">
-              <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+              <p className="text-[0.65rem] font-semibold uppercase text-brand-text">
                 {c.audience.lede}
               </p>
             </Rise>
@@ -367,7 +367,7 @@ export default function LinkedInMarketingPage() {
               {c.audience.sectors.map((sector, i) => (
                 <li key={sector.name}>
                   <Rise delay={i * 0.05}>
-                    <h3 className="font-display text-sm font-extrabold uppercase leading-[1.2] tracking-tight text-snow">
+                    <h3 className="font-display text-sm font-extrabold uppercase leading-[1.2] text-snow">
                       {sector.name}
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-ash">
@@ -396,11 +396,11 @@ export default function LinkedInMarketingPage() {
                     <div className="flex items-baseline gap-5 py-3.5">
                       <span
                         aria-hidden
-                        className="font-display shrink-0 text-[0.62rem] font-bold tabular-nums tracking-[0.2em] text-ash transition-colors duration-500 group-hover:text-brand-text"
+                        className="font-display shrink-0 text-[0.62rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <p className="font-display text-[clamp(1.05rem,1.9vw,1.45rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow transition-colors duration-500 group-hover:text-brand">
+                      <p className="font-display text-[clamp(1.05rem,1.9vw,1.45rem)] font-extrabold uppercase leading-[1.14] text-snow transition-colors duration-500 group-hover:text-brand">
                         {title}
                       </p>
                     </div>
@@ -449,7 +449,7 @@ export default function LinkedInMarketingPage() {
                     <span
                       aria-hidden
                       className={cn(
-                        "font-display pointer-events-none absolute -top-3 right-2 text-[5rem] font-extrabold leading-none tracking-tight transition-colors duration-500 sm:text-[7rem]",
+                        "font-display pointer-events-none absolute -top-3 right-2 text-[5rem] font-extrabold leading-none transition-colors duration-500 sm:text-[7rem]",
                         refusal ? "text-brand/[0.16]" : "text-snow/[0.04] group-hover:text-brand/[0.12]",
                       )}
                     >
@@ -460,7 +460,7 @@ export default function LinkedInMarketingPage() {
                       <div className="relative grid gap-x-14 gap-y-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-baseline">
                         <h3
                           className={cn(
-                            "font-display text-[clamp(1.2rem,2.4vw,1.85rem)] font-extrabold uppercase leading-[1.14] tracking-tight",
+                            "font-display text-[clamp(1.2rem,2.4vw,1.85rem)] font-extrabold uppercase leading-[1.14]",
                             refusal ? "text-brand" : "text-snow",
                           )}
                         >
@@ -505,7 +505,7 @@ export default function LinkedInMarketingPage() {
 
         <Work index="07" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="08" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="08" faqs={c.faqs} />
 
         <CtaBand
           label="Ready to Make LinkedIn Your Best B2B Channel"

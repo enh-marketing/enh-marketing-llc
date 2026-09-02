@@ -154,7 +154,7 @@ export default function LandingPageDevelopmentPage() {
               className="mb-12"
               aside={
                 <Rise key="threshold">
-                  <p className="font-display text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-brand">
+                  <p className="font-display text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold uppercase leading-[1.14] text-brand">
                     {c.testing.threshold}
                   </p>
                   <p className="mt-5 leading-relaxed text-fog sm:text-lg">
@@ -165,7 +165,7 @@ export default function LandingPageDevelopmentPage() {
             />
 
             <Rise>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ash">
+              <p className="text-xs font-semibold uppercase text-ash">
                 {c.testing.lede}
               </p>
             </Rise>
@@ -191,11 +191,11 @@ export default function LandingPageDevelopmentPage() {
                     <div className="flex items-baseline gap-4">
                       <span
                         aria-hidden
-                        className="font-display shrink-0 text-xs font-bold tabular-nums tracking-[0.1em] text-brand-text"
+                        className="font-display shrink-0 text-xs font-bold tabular-nums text-brand-text"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <p className="font-display text-[clamp(1.1rem,2.1vw,1.6rem)] font-extrabold uppercase leading-[1.14] tracking-tight text-snow">
+                      <p className="font-display text-[clamp(1.1rem,2.1vw,1.6rem)] font-extrabold uppercase leading-[1.14] text-snow">
                         {mode.label}
                       </p>
                     </div>
@@ -207,10 +207,10 @@ export default function LandingPageDevelopmentPage() {
 
             {/* The line the section is really for. */}
             <Rise delay={0.12} className="mt-10">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ash">
+              <p className="text-xs font-semibold uppercase text-ash">
                 {c.testing.closingLead}
               </p>
-              <p className="font-display mt-5 max-w-3xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+              <p className="font-display mt-5 max-w-3xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.16] text-snow">
                 {c.testing.closing}
               </p>
             </Rise>
@@ -235,10 +235,10 @@ export default function LandingPageDevelopmentPage() {
               className="mb-12"
               aside={
                 <Rise key="lede">
-                  <p className="font-display text-[clamp(1.15rem,2.1vw,1.7rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                  <p className="font-display text-[clamp(1.15rem,2.1vw,1.7rem)] font-extrabold uppercase leading-[1.16] text-snow">
                     {c.cases.lede}
                   </p>
-                  <p className="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-brand-text">
+                  <p className="mt-5 text-xs font-semibold uppercase text-brand-text">
                     {c.cases.itemsLead}
                   </p>
                 </Rise>
@@ -253,11 +253,11 @@ export default function LandingPageDevelopmentPage() {
                     <div className="flex items-baseline gap-4">
                       <span
                         aria-hidden
-                        className="font-display shrink-0 text-xs font-bold tabular-nums tracking-[0.1em] text-brand-text"
+                        className="font-display shrink-0 text-xs font-bold tabular-nums text-brand-text"
                       >
                         01
                       </span>
-                      <p className="font-display text-[clamp(1.05rem,1.9vw,1.45rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                      <p className="font-display text-[clamp(1.05rem,1.9vw,1.45rem)] font-extrabold uppercase leading-[1.16] text-snow">
                         {c.cases.platformsLead}
                       </p>
                     </div>
@@ -265,7 +265,7 @@ export default function LandingPageDevelopmentPage() {
                       {c.cases.platforms.map((platform) => (
                         <li
                           key={platform}
-                          className="font-display rounded-lg border border-line bg-ink-2 px-3.5 py-2 text-sm font-bold tracking-tight text-snow transition-colors duration-500 hover:border-brand/50"
+                          className="font-display rounded-lg border border-line bg-ink-2 px-3.5 py-2 text-sm font-bold text-snow transition-colors duration-500 hover:border-brand/50"
                         >
                           {platform}
                         </li>
@@ -284,11 +284,11 @@ export default function LandingPageDevelopmentPage() {
                         <div className="group relative flex h-full items-start overflow-hidden rounded-2xl border border-line bg-ink-2 p-5 transition-colors duration-500 hover:border-brand/45">
                           <span
                             aria-hidden
-                            className="font-display pointer-events-none absolute -right-1 -top-3 text-[3.4rem] font-extrabold leading-none tracking-tight text-snow/[0.05] transition-colors duration-500 group-hover:text-brand/20"
+                            className="font-display pointer-events-none absolute -right-1 -top-3 text-[3.4rem] font-extrabold leading-none text-snow/[0.05] transition-colors duration-500 group-hover:text-brand/20"
                           >
                             {String(i + 2).padStart(2, "0")}
                           </span>
-                          <p className="font-display relative text-base font-bold leading-snug tracking-tight text-snow">
+                          <p className="font-display relative text-base font-bold leading-snug text-snow">
                             {item}
                           </p>
                         </div>
@@ -304,11 +304,11 @@ export default function LandingPageDevelopmentPage() {
                   <div className="flex items-baseline gap-4 rounded-2xl border border-line bg-ink-2 p-6 sm:p-7">
                     <span
                       aria-hidden
-                      className="font-display shrink-0 text-xs font-bold tabular-nums tracking-[0.1em] text-ash"
+                      className="font-display shrink-0 text-xs font-bold tabular-nums text-ash"
                     >
                       08
                     </span>
-                    <p className="font-display text-[clamp(1.05rem,1.9vw,1.45rem)] font-extrabold uppercase leading-[1.16] tracking-tight text-snow">
+                    <p className="font-display text-[clamp(1.05rem,1.9vw,1.45rem)] font-extrabold uppercase leading-[1.16] text-snow">
                       {c.cases.items[7]}
                     </p>
                   </div>
@@ -374,7 +374,7 @@ export default function LandingPageDevelopmentPage() {
 
         <Work index="05" label="Summits Reached" />
 
-        <FaqList label="FAQs" index="06" title="FAQs" faqs={c.faqs} />
+        <FaqList label="FAQs" index="06" faqs={c.faqs} />
 
         <CtaBand
           label="Tell Us What You're Driving Traffic To"

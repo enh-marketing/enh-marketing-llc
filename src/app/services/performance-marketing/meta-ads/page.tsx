@@ -124,7 +124,7 @@ export default function MetaAdsPage() {
               className="mb-14"
               aside={
                 <Rise key="claim">
-                  <p className="font-display text-[clamp(1.15rem,2vw,1.7rem)] font-extrabold uppercase leading-[1.2] tracking-tight text-brand">
+                  <p className="font-display text-[clamp(1.15rem,2vw,1.7rem)] font-extrabold uppercase leading-[1.2] text-brand">
                     {c.whatsapp.claim}
                   </p>
                 </Rise>
@@ -145,14 +145,14 @@ export default function MetaAdsPage() {
 
             {/* The seven business types the copy lists, as a list. */}
             <Rise delay={0.2} className="mt-12">
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-fog">
+              <p className="text-sm font-semibold uppercase text-fog">
                 {c.whatsapp.fitLead}
               </p>
               <ul className="mt-5 flex flex-wrap gap-2.5">
                 {c.whatsapp.fitItems.map((item) => (
                   <li
                     key={item}
-                    className="rounded-full border border-line bg-ink-2 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-snow transition-colors duration-500 hover:border-brand/50"
+                    className="rounded-full border border-line bg-ink-2 px-4 py-2 text-xs font-semibold uppercase text-snow transition-colors duration-500 hover:border-brand/50"
                   >
                     {item}
                   </li>
@@ -162,7 +162,7 @@ export default function MetaAdsPage() {
 
             <div className="mt-14">
               <Rise>
-                <h3 className="font-display text-xs font-bold uppercase tracking-[0.22em] text-brand-text">
+                <h3 className="font-display text-xs font-bold uppercase text-brand-text">
                   {c.whatsapp.setupHeading}
                 </h3>
               </Rise>
@@ -177,7 +177,7 @@ export default function MetaAdsPage() {
             <Rise delay={0.1} className="mt-14">
               <div className="relative overflow-hidden rounded-2xl border border-brand/35 bg-brand/[0.05] p-7 sm:p-9">
                 <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-brand" />
-                <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-text">
+                <p className="text-xs font-bold uppercase text-brand-text">
                   {c.whatsapp.caution.label}
                 </p>
                 <p className="mt-5 leading-relaxed text-fog sm:text-lg">
@@ -242,7 +242,6 @@ export default function MetaAdsPage() {
         <FaqList
           label="FAQs"
           index="07"
-          title="FAQs"
           faqs={c.faqs}
         />
 
