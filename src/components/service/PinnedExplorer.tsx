@@ -22,6 +22,7 @@ import { SnapSurfaces } from "@/components/service/SnapSurfaces";
 import { AdsAccount } from "@/components/service/AdsAccount";
 import { CycleTrack } from "@/components/service/CycleTrack";
 import { OutputBoard } from "@/components/service/OutputBoard";
+import { HandoverMap } from "@/components/service/HandoverMap";
 import type { ServiceAnchor } from "@/content/services/instagram-marketing";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -62,7 +63,12 @@ export type DiagramSpec =
   | { kind: "snap" }
   | { kind: "adsaccount" }
   | { kind: "cycle" }
-  | { kind: "outputs" };
+  | { kind: "outputs" }
+  /** Seven automation services against the one thing that separates them:
+   *  whether the work stops for a person. `loop` is per item, in item order,
+   *  and each flag is cited in the content file against the sentence it was
+   *  read from. */
+  | { kind: "handover"; loop: boolean[] };
 
 /** Renders one pin. The diagram calls this where its own region sits, so pin
  *  placement is markup rather than a set of magic percentages maintained
@@ -138,6 +144,7 @@ export function PinnedExplorer({
   const enhanced = useEnhanced("(min-width: 1024px)");
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
+  /** The selector's tab buttons, for roving focus. */
   const pinRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   /* ---------------------------------------------------------- autoplay ----
@@ -177,6 +184,17 @@ export function PinnedExplorer({
   const choose = (i: number) => {
     setActive(i);
     setTaken(true);
+  };
+
+  /** Pointing at a segment previews it without seizing control, so the set
+   *  picks up again where the reader left it once they move away. Clicking is
+   *  what commits.
+   *
+   *  Only the selector does this. Hover feedback on something that cannot be
+   *  clicked is worse than no feedback at all, which is why the indicators on
+   *  the drawing are inert. */
+  const preview = (i: number) => {
+    if (!taken) setActive(i);
   };
 
   function onKeyDown(e: React.KeyboardEvent) {
@@ -224,6 +242,10 @@ export function PinnedExplorer({
         return <CycleTrack active={active} pin={pin} count={items.length} />;
       case "outputs":
         return <OutputBoard active={active} pin={pin} count={items.length} />;
+      case "handover":
+        return (
+          <HandoverMap active={active} pin={pin} count={items.length} loop={diagram.loop} />
+        );
       case "track":
         return (
           <ProcessTrack
@@ -275,6 +297,95 @@ export function PinnedExplorer({
 
         {enhanced ? (
           <>
+            {/* THE SELECTOR, and there is now only one.
+                The set used to carry two navigations: seven numbered pins on
+                the drawing, which were the real tablist, and a labelled rail
+                underneath, which was aria-hidden and decorative. So the thing
+                that looked like a control had no words on it, the thing with
+                the words was hidden from assistive tech, and a reader had to
+                guess which of the two to press. A hint reading "select any of
+                the seven" was a label papering over that.
+
+                One control instead, above the content where a selector belongs,
+                carrying the names rather than numbers. A row of named segments
+                is the most universally understood "pick one" there is, and it
+                needs no instruction. The pins on the drawing go back to being
+                what they always looked like: indicators. */}
+            <div
+              role="tablist"
+              aria-label={`${title} ${strokeTitle}`}
+              onKeyDown={onKeyDown}
+              onPointerEnter={() => setHeld(true)}
+              onPointerLeave={() => setHeld(false)}
+              onFocusCapture={() => setHeld(true)}
+              onBlurCapture={() => setHeld(false)}
+              className="mb-14 grid gap-2.5"
+              style={{ gridTemplateColumns: `repeat(${Math.min(items.length, 8)}, minmax(0, 1fr))` }}
+            >
+              {items.map((item, i) => {
+                const on = i === active;
+                return (
+                  <button
+                    key={item.no}
+                    ref={(el) => {
+                      pinRefs.current[i] = el;
+                    }}
+                    type="button"
+                    role="tab"
+                    id={`${id}-pin-${i}`}
+                    aria-selected={on}
+                    aria-controls={`${id}-panel-${i}`}
+                    tabIndex={on ? 0 : -1}
+                    onMouseEnter={() => preview(i)}
+                    onClick={() => choose(i)}
+                    className={cn(
+                      // A resting surface, a full border and a radius, because
+                      // the previous treatment was grey text under a hairline
+                      // rule, which is what a table's column headings look
+                      // like. A thing meant to be pressed has to look like an
+                      // object at rest, not only once the pointer finds it.
+                      "group relative flex flex-col gap-2 overflow-hidden rounded-lg border px-3.5 py-3 text-left transition-all duration-300",
+                      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                      "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+                      on
+                        ? "border-brand bg-brand/[0.09]"
+                        : "border-line bg-ink-3 hover:-translate-y-0.5 hover:border-brand/60 hover:shadow-[0_6px_16px_-8px_rgba(0,0,0,0.28)] active:translate-y-0 active:duration-75",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "font-display text-[0.7rem] font-bold tabular-nums transition-colors duration-300",
+                        on ? "text-brand-text" : "text-ash group-hover:text-brand-text",
+                      )}
+                    >
+                      {item.no}
+                    </span>
+                    <span
+                      className={cn(
+                        "text-[0.68rem] font-semibold uppercase leading-snug transition-colors duration-300",
+                        on ? "text-snow" : "text-fog group-hover:text-snow",
+                      )}
+                    >
+                      {item.title}
+                    </span>
+
+                    {/* How long this one has left, run along the bottom edge.
+                        Keyed on the active index so it restarts with each
+                        advance, and absent rather than frozen once the reader
+                        has taken over, since there is nothing left to count. */}
+                    {on && autoplaying && (
+                      <span
+                        key={active}
+                        aria-hidden
+                        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-brand"
+                        style={{ animation: `pin-progress ${interval}ms linear forwards` }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
             <div
               onPointerEnter={() => setHeld(true)}
               onPointerLeave={() => setHeld(false)}
@@ -287,43 +398,43 @@ export function PinnedExplorer({
                   : "lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]",
               )}
             >
-              {/* The drawing, with the pins on it. */}
-              <div
-                role="tablist"
-                aria-label={`${title} ${strokeTitle}`}
-                aria-orientation="vertical"
-                onKeyDown={onKeyDown}
-                className={cn("relative", !diagramFirst && "lg:order-2")}
-              >
+              {/* The drawing, with the pins on it.
+                  The invitation sits inside this column rather than beside it:
+                  the grid has exactly two children and a third would open a
+                  second row. */}
+              <div className={cn("relative", !diagramFirst && "lg:order-2")}>
+                {/* No hint here any more, and no second tablist. The selector
+                    above is the control; this is the picture it drives. */}
+                <div className="relative">
                 {renderDiagram((i, className) => {
                   const item = items[i];
                   if (!item) return null;
                   const on = i === active;
+                  // An indicator, and inert. It deliberately does not answer
+                  // the pointer either: something that lights up on hover and
+                  // then does nothing on click is a worse affordance than
+                  // something that never moved. The selector is the control.
                   return (
-                    <button
+                    <span
                       key={item.no}
-                      ref={(el) => {
-                        pinRefs.current[i] = el;
-                      }}
-                      role="tab"
-                      id={`${id}-pin-${i}`}
-                      aria-selected={on}
-                      aria-controls={`${id}-panel-${i}`}
-                      aria-label={item.title}
-                      tabIndex={on ? 0 : -1}
-                      onClick={() => choose(i)}
+                      aria-hidden
                       className={cn(
-                        "z-10 flex h-7 w-7 items-center justify-center rounded-full border-2 text-[0.58rem] font-bold tabular-nums transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                        "z-10 flex h-7 w-7 items-center justify-center rounded-full text-[0.58rem] font-bold tabular-nums transition-all duration-300 motion-reduce:transition-none",
+                        // The inactive marks are kept deliberately quiet. A
+                        // solid two-pixel chip reads as a row of buttons, and
+                        // these cannot be pressed, so only the active one is
+                        // drawn as an object: the rest are marks on a drawing.
                         on
-                          ? "scale-110 border-brand bg-brand text-white"
-                          : "border-line bg-ink-2 text-fog hover:border-brand/60 hover:text-snow",
+                          ? "scale-110 border-2 border-brand bg-brand text-white"
+                          : "border border-line bg-void/60 text-ash",
                         className,
                       )}
                     >
                       {item.no}
-                    </button>
+                    </span>
                   );
                 })}
+                </div>
               </div>
 
               {/* The selected item, given the room of one thing. */}
@@ -346,10 +457,10 @@ export function PinnedExplorer({
                         // An acronym: short form at scale, expansion beneath
                         // with the shared tail dimmed.
                         <div>
-                          <p className="font-display text-[clamp(2.6rem,5.5vw,4rem)] font-extrabold uppercase leading-[0.85] tracking-tight text-brand">
+                          <p className="font-display text-[clamp(2.6rem,5.5vw,4rem)] font-extrabold uppercase leading-[0.85] text-brand">
                             {item.no}
                           </p>
-                          <p className="font-display mt-5 text-[clamp(1.1rem,2.1vw,1.6rem)] font-extrabold uppercase leading-tight tracking-tight">
+                          <p className="font-display mt-5 text-[clamp(1.1rem,2.1vw,1.6rem)] font-extrabold uppercase leading-tight">
                             {(() => {
                               const words = item.expansion.split(" ");
                               const split = words.length - sharedTail;
@@ -372,10 +483,10 @@ export function PinnedExplorer({
                         // item, so it takes the panel at display scale rather
                         // than sitting above an empty paragraph.
                         <div>
-                          <p className="font-display text-sm font-bold tabular-nums tracking-[0.1em] text-brand-text">
+                          <p className="font-display text-sm font-bold tabular-nums text-brand-text">
                             {item.no}
                           </p>
-                          <p className="font-display mt-4 text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold uppercase leading-[1.12] tracking-tight text-snow">
+                          <p className="font-display mt-4 text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold uppercase leading-[1.12] text-snow">
                             {item.title}
                           </p>
                         </div>
@@ -387,14 +498,14 @@ export function PinnedExplorer({
                             </span>
                           )}
                           <div>
-                            <p className="font-display text-sm font-bold tabular-nums tracking-[0.1em] text-brand-text">
+                            <p className="font-display text-sm font-bold tabular-nums text-brand-text">
                               {item.no}
                             </p>
-                            <h3 className="font-display mt-3 text-[clamp(1.3rem,2.5vw,2rem)] font-extrabold uppercase leading-[1.1] tracking-tight text-snow">
+                            <h3 className="font-display mt-3 text-[clamp(1.3rem,2.5vw,2rem)] font-extrabold uppercase leading-[1.1] text-snow">
                               {item.title}
                             </h3>
                             {bodyLabel && (
-                              <p className="mt-6 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                              <p className="mt-6 text-[0.6rem] font-semibold uppercase text-ash">
                                 {bodyLabel}
                               </p>
                             )}
@@ -409,7 +520,7 @@ export function PinnedExplorer({
                             {item.note && (
                               <>
                                 {noteLabel && (
-                                  <p className="mt-6 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+                                  <p className="mt-6 text-[0.6rem] font-semibold uppercase text-brand-text">
                                     {noteLabel}
                                   </p>
                                 )}
@@ -432,61 +543,6 @@ export function PinnedExplorer({
               </div>
             </div>
 
-            {/* The whole set at once, so the others never hide behind the one
-                being read. Aria-hidden: the pins above are already the tablist,
-                and announcing every item twice helps nobody. */}
-            <div
-              onPointerEnter={() => setHeld(true)}
-              onPointerLeave={() => setHeld(false)}
-              className="mt-12 grid gap-2 border-t border-line pt-6"
-              style={{ gridTemplateColumns: `repeat(${Math.min(items.length, 8)}, minmax(0, 1fr))` }}
-            >
-              {items.map((item, i) => {
-                const on = i === active;
-                return (
-                  <button
-                    key={item.no}
-                    type="button"
-                    tabIndex={-1}
-                    aria-hidden
-                    onClick={() => choose(i)}
-                    className={cn(
-                      "group flex flex-col gap-2.5 border-t-2 pt-4 text-left transition-colors duration-300",
-                      on ? "border-brand" : "border-line hover:border-fog",
-                    )}
-                  >
-                    <span className="flex items-center gap-2">
-                      <span
-                        className={cn(
-                          "font-display text-xs font-bold tabular-nums tracking-[0.1em] transition-colors duration-300",
-                          on ? "text-brand-text" : "text-ash",
-                        )}
-                      >
-                        {item.no}
-                      </span>
-                      {/* How long this one has left. Keyed on the active index
-                          so it restarts with each advance, and paused rather
-                          than hidden when the timer is held. */}
-                      {on && autoplaying && (
-                        <span
-                          key={active}
-                          className="h-px flex-1 origin-left bg-brand/60"
-                          style={{ animation: `pin-progress ${interval}ms linear forwards` }}
-                        />
-                      )}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-[0.68rem] font-semibold uppercase leading-snug tracking-[0.1em] transition-colors duration-300",
-                        on ? "text-snow" : "text-ash group-hover:text-fog",
-                      )}
-                    >
-                      {item.title}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
 
             {/* The required mechanism to stop it. Hover and focus already pause
                 the timer, but neither is available to every reader. */}
@@ -496,7 +552,7 @@ export function PinnedExplorer({
                   type="button"
                   onClick={() => (taken ? (setTaken(false), setPaused(false)) : setPaused((v) => !v))}
                   aria-pressed={!autoplaying}
-                  className="inline-flex items-center gap-2.5 rounded-full border border-line px-4 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-fog transition-colors duration-300 hover:border-brand/50 hover:text-snow"
+                  className="inline-flex items-center gap-2.5 rounded-full border border-line px-4 py-2 text-[0.65rem] font-semibold uppercase text-fog transition-colors duration-300 hover:border-brand/50 hover:text-snow"
                 >
                   <span
                     aria-hidden
@@ -518,7 +574,7 @@ export function PinnedExplorer({
                 className="grid gap-x-6 gap-y-3 border-b border-line py-6 sm:grid-cols-[auto_1fr]"
               >
                 <span className="flex items-start gap-4">
-                  <span className="font-display pt-0.5 text-sm font-bold tabular-nums tracking-[0.1em] text-ash">
+                  <span className="font-display pt-0.5 text-sm font-bold tabular-nums text-ash">
                     {item.no}
                   </span>
                   {item.glyph && (
@@ -528,7 +584,7 @@ export function PinnedExplorer({
                   )}
                 </span>
                 <div>
-                  <h3 className="font-display text-base font-extrabold uppercase leading-tight tracking-tight text-snow sm:text-lg">
+                  <h3 className="font-display text-base font-extrabold uppercase leading-tight text-snow sm:text-lg">
                     {item.title}
                   </h3>
                   {/* Everything the panel can show has to survive here too.
@@ -539,12 +595,12 @@ export function PinnedExplorer({
                       that has already folded the expansion into the title —
                       the acronym page does — must not get it printed twice. */}
                   {item.expansion && !item.title.includes(item.expansion) && (
-                    <p className="font-display mt-2 text-sm font-bold uppercase tracking-tight text-ash">
+                    <p className="font-display mt-2 text-sm font-bold uppercase text-ash">
                       {item.expansion}
                     </p>
                   )}
                   {bodyLabel && (
-                    <p className="mt-4 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-ash">
+                    <p className="mt-4 text-[0.6rem] font-semibold uppercase text-ash">
                       {bodyLabel}
                     </p>
                   )}
@@ -554,7 +610,7 @@ export function PinnedExplorer({
                   {item.note && (
                     <>
                       {noteLabel && (
-                        <p className="mt-4 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-brand-text">
+                        <p className="mt-4 text-[0.6rem] font-semibold uppercase text-brand-text">
                           {noteLabel}
                         </p>
                       )}
