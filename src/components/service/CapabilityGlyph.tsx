@@ -65,7 +65,15 @@ export type GlyphVariant =
   | "goal"
   | "align"
   | "range"
-  | "adjust";
+  | "adjust"
+  /* ---- B2B lead generation. Three marks the set had no equivalent for: a
+     search with commercial intent behind it, a timed email sequence, and a
+     form whose length is a qualification decision. Borrowing `crawler` for
+     search or `conversation` for email would have put an SEO or a chat icon on
+     a paid-media card. Same 48-unit box, same stroke, same keyframes. */
+  | "intent"
+  | "sequence"
+  | "form";
 
 const S = {
   fill: "none",
@@ -507,6 +515,51 @@ function Ledger() {
   );
 }
 
+/** Google Ads: a query already typed, and the lens over the term that carries
+ *  commercial intent. The document's point is that the demand exists and the
+ *  campaign meets it, so the search sits above the result rather than beside. */
+function Intent() {
+  return (
+    <>
+      <path d="M6 12h20M6 19h13" {...S} opacity="0.45" />
+      <circle cx="27" cy="28" r="10" {...S} />
+      <path d="M34.5 35.5 42 43" {...S} className="glyph-pulse" />
+      <path d="M22 28h10" {...S} opacity="0.75" className="glyph-pulse" style={d(1)} />
+    </>
+  );
+}
+
+/** Email nurturing: three sends down a timeline, spaced rather than stacked,
+ *  because the document plans "the sequence, timing and next action" before the
+ *  journey begins. */
+function Sequence() {
+  return (
+    <>
+      <path d="M9 8v32" {...S} opacity="0.4" />
+      <rect x="16" y="7" width="20" height="9" rx="2" {...S} className="glyph-rise" />
+      <rect x="16" y="19" width="24" height="9" rx="2" {...S} className="glyph-rise" style={d(1)} />
+      <rect x="16" y="31" width="17" height="9" rx="2" {...S} className="glyph-rise" style={d(2)} />
+      <circle cx="9" cy="11.5" r="2.4" {...S} className="glyph-pulse" />
+      <circle cx="9" cy="23.5" r="2.4" {...S} className="glyph-pulse" style={d(1)} />
+      <circle cx="9" cy="35.5" r="2.4" {...S} className="glyph-pulse" style={d(2)} />
+    </>
+  );
+}
+
+/** Landing pages and lead forms: a page with a headline and fields, the last of
+ *  them dashed. Form length is a qualification decision in the document, so the
+ *  mark shows a field that may or may not be asked for. */
+function FormGlyph() {
+  return (
+    <>
+      <rect x="8" y="6" width="32" height="36" rx="3" {...S} />
+      <path d="M14 14h14" {...S} opacity="0.8" />
+      <rect x="14" y="20" width="20" height="5" rx="1.5" {...S} opacity="0.6" />
+      <rect x="14" y="28" width="20" height="5" rx="1.5" {...S} strokeDasharray="3 3" opacity="0.5" />
+      <path d="M25 36h9" {...S} className="glyph-pulse" />
+    </>
+  );
+}
 
 /* ---- campaign intelligence. Forecasting is drawn as ranges and lines, never
    as figures: a band is a range, a tick is a benchmark, a fork is a scenario,
@@ -674,6 +727,9 @@ const GLYPHS: Record<GlyphVariant, () => React.JSX.Element> = {
   align: Align,
   range: Range,
   adjust: Adjust,
+  intent: Intent,
+  sequence: Sequence,
+  form: FormGlyph,
 };
 
 export function CapabilityGlyph({
