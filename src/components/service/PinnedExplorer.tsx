@@ -9,6 +9,7 @@ import { useEnhanced } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 import { AnswerAnatomy } from "@/components/service/AnswerAnatomy";
 import { StoreShelf } from "@/components/service/StoreShelf";
+import { StoreArchitecture } from "@/components/service/StoreArchitecture";
 import { CampaignBoard } from "@/components/service/CampaignBoard";
 import { ProcessTrack } from "@/components/service/ProcessTrack";
 import { ProfileAnatomy } from "@/components/service/ProfileAnatomy";
@@ -51,6 +52,7 @@ export type PinnedItem = {
 export type DiagramSpec =
   | { kind: "answer" }
   | { kind: "shelf" }
+  | { kind: "storearch" }
   | { kind: "board" }
   | { kind: "track"; axis?: [string, string]; openEnded?: boolean }
   | { kind: "profile"; anchors: ServiceAnchor[] }
@@ -218,6 +220,8 @@ export function PinnedExplorer({
         return <AnswerAnatomy active={active} pin={pin} />;
       case "shelf":
         return <StoreShelf count={items.length} active={active} pin={pin} />;
+      case "storearch":
+        return <StoreArchitecture count={items.length} active={active} pin={pin} />;
       case "board":
         return <CampaignBoard active={active} pin={pin} />;
       case "profile":

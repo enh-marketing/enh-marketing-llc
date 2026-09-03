@@ -24,6 +24,8 @@ export function IndustryRun({
   index,
   title,
   strokeTitle,
+  lead,
+  note,
   items,
 }: {
   /** DevTools handle: id anchors the section, data-section names it. */
@@ -32,6 +34,16 @@ export function IndustryRun({
   index?: string;
   title: string;
   strokeTitle?: string;
+  /** The sentence that introduces the run, where the source writes one. Set as
+   *  the header's aside so it sits beside the heading rather than above a wall
+   *  of sector names. Optional: the first page to use this component had no
+   *  such line. */
+  lead?: string;
+  /** A qualifier the source attaches to the list rather than to any one entry
+   *  — a note that some of these sectors carry extra review before anything is
+   *  published. Set after the run, small, because it narrows the claim the run
+   *  has just made and must not be read as one of the sectors. Optional. */
+  note?: string;
   items: Item[];
 }) {
   return (
@@ -41,7 +53,8 @@ export function IndustryRun({
           index={index}
           title={title}
           strokeTitle={strokeTitle}
-          markNode={<MetaMark variant="reach" />}
+          markNode={lead ? undefined : <MetaMark variant="reach" />}
+          aside={lead ? <p className="leading-relaxed text-fog sm:text-lg">{lead}</p> : undefined}
           className="mb-14"
         />
 
@@ -81,6 +94,12 @@ export function IndustryRun({
             </motion.span>
           ))}
         </p>
+
+        {note && (
+          <p className="mt-10 max-w-2xl border-t border-line pt-6 text-sm leading-relaxed text-ash">
+            {note}
+          </p>
+        )}
       </Container>
     </section>
   );

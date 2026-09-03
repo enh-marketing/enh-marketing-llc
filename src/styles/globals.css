@@ -737,6 +737,222 @@ summary {
   }
 }
 
+/* ---- Lead pipeline (B2B Lead Generation) ----
+   Transform-only for anything carrying words, for the same reason the
+   attribution record is: `fill-mode: both` parks an element on its `from`
+   frame while an animation is pending or stalled, so animating opacity from 0
+   hides readable text on a slow device. The worst case here is a node drawn
+   small and a line sitting a few pixels low. */
+@keyframes pipe-in {
+  from {
+    transform: translateY(8px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes pipe-node {
+  from {
+    transform: scale(0.4);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes pipe-rail {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.is-in .pipe-in,
+.is-in .pipe-head,
+.is-in .pipe-verdict {
+  animation: pipe-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.is-in .pipe-node {
+  animation: pipe-node 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* The rail is the one thing drawn from nothing: it is a hairline, and if it
+   never arrives the numbered nodes still carry the sequence. */
+.is-in .pipe-rail {
+  transform-origin: top;
+  animation: pipe-rail 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .is-in .pipe-in,
+  .is-in .pipe-head,
+  .is-in .pipe-verdict,
+  .is-in .pipe-node,
+  .is-in .pipe-rail {
+    animation: none !important;
+  }
+}
+
+/* ---- Account match (the B2B Lead Generation hero) ----
+   Every one of these ends on the finished state, so a browser that never
+   animates, a reader who asked for no motion, and a failed hydration all land
+   on a complete matrix rather than a half-drawn one. */
+@keyframes match-lit {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.14;
+  }
+}
+
+@keyframes match-cross {
+  from {
+    stroke-dashoffset: 40;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes match-glow {
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  55% {
+    opacity: 1;
+  }
+}
+
+/* Decoration only: a tint behind the chosen account bar, a pair of dashed
+   leaders into the cell, and a wash under it. None of them carries words, so
+   animating opacity here is safe in a way it is not for text. */
+.match-lit {
+  animation: match-lit 420ms ease-out both;
+}
+
+.match-cross {
+  stroke-dasharray: 3 3;
+  animation: match-cross 520ms ease-out both;
+}
+
+.match-glow {
+  animation: match-glow 1600ms ease-in-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .match-lit,
+  .match-cross,
+  .match-glow {
+    animation: none !important;
+  }
+}
+
+/* ---- Shoot plan (Corporate Video Production) ----
+   Transform-only for anything carrying words, so a stalled animation leaves
+   text readable rather than invisible. The frames and the safe area are the
+   only things allowed to fade, and they carry no copy. */
+@keyframes shoot-in {
+  from {
+    transform: translateY(8px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes shoot-frame {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shoot-safe {
+
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.is-in .shoot-in {
+  animation: shoot-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.is-in .shoot-frame {
+  animation: shoot-frame 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* The safe area breathes so the eye finds the region every frame has to hold.
+   Decoration: it carries no words and its absence changes nothing. */
+.is-in .shoot-safe {
+  animation: shoot-safe 2600ms ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .is-in .shoot-in,
+  .is-in .shoot-frame,
+  .is-in .shoot-safe {
+    animation: none !important;
+  }
+}
+
+/* ---- Viewfinder (the Corporate Video hero) ----
+   The focus box settles rather than snapping: a short overshoot, the way a lens
+   hunts and locks. Decoration only, no words, so opacity is safe here. */
+@keyframes vf-focus {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.94);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.vf-focus {
+  animation: vf-focus 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vf-focus {
+    animation: none !important;
+  }
+}
+
 /* ---- Form fields ----
    Underline that wipes red on focus. Written as plain CSS rather than a
    peer-* utility: Tailwind was not emitting the peer-focus variant here, and
@@ -821,4 +1037,91 @@ summary {
     background-color: var(--color-ink-3);
   }
 
+}
+/* ---- Catalogue reach (Ecommerce SEO) ----
+   The hero drawing. Only the mark inside a reachable cell and the rule along
+   the base animate; the cells themselves change colour through a transition,
+   so a browser that never runs an animation still shows a complete catalogue
+   with its lit set in place. Nothing here carries words. */
+@keyframes cat-lit {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cat-route {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.cat-lit {
+  animation: cat-lit 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cat-route {
+  transform-origin: left center;
+  animation: cat-route 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ---- Platform stack (Ecommerce SEO) ----
+   Transform-only: every card carries a platform name and a paragraph, so a
+   stalled clock must leave them readable. */
+@keyframes plat-card {
+  from {
+    transform: translateY(10px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.is-in .plat-card {
+  animation: plat-card 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ---- Signal split (Ecommerce SEO) ----
+   Transform only, including the fork.
+
+   This section first drew its two branches in with stroke-dashoffset, and that
+   is exactly the mistake this file already documents for text: a dasharray in
+   the rule plus animation-fill-mode: both parks the path on its `from` frame,
+   which for a dash offset equal to the dash length means nothing is painted at
+   all. Wherever the animation clock is slow to start, the whole diagram was
+   simply missing, and a fork with no branches states the opposite of the point
+   it is there to make. So the fork is static and only rises into place with
+   everything around it. */
+@keyframes split-in {
+  from {
+    transform: translateY(8px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.is-in .split-in {
+  animation: split-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .cat-lit,
+  .cat-route,
+  .is-in .plat-card,
+  .is-in .split-in {
+    animation: none !important;
+  }
 }

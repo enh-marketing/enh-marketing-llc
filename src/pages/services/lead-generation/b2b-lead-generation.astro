@@ -1,0 +1,36 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/b2b-lead-generation";
+import { brand } from "@/lib/content";
+import { B2BLeadGenerationPage } from "@/page-bodies/services-lead-generation-b2b-lead-generation";
+
+/* Head tags and structured data. The page body carries the rest. */
+
+const HREF = "/services/lead-generation/b2b-lead-generation";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "B2B Lead Generation",
+  serviceType:
+    "B2B lead generation: LinkedIn, Google Ads, email nurturing, landing pages, marketing automation and paid social",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  isPartOf: {
+    "@type": "Service",
+    name: "Lead Generation",
+    url: "https://enhmedia.com/services/lead-generation",
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+  <B2BLeadGenerationPage client:load />
+</Base>
