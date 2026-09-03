@@ -36,147 +36,202 @@ export const BoltCanvas = forwardRef<BoltHandle, { className?: string }>(
       const host = mount.current;
       if (!host) return;
 
-      let renderer: THREE.WebGLRenderer;
-      try {
-        renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      } catch {
-        return; // No WebGL — section still works, just without the 3D bolt.
-      }
+      // NOTHING IS BUILT UNTIL THIS SECTION IS NEARLY IN VIEW, and on iOS that
+      // is the difference between a usable page and a frozen one.
+      //
+      // Everything below used to run at mount. Two things in it are expensive:
+      // it opens a SECOND WebGL context while the hero's SaturnCanvas already
+      // holds one, and pmrem.fromScene(new RoomEnvironment()) renders a scene
+      // to a cube map and filters a mipmap chain, synchronously, on the main
+      // thread. The Manifesto section it belongs to is far below the fold, so
+      // none of that work was needed during first load.
+      //
+      // Android Chrome absorbs it. iOS Safari does not: it caps how many WebGL
+      // contexts a page may hold and is markedly slower at PMREM. The reported
+      // symptom was an iPhone locking up for forty to fifty seconds and then
+      // coming right, which is what finishing a long synchronous job looks
+      // like from the outside. Deferring it means that cost is paid on
+      // approach and never during first load.
+      //
+      // rootMargin gives two viewports of warning, so the bolt is ready before
+      // it is seen and the visual result is unchanged.
+      let teardown: (() => void) | undefined;
 
-      let w = host.clientWidth || 1;
-      let h = host.clientHeight || 1;
-      // Capped the way SaturnCanvas caps it. A 3x phone rendering at DPR 2
-      // is four times the pixels of DPR 1, and on the homepage this canvas
-      // shares a main thread with a second WebGL context.
-      const mobile = window.matchMedia("(max-width: 767px)").matches;
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.5 : 2));
-      renderer.setSize(w, h);
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.1;
-      renderer.outputColorSpace = THREE.SRGBColorSpace;
-      host.appendChild(renderer.domElement);
-      Object.assign(renderer.domElement.style, { width: "100%", height: "100%", display: "block" });
+      // Runs once: the observer disconnects itself on the first intersection.
+      const build = (): (() => void) | undefined => {
+        let renderer: THREE.WebGLRenderer;
+        try {
+          renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        } catch {
+          return; // No WebGL — section still works, just without the 3D bolt.
+        }
 
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 100);
-      camera.position.set(0, 0, 9);
-
-      // Environment map → crisp reflections / specular highlights.
-      const pmrem = new THREE.PMREMGenerator(renderer);
-      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-
-      // Build the extruded bolt.
-      const shape = new THREE.Shape();
-      BOLT_PTS.forEach(([x, y], i) => (i ? shape.lineTo(x, -y) : shape.moveTo(x, -y)));
-      shape.closePath();
-      const geo = new THREE.ExtrudeGeometry(shape, {
-        depth: 52,
-        bevelEnabled: true,
-        bevelThickness: 9,
-        bevelSize: 6,
-        bevelSegments: 4,
-        steps: 1,
-      });
-      geo.center();
-      geo.computeBoundingBox();
-      const size = new THREE.Vector3();
-      geo.boundingBox!.getSize(size);
-      const scale = 2.82 / size.y; // fit ~2.82 world units tall (40% smaller)
-      geo.scale(scale, scale, scale);
-
-      const material = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xcc0512),
-        metalness: 0.5,
-        roughness: 0.16,
-        clearcoat: 1,
-        clearcoatRoughness: 0.18,
-        emissive: new THREE.Color(0x5a0007),
-        emissiveIntensity: 0.6,
-        envMapIntensity: 1.35,
-      });
-
-      const bolt = new THREE.Mesh(geo, material);
-      scene.add(bolt);
-
-      // Lights — a white key for the bright streak, a red rim for the glow.
-      const key = new THREE.DirectionalLight(0xffffff, 2.6);
-      key.position.set(4, 6, 8);
-      scene.add(key);
-      const rim = new THREE.PointLight(0xff2a36, 26, 40);
-      rim.position.set(-5, 0, -4);
-      scene.add(rim);
-      scene.add(new THREE.AmbientLight(0x220003, 1));
-
-      const clock = new THREE.Clock();
-      let raf = 0;
-      let renderRot = 0;
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      // ONLY RENDER WHILE ON SCREEN. This used to call tick() once and then
-      // loop for the lifetime of the page, with no IntersectionObserver and no
-      // visibilitychange handler, so it kept rendering while the Manifesto
-      // section sat far below the fold. On the homepage that meant two WebGL
-      // contexts competing for one main thread from first paint: this one
-      // never idle, and SaturnCanvas in the hero. Desktop absorbs it. A phone
-      // does not, and the symptom was not a missing bolt but a starved page --
-      // the hero headline's per-character reveal never finished and scrolling
-      // felt frozen. Same start/stop/IO/visibility shape as SaturnCanvas.
-      let visible = true;
-      let running = false;
-
-      const tick = () => {
-        const t = clock.getElapsedTime();
-        const target = progress.current * Math.PI * 2 * TURNS + (reduce ? 0 : t * 0.18);
-        renderRot += (target - renderRot) * 0.1; // smooth follow
-        bolt.rotation.y = renderRot;
-        bolt.rotation.z = Math.sin(progress.current * Math.PI) * 0.06; // subtle lean
-        renderer.render(scene, camera);
-        raf = requestAnimationFrame(tick);
-      };
-      const start = () => {
-        if (running) return;
-        running = true;
-        raf = requestAnimationFrame(tick);
-      };
-      const stop = () => {
-        running = false;
-        cancelAnimationFrame(raf);
-      };
-      start();
-
-      const io = new IntersectionObserver(
-        ([e]) => {
-          visible = e.isIntersecting;
-          if (visible && !document.hidden) start();
-          else stop();
-        },
-        { threshold: 0.01 },
-      );
-      io.observe(host);
-      const onVis = () => (document.hidden || !visible ? stop() : start());
-      document.addEventListener("visibilitychange", onVis);
-
-      const onResize = () => {
-        w = host.clientWidth || 1;
-        h = host.clientHeight || 1;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
+        let w = host.clientWidth || 1;
+        let h = host.clientHeight || 1;
+        // Capped the way SaturnCanvas caps it. A 3x phone rendering at DPR 2
+        // is four times the pixels of DPR 1, and on the homepage this canvas
+        // shares a main thread with a second WebGL context.
+        const mobile = window.matchMedia("(max-width: 767px)").matches;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.5 : 2));
         renderer.setSize(w, h);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.1;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        host.appendChild(renderer.domElement);
+        Object.assign(renderer.domElement.style, { width: "100%", height: "100%", display: "block" });
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 100);
+        camera.position.set(0, 0, 9);
+
+        // Environment map → crisp reflections / specular highlights.
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+        // Build the extruded bolt.
+        const shape = new THREE.Shape();
+        BOLT_PTS.forEach(([x, y], i) => (i ? shape.lineTo(x, -y) : shape.moveTo(x, -y)));
+        shape.closePath();
+        const geo = new THREE.ExtrudeGeometry(shape, {
+          depth: 52,
+          bevelEnabled: true,
+          bevelThickness: 9,
+          bevelSize: 6,
+          bevelSegments: 4,
+          steps: 1,
+        });
+        geo.center();
+        geo.computeBoundingBox();
+        const size = new THREE.Vector3();
+        geo.boundingBox!.getSize(size);
+        const scale = 2.82 / size.y; // fit ~2.82 world units tall (40% smaller)
+        geo.scale(scale, scale, scale);
+
+        const material = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color(0xcc0512),
+          metalness: 0.5,
+          roughness: 0.16,
+          clearcoat: 1,
+          clearcoatRoughness: 0.18,
+          emissive: new THREE.Color(0x5a0007),
+          emissiveIntensity: 0.6,
+          envMapIntensity: 1.35,
+        });
+
+        const bolt = new THREE.Mesh(geo, material);
+        scene.add(bolt);
+
+        // Lights — a white key for the bright streak, a red rim for the glow.
+        const key = new THREE.DirectionalLight(0xffffff, 2.6);
+        key.position.set(4, 6, 8);
+        scene.add(key);
+        const rim = new THREE.PointLight(0xff2a36, 26, 40);
+        rim.position.set(-5, 0, -4);
+        scene.add(rim);
+        scene.add(new THREE.AmbientLight(0x220003, 1));
+
+        const clock = new THREE.Clock();
+        let raf = 0;
+        let renderRot = 0;
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        // ONLY RENDER WHILE ON SCREEN. This used to call tick() once and then
+        // loop for the lifetime of the page, with no IntersectionObserver and no
+        // visibilitychange handler, so it kept rendering while the Manifesto
+        // section sat far below the fold. On the homepage that meant two WebGL
+        // contexts competing for one main thread from first paint: this one
+        // never idle, and SaturnCanvas in the hero. Desktop absorbs it. A phone
+        // does not, and the symptom was not a missing bolt but a starved page --
+        // the hero headline's per-character reveal never finished and scrolling
+        // felt frozen. Same start/stop/IO/visibility shape as SaturnCanvas.
+        let visible = true;
+        let running = false;
+
+        const tick = () => {
+          const t = clock.getElapsedTime();
+          const target = progress.current * Math.PI * 2 * TURNS + (reduce ? 0 : t * 0.18);
+          renderRot += (target - renderRot) * 0.1; // smooth follow
+          bolt.rotation.y = renderRot;
+          bolt.rotation.z = Math.sin(progress.current * Math.PI) * 0.06; // subtle lean
+          renderer.render(scene, camera);
+          raf = requestAnimationFrame(tick);
+        };
+        const start = () => {
+          if (running) return;
+          running = true;
+          raf = requestAnimationFrame(tick);
+        };
+        const stop = () => {
+          running = false;
+          cancelAnimationFrame(raf);
+        };
+        start();
+
+        const io = new IntersectionObserver(
+          ([e]) => {
+            visible = e.isIntersecting;
+            if (visible && !document.hidden) start();
+            else stop();
+          },
+          { threshold: 0.01 },
+        );
+        io.observe(host);
+        const onVis = () => (document.hidden || !visible ? stop() : start());
+        document.addEventListener("visibilitychange", onVis);
+
+        const onResize = () => {
+          w = host.clientWidth || 1;
+          h = host.clientHeight || 1;
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+          renderer.setSize(w, h);
+        };
+        const ro = new ResizeObserver(onResize);
+        ro.observe(host);
+
+        return () => {
+          stop();
+          io.disconnect();
+          document.removeEventListener("visibilitychange", onVis);
+          ro.disconnect();
+          geo.dispose();
+          material.dispose();
+          scene.environment?.dispose();
+          pmrem.dispose();
+          renderer.dispose();
+          renderer.domElement.remove();
+        };
       };
-      const ro = new ResizeObserver(onResize);
-      ro.observe(host);
+
+      const gate = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          gate.disconnect();
+
+          // Yield before building, so the work lands in its own task instead
+          // of extending whatever the browser is already doing. iOS Safari has
+          // no requestIdleCallback, and it is the platform this matters on, so
+          // the setTimeout fallback is the path that will actually run there:
+          // a task boundary is enough to let the browser paint first.
+          const schedule: (cb: () => void) => void =
+            typeof window.requestIdleCallback === "function"
+              ? (cb) => window.requestIdleCallback(cb, { timeout: 1500 })
+              : (cb) => window.setTimeout(cb, 120);
+          schedule(() => {
+            teardown = build();
+          });
+        },
+        // A quarter of a viewport of warning. 200% put the whole thing back on
+        // the critical path: this section sits directly under the hero, about
+        // 426px below the fold on a phone, so two viewports of margin fired
+        // the observer instantly and nothing was deferred at all.
+        { rootMargin: "25% 0px" },
+      );
+      gate.observe(host);
 
       return () => {
-        stop();
-        io.disconnect();
-        document.removeEventListener("visibilitychange", onVis);
-        ro.disconnect();
-        geo.dispose();
-        material.dispose();
-        scene.environment?.dispose();
-        pmrem.dispose();
-        renderer.dispose();
-        renderer.domElement.remove();
+        gate.disconnect();
+        teardown?.();
       };
     }, []);
 

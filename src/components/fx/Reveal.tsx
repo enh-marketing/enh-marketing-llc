@@ -11,15 +11,25 @@ export function Chars({
   className,
   delay = 0,
   immediate = false,
+  play: playProp,
 }: {
   text: string;
   className?: string;
   delay?: number;
   immediate?: boolean;
+  /** Drive the reveal from the caller instead of from view detection.
+   *
+   *  This exists so a caller can hold the animation back without holding the
+   *  markup back. The hero used to withhold its whole <h1> until the preloader
+   *  finished, which meant the headline was absent from the server HTML: a
+   *  crawler saw no <h1> on the homepage, and if the handover never arrived a
+   *  reader saw none either. With this the element is always rendered and only
+   *  the motion waits. */
+  play?: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
-  const play = immediate || inView;
+  const play = playProp ?? (immediate || inView);
 
   // Characters are grouped into words, each word an inline-block that cannot
   // break internally. Without this the browser may wrap between any two

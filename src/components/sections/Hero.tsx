@@ -62,8 +62,12 @@ export function Hero({ started, badges = [] }: { started: boolean; badges?: Part
           Digital Growth Studio — Dubai, est. 15 years ago
         </Rise>
 
-        {started && (
-          <h1 className="font-display mega font-extrabold uppercase">
+        {/* Always rendered. It used to sit behind `started &&`, so the real
+            headline existed only after the preloader handed over: it was
+            absent from the server HTML entirely, and a reader whose handover
+            never arrived got no headline at all. Now only the reveal waits,
+            through Chars' `play`, so the timing on screen is unchanged. */}
+        <h1 className="font-display mega font-extrabold uppercase">
             {/* "EXPLORE NEW" on one line, "HEIGHTS" on the next. The two words
                 keep their separate treatments, so this is two <Chars> on one
                 line rather than one string — which means the space between them
@@ -71,19 +75,18 @@ export function Hero({ started, badges = [] }: { started: boolean; badges?: Part
                 words it was given itself; without the {" "} below the line
                 renders as "EXPLORENEW". */}
             <span className="block">
-              <Chars text={heroWords[0]} immediate delay={0.05} />{" "}
+              <Chars text={heroWords[0]} play={started} delay={0.05} />{" "}
               <span className="text-stroke">
-                <Chars text={heroWords[1]} immediate delay={0.25} />
+                <Chars text={heroWords[1]} play={started} delay={0.25} />
               </span>
             </span>{" "}
             {/* Between two block spans this space costs nothing visually, but
                 without it the heading's textContent reads "NEWHEIGHTS" to
                 anything that flattens the markup. */}
             <span className="block text-brand">
-              <Chars text={heroWords[2]} immediate delay={0.4} />
-            </span>
-          </h1>
-        )}
+              <Chars text={heroWords[2]} play={started} delay={0.4} />
+          </span>
+        </h1>
 
         <Rise delay={0.8} className="mt-8 max-w-md text-base leading-relaxed text-fog sm:text-lg">
           {heroSub}
