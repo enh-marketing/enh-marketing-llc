@@ -45,7 +45,11 @@ export const BoltCanvas = forwardRef<BoltHandle, { className?: string }>(
 
       let w = host.clientWidth || 1;
       let h = host.clientHeight || 1;
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Capped the way SaturnCanvas caps it. A 3x phone rendering at DPR 2
+      // is four times the pixels of DPR 1, and on the homepage this canvas
+      // shares a main thread with a second WebGL context.
+      const mobile = window.matchMedia("(max-width: 767px)").matches;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.5 : 2));
       renderer.setSize(w, h);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.1;
@@ -108,6 +112,18 @@ export const BoltCanvas = forwardRef<BoltHandle, { className?: string }>(
       let renderRot = 0;
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+      // ONLY RENDER WHILE ON SCREEN. This used to call tick() once and then
+      // loop for the lifetime of the page, with no IntersectionObserver and no
+      // visibilitychange handler, so it kept rendering while the Manifesto
+      // section sat far below the fold. On the homepage that meant two WebGL
+      // contexts competing for one main thread from first paint: this one
+      // never idle, and SaturnCanvas in the hero. Desktop absorbs it. A phone
+      // does not, and the symptom was not a missing bolt but a starved page --
+      // the hero headline's per-character reveal never finished and scrolling
+      // felt frozen. Same start/stop/IO/visibility shape as SaturnCanvas.
+      let visible = true;
+      let running = false;
+
       const tick = () => {
         const t = clock.getElapsedTime();
         const target = progress.current * Math.PI * 2 * TURNS + (reduce ? 0 : t * 0.18);
@@ -117,7 +133,28 @@ export const BoltCanvas = forwardRef<BoltHandle, { className?: string }>(
         renderer.render(scene, camera);
         raf = requestAnimationFrame(tick);
       };
-      tick();
+      const start = () => {
+        if (running) return;
+        running = true;
+        raf = requestAnimationFrame(tick);
+      };
+      const stop = () => {
+        running = false;
+        cancelAnimationFrame(raf);
+      };
+      start();
+
+      const io = new IntersectionObserver(
+        ([e]) => {
+          visible = e.isIntersecting;
+          if (visible && !document.hidden) start();
+          else stop();
+        },
+        { threshold: 0.01 },
+      );
+      io.observe(host);
+      const onVis = () => (document.hidden || !visible ? stop() : start());
+      document.addEventListener("visibilitychange", onVis);
 
       const onResize = () => {
         w = host.clientWidth || 1;
@@ -130,7 +167,9 @@ export const BoltCanvas = forwardRef<BoltHandle, { className?: string }>(
       ro.observe(host);
 
       return () => {
-        cancelAnimationFrame(raf);
+        stop();
+        io.disconnect();
+        document.removeEventListener("visibilitychange", onVis);
         ro.disconnect();
         geo.dispose();
         material.dispose();
