@@ -197,7 +197,7 @@ export function LaunchTrack({
                   {stage.actor && (
                     <span
                       className={cn(
-                        "font-display shrink-0 rounded-full border px-3 py-1 text-[0.55rem] font-semibold uppercase transition-colors duration-500",
+                        "font-display shrink-0 rounded-full border px-3 py-1 text-[0.6875rem] font-semibold uppercase transition-colors duration-500",
                         stage.actor === "You"
                           ? "border-brand/50 text-brand-text"
                           : "border-line text-ash",
@@ -232,7 +232,7 @@ export function LaunchTrack({
                   </span>
                   <span
                     className={cn(
-                      "font-display text-[0.58rem] font-semibold uppercase",
+                      "font-display text-[0.6875rem] font-semibold uppercase",
                       isLaunch ? "text-brand-text" : "text-ash",
                     )}
                   >
@@ -296,7 +296,7 @@ export function LaunchTrack({
           />
           <span
             aria-hidden
-            className="font-display absolute top-4 -translate-x-1/2 text-[0.55rem] font-semibold uppercase text-brand-text"
+            className="font-display absolute top-4 -translate-x-1/2 text-[0.6875rem] font-semibold uppercase text-brand-text"
             style={{ left: `${livePoint}%` }}
           >
             {liveLabel}
