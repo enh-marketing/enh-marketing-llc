@@ -108,7 +108,7 @@ export function BenchmarkReadout({
     <section
       id={id}
       data-section={label}
-      className="relative overflow-x-clip border-y border-line bg-ink-3"
+      className="relative overflow-x-clip"
     >
       {/* Chapter identity: a fine grid that fades out, so the surface reads as a
           different room without a new colour. */}

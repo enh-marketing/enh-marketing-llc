@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Link from "next/link";
 import { routeExists } from "@/lib/sitemap";
 import { Crosslink } from "@/components/ui/Crosslink";
 import gsap from "gsap";
@@ -184,14 +183,14 @@ export function ChannelScroller({
               </>
             );
             return live ? (
-              <Link
+              <a
                 key={channel.href}
                 href={channel.href}
                 aria-labelledby={`ch-${channel.href}`}
                 className={shell}
               >
                 {inner}
-              </Link>
+              </a>
             ) : (
               <div key={channel.href} className={shell}>
                 {inner}

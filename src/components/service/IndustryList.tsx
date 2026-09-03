@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import Link from "next/link";
 import { routeExists } from "@/lib/sitemap";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -66,9 +65,9 @@ function Row({ item, i, active }: { item: Item; i: number; active: boolean }) {
     );
   }
   return (
-    <Link href={item.href} className={ROW}>
+    <a href={item.href} className={ROW}>
       <RowInner item={item} i={i} active={active} />
-    </Link>
+    </a>
   );
 }
 

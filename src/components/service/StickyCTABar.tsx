@@ -3,7 +3,6 @@
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useState } from "react";
 import { AnimatePresence } from "motion/react";
-import Link from "next/link";
 
 /** Mobile-only. The hero CTAs scroll away and the next conversion point is
  *  thousands of pixels below, so bring one back once the hero clears. */
@@ -24,12 +23,12 @@ export function StickyCTABar() {
         >
           {/* WhatsApp is deliberately absent: FloatingContact already owns that
               affordance bottom-right, and the right padding clears its bubble. */}
-          <Link
+          <a
             href="#quote"
             className="block rounded-full bg-brand px-5 py-3 text-center text-sm font-semibold text-white"
           >
             Request a quote
-          </Link>
+          </a>
         </motion.div>
       )}
     </AnimatePresence>

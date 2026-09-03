@@ -1,0 +1,46 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/performance-marketing";
+import { brand } from "@/lib/content";
+import { PerformanceMarketingPage } from "@/page-bodies/services-performance-marketing";
+
+/* Was `export const metadata` plus a module-scope schema object in
+   src/app/services/performance-marketing/page.tsx. The head tags are handed to the layout as props;
+   the structured data is emitted below, in the same place in the document it
+   occupied before, and as static HTML rather than through the island. */
+
+const HREF = "/services/performance-marketing";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Performance Marketing",
+  serviceType: "Performance marketing and paid media management",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Paid media channels",
+    itemListElement: c.channels.map((ch) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name: ch.name, url: `https://enhmedia.com${ch.href}` },
+    })),
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <PerformanceMarketingPage client:load />
+</Base>

@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import { insights } from "@/lib/content";
 import { pages, isPending } from "@/lib/sitemap";
 import { Chars, Rise } from "@/components/fx/Reveal";
@@ -84,13 +82,13 @@ export function Insights({
               link, and "coming soon" is an announcement nobody asked for. */}
           {archiveIsLive && (
             <Rise delay={0.2}>
-              <Link
+              <a
                 href={pages.insights.href}
                 className="group inline-flex items-center gap-3 py-1.5 text-sm font-semibold uppercase text-snow"
               >
                 All insights
                 <span className="h-px w-8 bg-brand transition-all duration-300 group-hover:w-14" />
-              </Link>
+              </a>
             </Rise>
           )}
         </div>
@@ -100,12 +98,12 @@ export function Insights({
           <Rise>
             <article className="group">
               <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-line">
-                <Image
+                <img
                   src={lead.image}
                   alt=""
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 52vw"
-                  className="object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
                 {/* Grounds the picture against the page rather than letting it
                     float as a bright rectangle. */}
@@ -137,12 +135,12 @@ export function Insights({
                 >
                   <article className="grid grid-cols-[92px_1fr] items-start gap-5 sm:grid-cols-[132px_1fr] sm:gap-6">
                     <div className="relative aspect-square overflow-hidden rounded-2xl border border-line">
-                      <Image
+                      <img
                         src={post.image}
                         alt=""
-                        fill
-                        sizes="132px"
-                        className="object-cover opacity-90"
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 h-full w-full object-cover opacity-90"
                       />
                     </div>
                     <div>

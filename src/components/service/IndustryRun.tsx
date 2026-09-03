@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { routeExists } from "@/lib/sitemap";
 import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
@@ -62,12 +61,12 @@ export function IndustryRun({
                   text-fog treatment reserved for unnamed items would dim most
                   of the sentence for a reason the reader cannot see. */}
               {item.href && routeExists(item.href) ? (
-                <Link
+                <a
                   href={item.href}
                   className="text-snow transition-colors duration-300 hover:text-brand"
                 >
                   {item.label}
-                </Link>
+                </a>
               ) : item.href ? (
                 <span className="text-snow">{item.label}</span>
               ) : (

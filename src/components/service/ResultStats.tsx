@@ -44,7 +44,7 @@ export function ResultStats({
     <section
       id={id}
       data-section={label}
-      className="relative border-y border-line bg-ink-2 py-14 sm:py-16"
+      className="relative py-14 sm:py-16"
     >
       <Container>
         <dl className="grid gap-y-12 sm:grid-cols-2 lg:grid-cols-4">

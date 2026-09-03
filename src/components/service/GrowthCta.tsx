@@ -139,7 +139,7 @@ export function GrowthCta({
       data-section={label}
       onPointerMove={move}
       onPointerLeave={rest}
-      className="relative overflow-hidden border-y border-line bg-ink-2"
+      className="relative overflow-hidden"
     >
       {/* Dots, revealed only around the pointer. */}
       <div aria-hidden className="dot-field spotlight-mask pointer-events-none absolute inset-0" />

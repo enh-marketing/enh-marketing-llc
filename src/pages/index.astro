@@ -1,0 +1,24 @@
+---
+import Base from "@/layouts/Base.astro";
+import { Experience } from "@/components/Experience";
+import { availableBadges } from "@/lib/badges";
+
+/* Resolved here rather than in the island for the same reason it was resolved
+   in the server component before: availableBadges() reads the filesystem. In
+   Astro this frontmatter runs at build time in Node, so the check still
+   happens once, at build, and travels down as plain data. */
+const badges = availableBadges();
+---
+
+<Base
+  title="ENH — Explore New Heights | Digital Growth Studio, Dubai"
+  description="ENH is a Dubai-based digital growth studio crafting brands, campaigns and digital experiences that move markets. Fifteen years. One obsession: growth with proof."
+  ogTitle="ENH — Explore New Heights"
+  ogDescription="A Dubai-based digital growth studio crafting brands, campaigns and experiences that move markets."
+>
+  {/* One island for the whole page. The Preloader hands `started` to the Hero
+      through React state, and nearly every section below runs its own
+      ScrollTrigger, so this tree cannot be split into separate islands without
+      inventing a shared store. See MIGRATION.md. */}
+  <Experience client:load badges={badges} />
+</Base>

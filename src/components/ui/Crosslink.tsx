@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { routeExists } from "@/lib/sitemap";
 import { cn } from "@/lib/cn";
 
@@ -30,8 +29,8 @@ export function Crosslink({
     return <span className={cn(pendingClassName)}>{children}</span>;
   }
   return (
-    <Link href={href} className={cn(className)}>
+    <a href={href} className={cn(className)}>
       {children}
-    </Link>
+    </a>
   );
 }

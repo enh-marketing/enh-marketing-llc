@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { trailFor, routeExists } from "@/lib/sitemap";
 import { cn } from "@/lib/cn";
 
@@ -72,12 +71,12 @@ export function Breadcrumbs({ href, className }: { href: string; className?: str
                       reachable; sending someone to a 404 from the breadcrumb is
                       strictly worse than a level that simply does not respond. */}
                   {routeExists(node.href) ? (
-                    <Link
+                    <a
                       href={node.href}
                       className="inline-block py-1 text-fog transition-colors duration-300 hover:text-brand"
                     >
                       {node.label}
-                    </Link>
+                    </a>
                   ) : (
                     <span className="inline-block py-1 text-fog">{node.label}</span>
                   )}

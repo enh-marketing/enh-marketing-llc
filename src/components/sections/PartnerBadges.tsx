@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import type { PartnerBadge } from "@/lib/content";
 import { cn } from "@/lib/cn";
@@ -87,13 +86,18 @@ export function PartnerBadges({
               plate,
             )}
           >
-            <Image
+            {/* Was next/image. Plain <img> here: these are four fixed-size
+                partner marks in /public, drawn at one height, so there was no
+                responsive srcset to lose. `sizes` goes with it, since it only
+                means anything alongside one. */}
+            <img
               src={badge.src}
               alt={badge.alt}
               width={badge.w}
               height={badge.h}
+              loading="lazy"
+              decoding="async"
               className="h-full w-auto object-contain"
-              sizes="180px"
             />
           </span>
         </motion.li>

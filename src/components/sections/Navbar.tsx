@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { brand } from "@/lib/content";
 import { topNav, isPending, type NavNode } from "@/lib/sitemap";
@@ -67,9 +65,9 @@ function NavLink({
     );
   }
   return (
-    <Link href={node.href} onClick={onNavigate} className={className}>
+    <a href={node.href} onClick={onNavigate} className={className}>
       {children}
-    </Link>
+    </a>
   );
 }
 
@@ -135,11 +133,15 @@ function SubMenu({ node, onNavigate }: { node: NavNode; onNavigate: () => void }
   );
 }
 
-export function Navbar() {
+/** `pathname` replaces next/navigation's usePathname, and is handed down from
+ *  the Astro layout as Astro.url.pathname. That is strictly better here: the
+ *  hook only ever returned a value in the browser, so the active nav item and
+ *  the CTA target were absent from the server-rendered HTML and appeared on
+ *  hydration. As a prop they are correct in the first paint. */
+export function Navbar({ pathname }: { pathname: string }) {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 60));
 
@@ -156,6 +158,11 @@ export function Navbar() {
 
   // A completed navigation should never leave the menu hanging open. Adjusted
   // during render rather than in an effect, so there is no second paint.
+  //
+  // Astro navigates with full page loads, so the island remounts and this no
+  // longer has anything to catch. It is kept because it costs nothing and is
+  // the guard that would be needed again the moment client-side routing (a
+  // ClientRouter / view transitions) is turned on.
   const [lastPath, setLastPath] = useState(pathname);
   if (lastPath !== pathname) {
     setLastPath(pathname);
@@ -209,18 +216,18 @@ export function Navbar() {
         )}
       >
         <Container className="flex items-center justify-between py-5">
-          <Link href="/" aria-label="ENH — Home" onClick={close}>
+          <a href="/" aria-label="ENH — Home" onClick={close}>
             <Logo className="h-7 sm:h-8" />
-          </Link>
+          </a>
 
           <div className="flex items-center gap-3 sm:gap-4">
             <ThemeToggle />
-            <Link
+            <a
               href={ctaTarget(pathname)}
               className="hidden rounded-full border border-line px-5 py-2.5 text-sm font-medium text-snow transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-white sm:block"
             >
               Start the climb
-            </Link>
+            </a>
             <button
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
@@ -382,7 +389,7 @@ export function Navbar() {
                           <p className="font-display mt-5 max-w-sm text-2xl font-bold leading-snug text-snow">
                             Fifteen years turning ambition into market share.
                           </p>
-                          <Link
+                          <a
                             href={ctaTarget(pathname)}
                             onClick={close}
                             className="mt-7 inline-flex items-center gap-3 self-start rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-brand-deep"
@@ -397,7 +404,7 @@ export function Navbar() {
                                 strokeLinejoin="round"
                               />
                             </svg>
-                          </Link>
+                          </a>
                           <dl className="mt-9 space-y-3 border-t border-line pt-7 text-sm">
                             <div className="flex justify-between gap-4">
                               <dt className="text-fog">Email</dt>
@@ -430,13 +437,13 @@ export function Navbar() {
                 transition={{ delay: 0.45 }}
                 className="mt-10 flex flex-col gap-4 border-t border-line pt-7 text-sm text-fog sm:flex-row sm:items-center sm:justify-between"
               >
-                <Link
+                <a
                   href={ctaTarget(pathname)}
                   onClick={close}
                   className="rounded-full bg-brand px-6 py-3 text-center font-semibold text-white sm:hidden"
                 >
                   Book a free consultation
-                </Link>
+                </a>
                 <a href={`mailto:${brand.email}`} className="hover:text-snow">
                   {brand.email}
                 </a>

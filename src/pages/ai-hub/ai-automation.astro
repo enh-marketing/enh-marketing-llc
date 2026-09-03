@@ -1,0 +1,39 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/ai-automation";
+import { brand } from "@/lib/content";
+import { AiAutomationPage } from "@/page-bodies/ai-hub-ai-automation";
+
+/* Was `export const metadata` plus a module-scope schema object in
+   src/app/services/ai/ai-automation/page.tsx (its route then). The head tags are handed to the layout as props;
+   the structured data is emitted below, in the same place in the document it
+   occupied before, and as static HTML rather than through the island. */
+
+const HREF = "/ai-hub/ai-automation";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "AI Automation",
+  serviceType:
+    "AI agents, workflow automation, document processing, enquiry handling, monitoring, reporting and custom AI tools",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <AiAutomationPage client:load />
+</Base>

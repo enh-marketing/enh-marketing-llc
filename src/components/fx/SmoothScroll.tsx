@@ -20,8 +20,13 @@ export function getLenis(): Lenis | null {
 }
 
 /** Lenis smooth scrolling — the backbone of the premium feel, fused to GSAP's
- *  ticker so ScrollTrigger-driven motion (the flight rocket) scrubs in lockstep. */
-export function SmoothScroll({ children }: { children: ReactNode }) {
+ *  ticker so ScrollTrigger-driven motion (the flight rocket) scrubs in lockstep.
+ *
+ *  Children are optional because it wraps nothing in Astro: it mounts as a
+ *  headless island beside the page rather than around it. Everything it does
+ *  is global (document listeners, a ResizeObserver on body, GSAP's ticker), so
+ *  it never needed to own the tree. */
+export function SmoothScroll({ children }: { children?: ReactNode }) {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 

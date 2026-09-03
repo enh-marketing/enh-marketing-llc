@@ -1,0 +1,44 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/on-page-seo";
+import { brand } from "@/lib/content";
+import { OnPageSeoPage } from "@/page-bodies/services-seo-on-page-seo";
+
+/* Was `export const metadata` plus a module-scope schema object in
+   src/app/services/seo/on-page-seo/page.tsx. The head tags are handed to the layout as props;
+   the structured data is emitted below, in the same place in the document it
+   occupied before, and as static HTML rather than through the island. */
+
+const HREF = "/services/seo/on-page-seo";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "On-Page SEO",
+  serviceType:
+    "On-page SEO: title tags, headings, content structure, internal links and schema markup",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  isPartOf: {
+    "@type": "Service",
+    name: "SEO",
+    url: "https://enhmedia.com/services/seo",
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <OnPageSeoPage client:load />
+</Base>

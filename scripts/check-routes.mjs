@@ -7,19 +7,25 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
-const APP = "src/app";
+const PAGES = "src/pages";
 
-/** Every page.tsx under src/app, as the URL it serves. Route groups ("(x)")
- *  and private folders ("_x") contribute no path segment. */
-function routes(dir = APP, url = "") {
+/** Every .astro page under src/pages, as the URL it serves.
+ *
+ *  Astro routes by filename rather than by a `page.tsx` inside a named folder,
+ *  so `index.astro` is the directory itself and `foo.astro` is `/foo`. Files
+ *  and folders starting with "_" are excluded from routing by Astro, so they
+ *  are skipped here too. */
+function routes(dir = PAGES, url = "") {
   const found = [];
   for (const entry of readdirSync(dir)) {
+    if (entry.startsWith("_")) continue;
     const path = join(dir, entry);
     if (statSync(path).isDirectory()) {
-      const segment = entry.startsWith("(") || entry.startsWith("_") ? "" : `/${entry}`;
-      found.push(...routes(path, url + segment));
-    } else if (entry === "page.tsx") {
-      found.push(url === "" ? "/" : url);
+      found.push(...routes(path, `${url}/${entry}`));
+    } else if (entry.endsWith(".astro")) {
+      const name = entry.slice(0, -".astro".length);
+      const route = name === "index" ? url : `${url}/${name}`;
+      found.push(route === "" ? "/" : route);
     }
   }
   return found;

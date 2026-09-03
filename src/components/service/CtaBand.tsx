@@ -35,7 +35,7 @@ export function CtaBand({
   whatsappLabel: string;
 }) {
   return (
-    <section id="quote" data-section={label} className="relative overflow-hidden border-t border-line py-16 sm:py-20">
+    <section id="quote" data-section={label} className="relative overflow-hidden py-16 sm:py-20">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="aurora-b absolute right-[-12%] top-0 h-[40vw] w-[40vw] rounded-full bg-brand/12 blur-[160px]" />
       </div>

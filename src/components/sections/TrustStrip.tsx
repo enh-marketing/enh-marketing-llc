@@ -51,7 +51,7 @@ export function TrustStrip({
     <section
       id={id}
       data-section={label}
-      className={cn("border-b border-line", compact ? "py-4" : "py-16")}
+      className={cn("", compact ? "py-4" : "py-16")}
     >
       {/* Claim line: homepage only. Inside the service heroes the logos speak
           for themselves, and dropping it also buys back the vertical space the

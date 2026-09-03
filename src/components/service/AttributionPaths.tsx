@@ -84,7 +84,7 @@ export function AttributionPaths({
     <section
       id={id}
       data-section={label}
-      className="relative overflow-x-clip border-y border-line bg-ink-3 py-14 sm:py-16"
+      className="relative overflow-x-clip py-14 sm:py-16"
     >
       {/* Fine grid, fading from the side the broken path sits on. */}
       <div

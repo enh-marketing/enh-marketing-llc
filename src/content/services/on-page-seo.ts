@@ -101,15 +101,23 @@ export const words = {
   title: "Words Your Customer",
   strokeTitle: "Would Actually Use",
   tension: "Search terms and marketing language pull in different directions.",
-  internalLead: "Internally, a service becomes",
+  internalLead: "Your business may call it",
   internal: "integrated facilities solutions",
-  searcherLead: "The person searching types",
+  searcherLead: "Your customers may search for",
   searcher: "office cleaning company Dubai",
-  // Reconstruction: usageLead + " " + placements[0] + ", " + placements[1]
-  // + ", and " + placements[2] + ", " + usageTail
-  usageLead: "On-page work uses the second one, in",
-  placements: ["the title", "the heading", "the first sentence"],
-  usageTail: "without turning the page into a keyword list.",
+  // Client revision (2026-09-03), supplied verbatim. It changes the shape of
+  // this line as well as its wording: the three parallel items became two
+  // clauses of one sentence, and the first now carries its own comma. So the
+  // reconstruction is a plain join and the slash separator the layout used to
+  // draw between the items is gone with it.
+  //
+  // Reconstruction: usageLead + " " + placements.join(" ") + " " + usageTail
+  usageLead: "On-page SEO connects the two",
+  placements: [
+    "using the words your customers search for in the title,",
+    "headings and page content",
+  ],
+  usageTail: "naturally and without turning the page into a keyword list.",
   /** Both referenced pages are unbuilt, so this stays prose. */
   related:
     "If you need the underlying research first, that sits with keyword research. If the pages need writing rather than improving, that is SEO content creation.",

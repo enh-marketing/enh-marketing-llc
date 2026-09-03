@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import { motion, useMotionValueEvent, useMotionValue, animate } from "motion/react";
 import { work, workImages } from "@/lib/content";
-import Image from "next/image";
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { Container } from "@/components/ui/Container";
 import { RouteLine } from "@/components/fx/Adornments";
@@ -13,12 +12,23 @@ const CARD_GAP = 20;
 /** Drag carousel of all 22 live case studies — 3–4 visible, drag or arrows for the rest. */
 /** Reused on service pages, so the section index and DevTools label are
  *  parameterised. Defaults are the homepage's own values. */
+/** `ctaHref` is where the end card points.
+ *
+ *  It used to be hardcoded to "#contact", which exists only on the homepage
+ *  (LetsTalk). This section also renders on all seventeen service pages, so on
+ *  every one of them the end card was a dead anchor: the click did nothing.
+ *  The service pages carry "#quote" instead, which is the same rule the Navbar
+ *  already applies through ctaTarget(). The default keeps the homepage as it
+ *  was. Pre-existing, and unrelated to the Astro migration: the Next build
+ *  emitted the same dead href. */
 export function Work({
   index = "03",
   label = "Summits Reached",
+  ctaHref = "#contact",
 }: {
   index?: string;
   label?: string;
+  ctaHref?: string;
 } = {}) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -80,12 +90,12 @@ export function Work({
               >
                 <div className="relative aspect-[3/2] overflow-hidden">
                   {workImages[w.client] ? (
-                    <Image
+                    <img
                       src={workImages[w.client]}
                       alt={w.client}
-                      fill
-                      sizes="300px"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
                     <div className="absolute inset-0 bg-ink-3" />
@@ -115,7 +125,7 @@ export function Work({
 
             {/* End card */}
             <a
-              href="#contact"
+              href={ctaHref}
               className="group flex w-[280px] shrink-0 flex-col items-center justify-center gap-5 rounded-3xl border border-dashed border-line p-6 text-center transition-colors duration-500 hover:border-brand sm:w-[300px]"
             >
               <span className="font-display text-2xl font-extrabold uppercase leading-tight text-stroke">

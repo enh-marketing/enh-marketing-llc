@@ -1,0 +1,108 @@
+---
+import { Font } from "astro:assets";
+import "@/styles/globals.css";
+import { SmoothScroll } from "@/components/fx/SmoothScroll";
+import { Navbar } from "@/components/sections/Navbar";
+import { Footer } from "@/components/sections/Footer";
+import { FloatingContact } from "@/components/sections/FloatingContact";
+
+/** The site shell, replacing app/layout.tsx.
+ *
+ *  WHAT MOVED, AND WHY IT LOOKS LIKE THIS. Next's Metadata API produced the
+ *  head tags from an exported object; Astro has no such API, so the tags are
+ *  written out here and driven by props. The set below is not invented: it is
+ *  the exact set Next was emitting, read back off the built HTML of all
+ *  eighteen pages before the migration. That includes the three twitter:* tags,
+ *  which Next synthesised from `openGraph` without anyone asking for them, so
+ *  dropping them would have been a silent SEO regression.
+ *
+ *  Two Next-isms are deliberately not reproduced. `<meta name="next-size-adjust">`
+ *  belongs to next/font's fallback metric adjustment and means nothing outside
+ *  Next. And the hashed favicon query string (`?favicon.2vob68tjqpejf.ico`) was
+ *  Next's cache-busting; the icon is a plain /favicon.ico here.
+ *
+ *  `metadataBase` becomes `site` in astro.config.mjs, which is what resolves
+ *  the canonical path to an absolute URL below. */
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path, not URL. Resolved against `site`, the way metadataBase did. */
+  canonical?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+}
+
+const { title, description, canonical, ogTitle, ogDescription } = Astro.props;
+
+const og = ogTitle ?? title;
+const ogDesc = ogDescription ?? description;
+const canonicalUrl = canonical ? new URL(canonical, Astro.site).href : undefined;
+---
+
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+
+    <meta property="og:title" content={og} />
+    <meta property="og:description" content={ogDesc} />
+    <meta property="og:locale" content="en_AE" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={og} />
+    <meta name="twitter:description" content={ogDesc} />
+
+    <link rel="icon" href="/favicon.ico" sizes="256x256" type="image/x-icon" />
+
+    {/* Replaces next/font/google. Same families and subsets, declared in
+        astro.config.mjs, and still exposed as --font-inter / --font-poppins so
+        the stylesheet's @theme block is untouched. Inter is preloaded because
+        it sets the body copy; Poppins is display-only and can arrive late. */}
+    <Font cssVariable="--font-inter" preload />
+    <Font cssVariable="--font-poppins" />
+
+    {/* Cabinet Grotesk has no Google provider, so it stays a Fontshare
+        stylesheet exactly as before. */}
+    <link
+      rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800,900&display=swap"
+    />
+
+    {/* Was <Script strategy="beforeInteractive">. An inline is:raw script in
+        the head is the Astro equivalent and runs at the same point: before
+        first paint, so the opted-in dark theme never flashes light. */}
+    <script is:inline>
+      try {
+        if (localStorage.getItem("enh-theme") === "dark")
+          document.documentElement.classList.add("dark");
+      } catch {}
+    </script>
+
+    <slot name="head" />
+  </head>
+
+  <body class="min-h-full bg-void text-snow antialiased">
+    {/* SmoothScroll rendered a bare fragment around its children and did all
+        its work in an effect, so in Astro it needs no children at all: it is a
+        headless island that starts Lenis and fuses it to GSAP's ticker. The
+        page content is a sibling rather than a child, which is what lets each
+        page hydrate independently of it. */}
+    <SmoothScroll client:load />
+
+    <div class="grain">
+      <Navbar client:load pathname={Astro.url.pathname} />
+      <slot />
+      {/* Footer carries no state or effects, so it is rendered to plain HTML
+          with no client directive and ships no JavaScript at all. */}
+      <Footer />
+      <FloatingContact client:visible />
+    </div>
+  </body>
+</html>

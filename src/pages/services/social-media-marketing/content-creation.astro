@@ -1,0 +1,44 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/content-creation";
+import { brand } from "@/lib/content";
+import { ContentCreationPage } from "@/page-bodies/services-social-media-marketing-content-creation";
+
+/* Was `export const metadata` plus a module-scope schema object in
+   src/app/services/social-media-marketing/content-creation/page.tsx. The head tags are handed to the layout as props;
+   the structured data is emitted below, in the same place in the document it
+   occupied before, and as static HTML rather than through the island. */
+
+const HREF = "/services/social-media-marketing/content-creation";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Social Media Content Creation",
+  serviceType:
+    "Social content production: direction, short-form video, photography, design, copy and creator content",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  isPartOf: {
+    "@type": "Service",
+    name: "Social Media Marketing",
+    url: "https://enhmedia.com/services/social-media-marketing",
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <ContentCreationPage client:load />
+</Base>

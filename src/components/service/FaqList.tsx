@@ -57,7 +57,7 @@ export function FaqList({
   };
 
   return (
-    <section id="faq" data-section={label} className="relative border-t border-line py-16 sm:py-20">
+    <section id="faq" data-section={label} className="relative py-16 sm:py-20">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">

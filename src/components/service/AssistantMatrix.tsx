@@ -77,7 +77,7 @@ export function AssistantMatrix({
     <section
       id={id}
       data-section={label}
-      className="relative overflow-x-clip border-y border-line bg-ink-3 py-14 sm:py-16"
+      className="relative overflow-x-clip py-14 sm:py-16"
     >
       {/* Chapter identity: a fine grid, masked away, so the surface reads as
           its own room without introducing a colour the system does not have. */}

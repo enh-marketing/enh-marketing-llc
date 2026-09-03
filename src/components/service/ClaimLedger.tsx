@@ -98,7 +98,7 @@ export function ClaimLedger({
       data-section={label}
       className={cn(
         "relative overflow-x-clip py-14 sm:py-16",
-        tone === "raised" && "border-y border-line bg-ink-3",
+        tone === "raised" && "",
       )}
     >
       {/* Fine grid, fading from the evidence side. */}

@@ -1,0 +1,44 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/linkedin-ads";
+import { brand } from "@/lib/content";
+import { LinkedInAdsPage } from "@/page-bodies/services-performance-marketing-linkedin-ads";
+
+/* Was `export const metadata` plus a module-scope schema object in
+   src/app/services/performance-marketing/linkedin-ads/page.tsx. The head tags are handed to the layout as props;
+   the structured data is emitted below, in the same place in the document it
+   occupied before, and as static HTML rather than through the island. */
+
+const HREF = "/services/performance-marketing/linkedin-ads";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "LinkedIn Ads",
+  serviceType:
+    "LinkedIn advertising: Sponsored Content, Lead Gen Forms, Message Ads and account-based campaigns",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  isPartOf: {
+    "@type": "Service",
+    name: "Performance Marketing",
+    url: "https://enhmedia.com/services/performance-marketing",
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <LinkedInAdsPage client:load />
+</Base>

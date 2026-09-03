@@ -67,7 +67,7 @@ export function PromiseLedger({
     <section
       id={id}
       data-section={label}
-      className="relative overflow-x-clip border-y border-line bg-ink-3 py-14 sm:py-16"
+      className="relative overflow-x-clip py-14 sm:py-16"
     >
       <Container className="relative">
         <SectionHeader

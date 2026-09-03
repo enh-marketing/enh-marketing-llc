@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { brand, social } from "@/lib/content";
 import { footerNav, pages, isPending, type NavNode } from "@/lib/sitemap";
 import { Container } from "@/components/ui/Container";
@@ -28,9 +27,9 @@ function FooterLink({ node }: { node: NavNode }) {
     );
   }
   return (
-    <Link href={node.href} className={LINK}>
+    <a href={node.href} className={LINK}>
       {node.label}
-    </Link>
+    </a>
   );
 }
 
@@ -56,7 +55,7 @@ export function Footer() {
   );
 
   return (
-    <footer className="relative bg-void pt-16">
+    <footer className="relative bg-ink-2 pt-16">
       <FooterCurve />
       <Container>
         <div className="grid gap-12 pb-16 lg:grid-cols-[1.2fr_1fr_1fr_1fr_0.7fr]">
@@ -101,9 +100,9 @@ export function Footer() {
                   {l.label}
                 </span>
               ) : (
-                <Link key={l.href} href={l.href} className="inline-block py-1.5 transition-colors hover:text-snow">
+                <a key={l.href} href={l.href} className="inline-block py-1.5 transition-colors hover:text-snow">
                   {l.label}
-                </Link>
+                </a>
               ),
             )}
           </div>

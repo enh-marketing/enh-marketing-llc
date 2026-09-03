@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import Link from "next/link";
 import { routeExists } from "@/lib/sitemap";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -271,12 +270,12 @@ export function CapabilityCarousel({
                     cross-reference there is no text worth keeping when the page
                     it points at does not exist yet. */}
                 {item.href && routeExists(item.href) && (
-                  <Link
+                  <a
                     href={item.href}
                     className="mt-6 inline-flex items-center gap-2 py-1.5 text-xs font-semibold uppercase text-snow transition-colors hover:text-brand"
                   >
                     See how <span aria-hidden>↓</span>
-                  </Link>
+                  </a>
                 )}
               </article>
             </li>

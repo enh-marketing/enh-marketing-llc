@@ -39,9 +39,20 @@ export function SampleSplit({
 
   /** Deterministic scatter. No Math.random: the same page must render the same
    *  dots on the server and in the browser, and a hydration mismatch over
-   *  decorative jitter would be an absurd thing to ship. */
-  const jitter = (i: number, salt: number) =>
-    ((Math.sin((i + 1) * (salt === 0 ? 12.9898 : 78.233)) * 43758.5453) % 1 + 1) % 1;
+   *  decorative jitter would be an absurd thing to ship.
+   *
+   *  Being seeded is not sufficient on its own, which is what the rounding is
+   *  for. ECMAScript leaves the precision of Math.sin implementation-defined,
+   *  so Node and the browser return values that differ in their last bits:
+   *  the prerendered HTML carried left:10.806326225370867% and the browser
+   *  recomputed 10.806326225982048%, and React reported a hydration mismatch
+   *  it would not patch up. Quantising to four decimals throws away far more
+   *  precision than the difference and lands both engines on the same string.
+   *  A percentage to 4dp is well under a tenth of a pixel here. */
+  const jitter = (i: number, salt: number) => {
+    const raw = ((Math.sin((i + 1) * (salt === 0 ? 12.9898 : 78.233)) * 43758.5453) % 1 + 1) % 1;
+    return Math.round(raw * 1e4) / 1e4;
+  };
 
   const side = (hollow: boolean) => (
     <div

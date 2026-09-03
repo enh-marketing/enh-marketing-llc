@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { routeExists } from "@/lib/sitemap";
 import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
@@ -86,12 +85,12 @@ export function CapabilityLedger({
               >
                 {/* Row wash and left rule, both on hover. */}
                 {item.href && routeExists(item.href) ? (
-                  <Link
+                  <a
                     href={item.href}
                     className={`${shell} transition-colors duration-500 hover:bg-ink-2/60`}
                   >
                     {Row}
-                  </Link>
+                  </a>
                 ) : (
                   <div className={`${shell} transition-colors duration-500 hover:bg-ink-2/60`}>
                     {Row}

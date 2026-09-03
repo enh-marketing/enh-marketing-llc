@@ -54,7 +54,7 @@ export function LetsTalk() {
   const [done, setDone] = useState(false);
 
   return (
-    <section id="contact" className="relative overflow-hidden border-t border-line py-16 sm:py-20">
+    <section id="contact" className="relative overflow-hidden py-16 sm:py-20">
       <div
         className="pointer-events-none absolute inset-0"
         style={{

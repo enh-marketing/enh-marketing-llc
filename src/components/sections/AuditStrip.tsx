@@ -11,7 +11,7 @@ export function AuditStrip() {
   const [done, setDone] = useState(false);
 
   return (
-    <section className="relative overflow-hidden border-y border-line bg-brand">
+    <section className="relative overflow-hidden bg-brand">
       <Container className="grid items-center gap-8 py-14 lg:grid-cols-[1.2fr_0.8fr]">
         <Rise>
           <div className="flex items-center gap-6">

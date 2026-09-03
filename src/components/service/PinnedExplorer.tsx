@@ -280,9 +280,9 @@ export function PinnedExplorer({
       data-section={label}
       className={cn(
         "relative overflow-x-clip py-14 sm:py-16",
-        tone !== "none" && "border-y border-line",
-        tone === "ink-2" && "bg-ink-2",
-        tone === "ink-3" && "bg-ink-3",
+        tone !== "none" && "",
+        tone === "ink-2" && "",
+        tone === "ink-3" && "",
       )}
     >
       <Container className="relative">

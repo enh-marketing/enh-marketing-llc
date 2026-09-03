@@ -46,13 +46,6 @@ const services: NavNode = {
       ],
     },
     {
-      label: "AI",
-      href: "/services/ai",
-      children: [
-        { label: "AI & Automation", href: "/services/ai/ai-automation" },
-      ],
-    },
-    {
       label: "Performance Marketing",
       href: "/services/performance-marketing",
       children: [
@@ -144,16 +137,21 @@ const industries: NavNode = {
 
 // Almost every node here leaves the site, and AI_HUB_HREF is a placeholder the
 // AI Hub property has not been wired to yet. The one exception is
-// "AI & Automation", which now has a real page under Services: it is marked
-// crossLink so it appears in this menu without being counted as a second page
-// or claiming the breadcrumb trail, which is what crossLink exists for.
+// "AI & Automation", which is a real page on this site and belongs to this
+// pillar rather than to Services: it is the AI Hub's own subpage, so it is a
+// plain internal node here and Services no longer lists it at all.
+//
+// Because this branch owns a built page, `aiHub` has to appear in the root
+// lists that buildablePages() and trailFor() walk. It did not before, when
+// every node under it was external, and leaving it out would have cost this
+// page its breadcrumbs and its BreadcrumbList JSON-LD without any error.
 const aiHub: NavNode = {
   label: "AI Hub",
   href: AI_HUB_HREF,
   external: true,
   children: [
     { label: "AI Search Visibility (AEO & GEO)", href: AI_HUB_HREF, external: true },
-    { label: "AI & Automation", href: "/services/ai/ai-automation", crossLink: true },
+    { label: "AI & Automation", href: "/ai-hub/ai-automation" },
     { label: "AI Creative Production", href: AI_HUB_HREF, external: true },
     { label: "Campaign Intelligence", href: AI_HUB_HREF, external: true },
     { label: "Intelligent Web", href: AI_HUB_HREF, external: true },
@@ -246,7 +244,7 @@ const BUILT = new Set([
   "/",
   "/services/lead-generation",
   "/services/lead-generation/landing-page-development",
-  "/services/ai/ai-automation",
+  "/ai-hub/ai-automation",
   "/services/performance-marketing",
   "/services/performance-marketing/linkedin-ads",
   "/services/performance-marketing/meta-ads",
@@ -296,7 +294,7 @@ export function buildablePages(): string[] {
     if (!n.external && !n.crossLink) seen.add(n.href);
     n.children?.forEach(walk);
   };
-  [home, about, services, industries, caseStudies, portfolio, testimonials, consultation, insights, contact].forEach(walk);
+  [home, about, services, industries, aiHub, caseStudies, portfolio, testimonials, consultation, insights, contact].forEach(walk);
   legal.forEach(walk);
   return [...seen];
 }
@@ -312,7 +310,7 @@ export function trailFor(href: string): NavNode[] {
     }
     return (n.children ?? []).some((c) => walk(c, next));
   };
-  [services, industries, caseStudies, portfolio, testimonials, consultation, insights, about, contact].some((r) =>
+  [services, industries, aiHub, caseStudies, portfolio, testimonials, consultation, insights, about, contact].some((r) =>
     walk(r, [home]),
   );
   return trail;

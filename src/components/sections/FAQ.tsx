@@ -13,7 +13,7 @@ export function FAQ() {
   const panelBase = "home-faq";
 
   return (
-    <section id="faq" className="relative border-t border-line py-16 sm:py-20">
+    <section id="faq" className="relative py-16 sm:py-20">
       <Container>
       <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div>

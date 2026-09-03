@@ -1,0 +1,43 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/landing-pages";
+import { brand } from "@/lib/content";
+import { LandingPageDevelopmentPage } from "@/page-bodies/services-lead-generation-landing-page-development";
+
+/* Was `export const metadata` plus a module-scope schema object in
+   src/app/services/lead-generation/landing-page-development/page.tsx. The head tags are handed to the layout as props;
+   the structured data is emitted below, in the same place in the document it
+   occupied before, and as static HTML rather than through the island. */
+
+const HREF = "/services/lead-generation/landing-page-development";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Landing Page Development",
+  serviceType: "Landing page design, build and conversion tracking",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  isPartOf: {
+    "@type": "Service",
+    name: "Lead Generation",
+    url: "https://enhmedia.com/services/lead-generation",
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <LandingPageDevelopmentPage client:load />
+</Base>
