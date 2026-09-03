@@ -1,5 +1,14 @@
 ---
 import { Font } from "astro:assets";
+/* Lenis's own stylesheet, which has never been imported on this site and
+   needs to be. Its first rule is `html.lenis, html.lenis body { height: auto }`
+   and the layout sets `class="h-full"` on <html>, so without it the root
+   element was pinned to 100% of the viewport (812px on a phone) while the body
+   ran to 21994px. Desktop tolerates that; mobile Safari does not, and it is
+   the classic cause of a page that will not scroll or that fights the address
+   bar. It also carries the [data-lenis-prevent] overscroll rules and the
+   iframe pointer-events guard, none of which were in effect either. */
+import "lenis/dist/lenis.css";
 import "@/styles/globals.css";
 import { SmoothScroll } from "@/components/fx/SmoothScroll";
 import { Navbar } from "@/components/sections/Navbar";

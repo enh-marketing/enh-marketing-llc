@@ -21,6 +21,14 @@ export default defineConfig({
 
   integrations: [react()],
 
+  // AI Automation moved out of Services and into the AI Hub, so its old URL
+  // has to keep working: it was already deployed at the address below, and a
+  // bare 404 is the worst outcome for anyone holding the link. Astro emits a
+  // redirect page for this in a static build.
+  redirects: {
+    "/services/ai/ai-automation": "/ai-hub/ai-automation",
+  },
+
   // Tailwind v4 through the Vite plugin rather than PostCSS. The stylesheet
   // itself is untouched: it still starts with @import "tailwindcss" and keeps
   // its @theme block.
