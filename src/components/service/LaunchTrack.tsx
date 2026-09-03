@@ -14,8 +14,9 @@ export type TrackStage = {
   title: string;
   body: string;
   glyph: GlyphVariant;
-  /** Who the stage's own sentence makes the actor. */
-  actor: "ENH" | "You";
+  /** Who the stage's own sentence makes the actor. Omit where every stage has
+   *  the same subject; the pill is then not drawn. */
+  actor?: "ENH" | "You";
 };
 
 /** Six stages as a pinned horizontal journey that crosses a launch line.
@@ -56,6 +57,7 @@ export function LaunchTrack({
   beforeLabel = "Before launch",
   afterLabel = "After launch",
   liveLabel = "Goes live",
+  softLaunch = false,
 }: {
   items: TrackStage[];
   /** Zero-based index of the stage that puts the automation live. */
@@ -63,6 +65,10 @@ export function LaunchTrack({
   beforeLabel?: string;
   afterLabel?: string;
   liveLabel?: string;
+  /** Keep the launch card's tint, number and label in brand but set its title
+   *  in the text colour like the other cards. For pages where a fully red card
+   *  reads as an alarm rather than a threshold. */
+  softLaunch?: boolean;
 }) {
   const root = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -162,7 +168,7 @@ export function LaunchTrack({
                 key={stage.no}
                 data-stage
                 className={cn(
-                  "group relative flex w-[84vw] shrink-0 snap-start flex-col overflow-hidden rounded-[1.5rem] border p-8 transition-colors duration-500 sm:w-[58vw] sm:p-10 lg:h-[28rem] lg:w-[30rem]",
+                  "group relative flex w-[84vw] shrink-0 snap-start flex-col overflow-hidden rounded-[1.5rem] border p-8 transition-colors duration-500 sm:w-[58vw] sm:p-10 lg:min-h-[28rem] lg:w-[30rem]",
                   isLaunch ? "border-brand/50 bg-ink-2" : "border-line bg-ink-2 hover:border-ash/60",
                 )}
               >
@@ -188,16 +194,18 @@ export function LaunchTrack({
                     <CapabilityGlyph variant={stage.glyph} />
                   </span>
 
-                  <span
-                    className={cn(
-                      "font-display shrink-0 rounded-full border px-3 py-1 text-[0.55rem] font-semibold uppercase transition-colors duration-500",
-                      stage.actor === "You"
-                        ? "border-brand/50 text-brand-text"
-                        : "border-line text-ash",
-                    )}
-                  >
-                    {stage.actor}
-                  </span>
+                  {stage.actor && (
+                    <span
+                      className={cn(
+                        "font-display shrink-0 rounded-full border px-3 py-1 text-[0.55rem] font-semibold uppercase transition-colors duration-500",
+                        stage.actor === "You"
+                          ? "border-brand/50 text-brand-text"
+                          : "border-line text-ash",
+                      )}
+                    >
+                      {stage.actor}
+                    </span>
+                  )}
                 </div>
 
                 {/* The rule grows on hover. Motion lives on the card's children,
@@ -235,7 +243,7 @@ export function LaunchTrack({
                 <h3
                   className={cn(
                     "font-display relative mt-5 text-[clamp(1.3rem,2.4vw,1.75rem)] font-extrabold uppercase leading-[1.12]",
-                    isLaunch ? "text-brand" : "text-snow",
+                    isLaunch && !softLaunch ? "text-brand" : "text-snow",
                   )}
                 >
                   {stage.title}
