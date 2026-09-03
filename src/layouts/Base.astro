@@ -74,15 +74,21 @@ const canonicalUrl = canonical ? new URL(canonical, Astro.site).href : undefined
         astro.config.mjs, and still exposed as --font-inter / --font-poppins so
         the stylesheet's @theme block is untouched. Inter is preloaded because
         it sets the body copy; Poppins is display-only and can arrive late. */}
-    <Font cssVariable="--font-inter" preload />
-    <Font cssVariable="--font-poppins" />
+    {/* Inter sets the body copy, so it is preloaded whole.
 
-    {/* Cabinet Grotesk has no Google provider, so it stays a Fontshare
-        stylesheet exactly as before. */}
-    <link
-      rel="stylesheet"
-      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800,900&display=swap"
-    />
+        Cabinet Grotesk preloads ONE weight, not four. It is declared at 500,
+        700, 800 and 900, and preloading all of them put ~86KB of font files at
+        high priority during load, competing with the very resources this
+        change was meant to unblock. 800 is the weight every hero headline uses
+        and accounts for 208 of the 332 font-display usages on the site; the
+        other three arrive normally and swap in against Astro's generated
+        fallback metrics, so they cost no layout shift.
+
+        Poppins is the second name in --font-display, only reached if Cabinet
+        fails, so it is never preloaded. */}
+    <Font cssVariable="--font-inter" preload />
+    <Font cssVariable="--font-cabinet" preload={[{ weight: 800 }]} />
+    <Font cssVariable="--font-poppins" />
 
     {/* Was <Script strategy="beforeInteractive">. An inline is:raw script in
         the head is the Astro equivalent and runs at the same point: before

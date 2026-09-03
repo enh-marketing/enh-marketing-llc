@@ -81,6 +81,19 @@ export default defineConfig({
       subsets: ["latin"],
     },
     {
+      // Was a render-blocking <link> to api.fontshare.com in <head>. That is
+      // the first font in --font-display, so every heading on the site waited
+      // on a third-party stylesheet before it could paint, and a slow response
+      // stalls first paint on Safari specifically. Astro 7 ships a fontshare
+      // provider, so it is self-hosted from our own origin now, with generated
+      // fallback metrics and a preload, and the third-party request is gone.
+      provider: fontProviders.fontshare(),
+      name: "Cabinet Grotesk",
+      cssVariable: "--font-cabinet",
+      weights: [500, 700, 800, 900],
+      styles: ["normal"],
+    },
+    {
       provider: fontProviders.google(),
       name: "Poppins",
       cssVariable: "--font-poppins",
