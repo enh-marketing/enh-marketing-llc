@@ -24,10 +24,18 @@ gsap.registerPlugin(ScrollTrigger);
  *  it is being spent.
  *
  *  PLACEMENT IS READ FROM THE FLAGS, not from position in the array, and the
- *  flags are cited in the content file. DOM order stays the document's order;
- *  the grid places each card explicitly, so the numbering reads 01 to 06 for a
- *  screen reader while the eye reads the phases. Below the large breakpoint the
- *  cards simply stack in document order, each carrying its phase as a chip.
+ *  flags are cited in the content file.
+ *
+ *  ONE ORDER, NOT TWO. A first build placed the cards by phase with an explicit
+ *  grid while numbering them in the document's order, so the page read 01, 02,
+ *  04, 05, 06, 03 — the benchmarking card, which belongs to every phase and so
+ *  sits last, carried the number 3. Numbers that do not ascend read as a bug,
+ *  and the mismatch was worse than cosmetic: the visual order and the DOM order
+ *  disagreed, so a screen reader and a sighted reader met the six in different
+ *  sequences. The cards are therefore sorted into phase order once, in markup,
+ *  and numbered from that order. The source document numbers none of them, so
+ *  nothing is contradicted; the content file keeps the document's own order and
+ *  this component decides how they are presented.
  *
  *  MOTION. On scroll each row rises as the reader reaches it and the start
  *  line draws across between the first two. Cards dim to 0.55 at most, so the
@@ -228,32 +236,101 @@ const SKETCH: Partial<Record<GlyphVariant, () => ReactNode>> = {
   benchmark: BenchmarkSketch,
 };
 
-type Kind = "stack" | "wide" | "band";
+/** The six, in the order they are presented: everything before the budget is
+ *  spent, then live, then after, then the one that runs through all three. The
+ *  display number comes from this order, so it always ascends down the page. */
+function order(items: TimelineItem[]) {
+  const every = (i: TimelineItem) => i.phases.length === 3;
+  const inPhase = (p: Phase) => items.filter((i) => !every(i) && i.phases.includes(p));
+  return {
+    before: inPhase("before"),
+    live: inPhase("live"),
+    after: inPhase("after"),
+    every: items.filter(every),
+  };
+}
+
+function Card({
+  item,
+  no,
+  wide,
+  band,
+}: {
+  item: TimelineItem;
+  no: number;
+  wide?: boolean;
+  band?: boolean;
+}) {
+  const Sketch = SKETCH[item.glyph];
+  // Only the band names its own phase. Every other card sits under a heading
+  // that already says it, and a chip repeating it verbatim two lines below is
+  // the same word twice.
+  const label = band ? "Every phase" : null;
+  return (
+    <article
+      className={cn(
+        "relative flex flex-col rounded-[1.5rem] border p-7 sm:p-8",
+        band ? "border-brand/40 bg-brand/[0.05]" : "border-line bg-ink-3",
+        (wide || band) && "lg:flex-row lg:items-center lg:gap-14 lg:p-10",
+      )}
+    >
+      <div className={cn("flex flex-col", (wide || band) && "lg:flex-1")}>
+        <div className="flex items-start justify-between gap-4">
+          <span className="h-10 w-10 shrink-0 text-brand">
+            <CapabilityGlyph variant={item.glyph} />
+          </span>
+          {label && (
+            <span className="font-display shrink-0 rounded-full border border-brand/50 px-3 py-1 text-[0.6875rem] font-semibold uppercase text-brand-text">
+              {label}
+            </span>
+          )}
+        </div>
+        <p className="font-display mt-7 text-[0.6875rem] font-bold tabular-nums text-brand-text">
+          {String(no).padStart(2, "0")}
+        </p>
+        <h3
+          className={cn(
+            "font-display mt-2 font-extrabold uppercase leading-[1.12] text-snow",
+            wide || band
+              ? "text-[clamp(1.3rem,2.4vw,1.9rem)]"
+              : "text-[clamp(1.15rem,1.9vw,1.5rem)]",
+          )}
+        >
+          {item.title}
+        </h3>
+        <p className={cn("mt-4 leading-relaxed text-fog", (wide || band) && "max-w-2xl sm:text-lg")}>
+          {item.body}
+        </p>
+      </div>
+      {Sketch && (
+        <div className={cn("mt-8 lg:mt-0", band ? "lg:w-[30%] lg:shrink-0" : "lg:w-[40%] lg:shrink-0")}>
+          <Sketch />
+        </div>
+      )}
+    </article>
+  );
+}
+
+function PhaseLabel({ children }: { children: string }) {
+  return (
+    <p aria-hidden className="font-display mb-4 text-[0.6875rem] font-semibold uppercase text-ash">
+      {children}
+    </p>
+  );
+}
 
 export function CampaignTimeline({
   items,
   startLabel = "Campaign starts",
-  allLabel = "Every phase",
 }: {
   items: TimelineItem[];
   startLabel?: string;
-  allLabel?: string;
 }) {
   const root = useRef<HTMLDivElement>(null);
-
-  /* Rows on the large grid, read from the flags:
-       1 label   2 before cards   3 start line   4 label   5 live card
-       6 label   7 after card     8 band                                  */
-  const before = items.filter((i) => i.phases.length < 3 && i.phases.includes("before"));
-  const cols = Math.max(1, before.length);
-  const place = (item: TimelineItem): { col: string; row: string; kind: Kind } => {
-    if (item.phases.length === 3) return { col: `1 / span ${cols}`, row: "8", kind: "band" };
-    if (item.phases.includes("before")) return { col: `${before.indexOf(item) + 1}`, row: "2", kind: "stack" };
-    if (item.phases.includes("live")) return { col: `1 / span ${cols}`, row: "5", kind: "wide" };
-    return { col: `1 / span ${cols}`, row: "7", kind: "wide" };
-  };
-  const phaseLabel = (item: TimelineItem) =>
-    item.phases.length === 3 ? allLabel : LABEL[item.phases[0]];
+  const { before, live, after, every } = order(items);
+  // The number each card carries, assigned once from the presented order.
+  let n = 0;
+  const next = () => (n += 1);
 
   useEffect(() => {
     const el = root.current;
@@ -264,107 +341,74 @@ export function CampaignTimeline({
       if (!ctx.conditions?.motion) return;
       const q = gsap.utils.selector(el);
       const start = q("[data-start]");
-      const rows = ["2", "5", "7", "8"].map((r) => q(`[data-row="${r}"]`));
+      const groups = q("[data-group]");
 
       gsap.set(start, { scaleX: 0, transformOrigin: "left center" });
-      rows.forEach((r) => gsap.set(r, { opacity: 0.55, y: 18 }));
+      gsap.set(groups, { opacity: 0.55, y: 18 });
 
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: el, start: "top 70%", end: "bottom 78%", scrub: 0.7 },
+        scrollTrigger: { trigger: el, start: "top 72%", end: "bottom 78%", scrub: 0.7 },
       });
-      tl.to(rows[0], { opacity: 1, y: 0, duration: 0.18, stagger: 0.05, ease: "power2.out" }, 0)
-        .to(start, { scaleX: 1, duration: 0.18, ease: "none" }, 0.2)
-        .to(rows[1], { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, 0.38)
-        .to(rows[2], { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, 0.58)
-        .to(rows[3], { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" }, 0.78);
+      tl.to(groups[0], { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" }, 0)
+        .to(start, { scaleX: 1, duration: 0.2, ease: "none" }, 0.22)
+        .to(groups.slice(1), { opacity: 1, y: 0, duration: 0.2, stagger: 0.22, ease: "power2.out" }, 0.44);
 
       return () => {
         tl.scrollTrigger?.kill();
         tl.kill();
-        gsap.set([start, ...rows], { clearProps: "all" });
+        gsap.set([start, ...groups], { clearProps: "all" });
       };
     });
 
     return () => mm.revert();
   }, [items.length]);
 
-  const g = (col: string, row: string) => ({ ["--gc" as string]: col, ["--gr" as string]: row });
-  const placed = "lg:[grid-column:var(--gc)] lg:[grid-row:var(--gr)]";
-
   return (
     <div ref={root}>
-      <ol
-        className="grid gap-5 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-0"
-        style={{ gridTemplateRows: undefined }}
-      >
-        {/* Phase labels and the start line. Desktop only: below lg the cards
-            stack in document order and each carries its phase as a chip. */}
-        <li aria-hidden style={g(`1 / span ${cols}`, "1")} className={cn("hidden pb-4 lg:block", placed)}>
-          <span className="font-display text-[0.6875rem] font-semibold uppercase text-ash">{LABEL.before}</span>
-        </li>
-        <li aria-hidden style={g(`1 / span ${cols}`, "3")} className={cn("relative hidden py-10 lg:block", placed)}>
-          <span data-start className="block h-px w-full bg-brand" />
-          <span className="font-display absolute left-0 top-[calc(50%+10px)] text-[0.6875rem] font-semibold uppercase text-brand-text">
-            {startLabel}
-          </span>
-        </li>
-        <li aria-hidden style={g(`1 / span ${cols}`, "4")} className={cn("hidden pb-4 lg:block", placed)}>
-          <span className="font-display text-[0.6875rem] font-semibold uppercase text-ash">{LABEL.live}</span>
-        </li>
-        <li aria-hidden style={g(`1 / span ${cols}`, "6")} className={cn("hidden pb-4 pt-5 lg:block", placed)}>
-          <span className="font-display text-[0.6875rem] font-semibold uppercase text-ash">{LABEL.after}</span>
-        </li>
+      {/* Before the budget is spent. */}
+      <div data-group>
+        <PhaseLabel>{LABEL.before}</PhaseLabel>
+        <div className="grid gap-5 lg:grid-cols-3">
+          {before.map((item) => (
+            <Card key={item.title} item={item} no={next()} />
+          ))}
+        </div>
+      </div>
 
-        {items.map((item) => {
-          const p = place(item);
-          const Sketch = SKETCH[item.glyph];
-          const wide = p.kind !== "stack";
-          return (
-            <li
-              key={item.no}
-              data-row={p.row}
-              style={g(p.col, p.row)}
-              className={cn(
-                "relative flex flex-col rounded-[1.5rem] border p-7 sm:p-8",
-                placed,
-                p.kind === "band" ? "border-brand/40 bg-brand/[0.05] lg:mt-5" : "border-line bg-ink-3",
-                wide && "lg:flex-row lg:items-center lg:gap-14 lg:p-10",
-              )}
-            >
-              <div className={cn("flex flex-col", wide && "lg:flex-1")}>
-                <div className="flex items-start justify-between gap-4">
-                  <span className="h-10 w-10 shrink-0 text-brand">
-                    <CapabilityGlyph variant={item.glyph} />
-                  </span>
-                  <span
-                    className={cn(
-                      "font-display shrink-0 rounded-full border px-3 py-1 text-[0.6875rem] font-semibold uppercase",
-                      p.kind === "band" ? "border-brand/50 text-brand-text" : "border-line text-ash",
-                    )}
-                  >
-                    {phaseLabel(item)}
-                  </span>
-                </div>
-                <p className="font-display mt-7 text-[0.6875rem] font-bold tabular-nums text-brand-text">{item.no}</p>
-                <h3
-                  className={cn(
-                    "font-display mt-2 font-extrabold uppercase leading-[1.12] text-snow",
-                    wide ? "text-[clamp(1.3rem,2.4vw,1.9rem)]" : "text-[clamp(1.15rem,1.9vw,1.5rem)]",
-                  )}
-                >
-                  {item.title}
-                </h3>
-                <p className={cn("mt-4 leading-relaxed text-fog", wide && "max-w-2xl sm:text-lg")}>{item.body}</p>
-              </div>
-              {Sketch && (
-                <div className={cn("mt-8 lg:mt-0", p.kind === "band" ? "lg:w-[30%] lg:shrink-0" : "lg:w-[40%] lg:shrink-0")}>
-                  <Sketch />
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ol>
+      {/* The line the campaign goes live at, drawn across the full width. */}
+      <div aria-hidden className="relative py-10">
+        <span data-start className="block h-px w-full bg-brand" />
+        <span className="font-display absolute left-0 top-[calc(50%+10px)] text-[0.6875rem] font-semibold uppercase text-brand-text">
+          {startLabel}
+        </span>
+      </div>
+
+      {/* While it runs. */}
+      <div data-group>
+        <PhaseLabel>{LABEL.live}</PhaseLabel>
+        <div className="grid gap-5">
+          {live.map((item) => (
+            <Card key={item.title} item={item} no={next()} wide />
+          ))}
+        </div>
+      </div>
+
+      {/* And after. */}
+      <div data-group className="mt-10">
+        <PhaseLabel>{LABEL.after}</PhaseLabel>
+        <div className="grid gap-5">
+          {after.map((item) => (
+            <Card key={item.title} item={item} no={next()} wide />
+          ))}
+        </div>
+      </div>
+
+      {/* What runs through all three. */}
+      <div data-group className="mt-5">
+        {every.map((item) => (
+          <Card key={item.title} item={item} no={next()} band />
+        ))}
+      </div>
     </div>
   );
 }
