@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -36,7 +37,7 @@ export function SourceQuote({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const play = reduced || inView;
 
   return (

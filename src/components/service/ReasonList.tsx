@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { SurfaceCard, CardTitle, CardBody } from "@/components/ui/SurfaceCard";
@@ -38,7 +38,7 @@ export function ReasonList({
   lede?: string;
   reasons: Reason[];
 }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   return (
     <section id={id} data-section={label} className="relative py-16 sm:py-20">

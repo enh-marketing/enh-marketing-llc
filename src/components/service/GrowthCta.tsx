@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Container } from "@/components/ui/Container";
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { Modal } from "@/components/ui/Modal";
@@ -47,7 +48,7 @@ function MagneticCta({
   onClick: () => void;
 }) {
   const ref = useRef<HTMLButtonElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, { stiffness: 240, damping: 20, mass: 0.3 });

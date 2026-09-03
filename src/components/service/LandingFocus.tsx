@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 
 /** The hero visual: a page with choices, collapsing into a page with one.
  *
@@ -25,7 +25,7 @@ import { useReducedMotion } from "motion/react";
  *  resolved state — the focused page, which is the thing being argued for. */
 export function LandingFocus({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = root.current;

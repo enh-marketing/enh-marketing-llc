@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { assistants } from "@/content/services/aeo-geo";
 
 /** The hero visual: an assistant composing an answer, and the sources it names.
@@ -35,7 +35,7 @@ const LINES = [
 
 export function AnswerStream({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const [turn, setTurn] = useState(0);
 
   const names = assistants.rows.map((r) => r.name);

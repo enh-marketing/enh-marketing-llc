@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { ChannelIcon } from "@/components/service/ChannelIcon";
 import { cn } from "@/lib/cn";
 import type { Channel } from "@/content/services/campaign-intelligence";
@@ -65,7 +66,7 @@ function layout(shares: number[]) {
 }
 
 export function BudgetSplit({ channels, className }: { channels: Channel[]; className?: string }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const [step, setStep] = useState(0);
 
   useEffect(() => {

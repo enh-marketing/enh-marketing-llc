@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 
 /** The hero visual: a storefront on a phone, resolving into a checkout.
  *
@@ -26,7 +26,7 @@ import { useReducedMotion } from "motion/react";
  *  its resting state, which is a complete, sensible picture on its own. */
 export function StorefrontPreview({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = root.current;
