@@ -10,6 +10,7 @@ import { cn } from "@/lib/cn";
 import { AnswerAnatomy } from "@/components/service/AnswerAnatomy";
 import { StoreShelf } from "@/components/service/StoreShelf";
 import { StoreArchitecture } from "@/components/service/StoreArchitecture";
+import { VenueFloor } from "@/components/service/VenueFloor";
 import { CampaignBoard } from "@/components/service/CampaignBoard";
 import { ProcessTrack } from "@/components/service/ProcessTrack";
 import { ProfileAnatomy } from "@/components/service/ProfileAnatomy";
@@ -53,6 +54,7 @@ export type DiagramSpec =
   | { kind: "answer" }
   | { kind: "shelf" }
   | { kind: "storearch" }
+  | { kind: "venue" }
   | { kind: "board" }
   | { kind: "track"; axis?: [string, string]; openEnded?: boolean }
   | { kind: "profile"; anchors: ServiceAnchor[] }
@@ -222,6 +224,8 @@ export function PinnedExplorer({
         return <StoreShelf count={items.length} active={active} pin={pin} />;
       case "storearch":
         return <StoreArchitecture count={items.length} active={active} pin={pin} />;
+      case "venue":
+        return <VenueFloor count={items.length} active={active} pin={pin} />;
       case "board":
         return <CampaignBoard active={active} pin={pin} />;
       case "profile":

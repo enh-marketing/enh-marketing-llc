@@ -1125,3 +1125,234 @@ summary {
     animation: none !important;
   }
 }
+
+/* ---- Run of show (Event Video Production) ----
+   The hero drawing. Only the camera marker and the instant line animate; the
+   lanes and their blocks are static, so a browser that never runs an animation
+   still renders the full programme with every track overlapping. Nothing here
+   carries words. */
+@keyframes ros-mark {
+  from {
+    transform: translate(-50%, -50%) scale(0.55);
+  }
+
+  to {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes ros-now {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.ros-mark {
+  animation: ros-mark 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ros-now {
+  animation: ros-now 420ms ease-out both;
+}
+
+/* ---- Coverage plan (Event Video Production) ----
+   Transform-only throughout. Every element in this section carries copy -- the
+   three cases, the consequence and all eight outputs -- so nothing may start
+   from an opacity of zero. */
+@keyframes cov-in {
+  from {
+    transform: translateY(10px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes cov-out {
+  from {
+    transform: translateX(-8px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.is-in .cov-in {
+  animation: cov-in 540ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.is-in .cov-out {
+  animation: cov-out 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .ros-mark,
+  .ros-now,
+  .is-in .cov-in,
+  .is-in .cov-out {
+    animation: none !important;
+  }
+}
+
+/* ---- Venue floor (Event Video Production) ----
+   The room redraws whenever a different event is selected. Transform only: an
+   opacity fade with animation-fill-mode: both parks every shape at zero when
+   the animation clock is slow to start, which would leave an empty room and no
+   way to tell that from a rendering bug. Scaling from 0.94 leaves the whole
+   plan visible whatever the clock does. Per-shape opacity is set as an SVG
+   attribute and is never animated. */
+@keyframes venue-el {
+  from {
+    transform: scale(0.94);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.venue-plan .venue-el {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: venue-el 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .venue-plan .venue-el {
+    animation: none !important;
+  }
+}
+
+/* ---- Said once (Explainer Video Production) ----
+   The hero drawing. Only the lit meeting animates, through a colour change on
+   a shape that carries no words; the rows, the joins and the single video are
+   static, so a browser that never animates still renders the whole argument. */
+@keyframes said-block {
+  from {
+    transform: scaleX(0.88);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.said-block {
+  transform-origin: left center;
+  transform-box: fill-box;
+  transition: opacity 500ms ease;
+}
+
+.said-block.is-lit {
+  animation: said-block 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---- Change window (Explainer Video Production) ----
+   Transform only. Every row here carries a step title and a paragraph, so
+   nothing starts from an opacity of zero; the wedge behind them scales from
+   its top edge, which leaves it visible at every frame including the first. */
+@keyframes cw-in {
+  from {
+    transform: translateY(10px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes cw-node {
+  from {
+    transform: scale(0.7);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes cw-wedge {
+  from {
+    transform: scaleY(0.82);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.is-in .cw-in {
+  animation: cw-in 540ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.is-in .cw-node {
+  animation: cw-node 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.is-in .cw-wedge {
+  transform-origin: top center;
+  animation: cw-wedge 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .said-block.is-lit,
+  .is-in .cw-in,
+  .is-in .cw-node,
+  .is-in .cw-wedge {
+    animation: none !important;
+  }
+}
+
+/* ---- Page drift (Facebook Marketing) ----
+   The hero drawing. Only the lit arrival animates, and it animates position,
+   not opacity: both lines and every arrival mark are drawn statically, so a
+   browser that never animates still shows the drift and the people arriving at
+   it. Nothing here carries words. */
+@keyframes drift-hit {
+  from {
+    transform: translateY(-5px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.drift-hit {
+  animation: drift-hit 460ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---- Split ledger (Facebook Marketing) ----
+   Transform only. The divider is a static rule: it is the one element that
+   must never look like it is about to join the two columns, so it does not
+   move, grow or fade. */
+@keyframes ledger-in {
+  from {
+    transform: translateY(10px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+.is-in .ledger-in {
+  animation: ledger-in 540ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .drift-hit,
+  .is-in .ledger-in {
+    animation: none !important;
+  }
+}

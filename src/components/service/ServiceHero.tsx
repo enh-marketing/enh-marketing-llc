@@ -19,6 +19,7 @@ export function ServiceHero({
   sub,
   primary,
   secondary,
+  secondaryHref,
   phoneHref,
   formTitle,
   formFields,
@@ -34,8 +35,13 @@ export function ServiceHero({
   sub: string;
   /** Opens the enquiry form in a dialog. */
   primary: string;
-  /** Places a call. */
+  /** Places a call, unless secondaryHref sends it somewhere else. */
   secondary: string;
+  /** Where the second button goes when its label does not promise a phone
+   *  call. The Event Video document asks for "View Our Portfolio" here, and a
+   *  button saying that must not dial a number; it points at this page's own
+   *  Work section, which is the portfolio. Omit for the usual call button. */
+  secondaryHref?: string;
   phoneHref: string;
   formTitle: string;
   formFields: FormField[];
@@ -116,17 +122,31 @@ export function ServiceHero({
           </button>
 
           <a
-            href={`tel:${phoneHref}`}
+            href={secondaryHref ?? `tel:${phoneHref}`}
             className="inline-flex shrink-0 items-center justify-center gap-3 whitespace-nowrap rounded-full border border-line px-7 py-3.5 text-sm font-semibold text-snow transition-colors duration-300 hover:border-brand hover:text-brand"
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path
-                d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-              />
-            </svg>
+            {/* The handset belongs to a call and nothing else. A button that
+                sends the reader down the page gets the arrow instead. */}
+            {secondaryHref ? (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path
+                  d="M12 4.5v15M6 13.5 12 19.5l6-6"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ) : (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path
+                  d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
             {secondary}
           </a>
         </Rise>
