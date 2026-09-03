@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import type { PartnerBadge } from "@/lib/content";
 import { cn } from "@/lib/cn";
 
@@ -54,7 +55,7 @@ export function PartnerBadges({
    *  share its axis; "center" when it stands alone in a band of its own. */
   align?: "center" | "start";
 }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   if (badges.length === 0) return null;
 
   const plate =

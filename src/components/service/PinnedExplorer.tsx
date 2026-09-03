@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { CapabilityGlyph, type GlyphVariant } from "@/components/service/CapabilityGlyph";
@@ -144,7 +145,7 @@ export function PinnedExplorer({
   children?: ReactNode;
 }) {
   const enhanced = useEnhanced("(min-width: 1024px)");
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const [active, setActive] = useState(0);
   /** The selector's tab buttons, for roving focus. */
   const pinRefs = useRef<(HTMLButtonElement | null)[]>([]);

@@ -136,10 +136,11 @@ const industries: NavNode = {
 /* -------------------------------------------------------------------- ai hub */
 
 // Almost every node here leaves the site, and AI_HUB_HREF is a placeholder the
-// AI Hub property has not been wired to yet. The one exception is
-// "AI & Automation", which is a real page on this site and belongs to this
-// pillar rather than to Services: it is the AI Hub's own subpage, so it is a
-// plain internal node here and Services no longer lists it at all.
+// AI Hub property has not been wired to yet. The exceptions are
+// "AI & Automation" and "Campaign Intelligence", which are real pages on this
+// site and belong to this pillar rather than to Services: they are the AI Hub's
+// own subpages, so they are plain internal nodes here and Services does not
+// list them at all.
 //
 // Because this branch owns a built page, `aiHub` has to appear in the root
 // lists that buildablePages() and trailFor() walk. It did not before, when
@@ -153,7 +154,7 @@ const aiHub: NavNode = {
     { label: "AI Search Visibility (AEO & GEO)", href: AI_HUB_HREF, external: true },
     { label: "AI & Automation", href: "/ai-hub/ai-automation" },
     { label: "AI Creative Production", href: AI_HUB_HREF, external: true },
-    { label: "Campaign Intelligence", href: AI_HUB_HREF, external: true },
+    { label: "Campaign Intelligence", href: "/ai-hub/campaign-intelligence" },
     { label: "Intelligent Web", href: AI_HUB_HREF, external: true },
     { label: "Data & Dashboards", href: AI_HUB_HREF, external: true },
     { label: "AI Workshops & Training", href: AI_HUB_HREF, external: true },
@@ -245,6 +246,7 @@ const BUILT = new Set([
   "/services/lead-generation",
   "/services/lead-generation/landing-page-development",
   "/ai-hub/ai-automation",
+  "/ai-hub/campaign-intelligence",
   "/services/lead-generation/b2b-lead-generation",
   "/services/video-marketing/corporate-video",
   "/services/performance-marketing",

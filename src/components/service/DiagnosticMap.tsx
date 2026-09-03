@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 
 /** The five checks, as five reads on one process.
@@ -62,7 +62,7 @@ export function DiagnosticMap({
   const [taken, setTaken] = useState(false);
   const [held, setHeld] = useState(false);
   const [paused, setPaused] = useState(false);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   /* ------------------------------------------------------------- autoplay --
    *

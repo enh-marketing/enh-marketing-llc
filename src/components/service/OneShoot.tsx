@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 
 /** The hero visual: one shoot day, and the formats that come out of it.
@@ -20,7 +20,7 @@ import { cn } from "@/lib/cn";
  *  NOT ONE WORD OF TEXT. Motion is opacity and scaleX only. */
 export function OneShoot({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = root.current;

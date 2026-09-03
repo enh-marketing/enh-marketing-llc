@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 
 /** The hero visual: one tile in a package, and then the same channel given a
@@ -31,7 +31,7 @@ import { cn } from "@/lib/cn";
  *  panel present. */
 export function TileBreakout({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = root.current;

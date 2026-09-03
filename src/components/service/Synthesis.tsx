@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -29,7 +30,7 @@ export function Synthesis({
   outcome: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const inView = useInView(ref, { once: true, margin: "0px 0px -20% 0px" });
   const [hover, setHover] = useState<"a" | "b" | null>(null);
 

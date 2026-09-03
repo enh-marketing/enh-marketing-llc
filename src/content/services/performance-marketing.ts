@@ -10,7 +10,8 @@ export type Stage = { no: string; title: string; body: string };
 export type CompareRow = { area: string; performance: string; digital: string };
 export type Faq = {
   q: string;
-  a: string;
+  /** One paragraph, or several where the source writes more than one. */
+  a: string | string[];
   /** A phrase inside `a` to render as a link. The answer text stays complete
    *  and unbracketed either way, so the FAQ structured data is unaffected and a
    *  page that omits this simply gets prose. */

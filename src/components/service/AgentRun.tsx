@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 
 /** The hero visual: one run of an agent, drawn as the mechanism the document
@@ -98,7 +98,10 @@ const T = {
 };
 
 export function AgentRun({ className }: { className?: string }) {
-  const reduced = useReducedMotion();
+  // Hydration-safe: see usePrefersReducedMotion. This component renders a
+  // different tree under reduced motion, so reading the query during the first
+  // client render used to fail hydration on this page.
+  const reduced = usePrefersReducedMotion();
   const [run, setRun] = useState(0);
 
   useEffect(() => {

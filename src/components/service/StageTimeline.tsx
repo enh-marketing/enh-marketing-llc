@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { motion, useMotionValueEvent, useScroll, useTransform } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { cn } from "@/lib/cn";
@@ -41,7 +42,7 @@ export function StageTimeline({
   mark?: { variant: "progression" | "growth" | "network" | "contrast" | "ecosystem"; label: string };
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const [active, setActive] = useState(0);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.62", "end 0.72"] });

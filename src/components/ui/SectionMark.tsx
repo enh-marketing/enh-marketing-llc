@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import { motion, useInView, useMotionValue, useSpring } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 
 /** Section marks: one small, subject-specific diagram per section, sitting in
  *  the space beside the heading.
@@ -163,7 +164,10 @@ const VARIANTS: Record<Variant, () => React.ReactElement> = {
 
 export function SectionMark({ variant, label }: { variant: Variant; label: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  // Hydration-safe: see usePrefersReducedMotion. Both the style below and the
+  // shape itself are conditional on this, so reading it during the first client
+  // render mismatched the server on every page carrying a section mark.
+  const reduced = usePrefersReducedMotion();
   const inView = useInView(ref, { once: true, margin: "0px 0px -15% 0px" });
 
   const x = useMotionValue(0);

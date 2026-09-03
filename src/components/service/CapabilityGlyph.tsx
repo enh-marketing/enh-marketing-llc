@@ -54,6 +54,18 @@ export type GlyphVariant =
   | "reseat"
   | "support"
   | "ledger"
+  /* ---- campaign intelligence. Forecasting is drawn as ranges and lines, never
+     as figures: a band is a range, a tick is a benchmark, a fork is a scenario,
+     two lines side by side are forecast against actual. */
+  | "forecast"
+  | "mix"
+  | "benchmark"
+  | "scenario"
+  | "compare"
+  | "goal"
+  | "align"
+  | "range"
+  | "adjust"
   /* ---- B2B lead generation. Three marks the set had no equivalent for: a
      search with commercial intent behind it, a timed email sequence, and a
      form whose length is a qualification decision. Borrowing `crawler` for
@@ -549,6 +561,128 @@ function FormGlyph() {
   );
 }
 
+/* ---- campaign intelligence. Forecasting is drawn as ranges and lines, never
+   as figures: a band is a range, a tick is a benchmark, a fork is a scenario,
+   two lines side by side are forecast against actual. ---- */
+
+/** Pre-campaign forecasting: a range drawn ahead of any result. */
+function Forecast() {
+  return (
+    <>
+      <path d="M7 40h34" {...S} opacity="0.45" />
+      <path d="M9 30c8-4 14-10 30-14" {...S} strokeDasharray="3 3" opacity="0.7" />
+      <path d="M9 38c8-4 14-10 30-14" {...S} strokeDasharray="3 3" opacity="0.7" />
+      <path d="M9 34c8-4 14-10 30-14" {...S} className="glyph-rise" />
+      <circle cx="39" cy="20" r="2.5" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
+/** Media mix: one budget, divided. */
+function Mix() {
+  return (
+    <>
+      <rect x="7" y="10" width="34" height="6" rx="2" {...S} />
+      <path d="M12 16v8M24 16v8M36 16v8" {...S} opacity="0.5" />
+      <rect x="7" y="24" width="12" height="6" rx="2" {...S} className="glyph-rise" />
+      <rect x="21" y="24" width="9" height="6" rx="2" {...S} className="glyph-rise" style={d(1)} />
+      <rect x="32" y="24" width="9" height="6" rx="2" {...S} className="glyph-rise" style={d(2)} />
+      <path d="M9 38h8M23 38h5M34 38h5" {...S} opacity="0.6" />
+    </>
+  );
+}
+
+/** Benchmark: a reading set against a category range. */
+function Benchmark() {
+  return (
+    <>
+      <path d="M7 24h34" {...S} opacity="0.45" />
+      <path d="M13 20v8M41 20v8" {...S} opacity="0.7" />
+      <rect x="13" y="20" width="28" height="8" rx="2" {...S} opacity="0.4" />
+      <path d="M27 12v24" {...S} className="glyph-pulse" />
+      <circle cx="27" cy="24" r="3" {...S} />
+    </>
+  );
+}
+
+/** Scenario: one plan, forking into what a change would do. */
+function Scenario() {
+  return (
+    <>
+      <path d="M7 24h12" {...S} />
+      <path d="M19 24c6 0 6-10 12-10h10" {...S} className="glyph-rise" />
+      <path d="M19 24h22" {...S} opacity="0.55" />
+      <path d="M19 24c6 0 6 10 12 10h10" {...S} className="glyph-rise" style={d(1)} />
+      <circle cx="19" cy="24" r="2.5" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
+/** Forecast against actual: the range, and the line inside it. */
+function Compare() {
+  return (
+    <>
+      <path d="M7 40h34" {...S} opacity="0.45" />
+      <path d="M9 30c10-2 16-8 30-12" {...S} opacity="0.5" />
+      <path d="M9 38c10-2 16-8 30-12" {...S} opacity="0.5" />
+      <path d="M9 36c8-1 14-5 22-9" {...S} className="animate-dash" />
+      <circle cx="31" cy="27" r="2.5" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
+/** The goal: one result agreed before anything is calculated. */
+function Goal() {
+  return (
+    <>
+      <circle cx="24" cy="24" r="16" {...S} opacity="0.4" />
+      <circle cx="24" cy="24" r="9" {...S} opacity="0.7" />
+      <circle cx="24" cy="24" r="2.5" {...S} className="glyph-pulse" />
+      <path d="M24 4v6M24 38v6M4 24h6M38 24h6" {...S} opacity="0.5" />
+    </>
+  );
+}
+
+/** Align: sources that disagree, brought onto one line. */
+function Align() {
+  return (
+    <>
+      <rect x="6" y="12" width="10" height="8" rx="2" {...S} opacity="0.6" />
+      <rect x="19" y="8" width="10" height="8" rx="2" {...S} opacity="0.6" />
+      <rect x="32" y="14" width="10" height="8" rx="2" {...S} opacity="0.6" />
+      <path d="M11 20v12M24 16v16M37 22v10" {...S} opacity="0.5" strokeDasharray="2 3" />
+      <path d="M6 34h36" {...S} className="glyph-scan" />
+      <circle cx="11" cy="34" r="2" {...S} />
+      <circle cx="24" cy="34" r="2" {...S} />
+      <circle cx="37" cy="34" r="2" {...S} />
+    </>
+  );
+}
+
+/** Range: the bracket a forecast is stated in. */
+function Range() {
+  return (
+    <>
+      <path d="M12 12v24M36 12v24" {...S} />
+      <path d="M8 12h4M8 36h4M36 12h4M36 36h4" {...S} opacity="0.6" />
+      <path d="M12 24h24" {...S} opacity="0.4" strokeDasharray="2 3" />
+      <rect x="16" y="18" width="16" height="12" rx="2" {...S} className="glyph-pulse" />
+    </>
+  );
+}
+
+/** Adjust: the allocation moved as new data arrives. */
+function Adjust() {
+  return (
+    <>
+      <path d="M8 14h32M8 24h32M8 34h32" {...S} opacity="0.4" />
+      <circle cx="30" cy="14" r="3" {...S} className="glyph-rise" />
+      <circle cx="16" cy="24" r="3" {...S} className="glyph-rise" style={d(1)} />
+      <circle cx="34" cy="34" r="3" {...S} className="glyph-rise" style={d(2)} />
+    </>
+  );
+}
+
 const GLYPHS: Record<GlyphVariant, () => React.JSX.Element> = {
   structure: Structure,
   creative: Creative,
@@ -584,6 +718,15 @@ const GLYPHS: Record<GlyphVariant, () => React.JSX.Element> = {
   reseat: Reseat,
   support: Support,
   ledger: Ledger,
+  forecast: Forecast,
+  mix: Mix,
+  benchmark: Benchmark,
+  scenario: Scenario,
+  compare: Compare,
+  goal: Goal,
+  align: Align,
+  range: Range,
+  adjust: Adjust,
   intent: Intent,
   sequence: Sequence,
   form: FormGlyph,

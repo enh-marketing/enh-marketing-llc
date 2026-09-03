@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -28,7 +29,7 @@ const BRANCHES = [40, 95, 130, 165, 220];
 export function FanOutDiagram({ className }: { className?: string }) {
   const ref = useRef<SVGSVGElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const play = reduced || inView;
 
   return (

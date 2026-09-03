@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 
 /** The hero visual: professional records checked against four criteria, and
@@ -43,7 +43,7 @@ const CRITERIA = 4;
 
 export function ProfileMatch({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = root.current;

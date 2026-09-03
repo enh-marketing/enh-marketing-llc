@@ -87,7 +87,14 @@ export function ServiceHero({
 
         {/* The copy stays on a reading measure; the button row is deliberately
             outside it, because together the two labels need ~567px and would
-            wrap inside max-w-lg. */}
+            wrap inside max-w-lg.
+
+            The buttons themselves wrap their own label below `sm`. They were
+            whitespace-nowrap at every width, so a long primary label — "Book a
+            Campaign Intelligence Diagnostic" is the longest on the site — ran
+            354px wide inside a 327px column on a 375px phone. The body clips
+            horizontal overflow, so there was no scrollbar to notice: the button
+            was simply cut off at the screen edge on an iPhone SE and smaller. */}
         <div className="mt-12 max-w-xl lg:max-w-lg">
           <Rise delay={0.15}>
             {/* Also height-aware, for the same reason as the heading: this
@@ -106,7 +113,7 @@ export function ServiceHero({
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="group inline-flex shrink-0 items-center justify-center gap-3 whitespace-nowrap rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-deep"
+            className="group inline-flex max-w-full shrink-0 items-center justify-center gap-3 whitespace-normal rounded-full bg-brand px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-deep sm:whitespace-nowrap"
           >
             {primary}
             <span className="relative flex h-4 w-4 items-center justify-center overflow-hidden">
@@ -117,7 +124,7 @@ export function ServiceHero({
 
           <a
             href={`tel:${phoneHref}`}
-            className="inline-flex shrink-0 items-center justify-center gap-3 whitespace-nowrap rounded-full border border-line px-7 py-3.5 text-sm font-semibold text-snow transition-colors duration-300 hover:border-brand hover:text-brand"
+            className="inline-flex max-w-full shrink-0 items-center justify-center gap-3 whitespace-normal rounded-full border border-line px-7 py-3.5 text-center text-sm font-semibold text-snow transition-colors duration-300 hover:border-brand hover:text-brand sm:whitespace-nowrap"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
               <path
