@@ -1,0 +1,117 @@
+<h2>Page map: Campaign Intelligence</h2>
+<p class="subtitle">Document order, top to bottom. Left: the section as the document names it. Middle: what it becomes on the page. Right: whether it reuses an existing component as-is, reuses one with a new drawing, or needs a new component. Sections marked "choice ahead" get their own screen next.</p>
+
+<style>
+  .pm { display: grid; grid-template-columns: 34px 1fr; gap: 0 14px; margin: 18px 0 8px; }
+  .pm .idx { font: 700 11px ui-monospace, monospace; color: #9c000a; padding-top: 14px; }
+  .pm .row { border: 1px solid #d2cdc3; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; background: #fff; display: grid; grid-template-columns: 1.1fr 1.6fr 0.9fr; gap: 14px; align-items: start; }
+  .pm .row h4 { margin: 0 0 4px; font-size: 13px; }
+  .pm .row p { margin: 0; font-size: 12px; line-height: 1.5; color: #57544f; }
+  .pm .tag { display: inline-block; font: 600 10px Inter, system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; border: 1px solid #d2cdc3; color: #57544f; margin-bottom: 6px; }
+  .pm .tag.reuse { border-color: #8fbf8f; color: #2f6b2f; }
+  .pm .tag.draw { border-color: #e8000d; color: #9c000a; }
+  .pm .tag.new { background: #e8000d; border-color: #e8000d; color: #fff; }
+  .pm .tag.choice { background: #15120f; border-color: #15120f; color: #fff; }
+  .pm .wire { height: 54px; border-radius: 8px; background: repeating-linear-gradient(90deg, #efece7 0 6px, #f7f7f6 6px 12px); border: 1px solid #e6e3de; position: relative; overflow: hidden; }
+  .pm .wire b { position: absolute; inset: 8px; border-radius: 6px; background: #fff; border: 1px solid #d2cdc3; }
+  .pm .wire b.half { right: 52%; } .pm .wire b.half2 { left: 52%; }
+  .pm .wire b.red { border-color: #e8000d; background: rgba(232,0,13,.06); }
+  .pm .wire b.bar { inset: 22px 8px; height: 10px; background: #15120f; border: 0; }
+</style>
+
+<div class="pm">
+
+  <div class="idx">00</div>
+  <div class="row">
+    <div><h4>Banner</h4><p>H1 "Campaign Intelligence in Dubai", intro paragraph, two CTAs, trust strip.</p></div>
+    <div><p><b>ServiceHero</b> as on every service page. Right-hand panel carries the chosen hero drawing: one budget bar dividing into Google, Meta, LinkedIn, TikTok and YouTube, rebalancing on a loop. Primary opens the diagnostic dialog, secondary is a phone call.</p></div>
+    <div><span class="tag reuse">reuse</span> <span class="tag new">new drawing: BudgetSplit</span><div class="wire"><b class="half"></b><b class="half2 red"></b></div></div>
+  </div>
+
+  <div class="idx">01</div>
+  <div class="row">
+    <div><h4>What We Do</h4><p>Two paragraphs: before the campaign, and once it is running.</p></div>
+    <div><p><b>Narrative</b>: the decoded paragraph used on AI Automation, Performance Marketing and AEO &amp; GEO. First sentence as the question, the second paragraph decoding word by word with "objective, budget, audience, channels, performance data" lighting as they clear. The two CTAs repeat beneath, as on AI Automation.</p></div>
+    <div><span class="tag reuse">reuse as-is</span><div class="wire"><b></b></div></div>
+  </div>
+
+  <div class="idx">02</div>
+  <div class="row">
+    <div><h4>What Campaign Intelligence Covers</h4><p>Six items: Pre-Campaign Forecasting, Media Mix Planning, Category Benchmarking, Scenario Planning, Early Performance Alerts, Forecast Versus Actual Reporting.</p></div>
+    <div><p>The six are not equal: three happen before the budget is spent, one during, one after, and one (benchmarking) feeds all of them. The drawing should show <i>when</i> each one acts. Candidate treatments on the next screen.</p></div>
+    <div><span class="tag choice">choice ahead</span><div class="wire"><b class="half"></b><b class="half2"></b></div></div>
+  </div>
+
+  <div class="idx">03</div>
+  <div class="row">
+    <div><h4>The Data We Need</h4><p>Lead sentence, twelve items, and the closing line that not every item is needed.</p></div>
+    <div><p>Twelve inputs is too many for cards and too flat as bullets. The closing sentence is the point: the diagnostic establishes what is available. Candidate treatments on a later screen.</p></div>
+    <div><span class="tag choice">choice ahead</span><div class="wire"><b class="half"></b><b class="half2"></b></div></div>
+  </div>
+
+  <div class="idx">04</div>
+  <div class="row">
+    <div><h4>How Forecasting Works</h4><p>Six numbered steps. Steps 1 to 4 happen before spend; step 5 is "Once the campaign starts"; step 6 adjusts.</p></div>
+    <div><p>Same shape as AI Automation's process, with a threshold at the moment the campaign goes live. <b>LaunchTrack</b> already draws exactly that (pinned horizontal run with a live line), relabelled "Before spend / Campaign live / After". Alternatives on a later screen.</p></div>
+    <div><span class="tag choice">choice ahead</span><div class="wire"><b class="bar"></b></div></div>
+  </div>
+
+  <div class="idx">05</div>
+  <div class="row">
+    <div><h4>CTA: Book a Consultation</h4><p>Document places a single CTA line here, after step 6.</p></div>
+    <div><p><b>GrowthCta</b> band, opening the same dialog. It needs a heading and one support line; the document supplies only the label, so the support line would have to be borrowed from the closing section's own first sentence. Terminal question after the visual screens.</p></div>
+    <div><span class="tag reuse">reuse as-is</span><div class="wire"><b class="red"></b></div></div>
+  </div>
+
+  <div class="idx">06</div>
+  <div class="row">
+    <div><h4>How ENH Helps You Plan and Improve Campaigns</h4><p>Two paragraphs: what we do before the campaign, what we do once it begins, and the promise to say so if the data is weak.</p></div>
+    <div><p>Editorial statement rather than a diagram, because the page has already had three drawings by here. Two candidate compositions on a later screen (a two-sided before/during split, or a single display-scale statement like OperationsReach).</p></div>
+    <div><span class="tag choice">choice ahead</span><div class="wire"><b class="half"></b><b class="half2"></b></div></div>
+  </div>
+
+  <div class="idx">07</div>
+  <div class="row">
+    <div><h4>Summits Reached</h4><p>Not in the document. Kept per your decision, as on AI Automation.</p></div>
+    <div><p><b>Work</b> carousel, unchanged.</p></div>
+    <div><span class="tag reuse">reuse as-is</span><div class="wire"><b class="half"></b><b class="half2"></b></div></div>
+  </div>
+
+  <div class="idx">08</div>
+  <div class="row">
+    <div><h4>FAQs</h4><p>Twelve questions, verbatim.</p></div>
+    <div><p><b>FaqList</b> with FAQPage JSON-LD, first answer open.</p></div>
+    <div><span class="tag reuse">reuse as-is</span><div class="wire"><b></b></div></div>
+  </div>
+
+  <div class="idx">09</div>
+  <div class="row">
+    <div><h4>Plan Your Campaign Before Committing the Budget</h4><p>Closing block: two paragraphs, primary and secondary CTA.</p></div>
+    <div><p><b>CtaBand</b>: heading split "Plan Your Campaign" / "Before Committing the Budget", first paragraph as body, second as the quieter note, standard form, WhatsApp secondary.</p></div>
+    <div><span class="tag reuse">reuse as-is</span><div class="wire"><b class="half"></b><b class="half2 red"></b></div></div>
+  </div>
+
+  <div class="idx">10</div>
+  <div class="row">
+    <div><h4>Field notes from the climb</h4><p>Not in the document. Kept per your decision.</p></div>
+    <div><p><b>Insights</b>, unchanged. Then footer.</p></div>
+    <div><span class="tag reuse">reuse as-is</span><div class="wire"><b></b></div></div>
+  </div>
+
+</div>
+
+<div class="section">
+  <h3>Also carried over without asking again</h3>
+  <p class="subtitle">Breadcrumb Home &gt; AI Hub &gt; Campaign Intelligence; Service, BreadcrumbList and FAQPage JSON-LD; section index numbers (01) to (10); section marks beside each heading; sticky mobile CTA; standard six-field form; light and dark themes; reduced-motion and below-large-breakpoint fallbacks for every drawing.</p>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="map-ok" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content"><h3>The map is right, show me the section choices</h3><p>Next screens: Covers, Data, Process, How ENH Helps.</p></div>
+  </div>
+  <div class="option" data-choice="map-change" onclick="toggleSelect(this)">
+    <div class="letter">✎</div>
+    <div class="content"><h3>Something needs changing first</h3><p>Tell me in the terminal which row.</p></div>
+  </div>
+</div>

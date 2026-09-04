@@ -1,0 +1,11 @@
+{"type":"server-started","port":53684,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:53684","screen_dir":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/content","state_dir":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/state"}
+{"type":"screen-added","file":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/content/covers-choice.html"}
+{"type":"screen-added","file":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/content/data-choice.html"}
+{"type":"screen-added","file":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/content/hero-concept.html"}
+{"type":"screen-added","file":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/content/page-map.html"}
+{"type":"screen-updated","file":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/content/hero-concept.html"}
+{"type":"screen-updated","file":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/content/page-map.html"}
+{"type":"screen-updated","file":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/content/covers-choice.html"}
+{"type":"screen-updated","file":"/Users/exalt/Projects/AI ENH/enh-marketing-llc/.superpowers/brainstorm/14161-1788436109/content/data-choice.html"}
+{"type":"server-stopped","reason":"owner process exited"}
+{"source":"user-event","type":"click","text":"the diagnostic\n        \n        what is available, how confidently\n      \n    \n    \n      C. Inputs gathered into the diagnostic\n      New drawing. The twelve inputs float as labelled chips and, on scroll, converge into a single diagnostic box which then feeds the next section. Reads well as a story beat into \"How Forecasting Works\", but twelve labelled chips is dense at phone widths, and convergence lines are the house visual for AI Automation's agent run, so the two pages would rhyme closely.","choice":"data-c","id":null,"timestamp":1788437507750}

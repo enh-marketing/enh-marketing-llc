@@ -70,6 +70,24 @@ export const narrative = {
 
 export type ServiceRole = "baseline" | "lever" | "monitor";
 
+/** Which of the three things the page's own thesis sentence names this service
+ *  works on. "AI search visibility is about making accurate information about
+ *  your business easier for AI search systems to find, understand, and
+ *  reference" — see `narrative.questionEmphasis`, which is that clause
+ *  verbatim, and `hero.stations`, which already sets the same three words as
+ *  the hero's three stations.
+ *
+ *  `reading` is not a fourth thing to do. It is the two services that measure
+ *  rather than change: 01 takes the reading and 07 repeats it, so they stand
+ *  outside the three and bracket them.
+ *
+ *  THE CLASSIFICATION IS SOURCED, NOT INVENTED. Every item carries the clause
+ *  from its OWN body that puts it where it is, and the page prints that clause
+ *  rather than asserting the grouping. Where a mapping is read from a sentence
+ *  elsewhere on the page rather than from the item's own body, the comment on
+ *  that item says so. */
+export type ServiceStage = "reading" | "find" | "understand" | "reference";
+
 export type Service = {
   no: string;
   title: string;
@@ -80,22 +98,33 @@ export type Service = {
    *  searches and record[s] changes". Those two measure; the five between them
    *  change things. The section is laid out as exactly that. */
   role: ServiceRole;
-  /** For the five levers only: where the boundary between "on the page" and
-   *  "beyond your website" falls on this row, as a percentage of the content
-   *  width. Each value is decided by the item's own sentence, cited above it. */
-  boundary?: number;
-  /** For the two readings only: the captions on their question strip. */
-  labels?: [string, string];
+  stage: ServiceStage;
+  /** The item's own words, verbatim, that place it in its stage. This is the
+   *  evidence for the grouping and it is printed on the page, so the reader
+   *  sees the reason rather than being asked to trust a diagram.
+   *
+   *  NO FIGURES. This replaces an earlier `boundary` percentage. Percentages
+   *  of 53, 84, 75, 84 and 15 were quantities on a page whose own header
+   *  commits to "no counts, no scores", and nobody can see 84 against 75
+   *  anyway. A clause is legible; a proportion nobody can measure is not. */
+  evidence: string;
 };
 
 export const services = {
   title: "Our AI Search",
   strokeTitle: "Visibility Services",
-  /** The two territories the section is divided into. Both are the document's
-   *  own words: 05 says the markup must match what people can see "on the
-   *  page", and 06 says answers may use information from "sources beyond your
-   *  website". */
-  territories: ["on the page", "beyond your website"] as [string, string],
+  /** The three bays the seven are sorted into, in the document's own order and
+   *  its own words. This is `narrative.questionEmphasis` split into its three
+   *  terms, so a reader meets these words one section earlier, in the sentence
+   *  that defines the whole service, and again as the hero's three stations.
+   *
+   *  The sort holds without reordering anything: 01 outside, 02 find, 03 to 05
+   *  understand, 06 reference, 07 outside. The bays are contiguous in the
+   *  client's own numbering, so the numbers still ascend strictly left to
+   *  right and nothing is moved to make the grouping work. */
+  stages: ["find", "understand", "reference"] as [string, string, string],
+  /** What the two readings are, for the bracket that stands around the bays. */
+  readingLabel: "an agreed list of questions",
   items: [
     {
       no: "01",
@@ -103,7 +132,10 @@ export const services = {
       body: "We start with an agreed list of questions related to your services, products and market. We test those questions across the included AI platforms and record whether your brand appears, which pages are cited and which competitors are mentioned. This creates a baseline that can be used to measure future changes.",
       glyph: "baseline",
       role: "baseline",
-      labels: ["Questions", "Platforms"],
+      // A reading, not a change: it "creates a baseline that can be used to
+      // measure future changes".
+      stage: "reading",
+      evidence: "record whether your brand appears",
     },
     {
       no: "02",
@@ -111,10 +143,9 @@ export const services = {
       body: "AI search systems cannot use a page if their search crawler cannot reach or process it. We review indexing, crawler access, robots.txt rules, noindex settings, canonical tags, sitemaps and other technical controls. We also check whether important content depends on scripts that make it difficult to access. Only public pages that you want people and search systems to find should be made accessible.",
       glyph: "crawler",
       role: "lever",
-      // "AI search systems cannot use a page if their search crawler cannot
-      // reach or process it": the crawler is outside and has to get in, so the
-      // boundary sits mid-row with the approach on its far side.
-      boundary: 53,
+      // Reaching the page is finding it. Its own first sentence.
+      stage: "find",
+      evidence: "cannot reach or process it",
     },
     {
       no: "03",
@@ -122,9 +153,9 @@ export const services = {
       body: "We review whether your website gives clear answers to the questions people ask about your business. This may involve improving service pages, location pages, product information, FAQs, comparisons and educational content. Important information should appear clearly on the page and be supported by accurate details. The aim is to make the content useful to people while also making its meaning easier for search and AI systems to understand.",
       glyph: "text",
       role: "lever",
-      // "Important information should appear clearly on the page": almost all of
-      // this work is inside, so the boundary runs near the far edge.
-      boundary: 84,
+      // Its own closing sentence uses the word.
+      stage: "understand",
+      evidence: "easier for search and AI systems to understand",
     },
     {
       no: "04",
@@ -132,10 +163,14 @@ export const services = {
       body: "Your company name, services, locations, contact information, and other important details should remain consistent across the web. We review your website and relevant external profiles to find missing, outdated, or conflicting information. We then identify which details need correcting. This is particularly important for UAE businesses serving specific locations or operating under several brand names.",
       glyph: "entity",
       role: "lever",
-      // "should remain consistent across the web ... your website and relevant
-      // external profiles": the only item that lives on both sides at once, so
-      // the boundary passes through its drawing.
-      boundary: 75,
+      // The weakest of the seven mappings, and flagged as such. This item's own
+      // body never says "understand"; the hero's does, of the same subject:
+      // "the business information ... that help AI systems understand a
+      // business". Knowing which company this is is a precondition of
+      // understanding it, so it sits in the middle bay. Its printed clause is
+      // its own, not the hero's.
+      stage: "understand",
+      evidence: "should remain consistent across the web",
     },
     {
       no: "05",
@@ -143,8 +178,10 @@ export const services = {
       body: "Structured data gives search engines clear information about the content and organisations shown on a page. We implement relevant schema markup for areas such as your organisation, services, locations, products, people and articles. The markup must match the information people can see on the page. There is no special AI schema that guarantees inclusion in an AI-generated answer. Structured data remains one part of the wider technical setup.",
       glyph: "schema",
       role: "lever",
-      // "The markup must match the information people can see on the page."
-      boundary: 84,
+      // "gives search engines clear information about" is understanding, in
+      // its own opening sentence.
+      stage: "understand",
+      evidence: "clear information about the content and organisations shown on a page",
     },
     {
       no: "06",
@@ -152,10 +189,10 @@ export const services = {
       body: "AI-generated answers may use information from sources beyond your website. We review relevant business listings, reviews, partner websites, industry publications, news coverage and other public sources. The aim is to build accurate and credible information around the brand. We do not create false reviews, manufactured mentions or paid links presented as independent coverage.",
       glyph: "offsite",
       role: "lever",
-      // "AI-generated answers may use information from sources beyond your
-      // website": this one is almost entirely outside, so the boundary steps
-      // back to the near edge and the row inverts.
-      boundary: 15,
+      // What a generated answer draws on when it references something. Its own
+      // first sentence.
+      stage: "reference",
+      evidence: "sources beyond your website",
     },
     {
       no: "07",
@@ -163,7 +200,9 @@ export const services = {
       body: "We repeat the agreed searches and record changes in mentions, citations and competitor visibility. Where platforms provide reporting, we also review cited pages, referral traffic and available search performance data. The report separates confirmed results from estimates and manual observations.",
       glyph: "watch",
       role: "monitor",
-      labels: ["Questions", "Each month"],
+      // The same reading as 01, taken again. Its own first words.
+      stage: "reading",
+      evidence: "repeat the agreed searches",
     },
   ] as Service[],
 };

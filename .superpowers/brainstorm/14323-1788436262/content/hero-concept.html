@@ -1,0 +1,128 @@
+<h2>Campaign Intelligence: which hero visual?</h2>
+<p class="subtitle">Each sketch is built only from ideas the document states. No numbers appear anywhere. The real build will be an SVG in the hero's right-hand panel, animated with CSS or GSAP, gated behind reduced motion, exactly like the AI Automation agent graph.</p>
+
+<style>
+  .ci-sk { width: 100%; height: 100%; display: block; background: #f7f7f6; }
+  .ci-sk .band { fill: #e8000d; opacity: .10; }
+  .ci-sk .ghost { stroke: #d2cdc3; stroke-width: 1; fill: none; }
+  .ci-sk .line { stroke: #15120f; stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: 400; animation: ci-draw 3.2s ease-out .4s forwards; }
+  .ci-sk .fore { stroke: #e8000d; stroke-width: 1.4; fill: none; stroke-dasharray: 3 4; }
+  .ci-sk .alert { fill: #e8000d; opacity: 0; animation: ci-pop .5s ease-out 3.2s forwards; }
+  .ci-sk .seg { transition: width .6s; }
+  .ci-sk .chip { fill: #fff; stroke: #d2cdc3; }
+  .ci-sk .label { font: 600 7px Inter, system-ui, sans-serif; fill: #68655f; letter-spacing: .06em; text-transform: uppercase; }
+  .ci-sk .mark { fill: #15120f; }
+  .ci-sk .mark.on { fill: #e8000d; }
+  @keyframes ci-draw { to { stroke-dashoffset: 0; } }
+  @keyframes ci-pop { to { opacity: 1; } }
+  @keyframes ci-split { 0%,15% { transform: scaleX(1);} 45%,60% { transform: scaleX(.62);} 90%,100% { transform: scaleX(1);} }
+  @keyframes ci-split2 { 0%,15% { transform: scaleX(1);} 45%,60% { transform: scaleX(1.55);} 90%,100% { transform: scaleX(1);} }
+  @keyframes ci-range { 0%,20% { transform: scaleX(.55);} 50%,70% { transform: scaleX(1);} 100% { transform: scaleX(.55);} }
+  .card-image { height: 260px; padding: 0; overflow: hidden; }
+</style>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <svg class="ci-sk" viewBox="0 0 220 160" aria-hidden="true">
+        <!-- grid -->
+        <g class="ghost"><line x1="24" y1="20" x2="24" y2="128"/><line x1="24" y1="128" x2="204" y2="128"/>
+          <line x1="24" y1="56" x2="204" y2="56" stroke-dasharray="2 4"/><line x1="24" y1="92" x2="204" y2="92" stroke-dasharray="2 4"/></g>
+        <!-- forecast band -->
+        <path class="band" d="M24 100 C 70 92, 110 78, 150 66 S 190 52, 204 46 L 204 78 C 190 84, 150 96, 110 106 S 60 118, 24 122 Z"/>
+        <path class="fore" d="M24 100 C 70 92, 110 78, 150 66 S 190 52, 204 46"/>
+        <path class="fore" d="M24 122 C 60 118, 110 106, 150 96 S 190 84, 204 78"/>
+        <!-- actual line, drawn on -->
+        <path class="line" d="M24 112 C 50 108, 70 104, 92 98 S 130 84, 150 80 S 178 90, 196 96"/>
+        <!-- point where it leaves the range -->
+        <circle class="alert" cx="196" cy="96" r="4"/>
+        <circle class="alert" cx="196" cy="96" r="9" fill="none" stroke="#e8000d" stroke-width="1"/>
+        <text class="label" x="24" y="146">forecast range</text>
+        <text class="label" x="140" y="146">actual</text>
+      </svg>
+    </div>
+    <div class="card-body">
+      <h3>A. The range, and the line inside it</h3>
+      <p>A forecast band is drawn first. The live result line then draws itself inside the band and, near the end, steps outside it: the point an early alert fires. This is the document's whole argument in one picture: estimate a range, then watch whether the campaign stays within it.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <svg class="ci-sk" viewBox="0 0 220 160" aria-hidden="true">
+        <text class="label" x="20" y="26">one budget</text>
+        <rect x="20" y="32" width="180" height="10" rx="3" fill="#15120f"/>
+        <!-- split lines -->
+        <g class="ghost"><path d="M40 42 V 70"/><path d="M85 42 V 70"/><path d="M125 42 V 70"/><path d="M160 42 V 70"/><path d="M188 42 V 70"/></g>
+        <text class="label" x="20" y="64">divided across channels</text>
+        <!-- allocation segments that rebalance -->
+        <g transform="translate(20 72)">
+          <rect x="0"   y="0" width="52" height="10" rx="3" fill="#e8000d" style="transform-origin:0 0; animation: ci-split 6s ease-in-out infinite;"/>
+          <rect x="56"  y="0" width="40" height="10" rx="3" fill="#15120f" opacity=".85"/>
+          <rect x="100" y="0" width="30" height="10" rx="3" fill="#15120f" opacity=".65" style="transform-origin:100px 0; animation: ci-split2 6s ease-in-out infinite;"/>
+          <rect x="134" y="0" width="26" height="10" rx="3" fill="#15120f" opacity=".45"/>
+          <rect x="164" y="0" width="16" height="10" rx="3" fill="#15120f" opacity=".3"/>
+        </g>
+        <!-- channel chips (marks would be the real ChannelIcon set) -->
+        <g transform="translate(20 96)">
+          <rect class="chip" x="0"   width="30" height="18" rx="4"/><text class="label" x="6"   y="12">G</text>
+          <rect class="chip" x="36"  width="30" height="18" rx="4"/><text class="label" x="42"  y="12">Meta</text>
+          <rect class="chip" x="72"  width="30" height="18" rx="4"/><text class="label" x="78"  y="12">In</text>
+          <rect class="chip" x="108" width="30" height="18" rx="4"/><text class="label" x="112" y="12">TikTok</text>
+          <rect class="chip" x="144" width="36" height="18" rx="4"/><text class="label" x="148" y="12">YouTube</text>
+        </g>
+        <text class="label" x="20" y="140">expected range per channel</text>
+        <g class="ghost"><line x1="20" y1="148" x2="200" y2="148"/></g>
+        <rect x="20" y="146" width="60" height="4" rx="2" class="band" style="opacity:.35; transform-origin:20px 0; animation: ci-range 6s ease-in-out infinite;"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <h3>B. One budget, divided</h3>
+      <p>A single budget bar splits into the five named channels, and the split keeps rebalancing as scenarios change. Official channel marks from the existing ChannelIcon set sit beneath. This leads with Media Mix Planning and Scenario Planning rather than with monitoring.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <svg class="ci-sk" viewBox="0 0 220 160" aria-hidden="true">
+        <text class="label" x="20" y="22">three budget scenarios</text>
+        <!-- scenario rows: each shows an expected range that widens/narrows -->
+        <g transform="translate(20 34)">
+          <g class="ghost"><line x1="0" y1="8" x2="180" y2="8"/></g>
+          <rect x="30" y="3" width="70" height="10" rx="3" class="band" style="opacity:.25; transform-origin:30px 0; animation: ci-range 5s ease-in-out infinite;"/>
+          <circle class="mark" cx="65" cy="8" r="3"/>
+          <text class="label" x="0" y="26">reduce</text>
+        </g>
+        <g transform="translate(20 72)">
+          <g class="ghost"><line x1="0" y1="8" x2="180" y2="8"/></g>
+          <rect x="55" y="3" width="70" height="10" rx="3" fill="#e8000d" opacity=".18" style="transform-origin:55px 0; animation: ci-range 5s ease-in-out .6s infinite;"/>
+          <circle class="mark on" cx="90" cy="8" r="3.5"/>
+          <text class="label" x="0" y="26">proposed</text>
+        </g>
+        <g transform="translate(20 110)">
+          <g class="ghost"><line x1="0" y1="8" x2="180" y2="8"/></g>
+          <rect x="80" y="3" width="90" height="10" rx="3" class="band" style="opacity:.25; transform-origin:80px 0; animation: ci-range 5s ease-in-out 1.2s infinite;"/>
+          <circle class="mark" cx="125" cy="8" r="3"/>
+          <text class="label" x="0" y="26">increase</text>
+        </g>
+        <!-- assumptions as ticks -->
+        <g transform="translate(150 22)" fill="#68655f">
+          <rect x="0" y="0" width="4" height="4" rx="1"/><rect x="8" y="1" width="30" height="2" rx="1"/>
+          <rect x="0" y="8" width="4" height="4" rx="1"/><rect x="8" y="9" width="24" height="2" rx="1"/>
+          <rect x="0" y="16" width="4" height="4" rx="1"/><rect x="8" y="17" width="34" height="2" rx="1"/>
+        </g>
+        <text class="label" x="150" y="52">assumptions</text>
+      </svg>
+    </div>
+    <div class="card-body">
+      <h3>C. Three scenarios, three ranges</h3>
+      <p>Reduce, proposed and increase, each as a range that breathes wider or narrower as the assumptions beside it change. Quieter than A, and it carries the document's repeated point that a forecast is a range with stated assumptions, never a single number.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="section">
+  <p class="subtitle">My recommendation is A. It shows pre-campaign forecasting, early alerts and forecast-versus-actual reporting in one mechanism, which is three of the six things the service covers. B would then become the Media Mix Planning section's own drawing, and C the Scenario Planning drawing, so none of the three ideas is lost.</p>
+</div>

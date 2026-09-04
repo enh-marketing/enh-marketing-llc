@@ -14,7 +14,7 @@ import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { SignalPath } from "@/components/service/SignalPath";
 import { Narrative } from "@/components/service/Narrative";
-import { VisibilityStage } from "@/components/service/VisibilityStage";
+import { VisibilityBays } from "@/components/service/VisibilityBays";
 import { VisibilityMark } from "@/components/service/VisibilityMark";
 import { SiteFork } from "@/components/service/SiteFork";
 import { ReturnLadder } from "@/components/service/ReturnLadder";
@@ -87,7 +87,7 @@ export function AiSearchVisibilityPage() {
             an AI system can reach, read, identify, parse and corroborate your
             web presence. So the page changes world here. Everything above and
             below is paper; this is not, which gives the page a spine and lets
-            the scene be the only thing on screen. See VisibilityStage. */}
+            the scene be the only thing on screen. See VisibilityBays. */}
         <section
           id="services"
           data-section="Our AI Search Visibility Services"
@@ -115,7 +115,11 @@ export function AiSearchVisibilityPage() {
               markNode={<VisibilityMark variant="bookends" />}
               className="mb-12"
             />
-            <VisibilityStage items={c.services.items} />
+            <VisibilityBays
+              items={c.services.items}
+              stages={c.services.stages}
+              readingLabel={c.services.readingLabel}
+            />
           </Container>
         </section>
 
