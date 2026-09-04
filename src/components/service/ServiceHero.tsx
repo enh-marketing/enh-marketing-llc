@@ -19,6 +19,7 @@ export function ServiceHero({
   sub,
   primary,
   secondary,
+  secondaryHref,
   phoneHref,
   formTitle,
   formFields,
@@ -34,8 +35,12 @@ export function ServiceHero({
   sub: string;
   /** Opens the enquiry form in a dialog. */
   primary: string;
-  /** Places a call. */
-  secondary: string;
+  /** Places a call by default. Optional: a document with a single call to
+   *  action renders the primary alone rather than an invented second label. */
+  secondary?: string;
+  /** Where the secondary goes instead of the phone. Given as a path or hash,
+   *  rendered without the phone icon. */
+  secondaryHref?: string;
   phoneHref: string;
   formTitle: string;
   formFields: FormField[];
@@ -122,20 +127,24 @@ export function ServiceHero({
             </span>
           </button>
 
-          <a
-            href={`tel:${phoneHref}`}
-            className="inline-flex max-w-full shrink-0 items-center justify-center gap-3 whitespace-normal rounded-full border border-line px-7 py-3.5 text-center text-sm font-semibold text-snow transition-colors duration-300 hover:border-brand hover:text-brand sm:whitespace-nowrap"
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path
-                d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-              />
-            </svg>
-            {secondary}
-          </a>
+          {secondary && (
+            <a
+              href={secondaryHref ?? `tel:${phoneHref}`}
+              className="inline-flex max-w-full shrink-0 items-center justify-center gap-3 whitespace-normal rounded-full border border-line px-7 py-3.5 text-center text-sm font-semibold text-snow transition-colors duration-300 hover:border-brand hover:text-brand sm:whitespace-nowrap"
+            >
+              {!secondaryHref && (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+              {secondary}
+            </a>
+          )}
         </Rise>
       </Container>
 

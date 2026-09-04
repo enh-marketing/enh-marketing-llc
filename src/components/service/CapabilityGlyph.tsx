@@ -73,7 +73,13 @@ export type GlyphVariant =
      a paid-media card. Same 48-unit box, same stroke, same keyframes. */
   | "intent"
   | "sequence"
-  | "form";
+  | "form"
+  /* ---- AI Search Visibility. One mark the set lacked: a set of questions
+     tested and recorded once, which is what a baseline is. */
+  | "baseline"
+  /* ---- AI Creative Production. An image: a frame with a horizon and a sun,
+     the oldest shorthand there is, so it cannot be mistaken for a chart. */
+  | "picture";
 
 const S = {
   fill: "none",
@@ -683,6 +689,31 @@ function Adjust() {
   );
 }
 
+/** A baseline: agreed questions as rows, a reading recorded against each. */
+function Baseline() {
+  return (
+    <>
+      <path d="M8 12h14M8 21h14M8 30h14M8 39h14" {...S} opacity="0.5" />
+      <rect x="28" y="8" width="8" height="8" rx="2" {...S} className="glyph-pulse" />
+      <rect x="28" y="17" width="8" height="8" rx="2" {...S} opacity="0.4" />
+      <rect x="28" y="26" width="8" height="8" rx="2" {...S} className="glyph-pulse" style={d(1)} />
+      <rect x="28" y="35" width="8" height="8" rx="2" {...S} opacity="0.4" />
+      <path d="M40 8v35" {...S} opacity="0.45" />
+    </>
+  );
+}
+
+/** An image: frame, horizon, sun. */
+function Picture() {
+  return (
+    <>
+      <rect x="7" y="9" width="34" height="30" rx="3" {...S} />
+      <circle cx="17" cy="19" r="3.5" {...S} className="glyph-pulse" />
+      <path d="M7 33l10-9 7 6 6-5 11 8" {...S} />
+    </>
+  );
+}
+
 const GLYPHS: Record<GlyphVariant, () => React.JSX.Element> = {
   structure: Structure,
   creative: Creative,
@@ -730,6 +761,8 @@ const GLYPHS: Record<GlyphVariant, () => React.JSX.Element> = {
   intent: Intent,
   sequence: Sequence,
   form: FormGlyph,
+  baseline: Baseline,
+  picture: Picture,
 };
 
 export function CapabilityGlyph({

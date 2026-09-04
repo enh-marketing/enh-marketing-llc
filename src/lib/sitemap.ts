@@ -156,7 +156,7 @@ const aiHub: NavNode = {
     { label: "AI Creative Production", href: AI_HUB_HREF, external: true },
     { label: "Campaign Intelligence", href: "/ai-hub/campaign-intelligence" },
     { label: "Intelligent Web", href: AI_HUB_HREF, external: true },
-    { label: "Data & Dashboards", href: AI_HUB_HREF, external: true },
+    { label: "Data & Dashboards", href: "/ai-hub/data-and-dashboards" },
     { label: "AI Workshops & Training", href: AI_HUB_HREF, external: true },
   ],
 };
@@ -247,6 +247,7 @@ const BUILT = new Set([
   "/services/lead-generation/landing-page-development",
   "/ai-hub/ai-automation",
   "/ai-hub/campaign-intelligence",
+  "/ai-hub/data-and-dashboards",
   "/services/lead-generation/b2b-lead-generation",
   "/services/video-marketing/corporate-video",
   "/services/performance-marketing",

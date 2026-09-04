@@ -32,6 +32,7 @@ function Label({ id, children, required }: { id: string; children: ReactNode; re
 
 export function Field({
   id,
+  name,
   label,
   type = "text",
   autoComplete,
@@ -40,6 +41,9 @@ export function Field({
   className,
 }: {
   id: string;
+  /** The submitted field name. Defaults to `id`; pass it when one page mounts
+   *  the same form twice and each copy needs its own DOM id. */
+  name?: string;
   label: string;
   type?: string;
   autoComplete?: string;
@@ -55,7 +59,7 @@ export function Field({
       <div className="field relative">
         <input
           id={id}
-          name={id}
+          name={name ?? id}
           type={type}
           autoComplete={autoComplete}
           required={required}
@@ -70,12 +74,14 @@ export function Field({
 
 export function TextareaField({
   id,
+  name,
   label,
   rows = 3,
   required,
   className,
 }: {
   id: string;
+  name?: string;
   label: string;
   rows?: number;
   required?: boolean;
@@ -87,7 +93,7 @@ export function TextareaField({
         {label}
       </Label>
       <div className="field relative">
-        <textarea id={id} name={id} rows={rows} required={required} className={cn(CONTROL, "resize-none")} />
+        <textarea id={id} name={name ?? id} rows={rows} required={required} className={cn(CONTROL, "resize-none")} />
         <span aria-hidden className={UNDERLINE} />
       </div>
     </div>
@@ -96,6 +102,7 @@ export function TextareaField({
 
 export function SelectField({
   id,
+  name,
   label,
   options,
   placeholder,
@@ -104,6 +111,7 @@ export function SelectField({
   ...rest
 }: {
   id: string;
+  name?: string;
   label: string;
   options: readonly string[];
   placeholder: string;
@@ -116,7 +124,7 @@ export function SelectField({
         {label}
       </Label>
       <div className="field relative">
-        <select id={id} name={id} required={required} defaultValue="" className={CONTROL} {...rest}>
+        <select id={id} name={name ?? id} required={required} defaultValue="" className={CONTROL} {...rest}>
           <option value="" disabled>
             {placeholder}
           </option>

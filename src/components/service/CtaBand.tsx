@@ -19,6 +19,7 @@ export function CtaBand({
   formSubmitLabel,
   whatsapp,
   whatsappLabel,
+  secondaryHref,
 }: {
   /** DevTools handle: names the section in data-section. */
   label: string;
@@ -31,8 +32,11 @@ export function CtaBand({
   note?: string;
   formFields: FormField[];
   formSubmitLabel: string;
-  whatsapp: string;
-  whatsappLabel: string;
+  /** The secondary action. WhatsApp by default; `secondaryHref` sends it
+   *  elsewhere; omit both label props to render the ask without one. */
+  whatsapp?: string;
+  whatsappLabel?: string;
+  secondaryHref?: string;
 }) {
   return (
     <section id="quote" data-section={label} className="relative overflow-hidden py-16 sm:py-20">
@@ -45,7 +49,7 @@ export function CtaBand({
           {/* Ask */}
           <div className="lg:sticky lg:top-32 lg:h-fit lg:self-start">
             {index && (
-              <p className="mb-7 text-xs font-semibold uppercase text-brand">
+              <p className="mb-7 text-xs font-semibold uppercase text-brand-text">
                 ({index})
               </p>
             )}
@@ -70,17 +74,18 @@ export function CtaBand({
               </Rise>
             )}
 
-            <Rise delay={0.35} className="mt-10">
-              <a
-                href={whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-3 border-b border-line pb-2 text-sm font-semibold uppercase text-snow transition-colors duration-300 hover:border-brand hover:text-brand"
-              >
-                <span className="h-px w-8 bg-brand transition-all duration-500 group-hover:w-14" />
-                {whatsappLabel}
-              </a>
-            </Rise>
+            {whatsappLabel && (secondaryHref || whatsapp) && (
+              <Rise delay={0.35} className="mt-10">
+                <a
+                  href={secondaryHref ?? whatsapp}
+                  {...(secondaryHref ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+                  className="group inline-flex items-center gap-3 border-b border-line pb-2 text-sm font-semibold uppercase text-snow transition-colors duration-300 hover:border-brand hover:text-brand"
+                >
+                  <span className="h-px w-8 bg-brand transition-all duration-500 group-hover:w-14" />
+                  {whatsappLabel}
+                </a>
+              </Rise>
+            )}
           </div>
 
           {/* Form panel */}

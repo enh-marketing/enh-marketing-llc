@@ -202,6 +202,7 @@ function BenchmarkSketch() {
               <path
                 d={`M93 ${r.y}H${RAIL}`}
                 {...S}
+                strokeWidth={0.8}
                 pathLength="100"
                 className="ci-draw text-brand"
                 style={{ animationDelay: `${i * 260}ms` }}
@@ -216,6 +217,7 @@ function BenchmarkSketch() {
       <path
         d={`M${RAIL - 7} ${top}h14M${RAIL} ${top}V${bottom}M${RAIL - 7} ${bottom}h14`}
         {...S}
+        strokeWidth={0.8}
         pathLength="100"
         className="ci-draw text-brand"
         style={{ animationDelay: "780ms" }}
@@ -328,9 +330,10 @@ export function CampaignTimeline({
 }) {
   const root = useRef<HTMLDivElement>(null);
   const { before, live, after, every } = order(items);
-  // The number each card carries, assigned once from the presented order.
-  let n = 0;
-  const next = () => (n += 1);
+  // The number each card carries: its position in the presented order, so the
+  // numbering can never disagree with the layout.
+  const presented = [...before, ...live, ...after, ...every];
+  const numberOf = (item: TimelineItem) => presented.indexOf(item) + 1;
 
   useEffect(() => {
     const el = root.current;
@@ -370,7 +373,7 @@ export function CampaignTimeline({
         <PhaseLabel>{LABEL.before}</PhaseLabel>
         <div className="grid gap-5 lg:grid-cols-3">
           {before.map((item) => (
-            <Card key={item.title} item={item} no={next()} />
+            <Card key={item.title} item={item} no={numberOf(item)} />
           ))}
         </div>
       </div>
@@ -388,7 +391,7 @@ export function CampaignTimeline({
         <PhaseLabel>{LABEL.live}</PhaseLabel>
         <div className="grid gap-5">
           {live.map((item) => (
-            <Card key={item.title} item={item} no={next()} wide />
+            <Card key={item.title} item={item} no={numberOf(item)} wide />
           ))}
         </div>
       </div>
@@ -398,7 +401,7 @@ export function CampaignTimeline({
         <PhaseLabel>{LABEL.after}</PhaseLabel>
         <div className="grid gap-5">
           {after.map((item) => (
-            <Card key={item.title} item={item} no={next()} wide />
+            <Card key={item.title} item={item} no={numberOf(item)} wide />
           ))}
         </div>
       </div>
@@ -406,7 +409,7 @@ export function CampaignTimeline({
       {/* What runs through all three. */}
       <div data-group className="mt-5">
         {every.map((item) => (
-          <Card key={item.title} item={item} no={next()} band />
+          <Card key={item.title} item={item} no={numberOf(item)} band />
         ))}
       </div>
     </div>

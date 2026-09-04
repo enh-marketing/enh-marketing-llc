@@ -65,7 +65,7 @@ function PlanSketch() {
       {/* The sweep, and how far along it the level sits. The brand arc draws
           in as the needle swings to the level, on a loop. */}
       <path d={arc(0, 1)} {...S} className="text-line" />
-      <path d={arc(0, set)} {...S} strokeWidth="2.5" pathLength="100" className="ci-draw text-brand" />
+      <path d={arc(0, set)} {...S} strokeWidth="1.3" pathLength="100" className="ci-draw text-brand" />
       {/* The range that level is forecast to produce. */}
       <path d={arc(set - 0.11, set + 0.11, R * 0.86)} {...S} strokeWidth="7" className="text-brand" opacity="0.16" />
       {[set - 0.11, set + 0.11].map((t) => {
@@ -99,7 +99,7 @@ function CheckSketch() {
       <path d="M14 44C60 40 120 34 206 26" {...S} strokeDasharray="3 4" className="text-brand" opacity="0.7" />
       <path d="M14 66C60 62 120 56 206 48" {...S} strokeDasharray="3 4" className="text-brand" opacity="0.7" />
       <path d="M14 44C60 40 120 34 206 26 L206 48 C120 56 60 62 14 66Z" fill="var(--color-brand)" opacity="0.08" stroke="none" />
-      <path d="M14 58C50 56 90 52 126 48 S164 30 178 20" {...S} pathLength="100" className="ci-draw text-snow" />
+      <path d="M14 58C50 56 90 52 126 48 S164 30 178 20" {...S} strokeWidth={0.8} pathLength="100" className="ci-draw text-snow" />
       <circle cx="178" cy="20" r="4" fill="var(--color-brand)" stroke="none" />
       <circle cx="178" cy="20" r="9" {...S} className="glyph-pulse text-brand" style={PULSE} />
       {/* Early: the point is caught well before the end of the run. */}
