@@ -120,21 +120,6 @@ html.dark {
    
    It stays dark in both themes on purpose: the chapter is a fixed part of the
    page's structure, not a theme response. */
-.chapter-dark {
-  color-scheme: dark;
-  --color-void: #060606;
-  --color-ink: #101010;
-  --color-ink-2: #171717;
-  --color-ink-3: #1e1e1e;
-  --color-line: #2e2e2e;
-  --color-snow: #f7f7f5;
-  --color-fog: #a3a39e;
-  --color-ash: #8c8c87;
-  --grid-line: rgba(255, 255, 255, 0.7);
-  --color-brand-text: #ff2e3a;
-  background-color: var(--color-ink);
-  color: var(--color-fog);
-}
 
 /* Atmosphere is tuned for the dark page and is too heavy on paper, so the
    light default carries it at half strength and dark restores it. */

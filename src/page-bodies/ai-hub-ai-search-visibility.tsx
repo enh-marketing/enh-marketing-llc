@@ -82,22 +82,28 @@ export function AiSearchVisibilityPage() {
           </Rise>
         </Narrative>
 
-        {/* THE DARK CHAPTER. The seven services are the heart of the page and
-            the longest thing on it, and they are all about one subject: whether
-            an AI system can reach, read, identify, parse and corroborate your
-            web presence. So the page changes world here. Everything above and
-            below is paper; this is not, which gives the page a spine and lets
-            the scene be the only thing on screen. See VisibilityBays. */}
+        {/* THE CHAPTER. The seven services are the heart of the page and the
+            longest thing on it, so the section holds the viewport and the
+            reader moves through them one at a time. See VisibilityChapter.
+
+            IT IS NOT A DARK CHAPTER ANY MORE. It carried a `chapter-dark` class
+            that forced near-black in both themes, and nothing else on this site
+            does that: in the light theme the page ran white, cut hard to
+            #101010 for one section, then cut back to white. That is a seam, not
+            a chapter. The section now takes the same paper as its neighbours
+            and is set apart by its scale and its pacing instead, which is what
+            actually distinguishes it. */}
         <section
           id="services"
           data-section="Our AI Search Visibility Services"
-          className="chapter-dark relative overflow-x-clip pb-24 pt-20 sm:pt-24"
+          className="relative overflow-x-clip pb-24 pt-20 sm:pt-24"
         >
-          {/* The chapter's own atmosphere: a faint grid and one warm bloom
-              behind the scene, both absent from the paper sections. */}
+          {/* A faint grid behind the scene. It reads in both themes because
+              --grid-line flips with them. The warm bloom that used to sit with
+              it was tuned for a near-black ground and went with it. */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
             <div
-              className="absolute inset-0 opacity-[0.16]"
+              className="absolute inset-0 opacity-[0.12]"
               style={{
                 backgroundImage:
                   "linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)",
@@ -105,7 +111,6 @@ export function AiSearchVisibilityPage() {
                 maskImage: "radial-gradient(ellipse at 50% 22%, black, transparent 72%)",
               }}
             />
-            <div className="aurora-b absolute left-1/2 top-[6%] h-[38vw] w-[52vw] -translate-x-1/2 rounded-full bg-brand/[0.10] blur-[170px]" />
           </div>
           <Container className="relative">
             <SectionHeader
