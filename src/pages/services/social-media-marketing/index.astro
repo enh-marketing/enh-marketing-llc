@@ -1,0 +1,29 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/social-media-marketing";
+import { brand } from "@/lib/content";
+import { SocialMediaMarketingPage } from "@/page-bodies/services-social-media-marketing";
+
+const HREF = "/services/social-media-marketing";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Social Media Marketing",
+  serviceType:
+    "Social media marketing: content creation, account management, campaigns, influencer marketing, Facebook, Instagram, LinkedIn and TikTok marketing, and Meta advertising",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+  <SocialMediaMarketingPage client:load />
+</Base>
