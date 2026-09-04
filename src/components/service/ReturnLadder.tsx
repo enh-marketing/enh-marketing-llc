@@ -72,7 +72,11 @@ export function ReturnLadder({
         });
         const head = c[0];
         const foot = c[c.length - 1];
-        const out = 40; // how far the return swings out to the left
+        // How far the return swings out to the left of the spine. It has to
+        // clear the rung circles (44px wide, centred on the spine) AND leave
+        // room for the label beside it, so it is derived from the rung rather
+        // than guessed: half a rung, plus the label's own height, plus air.
+        const out = head.x >= 44 ? 44 : 40;
         const d =
           `M ${head.x} ${head.y} V ${foot.y}` +
           ` C ${head.x} ${foot.y + 40}, ${head.x - out} ${foot.y + 40}, ${head.x - out} ${foot.y}` +
@@ -81,9 +85,13 @@ export function ReturnLadder({
         line.setAttribute("d", d);
         run.setAttribute("d", d);
         // The return's label, upright, beside the outer leg.
+        //
+        // OUTSIDE the leg, not inside it. Inside left only `out - 22` pixels
+        // between the leg and the rung circles, so an 11px label centred there
+        // ran straight across rungs 1 to 4. Outside, the leg itself separates
+        // the label from the numbers and the clearance is explicit.
         const midY = (head.y + foot.y) / 2;
-        // Inside the outer leg, never out past the container padding.
-        const lx = head.x - out + 13;
+        const lx = Math.max(7, head.x - out - 11);
         label.setAttribute("x", `${lx}`);
         label.setAttribute("y", `${midY}`);
         label.setAttribute("transform", `rotate(-90 ${lx} ${midY})`);
@@ -126,7 +134,7 @@ export function ReturnLadder({
   }, [items.length]);
 
   return (
-    <div ref={root} className="relative lg:pl-36">
+    <div ref={root} className="relative lg:pl-48">
       {/* The spine and its return, plotted from the rungs. */}
       <svg
         ref={svg}
