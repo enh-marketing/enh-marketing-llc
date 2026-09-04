@@ -85,4 +85,25 @@ Looping SVG classes live in `globals.css` under the Campaign Intelligence block:
 
 Shared: `ServiceHero`, `SectionHeader`, `CtaBand`, `GrowthCta`, `FaqList`, `StickyCTABar`, `Work`, `Insights`, `TrustStrip`, `LeadForm`, `Crosslink` (renders unbuilt routes as plain text; a link to a 404 is worse than no link).
 
-Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, stepped boundary, bedded mass, upright plate, horizontal schedule, narrowing measure, vertical swimlanes, spine with return loop, measured type silhouette, staged canvas.
+Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, sorted bays.
+
+Withdrawn, and not to be revived: stepped boundary, narrowing measure, measured type silhouette, staged canvas. All four were rejected as "just a list", and the reason is worth keeping. Each changed the ornament and kept the skeleton: one item per row, copy on one side, a picture on the other. A stepped hairline, a tinted bed, a measured outline and a pinned canvas are four coats on the same list.
+
+## What separates an approved section from a rejected one
+
+Measured across `/ai-hub/ai-automation` (approved) and the first four attempts at the AI Search Visibility services section (rejected):
+
+| | approved | rejected |
+|---|---|---|
+| `<rect>` per SVG | ~1 (small glyphs) | ~10 (large wireframes) |
+| Service names on screen at once | all seven | one |
+| Scroll needed to learn the offer | none | ~4,400px |
+
+The rules this yields outrank any amount of conceptual cleverness:
+
+1. **Every service name is legible at once.** A services section whose reader cannot see what is being sold has failed before its drawing is judged.
+2. **A drawing that has to be taught is not a drawing.** At most three labels, each a phrase from the document, answering exactly one question. `PERSON` / `MACHINE` works because nobody has to learn it. Position above a rule meaning "on your own site", brackets meaning "these two measure", a gap meaning "blocked": each is a notation, and a reader asked to learn four of them before the picture speaks will not.
+3. **Show the working.** Where a section sorts its items, print the clause the sort was read from. It makes the arrangement checkable, and it stops items in one group from feeling identical, which is what makes a category drawing sit still across consecutive selections.
+4. **No quantities.** These pages promise "no counts, no scores". A percentage nobody can measure by eye is both a broken promise and unreadable.
+5. **`--color-line` is 1.4:1 on the dark chapter.** Any line carrying meaning there is inked in `ash`, not `line`.
+6. **A GSAP `from` tween renders its start state on creation.** A timeline waiting on a ScrollTrigger that never fires (deep link, restored scroll, refresh mid-page) leaves its targets at `scaleX(0)` permanently. Pass `immediateRender: false` on every entrance tween.
