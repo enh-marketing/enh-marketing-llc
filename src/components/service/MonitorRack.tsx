@@ -163,48 +163,61 @@ function Screen({ kind, on, reduced }: { kind: Output["kind"]; on: boolean; redu
     "relative overflow-hidden rounded-xl border bg-void transition-colors duration-500 motion-reduce:transition-none",
     on ? "border-brand/60" : "border-line group-hover:border-ash/60",
   );
-  const grain = (
-    <span
-      aria-hidden
-      className="absolute inset-0 opacity-40"
-      style={{
-        backgroundImage:
-          "linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)",
-        backgroundSize: "16px 16px",
-      }}
-    />
-  );
   const scan = !reduced && on;
+  const ink = on ? "var(--color-brand)" : "var(--color-ash)";
 
   if (kind === "video") {
+    // A video player: a subject held behind a play control, captions, and a
+    // scrubber. Recognisable as a video ad, honest as a mock (no real footage).
     return (
       <div className={cn(frame, "h-[132px] w-[234px] sm:h-[144px] sm:w-[256px]")}>
-        {grain}
-        <svg viewBox="0 0 228 128" className="absolute inset-0 h-full w-full" aria-hidden preserveAspectRatio="none">
-          <path d="M14 92 C 50 92, 58 44, 96 44 S 158 92, 214 66" fill="none" stroke="var(--color-ash)" strokeOpacity="0.4" strokeWidth="1.4" />
-          <path d="M14 92 C 50 92, 58 44, 96 44 S 158 92, 214 66" fill="none" stroke="var(--color-brand)" strokeWidth="1.8" strokeLinecap="round" pathLength="100" className={on ? "ci-flow" : ""} style={{ animationDuration: "4s" }} />
+        <svg viewBox="0 0 256 144" className="absolute inset-0 h-full w-full" aria-hidden preserveAspectRatio="none">
+          {/* a soft subject block, off to one side like a framed shot */}
+          <rect x="0" y="0" width="256" height="144" fill="var(--color-ink-2)" />
+          <ellipse cx="180" cy="70" rx="70" ry="52" fill={ink} opacity={on ? 0.12 : 0.08} className="transition-opacity duration-500" />
+          {/* the play control */}
+          <circle cx="128" cy="66" r="22" fill="none" stroke={ink} strokeWidth="2" className="transition-colors duration-500" />
+          <path d="M122 56 l14 10 l-14 10 z" fill={ink} className="transition-colors duration-500" />
         </svg>
-        {scan && <span aria-hidden className="ci-scan-x absolute inset-y-0 left-0 w-[2px] bg-brand/70" style={{ animationDuration: "4.4s" }} />}
-        <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-line">
-          <span className="block h-full w-1/4 bg-brand" />
+        {/* captions */}
+        <span aria-hidden className="absolute inset-x-5 bottom-7 space-y-1">
+          <span className="mx-auto block h-1.5 w-3/4 rounded-full bg-snow/25" />
+          <span className="mx-auto block h-1.5 w-1/2 rounded-full bg-snow/15" />
         </span>
+        {/* scrubber */}
+        <span aria-hidden className="absolute inset-x-3 bottom-2.5 h-[3px] rounded-full bg-line">
+          <span className="block h-full rounded-full bg-brand" style={{ width: on ? "38%" : "24%" }} />
+        </span>
+        {scan && <span aria-hidden className="ci-scan-x absolute inset-y-0 left-0 w-[2px] bg-brand/60" style={{ animationDuration: "4.6s" }} />}
       </div>
     );
   }
 
   if (kind === "ugc") {
+    // A vertical creator ad: a presenter silhouette (never a face), a caption
+    // line, and a call-to-action button, with the disclosure tag pinned.
     return (
       <div className={cn(frame, "h-[218px] w-[124px] sm:h-[236px] sm:w-[134px]")}>
-        {grain}
-        {/* A silhouette, never a face. */}
-        <svg viewBox="0 0 106 186" className="absolute inset-0 h-full w-full" aria-hidden>
-          <circle cx="53" cy="70" r="20" fill="var(--color-ash)" fillOpacity={on ? 0.5 : 0.35} className="transition-[fill-opacity] duration-500" />
-          <path d="M20 128 a33 33 0 0 1 66 0 Z" fill="var(--color-ash)" fillOpacity={on ? 0.5 : 0.35} className="transition-[fill-opacity] duration-500" />
+        <svg viewBox="0 0 134 236" className="absolute inset-0 h-full w-full" aria-hidden preserveAspectRatio="none">
+          <rect x="0" y="0" width="134" height="236" fill="var(--color-ink-2)" />
+          {/* the presenter, a silhouette */}
+          <circle cx="67" cy="78" r="26" fill={ink} opacity={on ? 0.5 : 0.34} className="transition-opacity duration-500" />
+          <path d="M25 150 a42 42 0 0 1 84 0 Z" fill={ink} opacity={on ? 0.5 : 0.34} className="transition-opacity duration-500" />
         </svg>
-        {/* The item's own labels, typed beside it. */}
-        <span aria-hidden className="absolute inset-x-3 bottom-9 space-y-1.5">
-          <span className={cn("block h-1.5 rounded-full", on ? "bg-brand/70" : "bg-ash/40", scan && "ci-scan-x")} style={{ width: "82%", animationDuration: "5s" }} />
-          <span className="block h-1.5 w-[60%] rounded-full bg-ash/30" />
+        {/* a caption bar */}
+        <span aria-hidden className="absolute inset-x-4 bottom-[58px] space-y-1">
+          <span className="block h-1.5 w-[88%] rounded-full bg-snow/25" />
+          <span className="block h-1.5 w-3/5 rounded-full bg-snow/15" />
+        </span>
+        {/* the call-to-action button */}
+        <span
+          aria-hidden
+          className={cn(
+            "absolute inset-x-4 bottom-9 h-6 rounded-full transition-colors duration-500",
+            on ? "bg-brand" : "bg-ash/40",
+          )}
+        >
+          <span className="mx-auto mt-[9px] block h-1.5 w-1/2 rounded-full bg-white/70" />
         </span>
         <span className="font-display absolute inset-x-0 bottom-0 border-t border-line/70 bg-ink/75 px-2 py-1.5 text-center text-[0.6875rem] font-bold uppercase leading-[1.15] tracking-[0.04em] text-brand-text backdrop-blur-sm">
           Synthetic presenter
@@ -214,60 +227,71 @@ function Screen({ kind, on, reduced }: { kind: Output["kind"]; on: boolean; redu
   }
 
   if (kind === "imagery") {
+    // A product shot: one product on a ground shadow, with a row of background
+    // options beneath, the active one brand. "Background variations", drawn.
     return (
       <div className={cn(frame, "h-[168px] w-[168px] sm:h-[184px] sm:w-[184px]")}>
-        {grain}
-        {/* A held product mark, and background variations swapping behind it. */}
-        <span aria-hidden className={cn("absolute inset-6 rounded-lg", scan ? "ci-blink-soft" : "")} style={{ background: "var(--color-brand)", opacity: 0.08, animationDuration: "3.6s" }} />
-        <svg viewBox="0 0 160 160" className="absolute inset-0 h-full w-full" aria-hidden>
-          <rect x="58" y="58" width="44" height="44" rx="6" fill="none" stroke={on ? "var(--color-brand)" : "var(--color-ash)"} strokeWidth="1.6" className="transition-colors duration-500" />
-          <circle cx="80" cy="80" r="7" fill={on ? "var(--color-brand)" : "var(--color-ash)"} fillOpacity="0.7" className="transition-colors duration-500" />
-          {/* the loupe */}
-          <circle cx={on ? 116 : 44} cy="44" r="16" fill="none" stroke="var(--color-ash)" strokeOpacity="0.6" strokeWidth="1.4" className="transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none" />
-          <line x1={on ? 127 : 55} y1="55" x2={on ? 134 : 62} y2="62" stroke="var(--color-ash)" strokeOpacity="0.6" strokeWidth="1.4" className="transition-all duration-700 motion-reduce:transition-none" />
+        <svg viewBox="0 0 184 184" className="absolute inset-0 h-full w-full" aria-hidden preserveAspectRatio="none">
+          <rect x="0" y="0" width="184" height="184" fill="var(--color-ink-2)" />
+          {/* the stage wash behind the product */}
+          <ellipse cx="92" cy="80" rx="58" ry="46" fill={ink} opacity={on ? 0.12 : 0.07} className="transition-opacity duration-500" />
+          {/* a product silhouette: a simple bottle/box */}
+          <rect x="78" y="44" width="28" height="66" rx="7" fill={ink} opacity={on ? 0.55 : 0.4} className="transition-opacity duration-500" />
+          <rect x="86" y="34" width="12" height="12" rx="3" fill={ink} opacity={on ? 0.55 : 0.4} className="transition-opacity duration-500" />
+          {/* the ground shadow */}
+          <ellipse cx="92" cy="116" rx="34" ry="6" fill="var(--color-ash)" opacity="0.25" />
         </svg>
+        {/* the background options being swapped */}
+        <span aria-hidden className="absolute inset-x-5 bottom-5 flex gap-2">
+          {[0, 1, 2, 3].map((i) => (
+            <span
+              key={i}
+              className={cn(
+                "h-6 flex-1 rounded-md border transition-colors duration-500",
+                on && i === 1 ? "border-brand bg-brand/20" : "border-line bg-ink-3",
+              )}
+            />
+          ))}
+        </span>
       </div>
     );
   }
 
-  // variants: one red source fanning into many neutral versions.
+  // variants: one source, then the same idea in a family of real formats.
+  const FORMATS = [
+    { w: 52, h: 30 }, // 16:9
+    { w: 26, h: 46 }, // 9:16
+    { w: 38, h: 38 }, // 1:1
+    { w: 36, h: 45 }, // 4:5
+  ];
   return (
-    <div className={cn(frame, "h-[156px] w-[220px] border-0 bg-transparent sm:h-[168px] sm:w-[236px]")}>
-      <svg viewBox="0 0 210 150" className="absolute inset-0 h-full w-full" aria-hidden>
-        {/* the source */}
-        <rect x="8" y="58" width="46" height="34" rx="5" fill="var(--color-brand)" fillOpacity="0.12" stroke="var(--color-brand)" strokeWidth="1.6" />
-        {/* the fan of versions */}
-        {[
-          { x: 92, y: 12, w: 40, h: 24 },
-          { x: 150, y: 22, w: 52, h: 30 },
-          { x: 96, y: 62, w: 56, h: 32 },
-          { x: 162, y: 74, w: 40, h: 40 },
-          { x: 100, y: 108, w: 48, h: 28 },
-        ].map((r, i) => (
-          <g key={i}>
-            <path
-              d={`M54 75 C 74 75, 74 ${r.y + r.h / 2}, ${r.x} ${r.y + r.h / 2}`}
-              fill="none"
-              stroke="var(--color-ash)"
-              strokeOpacity="0.4"
-              strokeWidth="1"
-              strokeDasharray="3 4"
-            />
-            {scan && (
-              <path
-                d={`M54 75 C 74 75, 74 ${r.y + r.h / 2}, ${r.x} ${r.y + r.h / 2}`}
-                fill="none"
-                stroke="var(--color-brand)"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                pathLength="100"
-                className="ci-flow"
-                style={{ animationDuration: "3.6s", animationDelay: `${i * 0.5}s` }}
-              />
-            )}
-            <rect x={r.x} y={r.y} width={r.w} height={r.h} rx="4" fill="var(--color-ash)" fillOpacity="0.1" stroke={on ? "var(--color-ash)" : "var(--color-line)"} strokeOpacity="0.7" strokeWidth="1.2" className="transition-colors duration-500" />
-          </g>
-        ))}
+    <div className={cn(frame, "h-[156px] w-[236px] border-0 bg-transparent sm:h-[168px] sm:w-[252px]")}>
+      <svg viewBox="0 0 252 168" className="absolute inset-0 h-full w-full" aria-hidden>
+        {/* the one approved source */}
+        <rect x="8" y="62" width="56" height="42" rx="6" fill="var(--color-brand)" fillOpacity="0.14" stroke="var(--color-brand)" strokeWidth="1.8" />
+        <path d="M26 74 l10 8 l-10 8 z" fill="var(--color-brand)" opacity="0.8" />
+        {/* the family of formats, each a different real aspect ratio */}
+        {(() => {
+          const cols = [
+            { x: 120, y: 20 },
+            { x: 196, y: 20 },
+            { x: 120, y: 96 },
+            { x: 196, y: 96 },
+          ];
+          return FORMATS.map((f, i) => {
+            const cx = cols[i].x;
+            const cy = cols[i].y + f.h / 2;
+            return (
+              <g key={i}>
+                <path d={`M64 83 C 92 83, 92 ${cy}, ${cx - f.w / 2} ${cy}`} fill="none" stroke="var(--color-ash)" strokeOpacity="0.4" strokeWidth="1" strokeDasharray="3 4" />
+                {scan && (
+                  <path d={`M64 83 C 92 83, 92 ${cy}, ${cx - f.w / 2} ${cy}`} fill="none" stroke="var(--color-brand)" strokeWidth="1.6" strokeLinecap="round" pathLength="100" className="ci-flow" style={{ animationDuration: "3.4s", animationDelay: `${i * 0.5}s` }} />
+                )}
+                <rect x={cx - f.w / 2} y={cols[i].y} width={f.w} height={f.h} rx="4" fill="var(--color-ash)" fillOpacity="0.1" stroke={on ? "var(--color-ash)" : "var(--color-line)"} strokeOpacity="0.7" strokeWidth="1.2" className="transition-colors duration-500" />
+              </g>
+            );
+          });
+        })()}
       </svg>
     </div>
   );

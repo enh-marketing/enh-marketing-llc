@@ -71,15 +71,6 @@ export function ReviewBench({ items }: { items: ReviewStage[] }) {
       {/* ----------------------------------------------------- the specimen -- */}
       <div>
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.25rem] border border-line bg-ink-2 sm:aspect-[16/10]">
-          <span
-            aria-hidden
-            className="absolute inset-0 opacity-[0.35]"
-            style={{
-              backgroundImage:
-                "linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)",
-              backgroundSize: "24px 24px",
-            }}
-          />
           <Specimen step={step} reduced={reduced} />
           <span className="font-display absolute left-4 top-4 rounded border border-line/70 bg-ink/60 px-2 py-1 text-[0.6875rem] font-bold uppercase tracking-[0.1em] text-ash">
             One asset · pass {cur.no}

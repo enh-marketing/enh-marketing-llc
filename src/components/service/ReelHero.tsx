@@ -62,46 +62,26 @@ export function ReelHero({
         </div>
 
         {/* ------------------------------------------------------ the viewer -- */}
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-void">
-          {/* Grain, the code-drawn field. */}
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-[0.5]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 50% 50%, rgba(232,0,13,0.10), transparent 62%), linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)",
-              backgroundSize: "100% 100%, 26px 26px, 26px 26px",
-            }}
-          />
-          {/* One abstract contour: a subject that is clearly not footage. */}
-          <svg viewBox="0 0 320 180" className="absolute inset-0 h-full w-full" aria-hidden preserveAspectRatio="xMidYMid slice">
-            <path
-              d="M20 128 C 70 128, 78 66, 120 66 S 190 128, 232 108 S 288 58, 308 64"
-              fill="none"
-              stroke="var(--color-ash)"
-              strokeOpacity="0.4"
-              strokeWidth="1.4"
-            />
-            <path
-              d="M20 128 C 70 128, 78 66, 120 66 S 190 128, 232 108 S 288 58, 308 64"
-              fill="none"
-              stroke="var(--color-brand)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              pathLength="100"
-              className="ci-flow"
-              style={{ animationDuration: "4.6s" }}
-            />
-            {[64, 128, 192, 256].map((x) => (
-              <circle key={x} cx={x} cy="150" r="2" fill="var(--color-ash)" fillOpacity="0.5" />
-            ))}
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-ink-2">
+          {/* A subject held behind a play control: a video player, not a clip.
+              A soft off-centre wash stands in for a framed shot, honest as a
+              mock; no grid, no footage. */}
+          <svg viewBox="0 0 320 180" className="absolute inset-0 h-full w-full" aria-hidden preserveAspectRatio="none">
+            <ellipse cx="222" cy="86" rx="92" ry="66" fill="var(--color-brand)" opacity="0.10" />
+            <ellipse cx="70" cy="120" rx="60" ry="44" fill="var(--color-ash)" opacity="0.10" />
+            <circle cx="160" cy="82" r="28" fill="none" stroke="var(--color-brand)" strokeWidth="2.4" />
+            <path d="M152 68 l18 14 l-18 14 z" fill="var(--color-brand)" />
           </svg>
+          {/* captions */}
+          <span aria-hidden className="absolute inset-x-10 bottom-9 space-y-1.5">
+            <span className="mx-auto block h-2 w-3/4 rounded-full bg-snow/25" />
+            <span className="mx-auto block h-2 w-1/2 rounded-full bg-snow/15" />
+          </span>
 
-          {/* The play-head: the same scan the rest of the page rides, resting
-              near the head of the reel. */}
+          {/* The play-head: the same scan the rest of the page rides. */}
           <span
             aria-hidden
-            className="ci-scan-x absolute inset-y-0 left-0 w-[2px] bg-brand/80"
+            className="ci-scan-x absolute inset-y-0 left-0 w-[2px] bg-brand/70"
             style={{ animationDuration: "5.2s" }}
           />
 

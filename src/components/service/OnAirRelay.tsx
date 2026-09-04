@@ -90,15 +90,6 @@ export function OnAirRelay({
       >
         {/* The slot on air. */}
         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-brand/50 bg-void">
-          <span
-            aria-hidden
-            className="absolute inset-0 opacity-40"
-            style={{
-              backgroundImage:
-                "linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)",
-              backgroundSize: "20px 20px",
-            }}
-          />
           {/* The warmth that drains as the audience becomes familiar. Keyed on
               the on-air index so it restarts each handover; absent (a resting
               full warmth) when not playing. */}
@@ -145,12 +136,20 @@ export function OnAirRelay({
   );
 }
 
-/** A code-drawn field, honest about being a slot rather than a clip. */
+/** A video player, honest about being a slot rather than a clip: a subject
+ *  wash behind a play control, and a caption line. No grid, no footage. */
 function ReelField() {
   return (
-    <svg viewBox="0 0 320 180" className="absolute inset-0 h-full w-full" aria-hidden preserveAspectRatio="xMidYMid slice">
-      <path d="M18 120 C 64 120, 72 60, 116 60 S 186 120, 230 100 S 286 54, 306 60" fill="none" stroke="var(--color-ash)" strokeOpacity="0.4" strokeWidth="1.4" />
-      <path d="M18 120 C 64 120, 72 60, 116 60 S 186 120, 230 100 S 286 54, 306 60" fill="none" stroke="var(--color-brand)" strokeWidth="1.8" strokeLinecap="round" pathLength="100" className="ci-flow" style={{ animationDuration: "4.2s" }} />
-    </svg>
+    <>
+      <svg viewBox="0 0 320 180" className="absolute inset-0 h-full w-full" aria-hidden preserveAspectRatio="none">
+        <ellipse cx="214" cy="84" rx="88" ry="62" fill="var(--color-brand)" opacity="0.10" />
+        <circle cx="150" cy="82" r="26" fill="none" stroke="var(--color-brand)" strokeWidth="2.2" />
+        <path d="M143 69 l16 13 l-16 13 z" fill="var(--color-brand)" />
+      </svg>
+      <span aria-hidden className="absolute inset-x-10 bottom-8 space-y-1.5">
+        <span className="mx-auto block h-2 w-3/4 rounded-full bg-snow/25" />
+        <span className="mx-auto block h-2 w-1/2 rounded-full bg-snow/15" />
+      </span>
+    </>
   );
 }
