@@ -85,7 +85,7 @@ Looping SVG classes live in `globals.css` under the Campaign Intelligence block:
 
 Shared: `ServiceHero`, `SectionHeader`, `CtaBand`, `GrowthCta`, `FaqList`, `StickyCTABar`, `Work`, `Insights`, `TrustStrip`, `LeadForm`, `Crosslink` (renders unbuilt routes as plain text; a link to a 404 is worse than no link).
 
-Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, sorted bays.
+Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, sorted index and stage.
 
 Withdrawn, and not to be revived: stepped boundary, narrowing measure, measured type silhouette, staged canvas. All four were rejected as "just a list", and the reason is worth keeping. Each changed the ornament and kept the skeleton: one item per row, copy on one side, a picture on the other. A stepped hairline, a tinted bed, a measured outline and a pinned canvas are four coats on the same list.
 

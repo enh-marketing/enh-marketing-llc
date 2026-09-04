@@ -11,42 +11,38 @@ import type { Service } from "@/content/services/ai-search-visibility";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/** The seven services, sorted by the sentence the whole page turns on.
+/** The seven services as an index and a stage.
  *
- *  WHAT WENT WRONG FOUR TIMES. Every previous version of this section drew the
- *  system: questions travelling to platforms, platforms hitting gates, gates
- *  reading a page and its markup and its off-site sources. Ten unlabelled grey
- *  rectangles per drawing. The client's verdict was "same random diagram with
- *  no meaning ... even as a dev i couldnt understand and how normal people
- *  can???", and they were right. A picture that has to be taught is not a
- *  picture, and none of those versions ever put the seven service names on
- *  screen at the same time: you had to scroll four thousand pixels to find out
- *  what was being sold.
+ *  THE SHAPE. A narrow index runs down the left with all seven names on it at
+ *  once, grouped under the document's own three words. The rest of the width is
+ *  one stage: a large drawing, then the clause that places the service, then
+ *  its title and its paragraph. Choosing a name changes the stage; the index
+ *  never moves, so the whole offer stays readable while any one part of it is
+ *  being read.
  *
- *  WHAT THIS DOES INSTEAD. The names are the composition. All seven stand in
- *  one row, in one glance, sorted into three bays captioned with the document's
- *  own three words — "find, understand, and reference", which is
- *  `narrative.questionEmphasis` verbatim and which the reader has already met
- *  twice, in the hero's three stations and in the sentence that defines the
- *  service. Where a name sits IS its answer to the section's question, so the
- *  selector and the drawing are one object. There is no picture pinned beside a
- *  list, so there is no dead column and no list to recognise.
+ *  WHY NOT A ROW ACROSS THE TOP. That was the previous version. Seven columns
+ *  across a 1240px measure leaves 160px a name and about 400px for the drawing,
+ *  which is what made the section feel thin: the approved page carries 28 to 36
+ *  drawn shapes a section, and a 400px panel cannot hold them. Down the side,
+ *  the names take a fixed 17rem and the drawing gets the remaining two thirds,
+ *  which is roughly three times the room. The index is also the natural reading
+ *  order for a list of seven at any width, so the same markup serves the phone
+ *  with no second tablist.
  *
- *  NOTHING IS REORDERED TO MAKE THE SORT WORK. 01 outside, 02 find, 03 to 05
- *  understand, 06 reference, 07 outside. The bays are contiguous in the
- *  client's own numbering, so the numbers still ascend strictly left to right,
- *  which is the one thing this client has raised twice and angrily.
+ *  NOTHING IS REORDERED. 01 outside, 02 find, 03 to 05 understand, 06
+ *  reference, 07 outside. The bays are contiguous in the client's own
+ *  numbering, so the numbers ascend strictly top to bottom and no item moves to
+ *  make the grouping work. Captions break at every change of stage, so 07
+ *  returns to the agreed questions rather than being filed under reference.
  *
- *  THE GROUPING SHOWS ITS WORKING. Selecting a service prints the clause from
- *  that service's own body that puts it in its bay. The reader is never asked
- *  to trust the arrangement; they are shown the sentence it was read from. That
- *  is also what makes three services in the same bay feel different from each
- *  other, which is the trap a bay-only drawing would have fallen into.
+ *  THE GROUPING SHOWS ITS WORKING. The stage prints the clause from the
+ *  service's own body that puts it in its bay, verified verbatim against the
+ *  source. The reader is shown the sentence rather than asked to trust the
+ *  arrangement.
  *
- *  NO FIGURES. An earlier model carried a `boundary` percentage per service.
- *  Percentages are quantities, this page promises "no counts, no scores", and
- *  nobody can see 84 against 75 anyway. Position among named bays is the only
- *  quantification here, and it is categorical. */
+ *  ONE TABLIST. An earlier version rendered a desktop row and a phone column,
+ *  which put fourteen role="tab" elements in the DOM for seven services and
+ *  duplicated every ref. */
 export function VisibilityBays({
   items,
   stages,
@@ -54,7 +50,9 @@ export function VisibilityBays({
   territories,
 }: {
   items: Service[];
-  /** The three bay captions, the document's own words in its own order. */
+  /** The three bay captions, the document's own words in its own order. Read
+   *  from the items themselves; kept in the signature so the section fails
+   *  loudly if the content file's order and the items ever disagree. */
   stages: [string, string, string];
   /** What the two readings are taken against. */
   readingLabel: string;
@@ -78,45 +76,50 @@ export function VisibilityBays({
 
   useEffect(() => {
     if (!rotating || items.length < 2) return;
-    const t = window.setInterval(() => setActive((a) => (a + 1) % items.length), 4200);
+    const t = window.setInterval(() => setActive((a) => (a + 1) % items.length), 4600);
     return () => window.clearInterval(t);
   }, [rotating, items.length]);
 
-  /* The entrance. The row assembles the way it is read: the tie that holds the
-     questions, then the three bay captions, then the names left to right, then
-     each name's rule drawing outward. Nothing scales from zero anywhere —
-     every reveal is a clip or a shift, because scaleX(0.04) → 1 reads as a
-     rendering fault and has been rejected here once already. */
+  /* The entrance. The index assembles top to bottom, then the stage arrives.
+     Nothing scales from zero: every reveal is a clip or a shift, because
+     scaleX(0.04) -> 1 reads as a rendering fault and was rejected here once.
+
+     immediateRender: false on every tween, and it is load-bearing. A `from`
+     renders its start state the moment it is created, so a timeline waiting on
+     a ScrollTrigger that never fires — a deep link straight to #services, a
+     restored scroll position, a refresh landing mid-page — leaves its targets
+     invisible for good. That shipped once: all seven rules measured 0px wide. */
   useEffect(() => {
     const el = root.current;
     if (!el) return;
     const mm = gsap.matchMedia();
     mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
       const q = gsap.utils.selector(el);
-      const tie = q("[data-tie]");
       const caps = q("[data-cap]");
-      const names = q("[data-name]");
-      const rules = q("[data-rule]");
-      /* immediateRender: false on every one of these, and it is load-bearing.
-         A `from` tween renders its start state the moment it is created, so a
-         timeline waiting on a ScrollTrigger that never fires — a deep link
-         straight to #services, a restored scroll position, a refresh that
-         lands mid-page — leaves the row at scaleX(0) and opacity 0 for good.
-         That shipped once: the rule under all seven names measured 0px wide.
-         With immediateRender off, a trigger that never fires leaves everything
-         in its natural, readable state, which is the same rule this codebase
-         already holds for reduced motion. */
+      const rows = q("[data-row]");
+      const stage = q("[data-stage]");
       const tl = gsap.timeline({
         scrollTrigger: { trigger: el, start: "top 85%", once: true },
       });
-      tl.from(tie, { clipPath: "inset(0 100% 0 0)", duration: 0.7, ease: "expo.out", immediateRender: false }, 0)
-        .from(caps, { opacity: 0, y: 10, duration: 0.5, stagger: 0.08, ease: "power2.out", immediateRender: false }, 0.15)
-        .from(names, { opacity: 0, y: 12, duration: 0.5, stagger: 0.055, ease: "power2.out", immediateRender: false }, 0.25)
-        .from(rules, { scaleX: 0, duration: 0.45, stagger: 0.055, ease: "expo.out", immediateRender: false }, 0.32);
+      tl.from(
+        caps,
+        { opacity: 0, x: -10, duration: 0.5, stagger: 0.07, ease: "power2.out", immediateRender: false },
+        0,
+      )
+        .from(
+          rows,
+          { opacity: 0, x: -14, duration: 0.5, stagger: 0.05, ease: "power2.out", immediateRender: false },
+          0.08,
+        )
+        .from(
+          stage,
+          { opacity: 0, y: 18, duration: 0.7, ease: "expo.out", immediateRender: false },
+          0.2,
+        );
       return () => {
         tl.scrollTrigger?.kill();
         tl.kill();
-        gsap.set([tie, caps, names, rules], { clearProps: "all" });
+        gsap.set([caps, rows, stage], { clearProps: "all" });
       };
     });
     return () => mm.revert();
@@ -125,8 +128,8 @@ export function VisibilityBays({
   function onKeyDown(e: React.KeyboardEvent) {
     const last = items.length - 1;
     let next: number | null = null;
-    if (e.key === "ArrowRight" || e.key === "ArrowDown") next = active === last ? 0 : active + 1;
-    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = active === 0 ? last : active - 1;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") next = active === last ? 0 : active + 1;
+    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = active === 0 ? last : active - 1;
     else if (e.key === "Home") next = 0;
     else if (e.key === "End") next = last;
     if (next === null) return;
@@ -144,91 +147,57 @@ export function VisibilityBays({
     if (!taken) setActive(i);
   };
 
-  /* Where each bay starts and how wide it is, derived from the data rather
-     than authored, so the row follows the content file if the sort ever
-     changes. Reading services are not in a bay; they stand outside them. */
-  const bays = stages.map((caption) => {
-    const idx = items.map((s, i) => (s.stage === caption ? i : -1)).filter((i) => i >= 0);
-    return { caption, start: idx[0], span: idx.length };
-  });
-
-  const current = items[active];
+  const currentStage = items[active].stage;
 
   return (
-    <div ref={root} className="relative">
-      {/* ------------------------------------------------------- the row ---
-          Desktop only. Below the large breakpoint the same seven transpose
-          into a column, because seven names across a phone is four-line wraps
-          at 40px a column and nothing is legible. */}
-      <div className="hidden lg:block">
-        {/* The tie. One labelled convention, in words: everything here is
-            measured against the same agreed questions, which is why 01 and 07
-            stand at the ends and the three bays sit between them. */}
-        <div className="relative mb-3 flex items-center gap-4">
-          <span data-tie aria-hidden className="h-px flex-1 origin-left bg-ash/30" />
-          <span className="font-display shrink-0 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-ash">
-            {readingLabel}
-          </span>
-          <span data-tie aria-hidden className="h-px flex-1 origin-right bg-ash/30" />
-        </div>
-
-        {/* The three bay captions, each spanning exactly its own services. The
-            two readings sit under the tie with no caption: they are not a
-            fourth thing to do, they are the measurement the other five are
-            made inside. */}
-        <div
-          aria-hidden
-          className="grid items-end gap-x-5"
-          style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
-        >
-          {bays.map((b) => (
-            <div
-              key={b.caption}
-              data-cap
-              className="flex flex-col gap-2"
-              style={{ gridColumn: `${b.start + 1} / span ${b.span}` }}
-            >
-              <span
-                className={cn(
-                  "font-display text-[0.8125rem] font-extrabold uppercase tracking-[0.1em] transition-colors duration-500 motion-reduce:transition-none",
-                  current.stage === b.caption ? "text-brand-text" : "text-ash",
-                )}
-              >
-                {b.caption}
-              </span>
-              <span
-                className={cn(
-                  // NOT bg-line. On the dark chapter --color-line is #2e2e2e
-                  // against #101010, which is 1.4:1 and simply does not appear.
-                  // Any line that carries meaning here is inked in ash.
-                  "h-px w-full transition-colors duration-500 motion-reduce:transition-none",
-                  current.stage === b.caption ? "bg-brand" : "bg-ash/45",
-                )}
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* The seven. Number over name over a rule, and nothing else: no card,
-            no border, no radius, no fill, no glyph. That is what makes seven
-            across legible at 1024, and it is the cleanest refusal there is of
-            the bento grid this client rejected by name. */}
-        <div
-          role="tablist"
-          aria-label="AI Search Visibility services"
-          onKeyDown={onKeyDown}
-          onPointerEnter={() => setHeld(true)}
-          onPointerLeave={() => setHeld(false)}
-          onFocusCapture={() => setHeld(true)}
-          onBlurCapture={() => setHeld(false)}
-          className="mt-4 grid gap-x-5"
-          style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
-        >
-          {items.map((s, i) => {
-            const on = i === active;
-            return (
+    <div
+      ref={root}
+      className="relative lg:grid lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] lg:gap-x-14 xl:gap-x-20"
+    >
+      {/* --------------------------------------------------------- index ---
+          All seven, always. One tablist at every width. */}
+      <div
+        role="tablist"
+        aria-label={`${stages.join(", ")} services`}
+        aria-orientation="vertical"
+        onKeyDown={onKeyDown}
+        onPointerEnter={() => setHeld(true)}
+        onPointerLeave={() => setHeld(false)}
+        onFocusCapture={() => setHeld(true)}
+        onBlurCapture={() => setHeld(false)}
+        className="lg:sticky lg:top-28 lg:self-start"
+      >
+        {items.map((s, i) => {
+          const on = i === active;
+          /* A caption at every change of stage, not only at the three bays.
+             Bay captions alone put 07 under REFERENCE, because it follows 06
+             and nothing closed the bay: a monitoring service filed as an
+             external-references one. Readings carry the same label the two
+             ends share, so 01 opens on the agreed questions and 07 returns to
+             them. */
+          const opens = i === 0 || items[i - 1].stage !== s.stage;
+          const caption = s.stage === "reading" ? readingLabel : s.stage;
+          return (
+            <div key={s.no}>
+              {opens && (
+                <span
+                  data-cap
+                  aria-hidden
+                  className={cn(
+                    // Not border-line: on the dark chapter --color-line is
+                    // #2e2e2e against #101010, 1.4:1, and does not appear.
+                    "font-display block border-b pb-2 text-[0.75rem] font-extrabold uppercase tracking-[0.12em] transition-colors duration-500 motion-reduce:transition-none",
+                    i === 0 ? "mb-1 mt-0" : "mb-1 mt-8",
+                    currentStage === s.stage
+                      ? "border-brand text-brand-text"
+                      : "border-ash/35 text-ash",
+                  )}
+                >
+                  {caption}
+                </span>
+              )}
               <button
-                key={s.no}
+                data-row
                 ref={(el) => {
                   tabs.current[i] = el;
                 }}
@@ -240,102 +209,29 @@ export function VisibilityBays({
                 tabIndex={on ? 0 : -1}
                 onMouseEnter={() => preview(i)}
                 onClick={() => choose(i)}
-                className="group flex flex-col gap-2.5 pb-3 pt-1 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                className="group relative flex w-full items-baseline gap-3.5 py-2.5 pl-3.5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
+                {/* The marker: it grows down the edge of the chosen name rather
+                    than only recolouring it, which is this site's vocabulary
+                    for an active item. */}
                 <span
-                  data-name
+                  aria-hidden
                   className={cn(
-                    "font-display text-[0.7rem] font-bold tabular-nums transition-colors duration-300 motion-reduce:transition-none",
+                    "absolute bottom-1.5 left-0 top-1.5 w-[2px] origin-top transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
+                    on ? "scale-y-100 bg-brand" : "scale-y-0 bg-ash/50 group-hover:scale-y-100",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "font-display w-6 shrink-0 text-[0.7rem] font-bold tabular-nums transition-colors duration-300 motion-reduce:transition-none",
                     on ? "text-brand-text" : "text-ash group-hover:text-brand-text",
                   )}
                 >
                   {s.no}
                 </span>
                 <span
-                  data-name
                   className={cn(
-                    "font-display min-h-[3.25rem] text-[0.8125rem] font-extrabold uppercase leading-[1.25] tracking-[0.01em] transition-colors duration-300 motion-reduce:transition-none xl:text-[0.875rem]",
-                    on ? "text-snow" : "text-fog group-hover:text-snow",
-                  )}
-                >
-                  {s.title}
-                </span>
-                {/* The rule under each name carries the selection. It grows
-                    rather than only recolouring, which is this site's vocabulary
-                    for an active item. */}
-                <span
-                  data-rule
-                  aria-hidden
-                  className={cn(
-                    "h-[2px] origin-left transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
-                    on ? "w-full bg-brand" : "w-7 bg-ash/55 group-hover:w-14 group-hover:bg-ash",
-                  )}
-                />
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ------------------------------------------------ the same, small ---
-          One column, still grouped, still in order, still one tablist. */}
-      <div
-        role="tablist"
-        aria-label="AI Search Visibility services"
-        aria-orientation="vertical"
-        onKeyDown={onKeyDown}
-        className="lg:hidden"
-      >
-        {items.map((s, i) => {
-          const on = i === active;
-          /* A caption at every change of stage, not only at the three bays.
-             Emitting bay captions alone put 07 under REFERENCE, because it
-             follows 06 and nothing closed the bay: a monitoring service filed
-             as an external-references service, which is simply wrong. Reading
-             stages get the same label the desktop tie carries, so 01 opens on
-             the agreed questions and 07 returns to them, which is the bookend
-             the desktop row draws with position. */
-          const opens = i === 0 || items[i - 1].stage !== s.stage;
-          const caption = s.stage === "reading" ? readingLabel : s.stage;
-          return (
-            <div key={s.no}>
-              {opens && (
-                <span
-                  aria-hidden
-                  className={cn(
-                    "font-display mb-2 block border-b pb-1.5 text-[0.75rem] font-extrabold uppercase tracking-[0.1em] transition-colors duration-500 motion-reduce:transition-none",
-                    i === 0 ? "mt-0" : "mt-7",
-                    current.stage === s.stage
-                      ? "border-brand text-brand-text"
-                      : "border-ash/35 text-ash",
-                  )}
-                >
-                  {caption}
-                </span>
-              )}
-              <button
-                ref={(el) => {
-                  if (!enhanced) tabs.current[i] = el;
-                }}
-                type="button"
-                role="tab"
-                aria-selected={on}
-                aria-controls={`bay-panel-${i}`}
-                tabIndex={on ? 0 : -1}
-                onClick={() => choose(i)}
-                className="group flex w-full items-baseline gap-3 py-2.5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              >
-                <span
-                  className={cn(
-                    "font-display w-6 shrink-0 text-[0.7rem] font-bold tabular-nums transition-colors duration-300 motion-reduce:transition-none",
-                    on ? "text-brand-text" : "text-ash",
-                  )}
-                >
-                  {s.no}
-                </span>
-                <span
-                  className={cn(
-                    "font-display text-[0.8125rem] font-bold uppercase leading-snug transition-colors duration-300 motion-reduce:transition-none",
+                    "font-display text-[0.8125rem] font-bold uppercase leading-[1.3] transition-colors duration-300 motion-reduce:transition-none xl:text-[0.875rem]",
                     on ? "text-snow" : "text-fog group-hover:text-snow",
                   )}
                 >
@@ -345,14 +241,30 @@ export function VisibilityBays({
             </div>
           );
         })}
+
+        {/* The pause control, present only while there is something to pause. */}
+        {enhanced && !reduced && !taken && (
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            className="font-display mt-9 inline-flex items-center gap-2 rounded-full border border-ash/40 px-4 py-2 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ash transition-colors duration-300 hover:border-brand hover:text-brand-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none"
+          >
+            <span
+              aria-hidden
+              className={cn("h-1.5 w-1.5 rounded-full", paused ? "bg-ash" : "bg-brand")}
+            />
+            {paused ? "Play" : "Pause"}
+          </button>
+        )}
       </div>
 
-      {/* -------------------------------------------------- the panels ------
-          Every one stays mounted and in document order; the six that are not
-          open are collapsed and inert. Rendering only the open one drops the
-          rest out of the DOM after hydration, which is the defect FaqList
-          shipped with. */}
-      <div className="mt-8 lg:mt-10">
+      {/* --------------------------------------------------------- stage ---
+          Every panel stays mounted and in document order; the six that are not
+          open are hidden, never unmounted. Rendering only the open one drops
+          the rest out of the DOM after hydration, which is the defect FaqList
+          shipped with, and it would take six of the seven service descriptions
+          off the page for a crawler. */}
+      <div data-stage className="mt-12 lg:mt-0">
         {items.map((s, i) => {
           const on = i === active;
           return (
@@ -362,58 +274,34 @@ export function VisibilityBays({
               role="tabpanel"
               aria-labelledby={`bay-tab-${i}`}
               hidden={!on}
-              className="grid gap-x-14 gap-y-9 border-t border-ash/25 pt-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
             >
-              {/* The left half is the reason this service sits where it sits,
-                  in its own words. It is set at display scale because it is the
-                  most interesting thing on the panel: the reader is shown the
-                  sentence the grouping was read from rather than asked to trust
-                  it. The glyph is small, like the glyphs on the page this
-                  client approved; it sizes itself h-full w-full, so it gets a
-                  box rather than utility classes it would win against. */}
-              <div>
+              <VisibilityReach reach={s.reach} territories={territories} />
+
+              <div className="mt-9 border-t border-ash/25 pt-8">
                 <div className="flex gap-5">
-                  <span aria-hidden className="mt-1 hidden h-9 w-9 shrink-0 text-brand sm:block">
+                  <span aria-hidden className="mt-0.5 hidden h-9 w-9 shrink-0 text-brand sm:block">
                     <CapabilityGlyph variant={s.glyph} />
                   </span>
-                  <p className="font-display text-balance text-[1.375rem] font-extrabold uppercase leading-[1.15] tracking-[0.01em] text-brand-text sm:text-[1.5rem]">
+                  {/* The reason this service sits where it sits, in its own
+                      words. The evidence, not an assertion. */}
+                  <p className="font-display text-balance text-[1.25rem] font-extrabold uppercase leading-[1.15] tracking-[0.01em] text-brand-text sm:text-[1.5rem]">
                     &ldquo;{s.evidence}&rdquo;
                   </p>
                 </div>
 
-                <h3 className="font-display mb-3 mt-7 text-xl font-extrabold uppercase leading-[1.15] text-snow sm:text-2xl">
-                  {s.title}
-                </h3>
-                <p className="max-w-[62ch] text-[0.9375rem] leading-relaxed text-fog">{s.body}</p>
-              </div>
-
-              {/* The second axis, drawn: whose property this work happens on.
-                  Only rendered for the open panel's own service, so the six
-                  collapsed panels do not each carry a copy of it. */}
-              <div className="lg:pt-1">
-                <VisibilityReach reach={s.reach} territories={territories} />
+                <div className="mt-8 gap-x-14 sm:grid sm:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)]">
+                  <h3 className="font-display text-xl font-extrabold uppercase leading-[1.15] text-snow sm:text-2xl">
+                    {s.title}
+                  </h3>
+                  <p className="mt-3 max-w-[62ch] text-[0.9375rem] leading-relaxed text-fog sm:mt-0">
+                    {s.body}
+                  </p>
+                </div>
               </div>
             </div>
           );
         })}
       </div>
-
-      {/* The pause control. Present only while there is something to pause. */}
-      {enhanced && !reduced && !taken && (
-        <div className="mt-6 flex justify-end">
-          <button
-            type="button"
-            onClick={() => setPaused((p) => !p)}
-            className="font-display inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ash transition-colors duration-300 hover:border-brand hover:text-brand-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none"
-          >
-            <span
-              aria-hidden
-              className={cn("h-1.5 w-1.5 rounded-full", paused ? "bg-ash" : "bg-brand")}
-            />
-            {paused ? "Play" : "Pause"}
-          </button>
-        </div>
-      )}
     </div>
   );
 }
