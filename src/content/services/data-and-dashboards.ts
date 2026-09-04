@@ -78,6 +78,9 @@ export const services = {
    *  the document's words ("founders, directors and department heads" read a
    *  summary of the marketing, sales and finance systems it connects). */
   roles: ["Management", "Marketing", "Sales", "Finance"],
+  /** The document's own phrase for where preparation happens, set on the rule
+   *  above the last bed. */
+  beforeLabel: "Before it reaches the dashboard",
   title: "Our Data and",
   strokeTitle: "Dashboard Services",
   items: [

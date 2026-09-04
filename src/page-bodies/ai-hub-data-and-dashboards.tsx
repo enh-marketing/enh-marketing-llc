@@ -13,7 +13,7 @@ import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { OneView } from "@/components/service/OneView";
 import { Narrative } from "@/components/service/Narrative";
-import { DashboardGallery } from "@/components/service/DashboardGallery";
+import { DashboardStrata } from "@/components/service/DashboardStrata";
 import { DashboardAnatomy } from "@/components/service/DashboardAnatomy";
 import { DashboardMark } from "@/components/service/DashboardMark";
 import { RoiLedger } from "@/components/service/RoiLedger";
@@ -76,10 +76,7 @@ export function DataAndDashboardsPage() {
         <section id="services" data-section="Our Data and Dashboard Services" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="01" title={c.services.title} strokeTitle={c.services.strokeTitle} markNode={<DashboardMark variant="gallery" />} className="mb-12" />
-            <DashboardGallery
-              items={c.services.items}
-              roles={c.services.roles}
-            />
+            <DashboardStrata items={c.services.items} roles={c.services.roles} beforeLabel={c.services.beforeLabel} />
           </Container>
         </section>
 
