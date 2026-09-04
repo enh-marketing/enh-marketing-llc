@@ -6,18 +6,19 @@ import { TrustStrip } from "@/components/sections/TrustStrip";
 import { Insights } from "@/components/sections/Insights";
 import * as c from "@/content/services/local-seo-services";
 
-import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { Crosslink } from "@/components/ui/Crosslink";
 import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { MissedCall } from "@/components/service/MissedCall";
 import { Narrative } from "@/components/service/Narrative";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
-import { SetupModel } from "@/components/service/SetupModel";
-import { IndustryRun } from "@/components/service/IndustryRun";
+import { SetupSwitch } from "@/components/service/SetupSwitch";
+import { ProofGap } from "@/components/service/ProofGap";
+import { SpokenQuery } from "@/components/service/SpokenQuery";
+import { SectorMap } from "@/components/service/SectorMap";
+import { BoundaryBand } from "@/components/service/BoundaryBand";
+import { PromiseGrid } from "@/components/service/PromiseGrid";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
@@ -95,169 +96,106 @@ export function LocalSeoServicesPage() {
           diagram={{ kind: "setup" }}
         />
 
-        {/* THE PAGE'S ARGUMENT. Eligibility, and the shortcut that gets a
-            profile suspended. See SetupModel. */}
-        <section
+        {/* THE PAGE'S ARGUMENT: eligibility. Three setups, one of which is
+            the reader's, and the reader is the one who says which. See
+            SetupSwitch. */}
+        <SetupSwitch
           id="setup"
-          data-section="The Right Setup Depends on How Your Business Operates"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="03"
-              title={c.setup.title}
-              strokeTitle={c.setup.strokeTitle}
-              mark={{ variant: "contrast", label: "Three ways to be a local business" }}
-              className="mb-12"
-              aside={
-                <Rise key="lead">
-                  <p className="leading-relaxed text-fog sm:text-lg">{c.setup.lead}</p>
-                </Rise>
-              }
-            />
-            <SetupModel models={c.setup.models} warning={c.setup.warning} />
-          </Container>
-        </section>
+          label="The Right Setup Depends on How Your Business Operates"
+          index="03"
+          title={c.setup.title}
+          strokeTitle={c.setup.strokeTitle}
+          lead={c.setup.lead}
+          models={c.setup.models}
+          warningClaim={c.setup.warningClaim}
+          warningRisk={c.setup.warningRisk}
+          riskMark={c.setup.riskMark}
+        />
 
-        <section
+        {/* Two banks of signals, and then the two inferences the document
+            refuses to make from them. See ProofGap. */}
+        <ProofGap
           id="measure"
-          data-section="What We Measure"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="04"
-              title={c.measure.title}
-              strokeTitle={c.measure.strokeTitle}
-              className="mb-12"
-            />
-            <Rise>
-              <p className="font-display max-w-4xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
-                {c.measure.claim}
-              </p>
-            </Rise>
-            <div className="mt-12 grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-              <Rise>
-                <p className="leading-relaxed text-snow sm:text-lg">{c.measure.available}</p>
-              </Rise>
-              <div className="space-y-6">
-                {/* What a click does not prove. */}
-                <Rise delay={0.08}>
-                  <p className="flex gap-3 leading-relaxed text-ash">
-                    <span aria-hidden className="mt-1 shrink-0 text-brand">
-                      <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none">
-                        <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5" />
-                        <path d="M8 4.6v4.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                        <circle cx="8" cy="11.4" r="0.9" fill="currentColor" />
-                      </svg>
-                    </span>
-                    <span>{c.measure.limit}</span>
-                  </p>
-                </Rise>
-                <Rise delay={0.14}>
-                  <p className="border-t border-line pt-6 leading-relaxed text-fog">
-                    {c.measure.reporting}
-                  </p>
-                </Rise>
-              </div>
-            </div>
-          </Container>
-        </section>
+          label="What We Measure"
+          index="04"
+          title={c.measure.title}
+          strokeTitle={c.measure.strokeTitle}
+          claim={c.measure.claim}
+          profileLead={c.measure.profileLead}
+          profile={c.measure.profile}
+          analyticsLead={c.measure.analyticsLead}
+          analytics={c.measure.analytics}
+          breaks={c.measure.breaks}
+          therefore={c.measure.therefore}
+          reporting={c.measure.reporting}
+        />
 
-        <section
+        {/* A local search said out loud, and the limit on what can be promised
+            about where it is answered. See SpokenQuery. */}
+        <SpokenQuery
           id="discovery"
-          data-section="Where Voice and AI Search Fit"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="05"
-              title={c.discovery.title}
-              strokeTitle={c.discovery.strokeTitle}
-              className="mb-12"
-            />
-            <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-              <Rise>
-                <p className="leading-relaxed text-snow sm:text-lg">{c.discovery.lead}</p>
-              </Rise>
-              <div className="space-y-6">
-                <Rise delay={0.08}>
-                  <p className="border-l-2 border-brand pl-6 leading-relaxed text-fog">
-                    {c.discovery.limit}
-                  </p>
-                </Rise>
-                <Rise delay={0.14}>
-                  <p className="flex flex-wrap items-baseline gap-x-1.5 leading-relaxed text-fog">
-                    <span>{c.discovery.referenceLead}</span>
-                    <Crosslink href={c.discovery.referenceHref}>
-                      {c.discovery.referenceLabel}
-                    </Crosslink>
-                    <span>{c.discovery.referenceTail}</span>
-                  </p>
-                </Rise>
-              </div>
-            </div>
-          </Container>
-        </section>
+          label="Where Voice and AI Search Fit"
+          index="05"
+          title={c.discovery.title}
+          strokeTitle={c.discovery.strokeTitle}
+          askLead={c.discovery.askLead}
+          asks={c.discovery.asks}
+          answerLead={c.discovery.answerLead}
+          answerTail={c.discovery.answerTail}
+          limit={c.discovery.limit}
+          referenceLead={c.discovery.referenceLead}
+          referenceLabel={c.discovery.referenceLabel}
+          referenceHref={c.discovery.referenceHref}
+          referenceTail={c.discovery.referenceTail}
+        />
 
-        <IndustryRun
+        {/* Ten businesses set inside a search radius, because a place is the
+            only thing this service is about. See SectorMap. */}
+        <SectorMap
           id="sectors"
           label="Businesses That Benefit From Local SEO"
           index="06"
           title={c.sectors.title}
           strokeTitle={c.sectors.strokeTitle}
-          items={c.sectors.items.map((label) => ({ label }))}
+          items={c.sectors.items}
         />
 
-        {/* Where local SEO is the wrong purchase. The document says so, and the
-            page it points at is built. */}
-        <section
+        {/* The same radius, seen from its edge: where local SEO is the wrong
+            purchase, and the way out this document gives itself. */}
+        <BoundaryBand
           id="boundary"
-          data-section="When Local SEO Is Not the Right Scope"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <Rise>
-              <p className="font-display mx-auto max-w-4xl text-center text-[clamp(1.15rem,2.3vw,1.75rem)] font-extrabold uppercase leading-[1.16] text-snow">
-                <span>{c.sectors.boundaryLead}</span>{" "}
-                <Crosslink href={c.sectors.boundaryHref} className="text-brand underline-offset-4 hover:underline">
-                  {c.sectors.boundaryLabel}
-                </Crosslink>{" "}
-                <span>{c.sectors.boundaryTail}</span>
-              </p>
-            </Rise>
-          </Container>
-        </section>
+          label="When Local SEO Is Not the Right Scope"
+          claim={c.sectors.boundaryClaim}
+          lead={c.sectors.boundaryLead}
+          linkLabel={c.sectors.boundaryLabel}
+          linkHref={c.sectors.boundaryHref}
+          tail={c.sectors.boundaryTail}
+        />
 
-        <section
+        {/* Seven commitments, four of which are refusals. See PromiseGrid. */}
+        <PromiseGrid
           id="promises"
-          data-section="What You Get From ENH Marketing"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="07"
-              title={c.promises.title}
-              strokeTitle={c.promises.strokeTitle}
-              className="mb-12"
-            />
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {c.promises.items.map((p, i) => (
-                <SurfaceCard key={p.title} index={String(i + 1).padStart(2, "0")} delay={0.05 * i}>
-                  <p className="font-display text-[1.05rem] font-extrabold uppercase leading-[1.2] text-snow">
-                    {p.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-fog">{p.body}</p>
-                </SurfaceCard>
-              ))}
-            </div>
-            <Rise delay={0.14}>
-              <p className="mt-10 max-w-3xl border-t border-line pt-8 leading-relaxed text-fog">
-                {c.promises.tail}
-              </p>
-            </Rise>
-          </Container>
-        </section>
+          label="What You Get From ENH Marketing"
+          index="07"
+          title={c.promises.title}
+          strokeTitle={c.promises.strokeTitle}
+          items={c.promises.items}
+          tail={c.promises.tail}
+        />
+
+        {/* The house mid-page CTA, in the position every other service page
+            puts it: after the promises, before the work. It carries the closing
+            heading and the "tell us" line, while the CtaBand at the foot takes
+            the heading and the longer recommendation, so no sentence prints
+            twice. */}
+        <GrowthCta
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
 
         <Work index="08" label="Our Work" ctaHref="#quote" />
 
@@ -268,8 +206,7 @@ export function LocalSeoServicesPage() {
           index="10"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

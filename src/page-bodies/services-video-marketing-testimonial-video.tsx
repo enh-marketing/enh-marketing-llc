@@ -15,10 +15,12 @@ import { ServiceHero } from "@/components/service/ServiceHero";
 import { PoliteAnswer } from "@/components/service/PoliteAnswer";
 import { Narrative } from "@/components/service/Narrative";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
-import { ProofQuestions } from "@/components/service/ProofQuestions";
-import { StageTrack } from "@/components/service/StageTrack";
+import { QuestionSheet } from "@/components/service/QuestionSheet";
+import { OneInterview } from "@/components/service/OneInterview";
+import { StoryMural } from "@/components/service/StoryMural";
 import { IndustryRun } from "@/components/service/IndustryRun";
 import { FaqList } from "@/components/service/FaqList";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
@@ -77,30 +79,23 @@ export function TestimonialVideoPage() {
           </Rise>
         </Narrative>
 
-        {/* THE PAGE'S ARGUMENT, immediately after the scene that sets it up. */}
-        <section
+        {/* THE PAGE'S ARGUMENT, immediately after the scene that sets it up:
+            our questions on one side, their recorded answers on the other, and
+            no words invented for either. See QuestionSheet. */}
+        <QuestionSheet
           id="specifics"
-          data-section="Specific Answers Are More Useful Than General Praise"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="02"
-              title={c.specifics.title}
-              strokeTitle={c.specifics.strokeTitle}
-              mark={{ variant: "progression", label: "Situation, decision, work, result" }}
-              className="mb-12"
-            />
-            <ProofQuestions
-              claim={c.specifics.claim}
-              needLead={c.narrative.needLead}
-              questions={c.narrative.questions}
-              method={c.specifics.method}
-              consent={c.specifics.consent}
-              aim={c.specifics.aim}
-            />
-          </Container>
-        </section>
+          label="Specific Answers Are More Useful Than General Praise"
+          index="02"
+          title={c.specifics.title}
+          strokeTitle={c.specifics.strokeTitle}
+          claim={c.specifics.claim}
+          needLead={c.narrative.needLead}
+          questions={c.narrative.questions}
+          method={c.specifics.method}
+          methodMark={c.specifics.methodMark}
+          consent={c.specifics.consent}
+          aim={c.specifics.aim}
+        />
 
         <PinnedExplorer
           id="types"
@@ -119,62 +114,34 @@ export function TestimonialVideoPage() {
           diagram={{ kind: "outputs" }}
         />
 
-        <section
+        {/* One recording, and the four different sets of selections taken out
+            of it. The claim is about deciding placement first, which only means
+            anything once the reader can see that they all come from the same
+            conversation. See OneInterview. */}
+        <OneInterview
           id="distribution"
-          data-section="Where Your Testimonial Videos Can Be Used"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="04"
-              title={c.distribution.title}
-              strokeTitle={c.distribution.strokeTitle}
-              className="mb-12"
-            />
-            <Rise>
-              <p className="font-display max-w-4xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
-                {c.distribution.claim}
-              </p>
-            </Rise>
-            <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {c.distribution.places.map((place, i) => (
-                <Rise key={place} delay={0.05 * i} className="h-full">
-                  <li className="flex h-full flex-col rounded-2xl border border-line bg-ink-3 p-6">
-                    <span aria-hidden className="h-1 w-9 rounded-full bg-brand" />
-                    <p className="mt-5 leading-relaxed text-snow">{place}</p>
-                  </li>
-                </Rise>
-              ))}
-            </ul>
-            <div className="mt-12 grid gap-x-14 gap-y-6 border-t border-line pt-8 lg:grid-cols-2">
-              <Rise>
-                <p className="leading-relaxed text-snow sm:text-lg">{c.distribution.wider}</p>
-              </Rise>
-              <Rise delay={0.08}>
-                <p className="border-l-2 border-brand pl-6 leading-relaxed text-fog">
-                  {c.distribution.planning}
-                </p>
-              </Rise>
-            </div>
-          </Container>
-        </section>
+          label="Where Your Testimonial Videos Can Be Used"
+          index="04"
+          title={c.distribution.title}
+          strokeTitle={c.distribution.strokeTitle}
+          claim={c.distribution.claim}
+          places={c.distribution.places}
+          wider={c.distribution.wider}
+          widerMark={c.distribution.widerMark}
+          planning={c.distribution.planning}
+        />
 
-        <section
+        {/* One account, carried the whole way: a single line that leaves the
+            customer and becomes the delivered versions, travelled left to right
+            while the section holds. See StoryMural. */}
+        <StoryMural
           id="process"
-          data-section="How the Project Moves"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="05"
-              title={c.process.title}
-              strokeTitle={c.process.strokeTitle}
-              mark={{ variant: "progression", label: "Six stages, story to delivery" }}
-              className="mb-12"
-            />
-            <StageTrack stages={c.process.stages} columns={3} />
-          </Container>
-        </section>
+          label="How the Project Moves"
+          index="05"
+          title={c.process.title}
+          strokeTitle={c.process.strokeTitle}
+          stages={c.process.stages}
+        />
 
         <IndustryRun
           id="industries"
@@ -211,6 +178,20 @@ export function TestimonialVideoPage() {
           </Container>
         </section>
 
+        {/* The mid-page ask. It takes the heading and the short line; the band
+            at the foot of the page takes the longer recommendation, so no
+            sentence prints twice. */}
+        <GrowthCta
+          id="cta"
+          label="Give Prospective Customers a Real Experience to Consider"
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
+
         <Work index="08" label="Our Work" ctaHref="#quote" />
 
         <FaqList label="FAQs" index="09" faqs={c.faqs} />
@@ -220,8 +201,7 @@ export function TestimonialVideoPage() {
           index="10"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

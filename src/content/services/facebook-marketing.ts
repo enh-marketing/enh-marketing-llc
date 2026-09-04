@@ -133,8 +133,13 @@ export const services = {
 export const advertising = {
   title: "When Facebook",
   strokeTitle: "Advertising Is Included",
-  contrast:
-    "Organic posting reaches people who already follow or encounter the Page through normal platform activity. Paid campaigns distribute selected content to a defined audience using an allocated advertising budget.",
+  /** One sentence about reach that happens and one about reach that is bought.
+   *  Split at the document's own full stop: they describe two different states
+   *  of the same field and are drawn as two. */
+  contrastOrganic:
+    "Organic posting reaches people who already follow or encounter the Page through normal platform activity.",
+  contrastPaid:
+    "Paid campaigns distribute selected content to a defined audience using an allocated advertising budget.",
   scope:
     "Our Facebook advertising services in Dubai can include media planning, campaign setup, audience selection, creative testing, lead forms, website tracking and monthly optimisation. Forecasts may be prepared when sufficient historical or category data is available, with the assumptions stated clearly.",
   objectivesLead: "Meta's current campaign objectives cover",
@@ -150,6 +155,8 @@ export const advertising = {
   objectivesRule: "The objective should match the business outcome being measured.",
   objectivesWarning:
     "A traffic campaign should not be reported as though every website visit were a qualified lead.",
+  /** What goes wrong, marked inside the warning rather than restated. */
+  objectivesWarningMark: "every website visit were a qualified lead",
   /** Tracking, and the limit stated in the same breath. */
   tracking:
     "Meta Pixel, Conversions API and other tracking components may be included when relevant and technically possible.",
@@ -179,8 +186,10 @@ export const measure = {
   paidTerm: "Paid reports",
   /** The rule, and the worked case that shows why it matters. */
   agreement: "We agree the important measures before reporting begins.",
-  agreementCase:
-    "A large number of reactions may be useful for an awareness campaign but insufficient for a campaign expected to generate enquiries.",
+  /** The same reading, judged twice. Split at the document's own "but": the
+   *  two halves are the two verdicts, and they read back as one sentence. */
+  caseUseful: "A large number of reactions may be useful for an awareness campaign",
+  caseInsufficient: "but insufficient for a campaign expected to generate enquiries.",
 };
 
 export const sectors = {
@@ -198,46 +207,66 @@ export const sectors = {
     "Logistics and industrial companies",
     "Community and consumer-focused organisations",
   ],
-  caveat:
-    "The content and response process change with the industry. Healthcare, finance and other regulated sectors may require additional approval before claims, advice or promotional material can be published.",
+  /** The claim the wall of names is under, and the checkpoint attached to it.
+   *  Split at the document's own full stop. */
+  caveatLead: "The content and response process change with the industry.",
+  caveatGate:
+    "Healthcare, finance and other regulated sectors may require additional approval before claims, advice or promotional material can be published.",
+  caveatGateMark: "Healthcare, finance and other regulated sectors",
 };
 
-export type Promise = { title: string; body: string };
+export type Promise = { no: string; title: string; body: string; glyph: GlyphVariant };
 
 export const promises = {
   title: "What You Get",
   strokeTitle: "From ENH Marketing",
   items: [
     {
+      no: "01",
       title: "A defined scope for Facebook",
+      glyph: "structure",
       body: "We establish whether the work includes page management, content production, community responses, advertising or a combination.",
     },
     {
+      no: "02",
       title: "A monthly plan built around the business",
+      glyph: "sequence",
       body: "Content is connected to current services, customer questions, campaigns and available material rather than generic engagement dates.",
     },
     {
+      no: "03",
       title: "Approval before publishing",
+      glyph: "golive",
       body: "The content calendar and posts follow the review process agreed with your team.",
     },
     {
+      no: "04",
       title: "Clear escalation rules",
+      glyph: "triage",
       body: "We define which comments and messages can be answered by ENH and which require information or approval from your business.",
     },
     {
+      no: "05",
       title: "Platform-appropriate versions",
+      glyph: "creative",
       body: "Facebook copy and creative can be adjusted without automatically duplicating the Instagram version.",
     },
     {
+      no: "06",
       title: "Paid and organic reporting kept separate",
+      glyph: "reporting",
       body: "Advertising results are not blended with ordinary Page activity to make overall performance appear stronger.",
     },
     {
+      no: "07",
       title: "Access handled through business tools",
+      glyph: "tool",
       body: "Your company should retain ownership of its Facebook Page, business portfolio and advertising account while providing ENH with the access needed for the agreed work.",
     },
     {
+      no: "08",
       title: "Connected marketing support",
+      glyph: "fanout",
       body: "As a digital marketing agency in UAE, ENH can align Facebook with content production, website activity and other digital marketing services when included in the wider scope.",
     },
   ] as Promise[],

@@ -155,10 +155,29 @@ export const around = {
 export const versions = {
   title: "One Interview Can",
   strokeTitle: "Produce Several Videos",
-  claim:
-    "A recorded conversation does not need to become one long video. The same session can produce a full interview, a shorter highlights edit, separate answers and vertical clips for social media.",
-  places:
-    "Different versions can be prepared for a website, YouTube, LinkedIn, internal communication, recruitment and paid campaigns.",
+  claim: "A recorded conversation does not need to become one long video.",
+  /** The document's four, split at its own commas so the drawing labels each
+   *  branch with the client's wording rather than ours. Only two of the four
+   *  are ranked by the document -- the long-form interview against the short
+   *  social video -- so nothing on the page orders the middle two. */
+  outputsLead: "The same session can produce",
+  outputs: [
+    "a full interview",
+    "a shorter highlights edit",
+    "separate answers",
+    "vertical clips for social media",
+  ],
+  /** Six destinations, split the same way. The document never says which
+   *  version goes where, so nothing maps them to each other. */
+  placesLead: "Different versions can be prepared for",
+  places: [
+    "a website",
+    "YouTube",
+    "LinkedIn",
+    "internal communication",
+    "recruitment",
+    "paid campaigns",
+  ],
   consequence:
     "Planning these outputs before filming changes the questions and camera framing. A short social video needs a more direct answer than a detailed long-form interview.",
   support:
@@ -217,6 +236,11 @@ export const faqs: Faq[] = [
   { q: "Do we own the finished interview and raw footage?", a: "The final approved videos are supplied with the usage rights stated in the agreement. Raw footage and editable project files are provided only when included in the proposal. Music, stock footage and other licensed elements remain subject to their own usage terms." },
 ];
 
+/** The document's closing block. It now feeds BOTH calls to action on the
+ *  page and is split so no sentence is printed twice: the mid-page GrowthCta
+ *  takes the heading and `body`, the closing CtaBand takes the heading and
+ *  `note`. Only the heading appears in both, which is what a heading on two
+ *  calls to action is for. */
 export const finalCta = {
   title: "Plan Your",
   strokeTitle: "Interview Video",

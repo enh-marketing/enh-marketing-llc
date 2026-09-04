@@ -6,17 +6,18 @@ import { TrustStrip } from "@/components/sections/TrustStrip";
 import { Insights } from "@/components/sections/Insights";
 import * as c from "@/content/services/event-video";
 
-import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { RunOfShow } from "@/components/service/RunOfShow";
 import { Narrative } from "@/components/service/Narrative";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
-import { CoveragePlan } from "@/components/service/CoveragePlan";
-import { IndustryRun } from "@/components/service/IndustryRun";
+import { CoveragePile } from "@/components/service/CoveragePile";
+import { DeliverableFirst } from "@/components/service/DeliverableFirst";
+import { VideoRoutes } from "@/components/service/VideoRoutes";
+import { EventField } from "@/components/service/EventField";
+import { ShowDay } from "@/components/service/ShowDay";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
@@ -96,150 +97,100 @@ export function EventVideoPage() {
           diagram={{ kind: "venue" }}
         />
 
-        {/* Six capabilities, set as cards rather than another pinned panel so
-            two long six-item lists never read as the same section twice. */}
-        <section
+        {/* Six ways to cover the same day, in a pile you cannot see all of.
+            The page's argument is that an event runs in parallel and a camera
+            cannot, and a row states the opposite: in a row nothing is ever
+            behind anything else. See CoveragePile. */}
+        <CoveragePile
           id="coverage"
-          data-section="What Event Video Coverage Can Include"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="03"
-              title={c.coverage.title}
-              strokeTitle={c.coverage.strokeTitle}
-              mark={{ variant: "ecosystem", label: "Six ways to cover one day" }}
-              className="mb-12"
-            />
+          label="What Event Video Coverage Can Include"
+          index="03"
+          title={c.coverage.title}
+          strokeTitle={c.coverage.strokeTitle}
+          items={c.coverage.items}
+        />
 
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {c.coverage.items.map((item, i) => (
-                <SurfaceCard
-                  key={item.title}
-                  index={String(i + 1).padStart(2, "0")}
-                  delay={0.05 * i}
-                >
-                  <p className="font-display text-[1.05rem] font-extrabold uppercase leading-[1.2] text-snow">
-                    {item.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-fog">{item.body}</p>
-                </SurfaceCard>
-              ))}
-            </div>
-          </Container>
-        </section>
-
-        {/* THE PAGE'S ARGUMENT. The deliverables decide the shoot, so they are
-            drawn before the crew: three events wanting three different things,
-            the consequence for the setup, then the eight outputs one event can
-            produce. See CoveragePlan. */}
-        <section
+        {/* THE PAGE'S ARGUMENT, run in the order the document argues it: the
+            deliverables decide the shoot, three events want three different
+            lists, four things move as a result, and one event can produce
+            eight outputs. See DeliverableFirst. */}
+        <DeliverableFirst
           id="plan"
-          data-section="Decide the Deliverables Before Event Day"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="04"
-              title={c.plan.title}
-              strokeTitle={c.plan.strokeTitle}
-              mark={{ variant: "progression", label: "One event, eight deliverables" }}
-              className="mb-12"
-            />
+          label="Decide the Deliverables Before Event Day"
+          index="04"
+          title={c.plan.title}
+          strokeTitle={c.plan.strokeTitle}
+          claim={c.plan.claim}
+          cases={c.plan.cases}
+          consequenceLead={c.plan.consequenceLead}
+          affects={c.plan.affects}
+          consequenceAlso={c.plan.consequenceAlso}
+          outputsLead={c.plan.outputsLead}
+          outputs={c.plan.outputs}
+          outputsTail={c.plan.outputsTail}
+        />
 
-            <CoveragePlan
-              claim={c.plan.claim}
-              cases={c.plan.cases}
-              consequence={c.plan.consequence}
-              outputsLead={c.plan.outputsLead}
-              outputs={c.plan.outputs}
-              outputsTail={c.plan.outputsTail}
-            />
-          </Container>
-        </section>
-
-        {/* Where the footage goes, and the limit on what can be measured. Set
-            as an editorial three-part rather than cards: it is one continuous
-            argument, and the last part narrows the two before it. */}
-        <section
+        {/* The lead is a map, not a paragraph: four kinds of video and where
+            each one goes, each keeping its own verb. Ends on the limit the
+            document puts on what can be measured. See VideoRoutes. */}
+        <VideoRoutes
           id="distribution"
-          data-section="Where Your Event Videos Can Be Used"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="05"
-              title={c.distribution.title}
-              strokeTitle={c.distribution.strokeTitle}
-              className="mb-12"
-            />
+          label="Where Your Event Videos Can Be Used"
+          index="05"
+          title={c.distribution.title}
+          strokeTitle={c.distribution.strokeTitle}
+          routes={c.distribution.routes}
+          supportLead={c.distribution.supportLead}
+          supportUses={c.distribution.supportUses}
+          supportTail={c.distribution.supportTail}
+          measure={c.distribution.measure}
+          measureMark={c.distribution.measureMark}
+        />
 
-            <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-              <Rise>
-                <p className="leading-relaxed text-snow sm:text-lg">{c.distribution.lead}</p>
-              </Rise>
-              <div className="space-y-8">
-                <Rise delay={0.08}>
-                  <p className="border-l-2 border-brand pl-6 leading-relaxed text-fog">
-                    {c.distribution.support}
-                  </p>
-                </Rise>
-                <Rise delay={0.14}>
-                  <p className="flex gap-3 border-t border-line pt-6 text-sm leading-relaxed text-ash">
-                    <span aria-hidden className="mt-0.5 shrink-0 text-brand">
-                      <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none">
-                        <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5" />
-                        <path d="M8 4.6v4.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                        <circle cx="8" cy="11.4" r="0.9" fill="currentColor" />
-                      </svg>
-                    </span>
-                    <span>{c.distribution.measure}</span>
-                  </p>
-                </Rise>
-              </div>
-            </div>
-          </Container>
-        </section>
-
-        <IndustryRun
+        {/* The reader has one event and is scanning for it. Eleven occasions
+            spread on a plane with no first and no last, each drawn as the
+            occasion it is. See EventField. */}
+        <EventField
           id="sectors"
           label="Events and Sectors We Cover"
           index="06"
           title={c.sectors.title}
           strokeTitle={c.sectors.strokeTitle}
-          items={c.sectors.items.map((label) => ({ label }))}
+          items={c.sectors.items}
         />
 
-        <section
+        {/* The lead says the scope is "more than arriving with a camera" and
+            covers before, during and after. Arriving with a camera is the
+            during -- a point, not a third of the line -- so the eight sit
+            either side of it, each one drawn, with the split measured beside
+            them. See ShowDay. */}
+        <ShowDay
           id="promises"
-          data-section="What You Get From ENH Marketing"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="07"
-              title={c.promises.title}
-              strokeTitle={c.promises.strokeTitle}
-              className="mb-12"
-              aside={
-                <Rise key="lead">
-                  <p className="leading-relaxed text-fog sm:text-lg">{c.promises.lead}</p>
-                </Rise>
-              }
-            />
+          label="What You Get From ENH Marketing"
+          index="07"
+          title={c.promises.title}
+          strokeTitle={c.promises.strokeTitle}
+          lead={c.promises.lead}
+          leadMark={c.promises.leadMark}
+          eventLabel={c.promises.eventLabel}
+          items={c.promises.items}
+        />
 
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {c.promises.items.map((p, i) => (
-                <SurfaceCard key={p.title} index={String(i + 1).padStart(2, "0")} delay={0.05 * i}>
-                  <p className="font-display text-[1.05rem] font-extrabold uppercase leading-[1.2] text-snow">
-                    {p.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-fog">{p.body}</p>
-                </SurfaceCard>
-              ))}
-            </div>
-          </Container>
-        </section>
+        {/* The house mid-page CTA, in the position every other service page
+            puts it: after the promises, before the work. It carries the closing
+            heading and the "tell us" line, while the CtaBand at the foot takes
+            the heading and the longer recommendation, so no sentence prints
+            twice. */}
+        <GrowthCta
+          id="cta"
+          label="Tell Us What the Event Needs"
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
 
         {/* The hero's second button points here, because it says portfolio. */}
         <Work index="08" label="Summits Reached" ctaHref="#quote" />
@@ -251,8 +202,7 @@ export function EventVideoPage() {
           index="10"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

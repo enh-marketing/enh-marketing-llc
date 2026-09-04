@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, animate } from "motion/react";
+import { motion, useInView, useReducedMotion, animate } from "motion/react";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -29,6 +29,7 @@ export function Chars({
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
+  const reduced = useReducedMotion();
   const play = playProp ?? (immediate || inView);
 
   // Characters are grouped into words, each word an inline-block that cannot
@@ -48,8 +49,12 @@ export function Chars({
               <span key={ci} className="inline-block overflow-hidden align-bottom">
                 <motion.span
                   className="inline-block"
-                  initial={{ y: "110%", rotate: 6 }}
-                  animate={play ? { y: 0, rotate: 0 } : {}}
+                  /* A reader who asked for no motion gets the heading where it
+                     already is, not a hundred characters travelling into
+                     place. `initial={false}` skips the entrance without
+                     touching anything else. */
+                  initial={reduced ? false : { y: "110%", rotate: 6 }}
+                  animate={reduced || play ? { y: 0, rotate: 0 } : {}}
                   transition={{
                     duration: 0.7,
                     delay: delay + (start + ci) * 0.025,
@@ -83,12 +88,17 @@ export function Rise({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
+  const reduced = useReducedMotion();
   return (
     <motion.div
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      /* Under prefers-reduced-motion the block is simply there: no offset to
+         travel back from, and no opacity to wait for. This is the one entrance
+         used across every page, so honouring the preference here honours it
+         nearly everywhere. */
+      initial={reduced ? false : { opacity: 0, y }}
+      animate={reduced || inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay, ease: EASE }}
     >
       {children}

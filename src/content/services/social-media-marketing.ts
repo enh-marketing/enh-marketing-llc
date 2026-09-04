@@ -27,7 +27,7 @@
 import type { MeasureRow } from "@/components/service/MeasureTable";
 import type { IndexEntry } from "@/components/service/ServiceIndex";
 import type { TrackStage } from "@/components/service/StageTrack";
-import type { Sector } from "@/components/service/SectorLedger";
+export type Sector = { label: string; parts: string[] };
 
 export const meta = {
   title: "Social Media Marketing Agency in Dubai | ENH Marketing",
@@ -52,18 +52,27 @@ export const narrative = {
   highlight: ["plan what to publish", "create the material", "manage the work after it goes live"],
 };
 
+/** Each of the six is a position and then the reason for it. Split at the
+ *  source's own full stop -- and, for the fourth, at its own "when", the only
+ *  break that sentence offers -- so the page can set the position at weight and
+ *  the reason under it. Nothing is reworded. */
+export type Reason = { stance: string; detail: string };
+
 export const reasons = {
   title: "Why Choose ENH Marketing for",
   strokeTitle: "Social Media Marketing in Dubai",
   lead: "We have spent more than a decade helping businesses build and manage their social media presence. The work covers the full process, so strategy, production, publishing and advertising do not need to sit with separate teams.",
+  /** The four parts the lead says do not need separate teams. The section draws
+   *  them as one unbroken run. */
+  leadMark: "strategy, production, publishing and advertising",
   items: [
-    "We start with the business. Its audience, goals, products and available material shape the content plan.",
-    "Each platform gets its own role. Instagram may lead with visual content, while LinkedIn may need expert commentary and business context.",
-    "Photo, video, design and copy can be produced through one team. The scope states the monthly output before work begins.",
-    "Publishing and community replies are handled when social media management is included.",
-    "Organic activity and paid advertising are reported separately. You can see what the content achieved and what the media budget produced.",
-    "Content performance guides the next plan. Useful topics and formats are developed further instead of filling the calendar with unrelated ideas.",
-  ],
+    { stance: "We start with the business.", detail: "Its audience, goals, products and available material shape the content plan." },
+    { stance: "Each platform gets its own role.", detail: "Instagram may lead with visual content, while LinkedIn may need expert commentary and business context." },
+    { stance: "Photo, video, design and copy can be produced through one team.", detail: "The scope states the monthly output before work begins." },
+    { stance: "Publishing and community replies are handled", detail: "when social media management is included." },
+    { stance: "Organic activity and paid advertising are reported separately.", detail: "You can see what the content achieved and what the media budget produced." },
+    { stance: "Content performance guides the next plan.", detail: "Useful topics and formats are developed further instead of filling the calendar with unrelated ideas." },
+  ] as Reason[],
 };
 
 export const services = {
@@ -155,6 +164,8 @@ export const measure = {
     { track: "Audience sentiment", tells: "How people respond to the brand and the subjects being discussed" },
   ] as MeasureRow[],
   note: "The report connects these measures with the original goal. A campaign built for enquiries should not be judged mainly on likes, and an awareness campaign needs more context than the number of direct sales it produced.",
+  /** The refusal at the centre of the note. */
+  noteMark: "should not be judged mainly on likes",
 };
 
 export const process = {
@@ -175,29 +186,46 @@ export const sectors = {
   strokeTitle: "Across Social Media",
   lead: "Social media works best when the business has something useful, visual or timely to share and can support a consistent production process.",
   items: [
-    { label: "Food and beverage", detail: "dishes, menus, offers, atmosphere and behind-the-scenes content" },
-    { label: "Retail and ecommerce", detail: "products, demonstrations, launches and promotions" },
-    { label: "Hospitality and leisure", detail: "properties, experiences, events and seasonal activity" },
-    { label: "Healthcare and wellness", detail: "services, expert explanations and patient information" },
-    { label: "Real estate", detail: "properties, developments, communities and agent-led content" },
-    { label: "Professional services", detail: "advice, commentary, company updates and team expertise" },
-    { label: "Education and training", detail: "courses, events, student activity and useful guidance" },
-    { label: "Technology and B2B", detail: "demonstrations, case studies, expert content and industry topics" },
-    { label: "Construction and industrial businesses", detail: "projects, processes, teams and technical knowledge" },
-    { label: "Events and entertainment", detail: "announcements, artist content, live coverage and recap material" },
+    { label: "Food and beverage", parts: ["dishes","menus","offers","atmosphere","behind-the-scenes content"] },
+    { label: "Retail and ecommerce", parts: ["products","demonstrations","launches","promotions"] },
+    { label: "Hospitality and leisure", parts: ["properties","experiences","events","seasonal activity"] },
+    { label: "Healthcare and wellness", parts: ["services","expert explanations","patient information"] },
+    { label: "Real estate", parts: ["properties","developments","communities","agent-led content"] },
+    { label: "Professional services", parts: ["advice","commentary","company updates","team expertise"] },
+    { label: "Education and training", parts: ["courses","events","student activity","useful guidance"] },
+    { label: "Technology and B2B", parts: ["demonstrations","case studies","expert content","industry topics"] },
+    { label: "Construction and industrial businesses", parts: ["projects","processes","teams","technical knowledge"] },
+    { label: "Events and entertainment", parts: ["announcements","artist content","live coverage","recap material"] },
   ] as Sector[],
   tail: "Some businesses have a constant supply of visual material. Others need expert interviews, planned production days or design-led content. The monthly output should reflect what the business can realistically sustain.",
 };
 
-/** Paid, kept in its own section and never merged into the organic reporting. */
+/** Paid, kept in its own section and never merged into the organic reporting.
+ *
+ *  THREE SPLITS, ALL AT THE SOURCE'S OWN PUNCTUATION. The planning sentence
+ *  names five things decided before a campaign runs, separated by its own
+ *  commas, so the page can set them out as the five decisions they are. The
+ *  separation sentence names two money lines and then says what happens to
+ *  them, so the two become the ledger and the clause becomes the line under it.
+ *  Read the section in order and both sentences are back exactly as written. */
 export const paid = {
   title: "Reach a Larger Audience",
   strokeTitle: "With Paid Social Campaigns",
   claim:
     "Paid social campaigns can place the brand in front of people who do not currently follow its accounts.",
-  body: "We plan the objective, audience, creative, budget and tracking before the campaign begins. Facebook, Instagram, LinkedIn and other suitable platforms are selected according to the audience and the action the campaign needs to generate.",
-  separation:
-    "The advertising fee and media budget are shown separately. Campaign results can then be reviewed against the agreed KPIs without mixing paid performance with organic account activity.",
+  /** What is settled before anything runs. */
+  planLead: "We plan the",
+  decisions: ["objective", "audience", "creative", "budget", "tracking"],
+  planTail: "before the campaign begins.",
+  platforms:
+    "Facebook, Instagram, LinkedIn and other suitable platforms are selected according to the audience and the action the campaign needs to generate.",
+  /** The two lines that are never added together, and the clause that says so. */
+  ledger: ["The advertising fee", "media budget"],
+  ledgerVerb: "are shown separately.",
+  review:
+    "Campaign results can then be reviewed against the agreed KPIs without mixing paid performance with organic account activity.",
+  /** The clause the whole section exists to protect. */
+  reviewMark: "without mixing paid performance with organic account activity",
   scope:
     "ENH Marketing provides social media marketing in Dubai for businesses that need organic management, paid promotion or both under one coordinated plan.",
 };

@@ -25,6 +25,24 @@ import type { PinRenderer } from "@/components/service/PinnedExplorer";
  *  a capacity. The one element drawn in brand per layout is the thing the
  *  coverage has to reach, which is what the paragraph beside it is about.
  *
+ *  WHAT WAS MISSING, AND WHAT THE PAGE IS ACTUALLY ABOUT. The room alone shows
+ *  where things are. It does not show that they are happening at once, which is
+ *  the entire opening argument: a conference "may have a keynote on stage,
+ *  demonstrations in the exhibition area, interviews with speakers, and
+ *  conversations between attendees happening at the same time. One camera with
+ *  no coverage plan will miss something important." So each room now carries
+ *  the things its own paragraph says the coverage includes, live at once and
+ *  pulsing out of phase with each other -- four on a conference floor, five in
+ *  an exhibition, three at a launch. The reader watches several places asking
+ *  for attention simultaneously, which is the problem the whole page exists to
+ *  solve.
+ *
+ *  THESE ARE ACTIVITIES, NOT CAMERAS. Every marker is a thing named in that
+ *  event's own copy as something to be covered; none of them is a crew
+ *  position, and the count is the document's own list length, not a
+ *  recommendation. The page refuses to fix a camera number and this drawing
+ *  still refuses with it.
+ *
  *  No labels: the panel next to the drawing already names the event. */
 
 type Shape =
@@ -98,6 +116,24 @@ const LAYOUTS: Shape[][] = [
   ],
 ];
 
+/** What each event has running at the same time, taken from that event's own
+ *  paragraph and placed on its own floor:
+ *    01 keynote, panel, audience questions, speaker interviews          (4)
+ *    02 stands, demonstrations, interviews, conversations               (4)
+ *    03 the space, featured work, visitors, speakers, organisations     (5)
+ *    04 presentation, demonstration, audience response                  (3)
+ *    05 speaker and presentation, demonstrations and participants       (2)
+ *    06 stage, attendees, planned interviews                            (3)
+ *  Positions sit on the part of the room that activity happens in. */
+const LIVE: [number, number][][] = [
+  [[160, 34], [160, 122], [96, 150], [50, 200]],
+  [[125, 51], [197, 51], [125, 125], [161, 199]],
+  [[37, 64], [160, 66], [160, 158], [283, 64], [160, 209]],
+  [[160, 34], [160, 86], [160, 168]],
+  [[160, 33], [94, 93]],
+  [[160, 32], [160, 92], [104, 174]],
+];
+
 export function VenueFloor({
   count,
   active,
@@ -108,6 +144,7 @@ export function VenueFloor({
   pin: PinRenderer;
 }) {
   const shapes = LAYOUTS[active] ?? LAYOUTS[0];
+  const live = LIVE[active] ?? LIVE[0];
   const line = {
     fill: "none",
     stroke: "currentColor",
@@ -136,6 +173,16 @@ export function VenueFloor({
             {/* The way in, on the same wall every time. */}
             <path d="M132 232h56" stroke="var(--color-ink-3)" strokeWidth="4" />
             <path d="M132 232h56" {...line} strokeWidth="2" opacity="0.5" />
+
+            {/* And everything this event has running at once. Out of phase, so
+                the room reads as several places asking for attention at the
+                same moment rather than one blinking light. */}
+            {live.map(([cx, cy], i) => (
+              <g key={`live-${i}`} className="venue-live" style={{ animationDelay: `${i * 420}ms` }}>
+                <circle cx={cx} cy={cy} r="13" fill="none" stroke="var(--color-brand)" strokeWidth="1.4" />
+                <circle cx={cx} cy={cy} r="4" fill="var(--color-brand)" />
+              </g>
+            ))}
 
             {shapes.map((s, i) => {
               if (s.t === "rect") {

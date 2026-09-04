@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type ReactNode } from "react";
 import { routeExists } from "@/lib/sitemap";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -63,6 +63,7 @@ export function CapabilityCarousel({
   title,
   strokeTitle,
   items,
+  footer,
 }: {
   /** DevTools handle: id anchors the section, data-section names it. */
   id: string;
@@ -71,6 +72,10 @@ export function CapabilityCarousel({
   title: string;
   strokeTitle?: string;
   items: Capability[];
+  /** Copy the source attaches to the set rather than to any one card. Rendered
+   *  under the run, inside the same container as the heading, so a page whose
+   *  document closes the section with a sentence does not have to drop it. */
+  footer?: ReactNode;
 }) {
   const enabled = useEnhanced();
   const stageRef = useRef<HTMLDivElement>(null);
@@ -312,6 +317,8 @@ export function CapabilityCarousel({
           </div>
         )}
       </div>
+
+      {footer && <Container className="mt-14">{footer}</Container>}
     </section>
   );
 }

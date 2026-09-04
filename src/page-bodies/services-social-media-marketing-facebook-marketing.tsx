@@ -9,16 +9,18 @@ import * as c from "@/content/services/facebook-marketing";
 import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { Crosslink } from "@/components/ui/Crosslink";
 import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { PageDrift } from "@/components/service/PageDrift";
 import { Narrative } from "@/components/service/Narrative";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
-import { SplitLedger } from "@/components/service/SplitLedger";
-import { IndustryRun } from "@/components/service/IndustryRun";
+import { DeliveryField } from "@/components/service/DeliveryField";
+import { TwoLedgers } from "@/components/service/TwoLedgers";
+import { PageStack } from "@/components/service/PageStack";
+import { CapabilityCarousel } from "@/components/service/CapabilityCarousel";
 import { FaqList } from "@/components/service/FaqList";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
@@ -107,8 +109,9 @@ export function FacebookMarketingPage() {
           </Rise>
         </PinnedExplorer>
 
-        {/* Paid, and the two things the document is careful about: matching the
-            objective to the outcome, and not overclaiming tracking. */}
+        {/* THE PAGE'S FIRST ARGUMENT. One field of people, three states: who
+            organic reaches, who paid is aimed at, and what comes back. See
+            DeliveryField. */}
         <section
           id="advertising"
           data-section="When Facebook Advertising Is Included"
@@ -122,67 +125,27 @@ export function FacebookMarketingPage() {
               mark={{ variant: "contrast", label: "Organic reach and paid delivery are not the same thing" }}
               className="mb-12"
             />
-
-            <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
-              <Rise>
-                <p className="leading-relaxed text-snow sm:text-lg">{c.advertising.contrast}</p>
-                <p className="mt-6 border-l-2 border-brand pl-6 leading-relaxed text-fog">
-                  {c.advertising.scope}
-                </p>
-              </Rise>
-
-              {/* The objectives, and the mismatch the document warns about. */}
-              <Rise delay={0.08}>
-                <p className="leading-relaxed text-snow sm:text-lg">
-                  {c.advertising.objectivesLead}
-                </p>
-                <ul className="mt-5 flex flex-wrap gap-2.5">
-                  {c.advertising.objectives.map((o) => (
-                    <li
-                      key={o}
-                      className="font-display rounded-lg border border-brand/45 bg-brand/[0.06] px-4 py-2 text-sm font-bold text-snow"
-                    >
-                      {o}
-                    </li>
-                  ))}
-                </ul>
-                <p className="font-display mt-7 text-[clamp(1rem,1.9vw,1.3rem)] font-extrabold uppercase leading-[1.16] text-snow">
-                  {c.advertising.objectivesRule}
-                </p>
-                <p className="mt-4 flex gap-3 text-sm leading-relaxed text-ash">
-                  <span aria-hidden className="mt-0.5 shrink-0 text-brand">
-                    <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none">
-                      <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5" />
-                      <path d="M8 4.6v4.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                      <circle cx="8" cy="11.4" r="0.9" fill="currentColor" />
-                    </svg>
-                  </span>
-                  <span>{c.advertising.objectivesWarning}</span>
-                </p>
-              </Rise>
-            </div>
-
-            {/* Tracking, and the limit stated in the same breath. */}
-            <Rise delay={0.14} className="mt-12 border-t border-line pt-8">
-              <div className="grid gap-x-12 gap-y-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-                <p className="leading-relaxed text-snow sm:text-lg">
-                  {c.advertising.tracking}
-                </p>
-                <p className="leading-relaxed text-fog">{c.advertising.trackingCaveat}</p>
-              </div>
-              <p className="mt-8 flex flex-wrap items-baseline gap-x-1.5 leading-relaxed text-fog">
-                <span>{c.advertising.referenceLead}</span>
-                <Crosslink href={c.advertising.referenceHref}>
-                  {c.advertising.referenceLabel}
-                </Crosslink>
-                <span>{c.advertising.referenceTail}</span>
-              </p>
-            </Rise>
+            <DeliveryField
+              organic={c.advertising.contrastOrganic}
+              paid={c.advertising.contrastPaid}
+              scope={c.advertising.scope}
+              objectivesLead={c.advertising.objectivesLead}
+              objectives={c.advertising.objectives}
+              objectivesRule={c.advertising.objectivesRule}
+              objectivesWarning={c.advertising.objectivesWarning}
+              objectivesWarningMark={c.advertising.objectivesWarningMark}
+              tracking={c.advertising.tracking}
+              trackingCaveat={c.advertising.trackingCaveat}
+              referenceLead={c.advertising.referenceLead}
+              referenceLabel={c.advertising.referenceLabel}
+              referenceHref={c.advertising.referenceHref}
+              referenceTail={c.advertising.referenceTail}
+            />
           </Container>
         </section>
 
-        {/* THE SECOND ARGUMENT. Two ledgers, never added together. See
-            SplitLedger. */}
+        {/* THE SECOND ARGUMENT. Two instruments with different faces, and the
+            gap between them that nothing is carried across. See TwoLedgers. */}
         <section
           id="measure"
           data-section="What We Measure"
@@ -195,53 +158,57 @@ export function FacebookMarketingPage() {
               strokeTitle={c.measure.strokeTitle}
               className="mb-12"
             />
-            <SplitLedger
+            <TwoLedgers
               claim={c.measure.claim}
               organic={c.measure.organic}
               organicTerm={c.measure.organicTerm}
               paid={c.measure.paid}
               paidTerm={c.measure.paidTerm}
               agreement={c.measure.agreement}
-              agreementCase={c.measure.agreementCase}
+              caseUseful={c.measure.caseUseful}
+              caseInsufficient={c.measure.caseInsufficient}
             />
           </Container>
         </section>
 
-        <IndustryRun
+        {/* Ten businesses as the thing this service manages: ten Pages
+            standing closed, one open. Giving attention to one takes it from the
+            other nine, which is what this platform is. See PageStack. */}
+        <PageStack
           id="sectors"
           label="Businesses We Manage Facebook For"
           index="05"
           title={c.sectors.title}
           strokeTitle={c.sectors.strokeTitle}
-          note={c.sectors.caveat}
-          items={c.sectors.items.map((label) => ({ label }))}
+          items={c.sectors.items}
+          caveatLead={c.sectors.caveatLead}
+          caveatGate={c.sectors.caveatGate}
+          caveatGateMark={c.sectors.caveatGateMark}
         />
 
-        <section
+        {/* The commitments, on the run the site uses for capability sets. */}
+        <CapabilityCarousel
           id="promises"
-          data-section="What You Get From ENH Marketing"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="06"
-              title={c.promises.title}
-              strokeTitle={c.promises.strokeTitle}
-              className="mb-12"
-            />
+          label="What You Get From ENH Marketing"
+          index="06"
+          title={c.promises.title}
+          strokeTitle={c.promises.strokeTitle}
+          items={c.promises.items}
+        />
 
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {c.promises.items.map((p, i) => (
-                <SurfaceCard key={p.title} index={String(i + 1).padStart(2, "0")} delay={0.05 * i}>
-                  <p className="font-display text-[1.05rem] font-extrabold uppercase leading-[1.2] text-snow">
-                    {p.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-fog">{p.body}</p>
-                </SurfaceCard>
-              ))}
-            </div>
-          </Container>
-        </section>
+        {/* The mid-page ask. It takes the heading and the short line; the band
+            at the foot of the page takes the longer recommendation, so no
+            sentence prints twice. */}
+        <GrowthCta
+          id="cta"
+          label="Give the Page a Clear Role"
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
 
         <Work index="07" label="Summits Reached" ctaHref="#quote" />
 
@@ -252,8 +219,7 @@ export function FacebookMarketingPage() {
           index="09"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

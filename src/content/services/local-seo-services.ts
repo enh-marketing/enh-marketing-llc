@@ -33,6 +33,7 @@
 
 import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
+import type { PromiseMark } from "@/components/service/LocalPromiseIcon";
 
 export const meta = {
   title: "Local SEO Services in Dubai | ENH Marketing",
@@ -90,31 +91,56 @@ export const setup = {
     {
       name: "Storefront Businesses",
       body: "A shop, clinic, restaurant or office that receives customers should use its genuine public location and accurate customer-facing hours. Website pages should make the address, services, contact details and visiting information easy to confirm.",
+      /** The clause that decides eligibility, marked in place. Verbatim and
+       *  contiguous with the body, so the sentence still reads as written. */
+      mark: "its genuine public location and accurate customer-facing hours",
     },
     {
       name: "Service-Area Businesses",
       body: "A company that visits customers may define the areas it serves without displaying a residential or unstaffed address. Google permits one profile for the central location and does not treat virtual offices as genuine operating locations.",
+      mark: "does not treat virtual offices as genuine operating locations",
     },
     {
       name: "Multi-Location Businesses",
       body: "Each eligible branch may need its own profile and location page when it has a real operating presence and serves customers there. Names, categories and core business information should remain consistent across branches providing the same service.",
+      mark: "a real operating presence",
     },
   ],
-  /** The warning the section ends on. Two sentences, both kept. */
-  warning:
-    "Creating extra profiles or copied location pages does not create genuine coverage. It can confuse customers, weaken the website and place the Business Profile at risk of suspension.",
+  /** The warning the section ends on. Two sentences, both kept, split at the
+   *  source's own full stop: the first refuses the shortcut, the second names
+   *  what it costs. The page gives the second the greater weight. */
+  warningClaim:
+    "Creating extra profiles or copied location pages does not create genuine coverage.",
+  warningRisk:
+    "It can confuse customers, weaken the website and place the Business Profile at risk of suspension.",
+  /** The three words that are the actual consequence. */
+  riskMark: "at risk of suspension",
 };
 
 export const measure = {
   title: "What",
   strokeTitle: "We Measure",
   claim: "Local SEO reporting should show more than ranking screenshots.",
-  available:
-    "Google Business Profile performance can report the searches used to find the business, profile views, direction requests, call-button clicks and website clicks. Website analytics can then show organic visits, form submissions, bookings and other agreed actions.",
-  /** The two things a click does not prove. The document states them as a pair
-   *  and they are set as one. */
-  limit:
-    "A call-button click does not confirm that a qualified conversation happened. A direction request does not prove that someone arrived. We therefore define the important conversion actions at the beginning and connect the available data where possible.",
+  /** The document's two sources, split at its own commas so the drawing can
+   *  name each signal in the client's wording. */
+  profileLead: "Google Business Profile performance can report",
+  profile: [
+    "the searches used to find the business",
+    "profile views",
+    "direction requests",
+    "call-button clicks",
+    "website clicks",
+  ],
+  analyticsLead: "Website analytics can then show",
+  analytics: ["organic visits", "form submissions", "bookings", "other agreed actions"],
+  /** The two inferences the document explicitly refuses to make. Each is a
+   *  complete sentence in the source and stays one here. */
+  breaks: [
+    "A call-button click does not confirm that a qualified conversation happened.",
+    "A direction request does not prove that someone arrived.",
+  ],
+  therefore:
+    "We therefore define the important conversion actions at the beginning and connect the available data where possible.",
   reporting:
     "Reports explain what changed, which locations or services gained visibility and what needs attention next. Local performance is assessed over a meaningful period rather than judged through one week of movement.",
 };
@@ -123,7 +149,12 @@ export const measure = {
 export const discovery = {
   title: "Where Voice and",
   strokeTitle: "AI Search Fit",
-  lead: "People increasingly phrase local searches as complete questions, including requests for opening hours, nearby services, availability and directions. Clear website content, accurate business details and concise answers make that information easier for search systems to understand.",
+  /** Split at the document's own commas: the four things people ask for, and
+   *  the three things that make them answerable. */
+  askLead: "People increasingly phrase local searches as complete questions, including requests for",
+  asks: ["opening hours", "nearby services", "availability", "directions"],
+  answerLead: "Clear website content, accurate business details and concise answers",
+  answerTail: "make that information easier for search systems to understand.",
   limit:
     "Local SEO can support this wider discoverability, but it cannot guarantee that a business will be selected for a voice response or mentioned in an AI-generated answer.",
   referenceLead: "Our",
@@ -147,27 +178,38 @@ export const sectors = {
     "Contractors and maintenance companies",
     "Multi-location and franchise businesses",
   ],
-  /** Where local SEO is the wrong purchase, with the document's own crosslink. */
+  /** Where local SEO is the wrong purchase, with the document's own crosslink.
+   *  Split at the source's own full stop: the first sentence states where the
+   *  service applies, the second sends the reader somewhere else. */
+  boundaryClaim: "Local SEO is most useful when location affects the buying decision.",
   boundaryLead:
-    "Local SEO is most useful when location affects the buying decision. A business serving customers across the UAE without a local component may need a broader",
+    "A business serving customers across the UAE without a local component may need a broader",
   boundaryLabel: "SEO services",
   boundaryHref: "/services/seo",
   boundaryTail: "strategy instead.",
 };
 
-export type Promise = { title: string; body: string };
+export type Promise = {
+  title: string;
+  body: string;
+  mark: PromiseMark;
+  /** The clause where the source refuses something, verbatim and contiguous
+   *  with the end of `body`. Four of the seven carry one; the page marks it
+   *  rather than paraphrasing it. */
+  avoid?: string;
+};
 
 export const promises = {
   title: "What You Get",
   strokeTitle: "From ENH Marketing",
   items: [
-    { title: "An audit before changes begin", body: "We review the website, Business Profile, current rankings, listings, reviews and tracking to understand what is helping or limiting local visibility." },
-    { title: "A setup based on real operations", body: "Storefronts, service-area businesses and multi-location companies are handled according to how they actually receive or visit customers." },
-    { title: "Policy-aware Business Profile management", body: "We avoid keyword-stuffed names, false addresses, unnecessary profiles and other shortcuts that can create suspension risks." },
-    { title: "Useful location content", body: "Pages are developed around genuine services, areas and customer needs rather than producing near-identical pages for every Dubai neighbourhood." },
-    { title: "A responsible review process", body: "We help your team request honest feedback and respond professionally without buying reviews or filtering requests only towards satisfied customers." },
-    { title: "Clear service boundaries", body: "Local PPC, social media and other digital marketing services are shown separately when they are required rather than being presented as part of organic local SEO." },
-    { title: "Reporting tied to actions", body: "Rankings, profile activity and website traffic are connected with calls, directions, forms, bookings or other agreed conversion points where tracking allows." },
+    { title: "An audit before changes begin", mark: "audit", body: "We review the website, Business Profile, current rankings, listings, reviews and tracking to understand what is helping or limiting local visibility." },
+    { title: "A setup based on real operations", mark: "operations", body: "Storefronts, service-area businesses and multi-location companies are handled according to how they actually receive or visit customers." },
+    { title: "Policy-aware Business Profile management", mark: "policy", body: "We avoid keyword-stuffed names, false addresses, unnecessary profiles and other shortcuts that can create suspension risks.", avoid: "We avoid keyword-stuffed names, false addresses, unnecessary profiles and other shortcuts that can create suspension risks." },
+    { title: "Useful location content", mark: "pages", body: "Pages are developed around genuine services, areas and customer needs rather than producing near-identical pages for every Dubai neighbourhood.", avoid: "rather than producing near-identical pages for every Dubai neighbourhood." },
+    { title: "A responsible review process", mark: "reviews", body: "We help your team request honest feedback and respond professionally without buying reviews or filtering requests only towards satisfied customers.", avoid: "without buying reviews or filtering requests only towards satisfied customers." },
+    { title: "Clear service boundaries", mark: "boundaries", body: "Local PPC, social media and other digital marketing services are shown separately when they are required rather than being presented as part of organic local SEO.", avoid: "rather than being presented as part of organic local SEO." },
+    { title: "Reporting tied to actions", mark: "reporting", body: "Rankings, profile activity and website traffic are connected with calls, directions, forms, bookings or other agreed conversion points where tracking allows." },
   ] as Promise[],
   tail: "As a digital marketing agency in UAE, ENH can also connect local SEO with content, paid campaigns and conversion improvements when the wider scope requires it.",
 };

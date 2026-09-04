@@ -9,16 +9,18 @@ import * as c from "@/content/services/b2b-lead-generation";
 import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { AccountMatch } from "@/components/service/AccountMatch";
 import { Narrative } from "@/components/service/Narrative";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
-import { LeadPipeline } from "@/components/service/LeadPipeline";
+import { ScopeRoute } from "@/components/service/ScopeRoute";
+import { StageTravel } from "@/components/service/StageTravel";
+import { SectorCases } from "@/components/service/SectorCases";
 import { StageLadder } from "@/components/service/StageLadder";
-import { IndustryRun } from "@/components/service/IndustryRun";
+import { CapabilityCarousel } from "@/components/service/CapabilityCarousel";
 import { FaqList } from "@/components/service/FaqList";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
@@ -84,54 +86,23 @@ export function B2BLeadGenerationPage() {
             column of requirements rather than prose or cards. Two columns on
             wide screens because ten single-line items in one column is a
             ladder nobody reads to the bottom of. */}
-        <section
+        {/* Read the ten in order and they are not a list, they are the route a
+            campaign takes. Drawn as that route, in the document's own order, and
+            built at the scale of the card runs elsewhere on the site: a mark at
+            forty-eight pixels, a title at twenty-four. See ScopeRoute. */}
+        <ScopeRoute
           id="scope"
-          data-section="What Does a B2B Lead Generation Agency Actually Do?"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="02"
-              title={c.scope.title}
-              strokeTitle={c.scope.strokeTitle}
-              className="mb-10"
-              aside={
-                <Rise key="lead">
-                  <p className="leading-relaxed text-fog sm:text-lg">{c.scope.lead}</p>
-                </Rise>
-              }
-            />
-
-            <Rise delay={0.08}>
-              <p className="text-[0.62rem] font-semibold uppercase text-brand-text">
-                {c.scope.itemsLead}
-              </p>
-            </Rise>
-
-            <ol className="mt-6 grid gap-x-14 border-t border-line sm:grid-cols-2">
-              {c.scope.items.map((item, i) => (
-                <li key={item} className="group border-b border-line">
-                  <Rise delay={0.04 * i} className="flex items-baseline gap-5 py-3.5">
-                    <span
-                      aria-hidden
-                      className="font-display shrink-0 text-xs font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text"
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="leading-relaxed text-snow">{item}</span>
-                  </Rise>
-                </li>
-              ))}
-            </ol>
-
-            {/* The boundary the document draws around its own service. */}
-            <Rise delay={0.16} className="mt-9">
-              <p className="max-w-3xl border-l-2 border-brand pl-6 leading-relaxed text-snow sm:text-lg">
-                {c.scope.limit}
-              </p>
-            </Rise>
-          </Container>
-        </section>
+          label="What Does a B2B Lead Generation Agency Actually Do?"
+          index="02"
+          title={c.scope.title}
+          strokeTitle={c.scope.strokeTitle}
+          lead={c.scope.lead}
+          itemsLead={c.scope.itemsLead}
+          items={c.scope.items}
+          limitInside={c.scope.limitInside}
+          limitOutside={c.scope.limitOutside}
+          limitConditional={c.scope.limitConditional}
+        />
 
         {/* Seven channels, one at a time. Not the leadsystem diagram: that one
             belongs to the Lead Generation pillar page and drawing it again here
@@ -153,9 +124,9 @@ export function B2BLeadGenerationPage() {
           diagram={{ kind: "track", axis: ["Not looking", "Actively searching"] }}
         />
 
-        {/* THE PAGE'S SPINE. The document's five-row table, redrawn as the chain
-            it describes, followed by the sentence that gives it its point. See
-            LeadPipeline. */}
+        {/* THE PAGE'S SPINE. The document's five-row table, redrawn as a chain
+            that changes hands where the document says it does, and the sentence
+            that gives it its point. See StageTravel. */}
         <section
           id="stages"
           data-section="Lead Stages Should Be Clear"
@@ -170,7 +141,7 @@ export function B2BLeadGenerationPage() {
               className="mb-12"
             />
 
-            <LeadPipeline
+            <StageTravel
               columns={c.stages.columns}
               rows={c.stages.rows}
               verdict={c.stages.verdict}
@@ -236,58 +207,54 @@ export function B2BLeadGenerationPage() {
         />
 
 
-        {/* Twelve sectors, then the document's own warning that the campaign
-            changes with the sector. The caveat matters more than the list, so
-            it is not buried under it. */}
-        <IndustryRun
+        {/* Twelve sectors, and the two the document actually works through.
+            The caveat matters more than the list, so it is not buried under
+            it. See SectorCases. */}
+        <SectorCases
           id="sectors"
           label="B2B Sectors We Generate Leads For"
           index="07"
           title={c.sectors.title}
           strokeTitle={c.sectors.strokeTitle}
           lead={c.sectors.lead}
-          items={c.sectors.items.map((label) => ({ label }))}
+          items={c.sectors.items}
+          caveatLead={c.sectors.caveatLead}
+          cases={c.sectors.cases}
         />
 
-        <section
+        {/* The commitments, on the run the site uses for capability sets. The
+            document's own closing sentences sit under it: they belong to the
+            set, not to any one card. */}
+        <CapabilityCarousel
           id="promises"
-          data-section="What You Get From ENH Marketing"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="08"
-              title={c.promises.title}
-              strokeTitle={c.promises.strokeTitle}
-              mark={{ variant: "ecosystem", label: "Eight commitments" }}
-              className="mb-12"
-              aside={
-                <Rise key="caveat">
-                  <p className="leading-relaxed text-fog sm:text-lg">{c.sectors.caveat}</p>
-                </Rise>
-              }
-            />
-
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {c.promises.items.map((p, i) => (
-                <SurfaceCard key={p.title} index={String(i + 1).padStart(2, "0")} delay={0.05 * i}>
-                  <p className="font-display text-[1.05rem] font-extrabold uppercase leading-[1.2] text-snow">
-                    {p.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-fog">{p.body}</p>
-                </SurfaceCard>
-              ))}
-            </div>
-
-            {/* The one figure the document commits to, and the goal it sets. */}
-            <Rise delay={0.24} className="mt-12 grid gap-x-14 gap-y-6 border-t border-line pt-9 lg:grid-cols-2">
+          label="What You Get From ENH Marketing"
+          index="08"
+          title={c.promises.title}
+          strokeTitle={c.promises.strokeTitle}
+          items={c.promises.items}
+          footer={
+            <Rise className="grid gap-x-14 gap-y-6 border-t border-line pt-9 lg:grid-cols-2">
               <p className="leading-relaxed text-snow sm:text-lg">{c.promises.experience}</p>
               <p className="font-display text-[clamp(1.1rem,2vw,1.5rem)] font-extrabold uppercase leading-[1.2] text-snow">
                 {c.promises.goal}
               </p>
             </Rise>
-          </Container>
-        </section>
+          }
+        />
+
+        {/* The mid-page ask. It takes the heading and the short line; the band
+            at the foot of the page takes the longer recommendation, so no
+            sentence prints twice. */}
+        <GrowthCta
+          id="cta"
+          label="Put Better Opportunities Into the Pipeline"
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
 
         <Work index="09" label="Summits Reached" ctaHref="#quote" />
 
@@ -298,8 +265,7 @@ export function B2BLeadGenerationPage() {
           index="11"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

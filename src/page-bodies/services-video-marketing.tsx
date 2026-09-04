@@ -6,18 +6,16 @@ import { TrustStrip } from "@/components/sections/TrustStrip";
 import { Insights } from "@/components/sections/Insights";
 import * as c from "@/content/services/video-marketing";
 
-import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { UnplacedFilm } from "@/components/service/UnplacedFilm";
 import { Narrative } from "@/components/service/Narrative";
-import { ReasonLedger } from "@/components/service/ReasonLedger";
-import { ServiceIndex } from "@/components/service/ServiceIndex";
-import { MeasureTable } from "@/components/service/MeasureTable";
-import { StageTrack } from "@/components/service/StageTrack";
-import { SectorLedger } from "@/components/service/SectorLedger";
+import { CoverageLedger } from "@/components/service/CoverageLedger";
+import { ChannelScroller } from "@/components/service/ChannelScroller";
+import { PlayerReadout } from "@/components/service/PlayerReadout";
+import { StageLadder } from "@/components/service/StageLadder";
+import { FilmRuns } from "@/components/service/FilmRuns";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
@@ -58,105 +56,106 @@ export function VideoMarketingPage() {
           closing={c.narrative.closing}
         />
 
-        {/* Six children, all of them built. This is the only pillar on the site
-            where every card links. */}
-        <section
+        {/* Six children, all of them built -- the only pillar on the site
+            where every card links -- run as the pinned horizontal track the
+            paid pillar's channels use. Same component, same card, so each
+            production gets a full stage. See ChannelScroller. */}
+        <ChannelScroller
           id="services"
-          data-section="Video Production Services We Offer"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="02"
-              title={c.services.title}
-              strokeTitle={c.services.strokeTitle}
-              mark={{ variant: "ecosystem", label: "Six formats, one production team" }}
-              className="mb-12"
-            />
-            <ServiceIndex items={c.services.items} wide={2} />
-          </Container>
-        </section>
+          label="Video Production Services We Offer"
+          index="02"
+          title={c.services.title}
+          strokeTitle={c.services.strokeTitle}
+          mark={{ variant: "ecosystem", label: "Six formats, one production team" }}
+          channels={c.services.items.map((s) => ({
+            name: s.title,
+            href: s.href ?? "",
+            body: s.body,
+            glyph: s.glyph,
+          }))}
+        />
 
-        {/* Process before measurement here: this document's whole argument is
-            that the decision comes before the shoot, so the stages precede the
-            numbers rather than following them. */}
-        <section
+        {/* Process before measurement here, and before the reasons: this
+            document's whole argument is that the decision comes before the
+            shoot, so the stages precede everything that reads back off them.
+            The house ladder -- a panel that holds while the run moves past it,
+            a rail that fills with the reader's own scroll, and the stage under
+            the eye lit on it. Same component the AEO and LinkedIn Ads pages
+            use. Its tail treatment is off: this document numbers all seven
+            stages, so none of them is an open-ended continuation. */}
+        <StageLadder
           id="process"
-          data-section="How Our Video Production Process Works"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="03"
-              title={c.process.title}
-              strokeTitle={c.process.strokeTitle}
-              mark={{ variant: "progression", label: "Seven stages, brief to measurement" }}
-              className="mb-12"
-            />
-            <StageTrack stages={c.process.stages} columns={4} />
-          </Container>
-        </section>
+          label="How Our Video Production Process Works"
+          index="03"
+          title={c.process.title}
+          strokeTitle={c.process.strokeTitle}
+          stages={c.process.stages}
+          tail={false}
+        />
 
-        <section
+        {/* The closing sentence tells the reader to check the full scope
+            "rather than the camera list alone" -- an instruction to compare
+            breadth. Six of the seven positions enumerate what they cover, at
+            the document's own commas, so the counts are drawn against one
+            shared span and the scope is legible before it is read.
+            See CoverageLedger. */}
+        <CoverageLedger
           id="reasons"
-          data-section="Why Choose ENH Marketing for Video Production in Dubai"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="04"
-              title={c.reasons.title}
-              strokeTitle={c.reasons.strokeTitle}
-              className="mb-12"
-            />
-            <ReasonLedger lead={c.reasons.lead} items={c.reasons.items} tail={c.reasons.tail} />
-          </Container>
-        </section>
+          label="Why Choose ENH Marketing for Video Production in Dubai"
+          index="04"
+          title={c.reasons.title}
+          strokeTitle={c.reasons.strokeTitle}
+          lead={c.reasons.lead}
+          items={c.reasons.items}
+          tail={c.reasons.tail}
+          tailMark={c.reasons.tailMark}
+        />
 
-        <section
+        {/* Nine measures, attached to the object they are read off rather than
+            listed in a table: a player, a scrubber, a retention curve and the
+            things that happen after somebody watches. See PlayerReadout. */}
+        <PlayerReadout
           id="measure"
-          data-section="What We Measure"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="05"
-              title={c.measure.title}
-              strokeTitle={c.measure.strokeTitle}
-              className="mb-12"
-              aside={
-                <Rise key="lead">
-                  <p className="leading-relaxed text-fog sm:text-lg">{c.measure.lead}</p>
-                </Rise>
-              }
-            />
-            <MeasureTable
-              rows={c.measure.rows}
-              headTrack={c.measure.headTrack}
-              headTells={c.measure.headTells}
-              note={c.measure.note}
-            />
-          </Container>
-        </section>
+          label="What We Measure"
+          index="05"
+          title={c.measure.title}
+          strokeTitle={c.measure.strokeTitle}
+          lead={c.measure.lead}
+          rows={c.measure.rows}
+          headTrack={c.measure.headTrack}
+          headTells={c.measure.headTells}
+          note={c.measure.note}
+          noteMark={c.measure.noteMark}
+        />
 
-        <section
+        {/* The ten arrive with lists of different lengths, and that
+            difference is the most useful thing in the section: some sectors
+            have a standing programme of work and some have two films and a
+            reason. Drawn as runs against one shared axis. See FilmRuns. */}
+        <FilmRuns
           id="sectors"
-          data-section="Industries We Film For"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="06"
-              title={c.sectors.title}
-              strokeTitle={c.sectors.strokeTitle}
-              className="mb-12"
-            />
-            <SectorLedger lead={c.sectors.lead} items={c.sectors.items} />
-          </Container>
-        </section>
+          label="Industries We Film For"
+          index="06"
+          title={c.sectors.title}
+          strokeTitle={c.sectors.strokeTitle}
+          lead={c.sectors.lead}
+          items={c.sectors.items}
+        />
 
-        {/* The document's "Our Work" is a gate: "[Client video case study slides
-            and approved production counters]". This is the site's own section. */}
+        {/* The house mid-page CTA, in the position every other service page
+            puts it: after the argument, before the work. It carries the closing
+            heading and the "send us" line, while the CtaBand at the foot takes
+            the heading and the longer recommendation, so no sentence prints
+            twice. */}
+        <GrowthCta
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
+
         <Work index="07" label="Our Work" ctaHref="#quote" />
 
         <FaqList label="FAQs" index="08" faqs={siteFaqs} />
@@ -166,8 +165,7 @@ export function VideoMarketingPage() {
           index="09"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

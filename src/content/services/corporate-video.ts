@@ -203,7 +203,7 @@ export const industries = {
   ],
 };
 
-export type Promise = { title: string; body: string };
+export type Promise = { no: string; title: string; body: string; glyph: GlyphVariant };
 
 export const promises = {
   title: "What You Get",
@@ -211,35 +211,51 @@ export const promises = {
   lead: "Business video production across the UAE can involve several locations, approval teams, languages and final formats. Our proposal sets these requirements out before production begins.",
   items: [
     {
+      no: "01",
       title: "A clear brief before the camera",
+      glyph: "structure",
       body: "We confirm the purpose, audience, message and distribution before quoting because these decisions affect the concept and production requirements.",
     },
     {
+      no: "02",
       title: "Concept, script and storyboard support",
+      glyph: "sequence",
       body: "We develop the creative direction and obtain approval before filming, reducing the risk of avoidable changes during post-production.",
     },
     {
+      no: "03",
       title: "Permits and location clearances",
+      glyph: "form",
       body: "We coordinate the filming permit application and relevant location permissions included in the agreed production scope.",
     },
     {
+      no: "04",
       title: "Professional filming and sound",
+      glyph: "creative",
       body: "The camera, lighting, stabilisation and audio setup are selected according to the location, subject and final use of the video.",
     },
     {
+      no: "05",
       title: "Revision rounds stated in the quote",
+      glyph: "reconcile",
       body: "The approval process is agreed before work begins so the project does not enter an undefined editing cycle.",
     },
     {
+      no: "06",
       title: "Every required version planned together",
+      glyph: "catalogue",
       body: "Landscape, vertical, square and subtitled edits are produced according to the deliverables listed in the proposal.",
     },
     {
+      no: "07",
       title: "Marketing specialists involved in the brief",
+      glyph: "fanout",
       body: "ENH is also a digital marketing agency in Dubai, so the team can consider how the footage will support your campaigns and other digital marketing services.",
     },
     {
+      no: "08",
       title: "Arabic and English delivery",
+      glyph: "text",
       body: "Separate versions, subtitles, or voiceovers can be included according to the audience and distribution channels.",
     },
   ] as Promise[],

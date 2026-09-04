@@ -2,7 +2,7 @@
 
 /*
   ENH V3 — "The Cinematic Story"
-  Brand: enhmedia.com — Poppins display, Inter body, red #E8000D on deep black.
+  Brand: enhmedia.com — Cabinet Grotesk display, Inter body, red #E8000D on deep black.
 */
 
 @theme {
@@ -63,8 +63,13 @@
   --color-fog: #57544f;
   --color-ash: #68655f;
 
-  --font-display: var(--font-cabinet), var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Astro's <Font> already emits a complete stack in each variable -- the
+     family, its metric-matched Arial fallbacks, and a generic -- so nothing may
+     be appended after one. Anything written past the variable is dead: a
+     generic family always resolves, which is how Poppins came to be downloaded
+     on every page and never once used. */
+  --font-display: var(--font-cabinet);
+  --font-sans: var(--font-inter);
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -202,6 +207,23 @@ summary {
   font-size: clamp(1.5rem, 2.8vw, 2.6rem);
   line-height: 1.05;
 
+}
+
+/* A SECTION'S OWN STATEMENT: the one paragraph a section may set at display
+   weight, and the step that was missing from this scale.
+
+   Section headings are locked to .display-xl -- 60px at a 1440 viewport -- and
+   every statement paragraph was picking its own clamp. Audited across the whole
+   source, six of them had drifted to between 61% and 95% of the heading they
+   sat under, at the same weight, the same uppercase and the same two-tone brand
+   split. At 95% the reader does not see a heading and a statement, they see two
+   headings; the closing section on the SEO pillar was exactly that.
+
+   31px against 60px is the ratio the rest of the site already used by accident
+   and the one it now uses on purpose. Size only, no line-height: the call sites
+   keep their own leading, which differs with measure. */
+.statement {
+  font-size: clamp(1.2rem, 2.4vw, 1.9rem);
 }
 
 /* Film grain */
@@ -737,70 +759,6 @@ summary {
   }
 }
 
-/* ---- Lead pipeline (B2B Lead Generation) ----
-   Transform-only for anything carrying words, for the same reason the
-   attribution record is: `fill-mode: both` parks an element on its `from`
-   frame while an animation is pending or stalled, so animating opacity from 0
-   hides readable text on a slow device. The worst case here is a node drawn
-   small and a line sitting a few pixels low. */
-@keyframes pipe-in {
-  from {
-    transform: translateY(8px);
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-@keyframes pipe-node {
-  from {
-    transform: scale(0.4);
-  }
-
-  to {
-    transform: scale(1);
-  }
-}
-
-@keyframes pipe-rail {
-  from {
-    transform: scaleY(0);
-  }
-
-  to {
-    transform: scaleY(1);
-  }
-}
-
-.is-in .pipe-in,
-.is-in .pipe-head,
-.is-in .pipe-verdict {
-  animation: pipe-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.is-in .pipe-node {
-  animation: pipe-node 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-/* The rail is the one thing drawn from nothing: it is a hairline, and if it
-   never arrives the numbered nodes still carry the sequence. */
-.is-in .pipe-rail {
-  transform-origin: top;
-  animation: pipe-rail 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .is-in .pipe-in,
-  .is-in .pipe-head,
-  .is-in .pipe-verdict,
-  .is-in .pipe-node,
-  .is-in .pipe-rail {
-    animation: none !important;
-  }
-}
-
 /* ---- Account match (the B2B Lead Generation hero) ----
    Every one of these ends on the finished state, so a browser that never
    animates, a reader who asked for no motion, and a failed hydration all land
@@ -858,67 +816,6 @@ summary {
   .match-lit,
   .match-cross,
   .match-glow {
-    animation: none !important;
-  }
-}
-
-/* ---- Shoot plan (Corporate Video Production) ----
-   Transform-only for anything carrying words, so a stalled animation leaves
-   text readable rather than invisible. The frames and the safe area are the
-   only things allowed to fade, and they carry no copy. */
-@keyframes shoot-in {
-  from {
-    transform: translateY(8px);
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-@keyframes shoot-frame {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes shoot-safe {
-
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-
-  50% {
-    opacity: 1;
-  }
-}
-
-.is-in .shoot-in {
-  animation: shoot-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.is-in .shoot-frame {
-  animation: shoot-frame 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* The safe area breathes so the eye finds the region every frame has to hold.
-   Decoration: it carries no words and its absence changes nothing. */
-.is-in .shoot-safe {
-  animation: shoot-safe 2600ms ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .is-in .shoot-in,
-  .is-in .shoot-frame,
-  .is-in .shoot-safe {
     animation: none !important;
   }
 }
@@ -1074,54 +971,10 @@ summary {
   animation: cat-route 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ---- Platform stack (Ecommerce SEO) ----
-   Transform-only: every card carries a platform name and a paragraph, so a
-   stalled clock must leave them readable. */
-@keyframes plat-card {
-  from {
-    transform: translateY(10px);
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-.is-in .plat-card {
-  animation: plat-card 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* ---- Signal split (Ecommerce SEO) ----
-   Transform only, including the fork.
-
-   This section first drew its two branches in with stroke-dashoffset, and that
-   is exactly the mistake this file already documents for text: a dasharray in
-   the rule plus animation-fill-mode: both parks the path on its `from` frame,
-   which for a dash offset equal to the dash length means nothing is painted at
-   all. Wherever the animation clock is slow to start, the whole diagram was
-   simply missing, and a fork with no branches states the opposite of the point
-   it is there to make. So the fork is static and only rises into place with
-   everything around it. */
-@keyframes split-in {
-  from {
-    transform: translateY(8px);
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-.is-in .split-in {
-  animation: split-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
 
   .cat-lit,
-  .cat-route,
-  .is-in .plat-card,
-  .is-in .split-in {
+  .cat-route {
     animation: none !important;
   }
 }
@@ -1255,59 +1108,8 @@ summary {
   animation: said-block 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ---- Change window (Explainer Video Production) ----
-   Transform only. Every row here carries a step title and a paragraph, so
-   nothing starts from an opacity of zero; the wedge behind them scales from
-   its top edge, which leaves it visible at every frame including the first. */
-@keyframes cw-in {
-  from {
-    transform: translateY(10px);
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-@keyframes cw-node {
-  from {
-    transform: scale(0.7);
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-@keyframes cw-wedge {
-  from {
-    transform: scaleY(0.82);
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-.is-in .cw-in {
-  animation: cw-in 540ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.is-in .cw-node {
-  animation: cw-node 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.is-in .cw-wedge {
-  transform-origin: top center;
-  animation: cw-wedge 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
-
-  .said-block.is-lit,
-  .is-in .cw-in,
-  .is-in .cw-node,
-  .is-in .cw-wedge {
+  .said-block.is-lit {
     animation: none !important;
   }
 }
@@ -1331,28 +1133,8 @@ summary {
   animation: drift-hit 460ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ---- Split ledger (Facebook Marketing) ----
-   Transform only. The divider is a static rule: it is the one element that
-   must never look like it is about to join the two columns, so it does not
-   move, grow or fade. */
-@keyframes ledger-in {
-  from {
-    transform: translateY(10px);
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-.is-in .ledger-in {
-  animation: ledger-in 540ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
-
-  .drift-hit,
-  .is-in .ledger-in {
+  .drift-hit {
     animation: none !important;
   }
 }
@@ -1654,5 +1436,512 @@ summary {
   .mc-live,
   .is-in .sm-card {
     animation: none !important;
+  }
+}
+
+/* ---- Edit timeline (Interview Video) ----
+   The track's transitions are inline, because their durations belong with the
+   flex weights they animate. This is the one place that has to override them:
+   a reader on reduced motion is put straight on the finished cut, and nothing
+   should slide to get there. !important is required to beat an inline style. */
+@media (prefers-reduced-motion: reduce) {
+
+  .et-track,
+  .et-track * {
+    transition: none !important;
+  }
+}
+
+/* ---- Bespoke marks (Interview Video: promises and sectors) ----
+   Every one of these animates on hover or keyboard focus of the card that owns
+   it, never on a loop: twenty looping icons on one page is a fairground. All of
+   them move transform or a dash offset, so the mark is fully drawn at rest and
+   a browser that never animates loses nothing but the flourish. */
+
+/* Shared resting state for the two dash-drawn marks. pathLength="1" on the
+   path makes the dash a fraction of its own length, so one rule serves paths
+   of any size. */
+.pm-tick,
+.sc-trace {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.group:hover .pm-tick,
+.group:focus-visible .pm-tick,
+.group:hover .sc-trace,
+.group:focus-visible .sc-trace {
+  animation: mark-draw 620ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes mark-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Each remaining mark moves the part its own sentence is about. */
+.pm-hit,
+.pm-brief-lines,
+.pm-beam,
+.pm-level,
+.pm-behind,
+.pm-playhead,
+.pm-v2,
+.pm-v3,
+.pm-second,
+.sc-floors,
+.sc-chalk,
+.sc-core,
+.sc-drill,
+.sc-jib,
+.sc-move,
+.sc-rise,
+.sc-awning,
+.sc-stage,
+.sc-seats,
+.sc-columns {
+  /* view-box, not fill-box, so every one of these resolves against the same
+     40x40 grid. The crane's jib carries an inline transform-origin of 10 8 --
+     the top of its mast -- and that is a viewBox coordinate, which only means
+     what it says under view-box; under fill-box it would be measured from the
+     jib's own bounding box and the arm would swing from the wrong point. */
+  transform-box: view-box;
+  transform-origin: center;
+  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .pm-hit,
+.group:focus-visible .pm-hit,
+.group:hover .sc-core,
+.group:focus-visible .sc-core,
+.group:hover .sc-drill,
+.group:focus-visible .sc-drill {
+  transform: scale(1.45);
+}
+
+.group:hover .pm-brief-lines,
+.group:focus-visible .pm-brief-lines,
+.group:hover .sc-chalk,
+.group:focus-visible .sc-chalk,
+.group:hover .sc-stage,
+.group:focus-visible .sc-stage {
+  transform: translateX(2.5px);
+}
+
+.group:hover .pm-beam,
+.group:focus-visible .pm-beam,
+.group:hover .sc-awning,
+.group:focus-visible .sc-awning {
+  transform: scaleX(1.08);
+}
+
+.group:hover .pm-level,
+.group:focus-visible .pm-level {
+  transform: scaleY(1.35);
+}
+
+.group:hover .pm-behind,
+.group:focus-visible .pm-behind,
+.group:hover .pm-v2,
+.group:focus-visible .pm-v2 {
+  transform: translate(2px, -2px);
+}
+
+.group:hover .pm-v3,
+.group:focus-visible .pm-v3 {
+  transform: translate(2px, 2px);
+}
+
+.group:hover .pm-playhead,
+.group:focus-visible .pm-playhead {
+  transform: translateX(11px);
+}
+
+.group:hover .pm-second,
+.group:focus-visible .pm-second {
+  transform: translate(-2px, -2px);
+}
+
+.group:hover .sc-floors,
+.group:focus-visible .sc-floors,
+.group:hover .sc-columns,
+.group:focus-visible .sc-columns {
+  transform: scaleY(1.1);
+}
+
+/* The jib slews rather than scaling. Its origin is the mast, set inline in
+   view-box coordinates. */
+.group:hover .sc-jib,
+.group:focus-visible .sc-jib {
+  transform: rotate(-7deg);
+}
+
+.group:hover .sc-move,
+.group:focus-visible .sc-move {
+  transform: translateX(5px);
+}
+
+.group:hover .sc-rise,
+.group:focus-visible .sc-rise {
+  transform: translateY(-2.5px);
+}
+
+.group:hover .sc-seats,
+.group:focus-visible .sc-seats {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .pm-tick,
+  .sc-trace,
+  .pm-hit,
+  .pm-brief-lines,
+  .pm-beam,
+  .pm-level,
+  .pm-behind,
+  .pm-playhead,
+  .pm-v2,
+  .pm-v3,
+  .pm-second,
+  .sc-floors,
+  .sc-chalk,
+  .sc-core,
+  .sc-drill,
+  .sc-jib,
+  .sc-move,
+  .sc-rise,
+  .sc-awning,
+  .sc-stage,
+  .sc-seats,
+  .sc-columns {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* ---- Spoken query (Local SEO) ----
+   A level meter under the request line, so a typed chip reads as something
+   said out loud. Height only, and every bar rests at a real height, so a
+   browser that never animates shows a level rather than a flat line. */
+@keyframes sq-bar {
+
+  0%,
+  100% {
+    transform: scaleY(0.55);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.sq-bar {
+  transform-origin: center;
+  animation: sq-bar 1100ms ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .sq-bar {
+    animation: none !important;
+  }
+}
+
+/* ---- Bespoke marks (Local SEO: promises) ----
+   Same contract as the Interview Video set above: every mark rests fully drawn
+   and moves only on hover or keyboard focus of the card that owns it, so a
+   browser that never animates loses the flourish and nothing else. */
+
+/* The three dash-drawn marks. pathLength="1" makes the dash a fraction of the
+   path's own length, so one rule serves paths of any size. */
+.lp-guard,
+.lp-star,
+.lp-tie {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.group:hover .lp-guard,
+.group:focus-visible .lp-guard,
+.group:hover .lp-star,
+.group:focus-visible .lp-star,
+.group:hover .lp-tie,
+.group:focus-visible .lp-tie {
+  animation: mark-draw 680ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The rest move the part their own sentence is about. */
+.lp-lens,
+.lp-radius,
+.lp-awn,
+.lp-branch,
+.lp-district,
+.lp-reply,
+.lp-laneA,
+.lp-laneB,
+.lp-bar3 {
+  /* view-box, so every mark resolves against the same 40x40 grid. The tallest
+     bar carries an inline transform-origin of 22 34 -- its own foot on the
+     baseline -- and that is a viewBox coordinate, which only means what it says
+     under view-box. */
+  transform-box: view-box;
+  transform-origin: center;
+  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The lens travels across the page it is reading. */
+.group:hover .lp-lens,
+.group:focus-visible .lp-lens {
+  transform: translate(-6px, -5px);
+}
+
+/* The service area widens; the awning opens; the branch stands apart. */
+.group:hover .lp-radius,
+.group:focus-visible .lp-radius {
+  transform: scale(1.1);
+}
+
+.group:hover .lp-awn,
+.group:focus-visible .lp-awn {
+  transform: scaleX(1.1);
+}
+
+.group:hover .lp-branch,
+.group:focus-visible .lp-branch {
+  transform: translateX(2.5px);
+}
+
+/* The one district that is genuinely served lifts out of the grid. */
+.group:hover .lp-district,
+.group:focus-visible .lp-district {
+  transform: translate(1.5px, -1.5px);
+}
+
+.group:hover .lp-reply,
+.group:focus-visible .lp-reply {
+  transform: translate(-2px, 2px);
+}
+
+/* The two scopes pull apart rather than blur together. */
+.group:hover .lp-laneA,
+.group:focus-visible .lp-laneA {
+  transform: translateX(-2px);
+}
+
+.group:hover .lp-laneB,
+.group:focus-visible .lp-laneB {
+  transform: translateX(2px);
+}
+
+/* The bar grows from its foot, not its middle. */
+.group:hover .lp-bar3,
+.group:focus-visible .lp-bar3 {
+  transform: scaleY(1.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .lp-guard,
+  .lp-star,
+  .lp-tie,
+  .lp-lens,
+  .lp-radius,
+  .lp-awn,
+  .lp-branch,
+  .lp-district,
+  .lp-reply,
+  .lp-laneA,
+  .lp-laneB,
+  .lp-bar3 {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* ---- Sector map (Local SEO) ----
+   A search sweep over the field the pins sit on. Rotation only, on a layer that
+   carries no words, and the field is complete without it. */
+@keyframes sm-sweep {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sm-sweep {
+  animation: sm-sweep 9s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sm-sweep {
+    animation: none !important;
+  }
+}
+
+/* ---- Boundary band (Local SEO) ----
+   One packet leaving the search radius and continuing past it. The faint rule
+   underneath is the permanent structure, so the line still reads when nothing
+   animates -- and under reduced motion the packet is removed rather than
+   parked, because its finished state is "gone". Same contract as
+   `.agent-signal`, on its own clock so it repeats. */
+@keyframes bb-cross {
+
+  0% {
+    stroke-dashoffset: 14;
+  }
+
+  55%,
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+
+.bb-cross {
+  stroke-dasharray: 14 100;
+  stroke-dashoffset: -100;
+  animation: bb-cross 3400ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-cross {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
+
+/* ---- Closing beacon (SEO pillar) ----
+   The searches that are being answered while the reader is looking, and the
+   business answering them. Both loop; both are wordless. The packet's finished
+   state is "gone", so under reduced motion it is removed rather than parked,
+   and the ring holds one faint circle instead of freezing part-expanded. */
+@keyframes cb-signal {
+  from {
+    stroke-dashoffset: 16;
+  }
+
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+.cb-signal {
+  stroke-dasharray: 16 100;
+  stroke-dashoffset: -100;
+  animation: cb-signal 2600ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes cb-ring {
+  0% {
+    transform: scale(0.34);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.cb-ring {
+  /* view-box, so the origin below is read against the 1200x330 grid the rings
+     are drawn on rather than against each circle's own box. */
+  transform-box: view-box;
+  transform-origin: 600px 292px;
+  opacity: 0;
+  animation: cb-ring 3300ms ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .cb-signal {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .cb-ring {
+    animation: none !important;
+    opacity: 0.16 !important;
+  }
+}
+
+
+
+/* ---- Venue floor: what is running at once (Event Video) ----
+   Each marker is a thing that event's own copy says needs covering, pulsing
+   out of phase with the others so the room reads as several places asking for
+   attention at the same moment. Transform and opacity on wordless marks; the
+   dot at the centre never moves, so a browser that never animates still shows
+   every activity in place. */
+@keyframes venue-live {
+
+  0%,
+  100% {
+    transform: scale(0.62);
+    opacity: 0.25;
+  }
+
+  45% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+}
+
+.venue-live > circle:first-child {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: venue-live 2600ms ease-in-out infinite;
+  animation-delay: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .venue-live > circle:first-child {
+    animation: none !important;
+    opacity: 0.45 !important;
+  }
+}
+
+
+/* ---- Scope route (B2B Lead Generation) ----
+   A campaign runs; the joints between its stages say so. Only the travelling
+   dot animates and it carries no words, so a browser that never runs an
+   animation still shows the route complete with every connector drawn. */
+@keyframes route-run {
+  0% {
+    transform: translateY(-70%);
+    opacity: 0;
+  }
+
+  25%,
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(70%);
+    opacity: 0;
+  }
+}
+
+.route-run {
+  animation: route-run 2400ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  animation-delay: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-run {
+    animation: none !important;
+    opacity: 0.9 !important;
   }
 }

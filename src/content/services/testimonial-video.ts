@@ -92,22 +92,70 @@ export const specifics = {
    *  the section it qualifies. */
   consent:
     "Where a testimonial refers to results, figures or regulated claims, those details should be checked before publication. The customer must also understand where the finished video may be used, particularly when paid advertising is included.",
+  /** What the method refuses to do, marked where it stands rather than
+   *  restated: it is the difference between a prepared answer and a scripted
+   *  one, which is the whole section. */
+  methodMark:
+    "we do not ask them to memorise praise or pretend that an experience happened",
   aim: "The aim is to record a clear account in the customer’s own words and edit it without changing what they meant.",
 };
+
+export type PlaceFrame = "page" | "deck" | "phone" | "ad";
+export type Place = { text: string; preview: PlaceFrame; spans: [number, number][] };
 
 export const distribution = {
   title: "Where Your Testimonial",
   strokeTitle: "Videos Can Be Used",
   claim:
     "The intended placement should be decided before filming because it affects the questions, length, framing and supporting footage.",
+  /** Four placements, each a different set of selections out of the same
+   *  recording. `spans` are positions on an unlabelled lane and carry no
+   *  duration: the document gives one length, hedged, inside a FAQ answer, and
+   *  it is never lifted out. What the spans do carry is the document's own
+   *  arithmetic -- one long selection, one short one, several short vertical
+   *  edits, and "several openings and calls to action" for paid. `preview`
+   *  names the frame the placement ends up in. */
   places: [
-    "A longer client testimonial may belong on a case study or service page.",
-    "A concise result-led version may work better in a proposal or sales presentation.",
-    "Short vertical edits can be used across social media.",
-    "Paid campaigns may need several openings and calls to action from the same interview.",
-  ],
+    {
+      text: "A longer client testimonial may belong on a case study or service page.",
+      preview: "page",
+      spans: [[6, 62]] as [number, number][],
+    },
+    {
+      text: "A concise result-led version may work better in a proposal or sales presentation.",
+      preview: "deck",
+      spans: [[31, 21]] as [number, number][],
+    },
+    {
+      text: "Short vertical edits can be used across social media.",
+      preview: "phone",
+      spans: [
+        [14, 11],
+        [47, 10],
+        [73, 12],
+      ] as [number, number][],
+    },
+    {
+      text: "Paid campaigns may need several openings and calls to action from the same interview.",
+      preview: "ad",
+      spans: [
+        [8, 8],
+        [26, 7],
+        [57, 8],
+        [82, 9],
+      ] as [number, number][],
+    },
+  ] as Place[],
   wider:
     "Testimonials can also be included in email campaigns, exhibition presentations, recruitment material and direct follow-ups with prospective customers.",
+  /** The four other uses, marked in place. Lifting them into chips beside the
+   *  sentence would print the same four phrases on the page twice. */
+  widerMark: [
+    "email campaigns",
+    "exhibition presentations",
+    "recruitment material",
+    "direct follow-ups",
+  ],
   planning:
     "We plan the required landscape, square and vertical versions during production. This is more efficient than reopening the project later and avoids forcing a horizontal interview into a vertical frame.",
 };

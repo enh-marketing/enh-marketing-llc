@@ -24,10 +24,10 @@
 // THE ONE FIGURE. "15 years of creative web design experience in Dubai" sits
 // inside the why-choose lead and stays there.
 
-import type { MeasureRow } from "@/components/service/MeasureTable";
+export type Signal = { track: string; tells: string; q: number };
 import type { IndexEntry } from "@/components/service/ServiceIndex";
 import type { TrackStage } from "@/components/service/StageTrack";
-import type { Sector } from "@/components/service/SectorLedger";
+export type Sector = { label: string; parts: string[] };
 
 export const meta = {
   title: "Website Design & Development in Dubai | ENH Marketing",
@@ -54,19 +54,48 @@ export const narrative = {
     "The website is planned around the people using it and the action you want them to take. That could be sending an enquiry, buying a product, booking a service or learning enough to contact your team.",
 };
 
+/** THE TAIL IS THE SECTION'S BRIEF: businesses comparing agencies "should look
+ *  at what happens before the design starts and after the website goes live".
+ *  That is an instruction to look at a span, with the design sitting somewhere
+ *  in the middle of it, so each position carries where on that span it belongs.
+ *
+ *  Each is split at the source's own full stop so the position reads at weight
+ *  with its reason under it. Nothing is reworded. */
+export type Reason = { stance: string; detail: string };
+
 export const reasons = {
   title: "Why Choose ENH Marketing",
   strokeTitle: "for Web Design in Dubai",
   lead: "With 15 years of creative web design experience in Dubai, we understand how the website connects with SEO, advertising, content and the wider customer journey.",
   items: [
-    "We begin with the business goals, audience and market. The layout comes after we know what the website needs to achieve.",
-    "User experience shapes the structure. Visitors should be able to understand the offer and reach the right page without working for it.",
-    "Desktop and mobile are planned together. The design needs to work across different screen sizes, devices and browsing habits.",
-    "SEO requirements are considered during the build. Page structure, content, speed and technical setup affect how the website performs in search.",
-    "Analytics and conversion tracking are included in the planning. The website should show where visitors arrive, what they do and where they leave.",
-    "Maintenance and hosting remain available after launch. Updates, backups, monitoring and fixes can continue under a separate support scope.",
-  ],
+    {
+      stance: "We begin with the business goals, audience and market.",
+      detail: "The layout comes after we know what the website needs to achieve.",
+    },
+    {
+      stance: "User experience shapes the structure.",
+      detail: "Visitors should be able to understand the offer and reach the right page without working for it.",
+    },
+    {
+      stance: "Desktop and mobile are planned together.",
+      detail: "The design needs to work across different screen sizes, devices and browsing habits.",
+    },
+    {
+      stance: "SEO requirements are considered during the build.",
+      detail: "Page structure, content, speed and technical setup affect how the website performs in search.",
+    },
+    {
+      stance: "Analytics and conversion tracking are included in the planning.",
+      detail: "The website should show where visitors arrive, what they do and where they leave.",
+    },
+    {
+      stance: "Maintenance and hosting remain available after launch.",
+      detail: "Updates, backups, monitoring and fixes can continue under a separate support scope.",
+    },
+  ] as Reason[],
   tail: "Businesses comparing the best web design company in Dubai should look at what happens before the design starts and after the website goes live.",
+  /** The two ends of the span the tail sends the reader to look at. */
+  tailMark: "before the design starts and after the website goes live",
 };
 
 export const services = {
@@ -128,24 +157,51 @@ export const services = {
   ] as IndexEntry[],
 };
 
+/** THE LEAD IS A SORTING INSTRUCTION AND IT WAS BEING READ AS A SENTENCE.
+ *  "Website analytics help us understand where visitors come from, what they do
+ *  and where the journey becomes difficult" asks three questions, and every one
+ *  of the nine rows answers exactly one of them -- which is the structure the
+ *  section has had all along. Split at the source's own commas, the three
+ *  clauses become the three columns and the nine sort themselves 2 / 4 / 3.
+ *  Read the columns left to right and the lead is back, word for word.
+ *
+ *  `q` is read off each row's own "tells" and nothing else:
+ *    traffic         "which channels bring them"                  where from
+ *    landing pages   "which pages visitors reach first"           where from
+ *    engagement      "how people interact"                        what they do
+ *    conversion path "the steps visitors take before enquiring"   what they do
+ *    form submission "which pages and campaigns generate enquiries" what they do
+ *    ecommerce       "product views, basket, checkout, purchases" what they do
+ *    device          "how the experience changes across devices"  where difficult
+ *    page speed      "where loading time may affect the experience" where difficult
+ *    exit points     "where visitors commonly leave"              where difficult
+ */
 export const measure = {
   title: "What",
   strokeTitle: "We Measure",
   lead: "Website analytics help us understand where visitors come from, what they do and where the journey becomes difficult.",
-  headTrack: "What we track",
+  /** The lead's own three clauses, split at its commas. They head the three
+   *  columns; the sentence itself still runs whole above them. */
+  questions: [
+    "where visitors come from",
+    "what they do",
+    "where the journey becomes difficult",
+  ],
   headTells: "What it tells you",
   rows: [
-    { track: "Website traffic", tells: "How many people visit and which channels bring them" },
-    { track: "Landing pages", tells: "Which pages visitors reach first" },
-    { track: "Engagement", tells: "How people interact with the content and page" },
-    { track: "Conversion paths", tells: "The steps visitors take before enquiring or buying" },
-    { track: "Form submission", tells: "Which pages and campaigns generate enquiries" },
-    { track: "Ecommerce activity", tells: "Product views, basket activity, checkout progress and purchases" },
-    { track: "Device performance", tells: "How the experience changes across desktop and mobile" },
-    { track: "Page speed", tells: "Where loading time may affect the user experience" },
-    { track: "Exit points", tells: "Where visitors commonly leave the website" },
-  ] as MeasureRow[],
+    { track: "Website traffic", tells: "How many people visit and which channels bring them", q: 0 },
+    { track: "Landing pages", tells: "Which pages visitors reach first", q: 0 },
+    { track: "Engagement", tells: "How people interact with the content and page", q: 1 },
+    { track: "Conversion paths", tells: "The steps visitors take before enquiring or buying", q: 1 },
+    { track: "Form submission", tells: "Which pages and campaigns generate enquiries", q: 1 },
+    { track: "Ecommerce activity", tells: "Product views, basket activity, checkout progress and purchases", q: 1 },
+    { track: "Device performance", tells: "How the experience changes across desktop and mobile", q: 2 },
+    { track: "Page speed", tells: "Where loading time may affect the user experience", q: 2 },
+    { track: "Exit points", tells: "Where visitors commonly leave the website", q: 2 },
+  ] as Signal[],
   note: "At ENH, analytics specialists use tools such as Google Analytics to review engagement trends and conversion funnels. The findings help us make recommendations based on actual behaviour rather than assumptions.",
+  /** The point of the whole section. */
+  noteMark: "based on actual behaviour rather than assumptions",
 };
 
 export const process = {
@@ -166,11 +222,28 @@ export const process = {
 export const performance = {
   title: "Websites Optimised",
   strokeTitle: "for Performance",
-  claim:
-    "The main goal of tailored web design and development is to support traffic, leads and revenue. A website needs to load quickly, explain the offer and guide visitors towards a useful action.",
+  /** The claim is two sentences and both of them are lists. The first names
+   *  what the website is for, the second what it has to do to get there, and
+   *  splitting them at the source's own commas turns the section from a
+   *  paragraph into the requirement it actually states. Both read back whole. */
+  goal: "The main goal of tailored web design and development is to support traffic, leads and revenue.",
+  goalMark: "traffic, leads and revenue",
+  needsLead: "A website needs to",
+  needs: ["load quickly", "explain the offer", "guide visitors towards a useful action"],
   warning:
     "Advertising performance can also suffer when a strong ad sends people to a cluttered or confusing page.",
-  body: "We optimise the user experience, page structure and conversion routes around the needs of the audience. This may involve clearer navigation, shorter forms, stronger content hierarchy or a more focused landing page.",
+  body: "We optimise the user experience, page structure and conversion routes around the needs of the audience.",
+  /** What that work actually is, split at the source's own commas. The lead-in
+   *  and the four are one sentence in the document and read back as one here. */
+  leversLead: "This may involve",
+  levers: [
+    "clearer navigation",
+    "shorter forms",
+    "stronger content hierarchy",
+    "a more focused landing page",
+  ],
+  /** The consequence the section exists to name. */
+  warningMark: "when a strong ad sends people to a cluttered or confusing page",
   connected:
     "As an experienced digital marketing agency in Dubai, we also understand how the website affects conversion rate optimisation, SEO and campaign performance.",
 };
@@ -180,16 +253,16 @@ export const sectors = {
   strokeTitle: "for Different Industries",
   lead: "A well-planned website is useful wherever customers need to research, enquire, book or buy online.",
   items: [
-    { label: "Ecommerce and retail", detail: "product discovery, payments and checkout" },
-    { label: "Real estate", detail: "property listings, project information and lead forms" },
-    { label: "Healthcare", detail: "service pages, doctor profiles and appointment enquiries" },
-    { label: "Professional services", detail: "clear expertise, service information and qualified leads" },
-    { label: "Education and training", detail: "courses, registrations and programme information" },
-    { label: "Hospitality and leisure", detail: "bookings, venues, menus and experiences" },
-    { label: "Technology and B2B", detail: "technical information, demonstrations and sales enquiries" },
-    { label: "Construction and industrial businesses", detail: "projects, capabilities and product information" },
-    { label: "Events", detail: "registrations, schedules, ticket links and campaign landing pages" },
-    { label: "Local service businesses", detail: "service areas, contact routes and enquiry forms" },
+    { label: "Ecommerce and retail", parts: ["product discovery","payments","checkout"] },
+    { label: "Real estate", parts: ["property listings","project information","lead forms"] },
+    { label: "Healthcare", parts: ["service pages","doctor profiles","appointment enquiries"] },
+    { label: "Professional services", parts: ["clear expertise","service information","qualified leads"] },
+    { label: "Education and training", parts: ["courses","registrations","programme information"] },
+    { label: "Hospitality and leisure", parts: ["bookings","venues","menus","experiences"] },
+    { label: "Technology and B2B", parts: ["technical information","demonstrations","sales enquiries"] },
+    { label: "Construction and industrial businesses", parts: ["projects","capabilities","product information"] },
+    { label: "Events", parts: ["registrations","schedules","ticket links","campaign landing pages"] },
+    { label: "Local service businesses", parts: ["service areas","contact routes","enquiry forms"] },
   ] as Sector[],
   tail: "The website scope changes with the business. A corporate services company may need detailed service pages and lead forms, while an online retailer needs product organisation, payments and a reliable checkout.",
 };

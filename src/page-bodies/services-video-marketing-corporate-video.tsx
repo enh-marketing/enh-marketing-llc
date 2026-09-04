@@ -6,19 +6,17 @@ import { TrustStrip } from "@/components/sections/TrustStrip";
 import { Insights } from "@/components/sections/Insights";
 import * as c from "@/content/services/corporate-video";
 
-import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { Crosslink } from "@/components/ui/Crosslink";
 import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { Viewfinder } from "@/components/service/Viewfinder";
 import { Narrative } from "@/components/service/Narrative";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
-import { ShootPlan, ReachNote } from "@/components/service/ShootPlan";
-import { IndustryRun } from "@/components/service/IndustryRun";
+import { DistributionReel } from "@/components/service/DistributionReel";
+import { IndustryViewer } from "@/components/service/IndustryViewer";
+import { CapabilityCarousel } from "@/components/service/CapabilityCarousel";
 import { FaqList } from "@/components/service/FaqList";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
@@ -96,105 +94,75 @@ export function CorporateVideoPage() {
           diagram={{ kind: "cycle" }}
         />
 
-        {/* THE PAGE'S ARGUMENT. Distribution comes before the shoot, so it is
-            drawn before the destinations: one shoot, the four frames it has to
-            serve, then where each one goes. See ShootPlan. */}
-        <section
+        {/* THE PAGE'S ARGUMENT. The document's causal sentence leads, so the
+            frames are drawn before the destinations: one shoot, the four frames
+            it has to serve, then where each one goes. See DistributionReel. */}
+        <DistributionReel
           id="distribution"
-          data-section="Where the Video Goes After Delivery"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="03"
-              title={c.distribution.title}
-              strokeTitle={c.distribution.strokeTitle}
-              mark={{ variant: "progression", label: "One shoot, four frames, five destinations" }}
-              className="mb-12"
-            />
+          label="Where the Video Goes After Delivery"
+          index="03"
+          title={c.distribution.title}
+          strokeTitle={c.distribution.strokeTitle}
+          claim={c.distribution.claim}
+          versionsLead={c.distribution.versionsLead}
+          versions={c.distribution.versions}
+          versionsTail={c.distribution.versionsTail}
+          destinations={c.distribution.destinations}
+          reach={c.distribution.reach}
+          reachFigure={c.distribution.reachFigure}
+          reachCaveat={c.distribution.reachCaveat}
+          discoveryLead={c.distribution.discoveryLead}
+          discoveryItems={c.distribution.discoveryItems}
+          discoveryLink={c.distribution.discoveryLink}
+          discoveryTail={c.distribution.discoveryTail}
+        />
 
-            <ShootPlan
-              claim={c.distribution.claim}
-              versionsLead={c.distribution.versionsLead}
-              versions={c.distribution.versions}
-              versionsTail={c.distribution.versionsTail}
-              destinations={c.distribution.destinations}
-            />
-
-            {/* The one audience figure, kept with its qualifier. */}
-            <Rise delay={0.12} className="mt-12">
-              <ReachNote
-                reach={c.distribution.reach}
-                figure={c.distribution.reachFigure}
-                caveat={c.distribution.reachCaveat}
-              />
-            </Rise>
-
-            {/* The discoverability layer, and the page the document points at
-                for it. That page is built, so it is a real link. */}
-            <Rise delay={0.18} className="mt-10 border-t border-line pt-8">
-              <p className="max-w-4xl leading-relaxed text-snow sm:text-lg">
-                {c.distribution.discoveryLead}
-              </p>
-              <ul className="mt-5 flex flex-wrap gap-2.5">
-                {c.distribution.discoveryItems.map((item) => (
-                  <li
-                    key={item}
-                    className="font-display rounded-lg border border-brand/45 bg-brand/[0.06] px-4 py-2 text-sm font-bold text-snow"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-5 flex flex-wrap items-baseline gap-x-2 leading-relaxed text-fog">
-                <Crosslink href={c.distribution.discoveryLink.href}>
-                  {c.distribution.discoveryLink.label}
-                </Crosslink>
-                <span>{c.distribution.discoveryTail}</span>
-              </p>
-            </Rise>
-          </Container>
-        </section>
-
-        <IndustryRun
+        {/* Eleven names and nothing else. What was wrong with the earlier
+            versions was the picture, not the container: they all drew their
+            industries as hairline outlines, and eleven wireframes read as clip
+            art at any size. These are filled, in three tonal layers on one
+            horizon, inside a viewer the reader operates. See IndustryViewer. */}
+        <IndustryViewer
           id="industries"
           label="Industries We Film For"
           index="04"
           title={c.industries.title}
           strokeTitle={c.industries.strokeTitle}
-          items={c.industries.items.map((label) => ({ label }))}
+          items={c.industries.items}
         />
 
-        <section
+        {/* The commitments, on the run the site uses for capability sets. The
+            document's own opening sentence for the section sits under it: it
+            belongs to the set, not to any one card. */}
+        <CapabilityCarousel
           id="promises"
-          data-section="What You Get From ENH Marketing"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="05"
-              title={c.promises.title}
-              strokeTitle={c.promises.strokeTitle}
-              className="mb-12"
-              aside={
-                <Rise key="lead">
-                  <p className="leading-relaxed text-fog sm:text-lg">{c.promises.lead}</p>
-                </Rise>
-              }
-            />
+          label="What You Get From ENH Marketing"
+          index="05"
+          title={c.promises.title}
+          strokeTitle={c.promises.strokeTitle}
+          items={c.promises.items}
+          footer={
+            <Rise>
+              <p className="max-w-4xl border-t border-line pt-9 leading-relaxed text-fog sm:text-lg">
+                {c.promises.lead}
+              </p>
+            </Rise>
+          }
+        />
 
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {c.promises.items.map((p, i) => (
-                <SurfaceCard key={p.title} index={String(i + 1).padStart(2, "0")} delay={0.05 * i}>
-                  <p className="font-display text-[1.05rem] font-extrabold uppercase leading-[1.2] text-snow">
-                    {p.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-fog">{p.body}</p>
-                </SurfaceCard>
-              ))}
-            </div>
-          </Container>
-        </section>
+        {/* The mid-page ask. It takes the heading and the short line; the band
+            at the foot of the page takes the longer recommendation, so no
+            sentence prints twice. */}
+        <GrowthCta
+          id="cta"
+          label="Tell Us What the Video Needs to Do"
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
 
         {/* The document's "Corporate Videos We Have Produced" section is an
             instruction, not content: "[Portfolio section using existing,
@@ -209,8 +177,7 @@ export function CorporateVideoPage() {
           index="08"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

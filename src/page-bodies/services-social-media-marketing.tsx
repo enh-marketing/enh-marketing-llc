@@ -6,18 +6,17 @@ import { TrustStrip } from "@/components/sections/TrustStrip";
 import { Insights } from "@/components/sections/Insights";
 import * as c from "@/content/services/social-media-marketing";
 
-import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { PlatformRoles } from "@/components/service/PlatformRoles";
 import { Narrative } from "@/components/service/Narrative";
-import { ReasonLedger } from "@/components/service/ReasonLedger";
-import { ServiceIndex } from "@/components/service/ServiceIndex";
-import { MeasureTable } from "@/components/service/MeasureTable";
-import { StageTrack } from "@/components/service/StageTrack";
-import { SectorLedger } from "@/components/service/SectorLedger";
+import { ChannelScroller } from "@/components/service/ChannelScroller";
+import { PlatformCut } from "@/components/service/PlatformCut";
+import { ProcessLanes } from "@/components/service/ProcessLanes";
+import { MeasureBank } from "@/components/service/MeasureBank";
+import { PreLaunchBrief } from "@/components/service/PreLaunchBrief";
+import { SectorTrack } from "@/components/service/SectorTrack";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
@@ -57,143 +56,123 @@ export function SocialMediaMarketingPage() {
           highlight={c.narrative.highlight}
         />
 
-        {/* The nine children first on this page, before the reasons: the social
-            document leads with the platforms and treats the agency argument as
-            support, which is the reverse of the SEO page. */}
-        <section
+        {/* The nine children first on this page, before the reasons: the
+            social document leads with the platforms and treats the agency
+            argument as support, which is the reverse of the SEO page. Run as
+            the pinned horizontal track the paid pillar's channels use -- same
+            component, same card -- so each service gets a full stage instead of
+            a ninth of a grid. See ChannelScroller. */}
+        <ChannelScroller
           id="services"
-          data-section="Social Media Services We Offer"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="02"
-              title={c.services.title}
-              strokeTitle={c.services.strokeTitle}
-              mark={{ variant: "network", label: "Nine scopes, bookable together or apart" }}
-              className="mb-12"
-            />
-            <ServiceIndex items={c.services.items} wide={1} />
-            <Rise delay={0.12}>
-              <p className="mt-10 max-w-3xl leading-relaxed text-fog">{c.services.tail}</p>
-            </Rise>
-          </Container>
-        </section>
+          label="Social Media Services We Offer"
+          index="02"
+          title={c.services.title}
+          strokeTitle={c.services.strokeTitle}
+          mark={{ variant: "ecosystem", label: "Nine services, one publishing plan" }}
+          channels={c.services.items.map((s) => ({
+            name: s.title,
+            href: s.href ?? "",
+            body: s.body,
+            glyph: s.glyph,
+          }))}
+          tail={c.services.tail}
+        />
 
-        <section
+        {/* The second position on the list is the page's whole argument, and
+            the opening scene is a business ignoring it. So the section proves
+            it: the same post, re-cut four ways, with the parts moving between
+            arrangements rather than cross-fading. See PlatformCut. */}
+        <PlatformCut
           id="reasons"
-          data-section="Why Choose ENH Marketing for Social Media Marketing in Dubai"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="03"
-              title={c.reasons.title}
-              strokeTitle={c.reasons.strokeTitle}
-              className="mb-12"
-            />
-            <ReasonLedger lead={c.reasons.lead} items={c.reasons.items} />
-          </Container>
-        </section>
+          label="Why Choose ENH Marketing for Social Media Marketing in Dubai"
+          index="03"
+          title={c.reasons.title}
+          strokeTitle={c.reasons.strokeTitle}
+          lead={c.reasons.lead}
+          leadMark={c.reasons.leadMark}
+          items={c.reasons.items}
+        />
 
-        <section
+        {/* Sorted by whose desk each stage sits on. Five of the six say "we"
+            or "our team"; exactly one says "Your team receives the content
+            before publishing", so the shape of the section answers the question
+            a client actually has. See ProcessLanes. */}
+        <ProcessLanes
           id="process"
-          data-section="How Our Social Media Process Works"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="04"
-              title={c.process.title}
-              strokeTitle={c.process.strokeTitle}
-              mark={{ variant: "progression", label: "Six stages, repeating every month" }}
-              className="mb-12"
-            />
-            <StageTrack stages={c.process.stages} columns={3} />
-          </Container>
-        </section>
+          label="How Our Social Media Process Works"
+          index="04"
+          title={c.process.title}
+          strokeTitle={c.process.strokeTitle}
+          stages={c.process.stages}
+          laneOurs="Our team"
+          laneYours="Your team"
+        />
 
-        <section
+        {/* Nine measures as an instrument panel, one reading at a time, because
+            the section's own note warns against reading a number on its own.
+            See MeasureBank. */}
+        <MeasureBank
           id="measure"
-          data-section="What We Measure"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="05"
-              title={c.measure.title}
-              strokeTitle={c.measure.strokeTitle}
-              className="mb-12"
-              aside={
-                <Rise key="lead">
-                  <p className="leading-relaxed text-fog sm:text-lg">{c.measure.lead}</p>
-                </Rise>
-              }
-            />
-            <MeasureTable
-              rows={c.measure.rows}
-              headTrack={c.measure.headTrack}
-              headTells={c.measure.headTells}
-              note={c.measure.note}
-            />
-          </Container>
-        </section>
+          label="What We Measure"
+          index="05"
+          title={c.measure.title}
+          strokeTitle={c.measure.strokeTitle}
+          lead={c.measure.lead}
+          rows={c.measure.rows}
+          headTrack={c.measure.headTrack}
+          headTells={c.measure.headTells}
+          note={c.measure.note}
+          noteMark={c.measure.noteMark}
+        />
 
-        {/* Paid, in a section of its own, because this document will not let it
-            be added to the organic numbers above. */}
-        <section
+        {/* Two lists the copy already contains and no earlier version drew:
+            the five things settled before a campaign runs, and the two money
+            lines that are never added up. The ledger deliberately stops one row
+            short of a total. See PreLaunchBrief. */}
+        <PreLaunchBrief
           id="paid"
-          data-section="Reach a Larger Audience With Paid Social Campaigns"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="06"
-              title={c.paid.title}
-              strokeTitle={c.paid.strokeTitle}
-              mark={{ variant: "contrast", label: "Reported apart from the accounts" }}
-              className="mb-12"
-            />
-            <Rise>
-              <p className="font-display max-w-4xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
-                {c.paid.claim}
-              </p>
-            </Rise>
-            <div className="mt-10 grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-              <Rise delay={0.06}>
-                <p className="leading-relaxed text-snow sm:text-lg">{c.paid.body}</p>
-              </Rise>
-              <div className="space-y-6">
-                <Rise delay={0.12}>
-                  <p className="border-l-2 border-brand pl-6 leading-relaxed text-fog">
-                    {c.paid.separation}
-                  </p>
-                </Rise>
-                <Rise delay={0.18}>
-                  <p className="border-t border-line pt-6 leading-relaxed text-ash">
-                    {c.paid.scope}
-                  </p>
-                </Rise>
-              </div>
-            </div>
-          </Container>
-        </section>
+          label="Reach a Larger Audience With Paid Social Campaigns"
+          index="06"
+          title={c.paid.title}
+          strokeTitle={c.paid.strokeTitle}
+          claim={c.paid.claim}
+          planLead={c.paid.planLead}
+          decisions={c.paid.decisions}
+          planTail={c.paid.planTail}
+          platforms={c.paid.platforms}
+          ledger={c.paid.ledger}
+          ledgerVerb={c.paid.ledgerVerb}
+          review={c.paid.review}
+          reviewMark={c.paid.reviewMark}
+          scope={c.paid.scope}
+        />
 
-        <section
+        {/* Ten sectors and the material each has to publish, run sideways by
+            the page's own scroll. See SectorTrack. */}
+        <SectorTrack
           id="sectors"
-          data-section="Sectors We Support Across Social Media"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="07"
-              title={c.sectors.title}
-              strokeTitle={c.sectors.strokeTitle}
-              className="mb-12"
-            />
-            <SectorLedger lead={c.sectors.lead} items={c.sectors.items} tail={c.sectors.tail} />
-          </Container>
-        </section>
+          label="Sectors We Support Across Social Media"
+          index="07"
+          title={c.sectors.title}
+          strokeTitle={c.sectors.strokeTitle}
+          lead={c.sectors.lead}
+          items={c.sectors.items}
+          tail={c.sectors.tail}
+        />
+
+        {/* The house mid-page CTA, in the position every other service page
+            puts it: after the argument, before the work. It carries the closing
+            heading and the "send us" line, while the CtaBand at the foot takes
+            the heading and the longer recommendation, so no sentence prints
+            twice. */}
+        <GrowthCta
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
 
         {/* The document's "Our Work" is a gate: "[Client case study slides and
             approved social media counters]". This is the site's own Work
@@ -209,8 +188,7 @@ export function SocialMediaMarketingPage() {
           index="10"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

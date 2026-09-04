@@ -21,7 +21,7 @@
 import type { MeasureRow } from "@/components/service/MeasureTable";
 import type { IndexEntry } from "@/components/service/ServiceIndex";
 import type { TrackStage } from "@/components/service/StageTrack";
-import type { Sector } from "@/components/service/SectorLedger";
+export type Sector = { label: string; parts: string[] };
 
 export const meta = {
   title: "Video Production Services in Dubai | ENH Marketing",
@@ -48,20 +48,77 @@ export const narrative = {
     "As a digital marketing agency, we can also help plan how the video will be distributed after delivery.",
 };
 
+/** Each is a position, and four of the seven carry the reason for it in a
+ *  second sentence. Split at the source's own full stop -- and the third at its
+ *  own "when" -- so the position reads at weight with its reason under it. The
+ *  three that are a single sentence simply have no second half. Nothing is
+ *  reworded. */
+/** Each is a position, and four of the seven carry the reason for it in a
+ *  second sentence. Split at the source's own full stop -- and the third at its
+ *  own "when" -- so the position reads at weight with its reason under it. The
+ *  three that are a single sentence simply have no second half. Nothing is
+ *  reworded.
+ *
+ *  `covers` IS A COUNT OF THE POSITION'S OWN LIST, not an estimate of anything.
+ *  Six of the seven sentences enumerate what they cover, separated by the
+ *  document's own commas, and the page draws that count as discrete blocks so
+ *  the breadth of the scope is visible before a word of it is read -- which is
+ *  precisely what the section's closing sentence asks the reader to check. The
+ *  words being counted, in order:
+ *    1  script, framing, length, final versions                            (4)
+ *    2  concept, scriptwriting, filming, editing, colour grading,
+ *       sound, graphics                                                   (7)
+ *    3  landscape, vertical, square                                       (3)
+ *    4  corporate films, social videos                                    (2)
+ *    5  what will be filmed, which final versions are included,
+ *       how feedback will be handled                                      (3)
+ *    6  no list                                                           (0)
+ *    7  the scale of the shoot, the production support required,
+ *       what needs to happen after filming                                (3)
+ *  Nothing is added to a list and nothing is dropped from one. */
+export type Reason = { stance: string; detail?: string; covers: number };
+
 export const reasons = {
   title: "Why Choose ENH Marketing",
   strokeTitle: "for Video Production in Dubai",
   lead: "We have more than 15 years of experience creating corporate videos, event coverage, interviews, animation, product content and commercial films in Dubai and across the UAE.",
   items: [
-    "We ask where the video will be used before planning the shoot. The answer affects the script, framing, length and final versions.",
-    "Concept, scriptwriting, filming, editing, colour grading, sound and graphics can be handled by one production team.",
-    "Landscape, vertical and square versions can be planned together when the content needs to work across several channels.",
-    "Corporate films and social videos are treated differently. A website film needs a different pace and structure from a Reel or paid advertisement.",
-    "The quote states what will be filmed, which final versions are included and how feedback will be handled.",
-    "Distribution and performance tracking can be added when the video forms part of a wider campaign.",
-    "Businesses searching “video production company Dubai” or “videographer Dubai” may find the same suppliers appearing for very different jobs. The right choice depends on the scale of the shoot, the production support required and what needs to happen after filming.",
-  ],
+    {
+      stance: "We ask where the video will be used before planning the shoot.",
+      detail: "The answer affects the script, framing, length and final versions.",
+      covers: 4,
+    },
+    {
+      stance: "Concept, scriptwriting, filming, editing, colour grading, sound and graphics can be handled by one production team.",
+      covers: 7,
+    },
+    {
+      stance: "Landscape, vertical and square versions can be planned together",
+      detail: "when the content needs to work across several channels.",
+      covers: 3,
+    },
+    {
+      stance: "Corporate films and social videos are treated differently.",
+      detail: "A website film needs a different pace and structure from a Reel or paid advertisement.",
+      covers: 2,
+    },
+    {
+      stance: "The quote states what will be filmed, which final versions are included and how feedback will be handled.",
+      covers: 3,
+    },
+    {
+      stance: "Distribution and performance tracking can be added when the video forms part of a wider campaign.",
+      covers: 0,
+    },
+    {
+      stance: "Businesses searching “video production company Dubai” or “videographer Dubai” may find the same suppliers appearing for very different jobs.",
+      detail: "The right choice depends on the scale of the shoot, the production support required and what needs to happen after filming.",
+      covers: 3,
+    },
+  ] as Reason[],
   tail: "Businesses comparing “video production services Dubai” or “video production agency UAE” providers should check the full scope rather than the camera list alone.",
+  /** The comparison the whole section is arguing against. */
+  tailMark: "rather than the camera list alone",
 };
 
 export const services = {
@@ -131,6 +188,9 @@ export const measure = {
     { track: "Paid Campaign Results", tells: "Cost per view, lead or conversion where advertising is included" },
   ] as MeasureRow[],
   note: "Video analytics need context. A short social clip and a detailed corporate film serve different purposes and should be measured accordingly.",
+  /** The sentence the section exists to protect: no measure means anything
+   *  without knowing which film it belongs to. */
+  noteMark: "serve different purposes and should be measured accordingly",
 };
 
 export const process = {
@@ -152,16 +212,16 @@ export const sectors = {
   strokeTitle: "We Film For",
   lead: "Video is useful when the audience needs to see, hear or understand something that static content cannot explain as clearly.",
   items: [
-    { label: "Corporate communications", detail: "company profiles, leadership messages and internal updates" },
-    { label: "Events", detail: "conferences, launches, exhibitions and panel discussions" },
-    { label: "Products and services", detail: "demonstrations, explainers and promotional films" },
-    { label: "Client proof", detail: "testimonials and case studies" },
-    { label: "Hospitality", detail: "hotels, restaurants, venues and destination content" },
-    { label: "Real estate", detail: "property tours, developments and community videos" },
-    { label: "Healthcare", detail: "service explanations, doctor interviews and patient information" },
-    { label: "Education", detail: "training, courses and instructional videos" },
-    { label: "Industrial businesses", detail: "facilities, processes, safety and equipment" },
-    { label: "Social media", detail: "Reels, Shorts, TikTok videos and paid creative" },
+    { label: "Corporate communications", parts: ["company profiles","leadership messages","internal updates"] },
+    { label: "Events", parts: ["conferences","launches","exhibitions","panel discussions"] },
+    { label: "Products and services", parts: ["demonstrations","explainers","promotional films"] },
+    { label: "Client proof", parts: ["testimonials","case studies"] },
+    { label: "Hospitality", parts: ["hotels","restaurants","venues","destination content"] },
+    { label: "Real estate", parts: ["property tours","developments","community videos"] },
+    { label: "Healthcare", parts: ["service explanations","doctor interviews","patient information"] },
+    { label: "Education", parts: ["training","courses","instructional videos"] },
+    { label: "Industrial businesses", parts: ["facilities","processes","safety","equipment"] },
+    { label: "Social media", parts: ["Reels","Shorts","TikTok videos","paid creative"] },
   ] as Sector[],
 };
 

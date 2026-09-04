@@ -148,7 +148,7 @@ export function GoogleGuidance({
 
           {/* The point of the whole section, at the scale of the point. */}
           <Rise delay={0.16} className="flex items-center">
-            <p className="font-display border-l-2 border-brand pl-7 text-[clamp(1.5rem,3.2vw,2.6rem)] font-extrabold uppercase leading-[1.06] text-brand sm:pl-9">
+            <p className="font-display border-l-2 border-brand pl-7 statement font-extrabold uppercase leading-[1.06] text-brand sm:pl-9">
               {eligibilityVerdict}
             </p>
           </Rise>

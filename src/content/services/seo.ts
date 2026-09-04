@@ -26,7 +26,7 @@
 import type { MeasureRow } from "@/components/service/MeasureTable";
 import type { IndexEntry } from "@/components/service/ServiceIndex";
 import type { TrackStage } from "@/components/service/StageTrack";
-import type { Sector } from "@/components/service/SectorLedger";
+export type Sector = { label: string; parts: string[] };
 
 export const meta = {
   title: "SEO Services in Dubai | ENH Marketing",
@@ -60,19 +60,54 @@ export const narrative = {
     "We also report on what those rankings produce, so you can see which pages and searches are bringing useful traffic.",
 };
 
+/** Each of the six is a position followed by the reason for it. Split at the
+ *  source's own full stop (and, for the fourth, at its own comma, which is the
+ *  only break that sentence offers) so the page can set the position at display
+ *  weight and the reason underneath it. Nothing is reworded. */
+export type Reason = { stance: string; detail: string };
+
 export const reasons = {
   title: "Why Choose ENH Marketing",
   strokeTitle: "for SEO in Dubai",
   lead: "Type “SEO company Dubai”, “SEO agency Dubai” or “search engine optimisation Dubai” into Google and you will find plenty of agencies promising higher rankings. The work behind those promises matters more.",
-  items: [
-    "We look beyond traffic growth. Keywords are assessed by search intent and commercial value before they are added to the plan.",
-    "Technical issues come first when they are holding the site back. Publishing more content will not solve poor indexing, weak site structure or pages that search engines cannot understand.",
-    "Local and ecommerce SEO get their own strategies. A Google Business Profile and a product catalogue have very different problems.",
-    "Content is written around what customers are searching for, with service pages, landing pages, guides and blogs each given a clear role.",
-    "Link building focuses on relevant editorial placements. We avoid poor-quality links that put the website at risk.",
-    "Search data is explained clearly. You can see which terms, pages and locations are improving without having to decode an SEO report.",
+  /** The three searches the lead names, pulled out so the section can actually
+   *  run them. Verbatim, minus the source's own quotation marks, which belong
+   *  to the sentence rather than to the query. */
+  queries: [
+    "SEO company Dubai",
+    "SEO agency Dubai",
+    "search engine optimisation Dubai",
   ],
+  items: [
+    {
+      stance: "We look beyond traffic growth.",
+      detail: "Keywords are assessed by search intent and commercial value before they are added to the plan.",
+    },
+    {
+      stance: "Technical issues come first when they are holding the site back.",
+      detail: "Publishing more content will not solve poor indexing, weak site structure or pages that search engines cannot understand.",
+    },
+    {
+      stance: "Local and ecommerce SEO get their own strategies.",
+      detail: "A Google Business Profile and a product catalogue have very different problems.",
+    },
+    {
+      stance: "Content is written around what customers are searching for,",
+      detail: "with service pages, landing pages, guides and blogs each given a clear role.",
+    },
+    {
+      stance: "Link building focuses on relevant editorial placements.",
+      detail: "We avoid poor-quality links that put the website at risk.",
+    },
+    {
+      stance: "Search data is explained clearly.",
+      detail: "You can see which terms, pages and locations are improving without having to decode an SEO report.",
+    },
+  ] as Reason[],
   tail: "The best SEO company in UAE for your business should be able to show what needs fixing, what deserves investment and what can wait.",
+  /** The three things the tail says an agency should be able to show. Marked in
+   *  place rather than pulled out. */
+  tailMark: "what needs fixing, what deserves investment and what can wait",
 };
 
 /** The nine children. Four of these pages are not built yet; their cards
@@ -165,6 +200,8 @@ export const measure = {
     { track: "Search visibility", tells: "How much of the relevant search market the website currently reaches" },
   ] as MeasureRow[],
   note: "Relevance matters more than exposure alone. Search analytics help us find valuable keyword patterns, understand customer behaviour and decide what to work on next.",
+  /** The sentence the whole page turns on. */
+  noteMark: "Relevance matters more than exposure alone.",
 };
 
 export const process = {
@@ -185,15 +222,15 @@ export const sectors = {
   strokeTitle: "From Search Visibility",
   lead: "SEO works best when people are already searching for the product, service or information the business provides.",
   items: [
-    { label: "Ecommerce and retail", detail: "product pages, category pages, filters and product schema" },
-    { label: "Local businesses", detail: "Google Business Profile, location pages, citations and reviews" },
-    { label: "Real estate", detail: "project pages, community searches and location-led enquiries" },
-    { label: "Healthcare", detail: "treatment pages, clinic searches and service information" },
-    { label: "Professional services", detail: "legal, audit, accounting, corporate services and company formation" },
-    { label: "Education and training", detail: "courses, qualifications and programme searches" },
-    { label: "Technology and B2B", detail: "service pages, technical content and research-led searches" },
-    { label: "Hospitality", detail: "hotels, restaurants, venues and local discovery" },
-    { label: "Home and trade services", detail: "maintenance, fit-out, moving and automotive services" },
+    { label: "Ecommerce and retail", parts: ["product pages","category pages","filters","product schema"] },
+    { label: "Local businesses", parts: ["Google Business Profile","location pages","citations","reviews"] },
+    { label: "Real estate", parts: ["project pages","community searches","location-led enquiries"] },
+    { label: "Healthcare", parts: ["treatment pages","clinic searches","service information"] },
+    { label: "Professional services", parts: ["legal","audit","accounting","corporate services","company formation"] },
+    { label: "Education and training", parts: ["courses","qualifications","programme searches"] },
+    { label: "Technology and B2B", parts: ["service pages","technical content","research-led searches"] },
+    { label: "Hospitality", parts: ["hotels","restaurants","venues","local discovery"] },
+    { label: "Home and trade services", parts: ["maintenance","fit-out","moving","automotive services"] },
   ] as Sector[],
   /** The three paragraphs the document closes the section with, all about the
    *  local case. Kept as separate paragraphs, in order. */
@@ -204,11 +241,15 @@ export const sectors = {
   ],
 };
 
-/** The document's closing argument, before the work and the FAQs. */
+/** The document's closing argument, before the work and the FAQs. Both
+ *  paragraphs are carried whole and in order: an earlier version took them
+ *  apart at their commas, and taking a closing argument to pieces is the one
+ *  place on a page where the sentences should be left alone. */
 export const closing = {
   title: "Be Seen, Be Found and Drive Sales",
   strokeTitle: "With the Best SEO Services in Dubai",
   lead: "SEO helps prospective customers find your business when they search for the services, products or information you provide.",
+  leadMark: "when they search for the services, products or information you provide",
   body: [
     "It can also improve the website itself. Clearer navigation, better page structure and more useful content make it easier for visitors to understand the business and take the next step.",
     "Good SEO takes patience, technical skill and an understanding of search behaviour. Our SEO content strategy keeps the intended audience at the centre of the work while supporting stronger organic traffic, rankings and conversions.",

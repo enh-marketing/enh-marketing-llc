@@ -119,37 +119,65 @@ export const events = {
   ] as EventType[],
 };
 
-export type Capability = { title: string; body: string };
+export type Capability = {
+  title: string;
+  body: string;
+  before: string;
+  /** Which drawing the run leads the card with. A drawing choice, not a claim:
+   *  none of them counts cameras, crew or days. */
+  preview: "angles" | "cut" | "live" | "chairs" | "shapes" | "options";
+};
 
 /** Six things the coverage itself can include. Set apart from the six event
- *  types above, which are occasions rather than capabilities. */
+ *  types above, which are occasions rather than capabilities.
+ *
+ *  EVERY ONE OF THE SIX CARRIES A PRECONDITION, and `before` is the clause that
+ *  states it, verbatim and in place. That is not a coincidence in the copy: the
+ *  page is called "Plan the Coverage Before the Event Begins", and each
+ *  capability names the thing that has to be settled for it to be possible on
+ *  the day -- audio feeds planned, length and delivery agreed, venue internet
+ *  checked, questions written, vertical framing planned during filming, each
+ *  specialist item priced separately. Marked rather than extracted, so the
+ *  paragraph still reads exactly as written. */
 export const coverage = {
   title: "What Event Video",
   strokeTitle: "Coverage Can Include",
   items: [
     {
       title: "Multi-Camera Event Recording",
+      preview: "angles",
       body: "Multiple cameras can cover the stage, speakers, audience and other activity without depending on one fixed view. The number of cameras is based on the venue, programme and required deliverables. Separate audio feeds are planned for speeches, panels and presentations.",
+      before: "Separate audio feeds are planned for speeches, panels and presentations.",
     },
     {
       title: "Event Highlights Reel",
+      preview: "cut",
       body: "An event highlights reel is usually a short edit covering the most useful moments, people and activity. It can be prepared for websites, YouTube, LinkedIn and future event promotion. The required length, style and delivery date are agreed before filming.",
+      before: "The required length, style and delivery date are agreed before filming.",
     },
     {
       title: "Live Streaming and Hybrid Events",
+      preview: "live",
       body: "Live streaming allows remote viewers to follow the event through an approved platform or website. The setup may include multiple cameras, presentation feeds, graphics and separate audio. Venue internet, technical access, platform requirements and backup arrangements must be checked in advance.",
+      before: "Venue internet, technical access, platform requirements and backup arrangements must be checked in advance.",
     },
     {
       title: "Interviews and Testimonials",
+      preview: "chairs",
       body: "Speakers, organisers, sponsors and attendees can be interviewed during the event. We prepare a question set and identify a suitable filming area with controlled sound. Interviews can appear in the main event film or be delivered as separate case study and social media videos.",
+      before: "We prepare a question set and identify a suitable filming area with controlled sound.",
     },
     {
       title: "Social Media Video Edits",
+      preview: "shapes",
       body: "One event can supply several short videos for Instagram, LinkedIn, TikTok, Facebook and YouTube. Vertical and square framing is planned during filming so the final content does not rely on cropping landscape footage. Same-day or next-day edits can be scoped when required.",
+      before: "Vertical and square framing is planned during filming so the final content does not rely on cropping landscape footage.",
     },
     {
       title: "Specialist Production Options",
+      preview: "options",
       body: "Drone videography, time-lapse, stop motion, green screen, 360 video, VR capture, graphic overlays and screen management can be added when suitable. These services depend on the venue, event programme, technical requirements and necessary permissions. Each specialist item will be shown separately in the quote.",
+      before: "Each specialist item will be shown separately in the quote.",
     },
   ] as Capability[],
 };
@@ -162,15 +190,28 @@ export const plan = {
   strokeTitle: "Before Event Day",
   claim:
     "The event coverage plan should state what needs to be delivered, rather than simply asking the crew to film everything.",
-  /** Three events, three different answers. Split at the document's own
-   *  sentence boundaries; the wording is untouched. */
+  /** Three events, three different answers, each split at its own commas so
+   *  the section can show that the same day produces different lists. Read a
+   *  case's lead and its items in order and the sentence is back as written. */
   cases: [
-    "A conference may need complete recordings of each session, a three-minute highlights film and individual speaker clips.",
-    "An exhibition may need daily social content, exhibitor interviews and a promotional video for next year.",
-    "A product launch may need a fast media edit followed by a longer campaign version.",
-  ],
-  consequence:
-    "These decisions affect the number of cameras, crew positions, audio sources and footage required. They also determine whether interviews need to happen during the event and how quickly the first edits must be delivered.",
+    {
+      lead: "A conference may need",
+      items: ["complete recordings of each session", "a three-minute highlights film", "individual speaker clips"],
+    },
+    {
+      lead: "An exhibition may need",
+      items: ["daily social content", "exhibitor interviews", "a promotional video for next year"],
+    },
+    {
+      lead: "A product launch may need",
+      items: ["a fast media edit", "a longer campaign version"],
+    },
+  ] as { lead: string; items: string[] }[],
+  /** And what those choices change, at the document's own commas. */
+  consequenceLead: "These decisions affect",
+  affects: ["the number of cameras", "crew positions", "audio sources", "footage required"],
+  consequenceAlso:
+    "They also determine whether interviews need to happen during the event and how quickly the first edits must be delivered.",
   outputsLead: "ENH can prepare the following from one event:",
   outputs: [
     "Full session or presentation recordings",
@@ -190,12 +231,35 @@ export const plan = {
 export const distribution = {
   title: "Where Your Event",
   strokeTitle: "Videos Can Be Used",
-  lead: "The main highlights film can sit on the website, company YouTube channel or event page. Full sessions can be shared with attendees, employees or people who could not attend. Speaker clips can support LinkedIn content, while short vertical videos can be used across social platforms.",
-  support:
-    "Footage can also support email campaigns, sales presentations, sponsor reporting and paid promotion. When ENH's digital marketing services are included, the production team can plan the video formats around the campaigns that will use them.",
+  /** THE LEAD IS A MAP, NOT A PARAGRAPH. It pairs four kinds of video with
+   *  where each one goes, and reading a row's three parts in order gives the
+   *  sentence back word for word. The verbs differ between rows and are kept:
+   *  a highlights film sits somewhere, sessions are shared with people, clips
+   *  support something. */
+  routes: [
+    {
+      what: "The main highlights film",
+      verb: "can sit on",
+      where: ["the website", "company YouTube channel", "event page"],
+    },
+    {
+      what: "Full sessions",
+      verb: "can be shared with",
+      where: ["attendees", "employees", "people who could not attend"],
+    },
+    { what: "Speaker clips", verb: "can support", where: ["LinkedIn content"] },
+    { what: "short vertical videos", verb: "can be used across", where: ["social platforms"] },
+  ] as { what: string; verb: string; where: string[] }[],
+  supportLead: "Footage can also support",
+  supportUses: ["email campaigns", "sales presentations", "sponsor reporting", "paid promotion"],
+  supportTail:
+    "When ENH's digital marketing services are included, the production team can plan the video formats around the campaigns that will use them.",
   /** The measurement sentence and its limit, kept together. */
   measure:
     "Views, watch time, engagement and website activity can then be monitored through the relevant platforms. The measurement available will depend on where the video is published and whether campaign tracking is included.",
+  /** The limit the section will not go past. */
+  measureMark:
+    "will depend on where the video is published and whether campaign tracking is included",
 };
 
 export const sectors = {
@@ -216,44 +280,71 @@ export const sectors = {
   ],
 };
 
-export type Promise = { title: string; body: string };
+/** THE LEAD SORTS THIS SECTION AND IT HAD BEEN READ AS A SENTENCE: the scope
+ *  "covers what needs to happen before, during and after the event". The event
+ *  itself is a point, not a phase -- arriving with a camera is the one part
+ *  everybody already assumes -- so `side` records which side of that point each
+ *  promise falls on, off its own verb:
+ *    1 "before deciding the crew and equipment"        before
+ *    2 "checked before event day"                      before
+ *    3 "confirm access times ... loading arrangements" before
+ *    4 permits and approvals coordinated               before
+ *    5 "agreed with the event team"                    before
+ *    6 "confirmed before production begins"            before
+ *    7 "prepared while the project is active"          after
+ *    8 separate edits and subtitles delivered          after
+ *  Six on one side of the day and two on the other is the section's own point,
+ *  and the shape says it without a word being added. */
+export type Promise = { title: string; body: string; side: "before" | "after" };
 
 export const promises = {
   title: "What You Get",
   strokeTitle: "From ENH Marketing",
   lead: "Professional event videography services in Dubai require more than arriving with a camera. Our scope covers what needs to happen before, during and after the event.",
+  /** The claim the shape of the section is there to prove. */
+  leadMark: "more than arriving with a camera",
+  /** The point the promises sit either side of, in the lead's own words. */
+  eventLabel: "the event",
   items: [
     {
       title: "A coverage plan based on the programme",
       body: "We review the event schedule, venue and required videos before deciding the crew and equipment.",
+      side: "before",
     },
     {
       title: "Camera and audio requirements agreed early",
       body: "Stage feeds, microphones, presentations and audience coverage are checked before event day.",
+      side: "before",
     },
     {
       title: "Coordination with the organiser and venue",
       body: "We confirm access times, camera positions, power, internet, loading arrangements and filming restrictions.",
+      side: "before",
     },
     {
       title: "Permits and location approvals",
       body: "We coordinate the filming permissions included in the scope and identify when the venue or specialist filming requires additional approval.",
+      side: "before",
     },
     {
       title: "Interview planning",
       body: "The speakers, questions, filming location and available time are agreed with the event team.",
+      side: "before",
     },
     {
       title: "Editing and feedback stated in the quote",
       body: "The deliverables, turnaround and revision rounds are confirmed before production begins.",
+      side: "before",
     },
     {
       title: "Every version produced together",
       body: "Full recordings, highlights, social edits and subtitled versions are prepared while the project is active.",
+      side: "after",
     },
     {
       title: "Arabic and English delivery",
       body: "Separate edits, subtitles, graphics or voiceovers can be included when required.",
+      side: "after",
     },
   ] as Promise[],
 };

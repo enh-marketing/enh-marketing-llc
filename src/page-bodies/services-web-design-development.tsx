@@ -6,18 +6,17 @@ import { TrustStrip } from "@/components/sections/TrustStrip";
 import { Insights } from "@/components/sections/Insights";
 import * as c from "@/content/services/web-design-development";
 
-import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { LandingDrop } from "@/components/service/LandingDrop";
 import { Narrative } from "@/components/service/Narrative";
-import { ReasonLedger } from "@/components/service/ReasonLedger";
-import { ServiceIndex } from "@/components/service/ServiceIndex";
-import { MeasureTable } from "@/components/service/MeasureTable";
-import { StageTrack } from "@/components/service/StageTrack";
-import { SectorLedger } from "@/components/service/SectorLedger";
+import { ComparisonSheet } from "@/components/service/ComparisonSheet";
+import { ChannelScroller } from "@/components/service/ChannelScroller";
+import { ThreeQuestions } from "@/components/service/ThreeQuestions";
+import { StageLadder } from "@/components/service/StageLadder";
+import { RequirementChain } from "@/components/service/RequirementChain";
+import { SectorChips } from "@/components/service/SectorChips";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
@@ -58,148 +57,123 @@ export function WebDesignDevelopmentPage() {
           closing={c.narrative.closing}
         />
 
-        <section
+        {/* The tail is an instruction, not a summary: a reader mid-comparison
+            "should look at what happens before the design starts and after the
+            website goes live". So the section is a sheet they can take to the
+            others -- six line items, our column filled, theirs left blank.
+            See ComparisonSheet. */}
+        <ComparisonSheet
           id="reasons"
-          data-section="Why Choose ENH Marketing for Web Design in Dubai"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="02"
-              title={c.reasons.title}
-              strokeTitle={c.reasons.strokeTitle}
-              className="mb-12"
-            />
-            <ReasonLedger lead={c.reasons.lead} items={c.reasons.items} tail={c.reasons.tail} />
-          </Container>
-        </section>
+          label="Why Choose ENH Marketing for Web Design in Dubai"
+          index="02"
+          title={c.reasons.title}
+          strokeTitle={c.reasons.strokeTitle}
+          lead={c.reasons.lead}
+          ours={brand.name}
+          items={c.reasons.items}
+          tail={c.reasons.tail}
+          tailMark={c.reasons.tailMark}
+        />
 
-        {/* Eight capabilities, not eight pages. Four of these are parts of a
-            build rather than separate scopes, so their cards carry no link at
-            all. See the note in the content file. */}
-        <section
+        {/* Eight capabilities, run as the pinned horizontal track the paid
+            pillar's channels use. Four of the eight are parts of a build rather
+            than pages of their own, so their cards render in full and simply
+            have nowhere to send you. See ChannelScroller. */}
+        <ChannelScroller
           id="services"
-          data-section="Web Design & Development Services We Offer"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="03"
-              title={c.services.title}
-              strokeTitle={c.services.strokeTitle}
-              mark={{ variant: "ecosystem", label: "Eight capabilities, before and after launch" }}
-              className="mb-12"
-            />
-            <ServiceIndex items={c.services.items} wide={2} />
-          </Container>
-        </section>
+          label="Web Design & Development Services We Offer"
+          index="03"
+          title={c.services.title}
+          strokeTitle={c.services.strokeTitle}
+          mark={{ variant: "ecosystem", label: "Eight capabilities, one build" }}
+          channels={c.services.items.map((s) => ({
+            name: s.title,
+            href: s.href ?? "",
+            body: s.body,
+            glyph: s.glyph,
+          }))}
+        />
 
-        <section
+        {/* The house ladder: a panel that holds while the run moves past it, a
+            rail that fills with the reader's own scroll, and the stage under
+            the eye lit on it. This document numbers all seven stages, so none
+            of them is the open-ended continuation the tail treatment is for. */}
+        <StageLadder
           id="process"
-          data-section="How Our Web Design and Development Process Works"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="04"
-              title={c.process.title}
-              strokeTitle={c.process.strokeTitle}
-              mark={{ variant: "progression", label: "Seven stages, and support after launch" }}
-              className="mb-12"
-            />
-            <StageTrack stages={c.process.stages} columns={4} />
-          </Container>
-        </section>
+          label="How Our Web Design and Development Process Works"
+          index="04"
+          title={c.process.title}
+          strokeTitle={c.process.strokeTitle}
+          stages={c.process.stages}
+          tail={false}
+        />
 
-        {/* The document's argument that a build is a marketing problem. */}
-        <section
-          id="performance"
-          data-section="Websites Optimised for Performance"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="05"
-              title={c.performance.title}
-              strokeTitle={c.performance.strokeTitle}
-              mark={{ variant: "contrast", label: "A strong ad cannot rescue a weak page" }}
-              className="mb-12"
-            />
-            <Rise>
-              <p className="font-display max-w-4xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
-                {c.performance.claim}
-              </p>
-            </Rise>
-            <div className="mt-10 grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-              <Rise delay={0.06}>
-                <p className="flex gap-3 leading-relaxed text-snow sm:text-lg">
-                  <span aria-hidden className="mt-1 shrink-0 text-brand">
-                    <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none">
-                      <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5" />
-                      <path d="M8 4.6v4.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                      <circle cx="8" cy="11.4" r="0.9" fill="currentColor" />
-                    </svg>
-                  </span>
-                  <span>{c.performance.warning}</span>
-                </p>
-              </Rise>
-              <div className="space-y-6">
-                <Rise delay={0.12}>
-                  <p className="border-l-2 border-brand pl-6 leading-relaxed text-fog">
-                    {c.performance.body}
-                  </p>
-                </Rise>
-                <Rise delay={0.18}>
-                  <p className="border-t border-line pt-6 leading-relaxed text-ash">
-                    {c.performance.connected}
-                  </p>
-                </Rise>
-              </div>
-            </div>
-          </Container>
-        </section>
-
-        <section
+        {/* The lead asks three questions -- where visitors come from, what they
+            do, where the journey becomes difficult -- and every one of the nine
+            rows answers exactly one of them. The lead is the layout.
+            See ThreeQuestions. */}
+        <ThreeQuestions
           id="measure"
-          data-section="What We Measure"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="06"
-              title={c.measure.title}
-              strokeTitle={c.measure.strokeTitle}
-              className="mb-12"
-              aside={
-                <Rise key="lead">
-                  <p className="leading-relaxed text-fog sm:text-lg">{c.measure.lead}</p>
-                </Rise>
-              }
-            />
-            <MeasureTable
-              rows={c.measure.rows}
-              headTrack={c.measure.headTrack}
-              headTells={c.measure.headTells}
-              note={c.measure.note}
-            />
-          </Container>
-        </section>
+          label="What We Measure"
+          index="05"
+          title={c.measure.title}
+          strokeTitle={c.measure.strokeTitle}
+          lead={c.measure.lead}
+          questions={c.measure.questions}
+          rows={c.measure.rows}
+          headTells={c.measure.headTells}
+          note={c.measure.note}
+          noteMark={c.measure.noteMark}
+        />
 
-        <section
+        {/* A purpose and three requirements derived from it, then what it
+            costs when a page fails them, then the four levers. The argument the
+            whole page rests on, given the only full-bleed band on it.
+            See RequirementChain. */}
+        <RequirementChain
+          id="performance"
+          label="Websites Optimised for Performance"
+          index="06"
+          title={c.performance.title}
+          strokeTitle={c.performance.strokeTitle}
+          goal={c.performance.goal}
+          goalMark={c.performance.goalMark}
+          needsLead={c.performance.needsLead}
+          needs={c.performance.needs}
+          warning={c.performance.warning}
+          warningMark={c.performance.warningMark}
+          body={c.performance.body}
+          leversLead={c.performance.leversLead}
+          levers={c.performance.levers}
+          connected={c.performance.connected}
+        />
+
+        {/* Ten industries, each with what its website actually has to do, split
+            at the document's own commas. See SectorChips. */}
+        <SectorChips
           id="sectors"
-          data-section="Websites Built for Different Industries"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="07"
-              title={c.sectors.title}
-              strokeTitle={c.sectors.strokeTitle}
-              className="mb-12"
-            />
-            <SectorLedger lead={c.sectors.lead} items={c.sectors.items} tail={c.sectors.tail} />
-          </Container>
-        </section>
+          label="Websites Built for Different Industries"
+          index="07"
+          title={c.sectors.title}
+          strokeTitle={c.sectors.strokeTitle}
+          lead={c.sectors.lead}
+          items={c.sectors.items}
+          tail={c.sectors.tail}
+        />
+
+        {/* The house mid-page CTA, in the position every other service page
+            puts it: after the argument, before the work. It carries the closing
+            heading and the "send us" line, while the CtaBand at the foot takes
+            the heading and the longer recommendation, so no sentence prints
+            twice. */}
+        <GrowthCta
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
 
         <Work index="08" label="Our Work" ctaHref="#quote" />
 
@@ -210,8 +184,7 @@ export function WebDesignDevelopmentPage() {
           index="10"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

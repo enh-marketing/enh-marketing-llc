@@ -9,16 +9,19 @@ import * as c from "@/content/services/interview-video";
 import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { Crosslink } from "@/components/ui/Crosslink";
 import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { TakeTwo } from "@/components/service/TakeTwo";
 import { Narrative } from "@/components/service/Narrative";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
-import { StandaloneAnswer } from "@/components/service/StandaloneAnswer";
-import { IndustryRun } from "@/components/service/IndustryRun";
+import { EditTimeline } from "@/components/service/EditTimeline";
+import { SupportingLayers } from "@/components/service/SupportingLayers";
+import { VersionBranches } from "@/components/service/VersionBranches";
+import { IndustryTrack } from "@/components/service/IndustryTrack";
+import { PromiseRun } from "@/components/service/PromiseRun";
 import { FaqList } from "@/components/service/FaqList";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
@@ -115,7 +118,7 @@ export function InterviewVideoPage() {
               index="03"
               title={c.natural.title}
               strokeTitle={c.natural.strokeTitle}
-              mark={{ variant: "contrast", label: "Take the question away and see what stands" }}
+              mark={{ variant: "contrast", label: "One session, and the cut that comes out of it" }}
               className="mb-12"
               aside={
                 <Rise key="lead">
@@ -128,7 +131,7 @@ export function InterviewVideoPage() {
                 {c.natural.prep}
               </p>
             </Rise>
-            <StandaloneAnswer
+            <EditTimeline
               test={c.natural.test}
               filming={c.natural.filming}
               job={c.natural.job}
@@ -149,112 +152,72 @@ export function InterviewVideoPage() {
               strokeTitle={c.around.strokeTitle}
               className="mb-12"
             />
-            <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
-              <Rise>
-                <p className="leading-relaxed text-snow sm:text-lg">{c.around.lead}</p>
-                <p className="mt-8 border-t border-line pt-6 text-sm leading-relaxed text-ash">
-                  {c.around.tail}
-                </p>
-              </Rise>
-              <div>
-                <Rise>
-                  <p className="font-display text-[clamp(1rem,1.9vw,1.3rem)] font-extrabold uppercase leading-[1.16] text-snow">
-                    {c.around.itemsLead}
-                  </p>
-                </Rise>
-                <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
-                  {c.around.items.map((item, i) => (
-                    <Rise key={item} delay={0.04 * i}>
-                      <li className="group flex items-center gap-3 rounded-xl border border-line bg-ink-3 px-4 py-3 transition-colors duration-500 hover:border-brand/60">
-                        <span
-                          aria-hidden
-                          className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand transition-transform duration-500 group-hover:scale-150"
-                        />
-                        <span className="text-sm leading-snug text-snow">{item}</span>
-                      </li>
-                    </Rise>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </Container>
-        </section>
-
-        <section
-          id="versions"
-          data-section="One Interview Can Produce Several Videos"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="05"
-              title={c.versions.title}
-              strokeTitle={c.versions.strokeTitle}
-              mark={{ variant: "progression", label: "Decided before the camera is set up" }}
-              className="mb-12"
+            <SupportingLayers
+              lead={c.around.lead}
+              itemsLead={c.around.itemsLead}
+              items={c.around.items}
+              tail={c.around.tail}
             />
-            <Rise>
-              <p className="font-display max-w-4xl text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.14] text-snow">
-                {c.versions.claim}
-              </p>
-            </Rise>
-            <div className="mt-10 grid gap-x-14 gap-y-6 lg:grid-cols-3">
-              <Rise delay={0.06}>
-                <p className="leading-relaxed text-snow">{c.versions.places}</p>
-              </Rise>
-              <Rise delay={0.12}>
-                <p className="border-l-2 border-brand pl-6 leading-relaxed text-fog">
-                  {c.versions.consequence}
-                </p>
-              </Rise>
-              <Rise delay={0.18}>
-                <p className="leading-relaxed text-ash">{c.versions.support}</p>
-              </Rise>
-            </div>
           </Container>
         </section>
 
-        <IndustryRun
+        {/* One session opening outwards. The component owns the section, as
+            ContentLifespan and ClaimLedger do: the diagram and the header are
+            one composition, not a widget dropped under a heading. */}
+        <VersionBranches
+          id="versions"
+          label="One Interview Can Produce Several Videos"
+          index="05"
+          title={c.versions.title}
+          strokeTitle={c.versions.strokeTitle}
+          claim={c.versions.claim}
+          consequence={c.versions.consequence}
+          outputsLead={c.versions.outputsLead}
+          outputs={c.versions.outputs}
+          placesLead={c.versions.placesLead}
+          places={c.versions.places}
+          support={c.versions.support}
+        />
+
+        {/* Not an arrangement of eleven names -- a run that moves. The page's
+            vertical scroll drives the sectors horizontally. See IndustryTrack. */}
+        <IndustryTrack
           id="industries"
           label="Industries We Produce Interviews For"
           index="06"
           title={c.industries.title}
           strokeTitle={c.industries.strokeTitle}
-          items={c.industries.items.map((label) => ({ label }))}
+          items={c.industries.items}
         />
 
-        <section
+        {/* The nine hung off the run they happen on, grouped by the three
+            phases the document's own lead names. See PromiseRun. */}
+        <PromiseRun
           id="promises"
-          data-section="What You Get From ENH Marketing"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="07"
-              title={c.promises.title}
-              strokeTitle={c.promises.strokeTitle}
-              className="mb-12"
-              aside={
-                <Rise key="lead">
-                  <p className="leading-relaxed text-fog sm:text-lg">{c.promises.lead}</p>
-                </Rise>
-              }
-            />
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {c.promises.items.map((p, i) => (
-                <SurfaceCard key={p.title} index={String(i + 1).padStart(2, "0")} delay={0.05 * i}>
-                  <p className="font-display text-[1.05rem] font-extrabold uppercase leading-[1.2] text-snow">
-                    {p.title}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-fog">{p.body}</p>
-                </SurfaceCard>
-              ))}
-            </div>
-          </Container>
-        </section>
+          label="What You Get From ENH Marketing"
+          index="07"
+          title={c.promises.title}
+          strokeTitle={c.promises.strokeTitle}
+          lead={c.promises.lead}
+          items={c.promises.items}
+        />
 
         {/* The document's "Interview Videos We Have Produced" is a gate:
             "[Portfolio section using real, permissioned ENH interview work.]" */}
+        {/* The house mid-page CTA, in the position every other service page
+            puts it: after the promises, before the work. It carries the
+            document's own closing block -- the heading and the "tell us" line
+            -- while the CtaBand at the foot takes the heading and the longer
+            recommendation, so no sentence appears twice. */}
+        <GrowthCta
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
+
         <Work index="08" label="Our Work" ctaHref="#quote" />
 
         <FaqList label="FAQs" index="09" faqs={c.faqs} />
@@ -264,8 +227,7 @@ export function InterviewVideoPage() {
           index="10"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

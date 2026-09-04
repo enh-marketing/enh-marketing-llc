@@ -114,7 +114,7 @@ export const formats = {
   ] as Format[],
 };
 
-export type Craft = { title: string; body: string };
+export type Craft = { no: string; title: string; body: string; glyph: GlyphVariant };
 
 /** Six things that go into the video. Parts of one production, not options. */
 export const craft = {
@@ -122,27 +122,39 @@ export const craft = {
   strokeTitle: "an Explainer Video",
   items: [
     {
+      no: "01",
       title: "Script and Message Structure",
+      glyph: "structure",
       body: "The script establishes the problem, explanation and next action in language the intended audience can understand. Technical information is checked with your subject experts before the wording is approved for production.",
     },
     {
+      no: "02",
       title: "Storyboard and Visual Direction",
+      glyph: "sequence",
       body: "The storyboard shows how each part of the script will appear on screen. It allows your team to review the sequence, graphics and visual examples before detailed animation begins.",
     },
     {
+      no: "03",
       title: "Illustration and Graphic Design",
+      glyph: "creative",
       body: "Characters, icons, diagrams, interface elements and other graphics are designed around the approved visual direction. Existing brand guidelines can be applied, or a project-specific style can be developed where required.",
     },
     {
+      no: "04",
       title: "Voiceover and On-Screen Copy",
+      glyph: "conversation",
       body: "Voiceover talent is selected according to the language, audience and tone of the project. Important information can also appear through labels, captions and on-screen text without repeating every spoken line.",
     },
     {
+      no: "05",
       title: "Animation and Motion Graphics",
+      glyph: "heartbeat",
       body: "Approved visuals are animated to demonstrate movement, sequence, comparison and cause and effect. The animation style is chosen according to the subject rather than added simply to keep the screen busy.",
     },
     {
+      no: "06",
       title: "Sound, Music and Subtitles",
+      glyph: "text",
       body: "Licensed music and sound design support the pace without competing with the explanation. Subtitles and separate language versions can be included according to the platforms and audiences stated in the scope.",
     },
   ] as Craft[],
@@ -207,19 +219,34 @@ export const process = {
   gates: [1, 2],
 };
 
+export type PlaceKind = "homepage" | "product" | "sales" | "exhibition";
+export type Place = { text: string; kind: PlaceKind };
+
 /** Where the video goes, and why that is decided first. */
 export const distribution = {
   title: "Where the Explainer",
   strokeTitle: "Goes After Delivery",
   claim:
     "The video's intended location affects its script, pacing, dimensions and call to action, so distribution should be planned before production begins.",
-  /** Four placements, split at the document's own sentence boundaries. */
+  /** The four things the location decides. Marked inside the claim rather than
+   *  listed under it: they are already a list, and repeating them would print
+   *  the same four words twice. */
+  claimMark: "script, pacing, dimensions and call to action",
+  /** Four placements, split at the document's own sentence boundaries. Each
+   *  carries the name of the screen it is drawn on: the sentence says where the
+   *  video goes, and the drawing is that place. */
   places: [
-    "A homepage explainer may introduce the overall offer.",
-    "A product page may need a more detailed demonstration.",
-    "Sales teams can use concise versions during presentations and follow-ups.",
-    "Exhibitions may need a subtitled version that works without sound.",
-  ],
+    { text: "A homepage explainer may introduce the overall offer.", kind: "homepage" },
+    { text: "A product page may need a more detailed demonstration.", kind: "product" },
+    {
+      text: "Sales teams can use concise versions during presentations and follow-ups.",
+      kind: "sales",
+    },
+    {
+      text: "Exhibitions may need a subtitled version that works without sound.",
+      kind: "exhibition",
+    },
+  ] as Place[],
   channelsLead: "Explainer videos can also be prepared for",
   channels: [
     "YouTube",
@@ -235,6 +262,10 @@ export const distribution = {
    *  reading as a ranking promise. */
   discovery:
     "A descriptive title, transcript, subtitles and relevant webpage copy also make the subject easier for search engines and AI assistants to understand.",
+  /** The four elements, marked as one contiguous run so the sentence is never
+   *  broken up: each of these words appears elsewhere on the page, and only the
+   *  run as a whole belongs to this claim. */
+  discoveryMark: "A descriptive title, transcript, subtitles and relevant webpage copy",
   discoveryCaveat:
     "These elements support discoverability, although they do not guarantee rankings or views.",
   connected:
@@ -258,9 +289,25 @@ export const industries = {
   ],
   caveat:
     "Technical, financial and regulated subjects may need additional review from your legal, compliance or subject-matter teams before the script is approved.",
+  /** Which subjects the note is about, marked where it stands rather than
+   *  lifted out into three headings: the document never says which of the ten
+   *  industries above falls under which word, and deciding that here would be
+   *  a claim made on the client's behalf. */
+  caveatMark: "Technical, financial and regulated subjects",
 };
 
-export type Promise = { title: string; body: string };
+/** `plate` names the part of the finished video the promise is about, drawn
+ *  from the promise's own nouns. It is a drawing's name, never printed. */
+export type PromisePlate =
+  | "audience"
+  | "script"
+  | "storyboard"
+  | "style"
+  | "check"
+  | "rounds"
+  | "versions"
+  | "language";
+export type Promise = { title: string; body: string; plate: PromisePlate };
 
 export const promises = {
   title: "What You Get",
@@ -268,34 +315,42 @@ export const promises = {
   items: [
     {
       title: "A defined audience before scripting",
+      plate: "audience",
       body: "We establish who needs the explanation and what they should understand before deciding what the video will say.",
     },
     {
       title: "A script written for video",
+      plate: "script",
       body: "The wording is developed around speech, timing and visuals instead of transferring paragraphs directly from existing marketing material.",
     },
     {
       title: "Approval before detailed animation",
+      plate: "storyboard",
       body: "The script and storyboard are reviewed early, when structural changes are still practical to make.",
     },
     {
       title: "A visual style suited to the subject",
+      plate: "style",
       body: "Character animation, motion graphics, screen recordings and filmed material are selected according to what needs explaining.",
     },
     {
       title: "Technical information checked with your team",
+      plate: "check",
       body: "Product specifications, processes and regulated claims remain subject to approval from the people responsible for their accuracy.",
     },
     {
       title: "Feedback rounds stated in the quote",
+      plate: "rounds",
       body: "The proposal explains how many review stages are included and what has already been approved at each stage.",
     },
     {
       title: "Versions planned together",
+      plate: "versions",
       body: "Landscape, square, vertical, subtitled and shorter edits can be produced within the same project when included in the scope.",
     },
     {
       title: "Arabic and English production",
+      plate: "language",
       body: "Voiceovers, subtitles and separate language versions can be arranged according to the intended UAE and regional audiences.",
     },
   ] as Promise[],

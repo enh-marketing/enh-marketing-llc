@@ -9,10 +9,22 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ArrowRight } from "@/components/ui/Button";
 import { ChannelIconBadge } from "@/components/service/ChannelIcon";
+import { cn } from "@/lib/cn";
+import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
+import { CoveragePreview, type PreviewKind } from "@/components/service/CoveragePreview";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type Channel = { name: string; href: string; body: string };
+type Channel = {
+  name: string;
+  href: string;
+  body: string;
+  glyph?: GlyphVariant;
+  /** A drawing of the thing itself, for runs whose entries are formats rather
+   *  than platforms or disciplines. When present it replaces the ring badge and
+   *  the card leads with the picture. */
+  preview?: PreviewKind;
+};
 type OrganicNote = { body: string; links: { label: string; href: string }[]; suffix: string };
 
 /** Six channels as a pinned horizontal run: the section holds while the track
@@ -26,8 +38,10 @@ export function ChannelScroller({
   title,
   strokeTitle,
   lede,
+  mark = { variant: "network", label: "Six channels, one budget" },
   channels,
   note,
+  tail,
 }: {
   /** DevTools handle: id anchors the section, data-section names it. */
   id: string;
@@ -35,9 +49,15 @@ export function ChannelScroller({
   index?: string;
   title: string;
   strokeTitle?: string;
-  lede: string;
+  lede?: string;
+  /** The diagram beside the heading. Defaulted to the six-channel run this was
+   *  built for; passed explicitly by anything else reusing the run. */
+  mark?: { variant: "growth" | "network" | "progression" | "contrast" | "ecosystem"; label: string };
   channels: Channel[];
   note?: OrganicNote;
+  /** A closing line under the run, for sections whose source gives one instead
+   *  of the organic note. */
+  tail?: string;
 }) {
   const root = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -61,8 +81,17 @@ export function ChannelScroller({
         // Travel far enough that the last card lands in the middle of the
         // viewport, then release. Measured from the card itself so it stays
         // correct at any width.
+        //
+        // EVERY CARD COUNTS, NOT JUST THE LINKED ONES. This selected ":scope > a",
+        // which was correct only as long as every entry in the run had a page to
+        // send you to. On a pillar whose last cards are capabilities rather than
+        // pages -- Web Design ends on two of them -- the last <a> is not the last
+        // card, so the run stopped short and those entries never reached the
+        // middle of the screen. Measured there: the travel came out at 0 against
+        // a real requirement of 2,768px. Direct element children, so a card that
+        // happens to have nowhere to send you still gets its turn.
         const distance = () => {
-          const cards = rail.querySelectorAll<HTMLElement>(":scope > a");
+          const cards = rail.querySelectorAll<HTMLElement>(":scope > a, :scope > div");
           const last = cards[cards.length - 1];
           if (!last) return 0;
           const centred = last.offsetLeft + last.offsetWidth / 2 - el.clientWidth / 2;
@@ -72,7 +101,7 @@ export function ChannelScroller({
         // Depth of field: whichever card is nearest the middle of the viewport
         // is fully lit, the rest recede. Driven by quickSetter so the per-frame
         // work is a direct style write, not a tween per card.
-        const cards = gsap.utils.toArray<HTMLElement>(":scope > a", rail);
+        const cards = gsap.utils.toArray<HTMLElement>(":scope > a, :scope > div", rail);
 
         // Written straight to style rather than through gsap.quickSetter:
         // the "scale" setter needs a primed transform cache and silently
@@ -133,7 +162,7 @@ export function ChannelScroller({
           title={title}
           strokeTitle={strokeTitle}
           lede={lede}
-          mark={{ variant: "network", label: "Six channels, one budget" }}
+          mark={mark}
         />
       </Container>
 
@@ -157,14 +186,36 @@ export function ChannelScroller({
             const inner = (
               <>
               <div className="relative">
-                <ChannelIconBadge name={channel.name} />
+                {/* A CARD THAT LEADS WITH THE THING, WHERE THERE IS A THING TO
+                    LEAD WITH. Advertising channels have a logo and nothing else
+                    to show, so they keep the ring badge. A run of formats --
+                    four angles, one cut out of a long day, a feed going out
+                    live -- can show what it actually produces, and a symbol in
+                    a circle would be a worse card than the picture it stands
+                    in for. */}
+                {channel.preview ? (
+                  <div className="relative overflow-hidden rounded-xl border border-line bg-[color-mix(in_srgb,var(--color-brand)_5%,transparent)] transition-colors duration-500 group-hover:border-brand/45">
+                    <div className="p-4 text-snow transition-colors duration-500 group-hover:text-brand">
+                      <div className="h-[104px] w-full">
+                        <CoveragePreview kind={channel.preview} />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <ChannelIconBadge name={channel.name} glyph={channel.glyph} />
+                )}
                 <h3
                   id={`ch-${channel.href}`}
-                  className="font-display display-lg mt-7 font-extrabold uppercase text-snow transition-colors duration-300 group-hover:text-brand"
+                  className={cn(
+                    "font-display font-extrabold uppercase text-snow transition-colors duration-300 group-hover:text-brand",
+                    channel.preview
+                      ? "mt-6 text-[clamp(1.15rem,2vw,1.5rem)] leading-[1.14]"
+                      : "display-lg mt-7",
+                  )}
                 >
                   {channel.name}
                 </h3>
-                <p className="mt-6 max-w-sm text-[0.9375rem] leading-relaxed text-fog">
+                <p className="mt-5 max-w-sm text-[0.9375rem] leading-relaxed text-fog">
                   {channel.body}
                 </p>
               </div>
@@ -211,6 +262,12 @@ export function ChannelScroller({
           />
         </span>
       </Container>
+
+      {tail && (
+        <Container className="mt-16">
+          <p className="max-w-3xl leading-relaxed text-fog">{tail}</p>
+        </Container>
+      )}
 
       {note && (
         <Container className="mt-16">
