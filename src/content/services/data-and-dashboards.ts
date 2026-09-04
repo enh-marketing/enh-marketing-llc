@@ -199,6 +199,9 @@ export type Step = { no: string; title: string; body: string };
 export const process = {
   title: "How the Dashboard",
   strokeTitle: "Project Works",
+  /** The boundary the last step is measured from: its first words are "After
+   *  launch", and step 6 is "Testing and Launch". */
+  launchLabel: "Launch",
   items: [
     { no: "1", title: "Reporting Review", body: "We review the reports currently being used, the people who prepare them, and the decisions they need to support." },
     { no: "2", title: "Data Diagnostic", body: "We inspect the available data sources, identify gaps, and agree which system should provide each metric." },

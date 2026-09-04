@@ -3,102 +3,35 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { cn } from "@/lib/cn";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export type BuildStep = { no: string; title: string; body: string };
 
-/** Seven steps, and the dashboard they assemble.
+/** The seven stages of a dashboard project, drawn as the schedule they are.
  *
- *  WHY THIS SHAPE. The steps are how a dashboard gets built, so the drawing is
- *  a dashboard getting built: a report being reviewed, then sources, then the
- *  definitions strip, then connections, then tiles, then the checks, then the
- *  heartbeat of the managed service. The drawing sits beside the steps and
- *  gains a layer as each step scrolls past, so the reader watches the object
- *  come together in the order the words describe.
+ *  WHY THIS SHAPE. This is the only section on the page about time. The
+ *  document's last step begins "After launch", which makes the sixth step a
+ *  boundary and the seventh open-ended: monitoring and support do not finish.
+ *  A schedule says all of that at a glance, so each stage carries a bar on one
+ *  shared scale, the bars step across the page in order, a launch line marks
+ *  the boundary, and the last bar is dashed and runs off the end.
  *
- *  ONE ORDER. Steps read one to seven down the page; the drawing adds layers in
- *  that same order. Nothing stacks upwards against the reading direction.
+ *  NOT AN ANNOTATED DRAWING. The section above this one is a plate: one object
+ *  with its parts named. Two sections running the same arrangement, a pinned
+ *  drawing beside a list, was the first build's mistake here; a schedule and a
+ *  plate are different devices and now read as different sections.
  *
- *  NOTHING READABLE IS GATED. The steps are always at full contrast beyond a
- *  gentle dim; the layers rest fully drawn in the markup and are only dimmed
- *  by the scrub, so with no script, under reduced motion and on small screens
- *  the drawing is the finished dashboard. The seventh layer, the heartbeat,
- *  runs on a loop because that step has no end. */
+ *  NO DURATIONS. The bars mark order and overlap, not weeks. The document
+ *  gives no timings and the page invents none, so the scale carries no units.
+ *
+ *  Below the large breakpoint the bars are dropped and the seven read as a
+ *  numbered list, which is where the content lives. */
 
-const S = { fill: "none", stroke: "currentColor", strokeWidth: 1.2, strokeLinecap: "round" as const, vectorEffect: "non-scaling-stroke" as const };
+const N = 7;
 
-function BuildSketch() {
-  return (
-    <svg viewBox="0 0 220 176" aria-hidden className="block w-full text-fog">
-      {/* 1. The report as it is today. */}
-      <g data-layer="0">
-        <rect x="12" y="10" width="34" height="42" rx="3" {...S} />
-        {[18, 25, 32, 39].map((y) => (
-          <rect key={y} x="17" y={y} width={y === 39 ? 14 : 24} height="2.2" rx="1.1" fill="currentColor" opacity="0.5" />
-        ))}
-        <path d="M46 31 h10" {...S} strokeDasharray="2 3" />
-      </g>
-      {/* 2. The sources. */}
-      <g data-layer="1">
-        {[70, 96, 122].map((x) => (
-          <rect key={x} x={x} y="10" width="20" height="12" rx="3" {...S} />
-        ))}
-      </g>
-      {/* 3. Definitions: one strip of metrics. */}
-      <g data-layer="2">
-        <rect x="62" y="34" width="146" height="12" rx="3" {...S} className="text-brand" />
-        {[68, 96, 124, 152, 180].map((x) => (
-          <g key={x}>
-            <rect x={x} y="38" width="4" height="4" rx="1" fill="var(--color-brand)" />
-            <rect x={x + 6} y="39" width="16" height="2" rx="1" fill="currentColor" opacity="0.6" />
-          </g>
-        ))}
-      </g>
-      {/* 4. Connections from sources into the view. */}
-      <g data-layer="3">
-        {[80, 106, 132].map((x) => (
-          <path key={x} d={`M${x} 22 V 34`} {...S} className="text-brand" />
-        ))}
-        <path d="M62 60 H 208" {...S} className="text-line" />
-      </g>
-      {/* 5. The views. */}
-      <g data-layer="4">
-        <rect x="62" y="60" width="146" height="82" rx="4" fill="var(--color-ink-3)" stroke="var(--color-line)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
-        {[70, 118].map((x, i) => (
-          <g key={x}>
-            <rect x={x} y="68" width="40" height="30" rx="3" {...S} />
-            {[0, 1, 2, 3].map((b) => (
-              <rect key={b} x={x + 6 + b * 8} y={94 - [10, 16, 12, 20][(b + i) % 4]} width="5" height={[10, 16, 12, 20][(b + i) % 4]} rx="1" fill="currentColor" opacity="0.5" />
-            ))}
-          </g>
-        ))}
-        <rect x="166" y="68" width="34" height="30" rx="3" {...S} />
-        <path d="M172 92 C 180 88, 186 80, 194 76" fill="none" stroke="var(--color-brand)" strokeWidth="1.4" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-        <rect x="70" y="106" width="130" height="28" rx="3" {...S} />
-        {[113, 120, 127].map((y) => (
-          <rect key={y} x="76" y={y} width="60" height="2.2" rx="1.1" fill="currentColor" opacity="0.45" />
-        ))}
-      </g>
-      {/* 6. Tested: the checks. */}
-      <g data-layer="5">
-        {[[104, 72], [152, 72], [194, 72], [194, 110]].map(([x, y]) => (
-          <g key={`${x}-${y}`}>
-            <circle cx={x} cy={y} r="5" fill="var(--color-brand)" />
-            <path d={`M${x - 2.4} ${y} l1.8 1.8 l3.2 -3.6`} fill="none" stroke="#fff" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-          </g>
-        ))}
-      </g>
-      {/* 7. Monitored: a heartbeat that does not stop. */}
-      <g data-layer="6">
-        <path d="M62 160 H 208" {...S} className="text-line" />
-        <path d="M62 160 h40 l6 -10 l8 20 l6 -10 h86" fill="none" stroke="var(--color-brand)" strokeWidth="0.7" strokeLinecap="round" strokeLinejoin="round" pathLength="100" className="ci-draw" />
-      </g>
-    </svg>
-  );
-}
-
-export function BuildSteps({ items }: { items: BuildStep[] }) {
+export function BuildSteps({ items, launchLabel }: { items: BuildStep[]; launchLabel: string }) {
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -108,59 +41,96 @@ export function BuildSteps({ items }: { items: BuildStep[] }) {
     mm.add({ scrub: "(min-width: 1024px) and (prefers-reduced-motion: no-preference)" }, (ctx) => {
       if (!ctx.conditions?.scrub) return;
       const q = gsap.utils.selector(el);
-      const steps = q("[data-step]");
-      const layers = q("[data-layer]");
-      gsap.set(steps, { opacity: 0.55 });
-      // 0.55, the site's reveal floor: a layer that has not been reached yet is
-      // dimmed, never hidden. See the house rule on scroll reveals.
-      gsap.set(layers, { opacity: 0.55 });
-      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 65%", end: "bottom 75%", scrub: 0.7 } });
-      const n = steps.length;
-      steps.forEach((s, i) => {
-        tl.to(s, { opacity: 1, duration: 0.6 / n, ease: "none" }, i / n);
-        if (layers[i]) tl.to(layers[i], { opacity: 1, duration: 0.6 / n, ease: "none" }, i / n);
+      const rows = q("[data-row]");
+      // 0.55 is the site's reveal floor: a stage not yet reached is dimmed,
+      // never hidden. The bars are never scaled from zero — a schedule with
+      // invisible bars is not a schedule.
+      gsap.set(rows, { opacity: 0.55 });
+      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 68%", end: "bottom 80%", scrub: 0.7 } });
+      rows.forEach((r, i) => {
+        tl.to(r, { opacity: 1, duration: 0.6 / rows.length, ease: "none" }, i / rows.length);
       });
       return () => {
         tl.scrollTrigger?.kill();
         tl.kill();
-        gsap.set([steps, layers], { clearProps: "all" });
+        gsap.set(rows, { clearProps: "all" });
       };
     });
     return () => mm.revert();
   }, [items.length]);
 
+  // Where the launch boundary falls: after the sixth of seven stages.
+  const launchAt = ((N - 1) / N) * 100;
+
   return (
-    <div ref={root} className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-start lg:gap-16">
-      {/* The drawing. First on small screens, sticky beside the steps on large. */}
-      <div className="order-1 lg:order-2 lg:sticky lg:top-28">
-        <div className="relative overflow-hidden rounded-[1.5rem] border border-line bg-ink-2 p-6 sm:p-8">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-[0.10]"
-            style={{
-              backgroundImage:
-                "linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)",
-              backgroundSize: "22px 22px",
-            }}
-          />
-          <div className="relative">
-            <BuildSketch />
-          </div>
+    <div ref={root}>
+      {/* The scale every bar is measured against, and the launch boundary. */}
+      <div aria-hidden className="mb-5 hidden lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12">
+        <span />
+        <div className="relative h-6">
+          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-line" />
+          {/* A packet running the whole track, so the scale is alive. */}
+          <svg className="absolute inset-0 h-full w-full" preserveAspectRatio="none" viewBox="0 0 100 6">
+            <path d="M0 3 H100" pathLength="100" stroke="var(--color-brand)" strokeWidth="1" strokeLinecap="butt" fill="none" className="ci-flow" style={{ animationDuration: "5.5s" }} />
+          </svg>
+          {Array.from({ length: N + 1 }, (_, i) => (
+            <span key={i} className="absolute top-1/2 h-2 w-px -translate-y-1/2 bg-line" style={{ left: `${(i / N) * 100}%` }} />
+          ))}
+          {/* Launch: the document's own word, and the point its last step
+              begins after. */}
+          <span className="absolute inset-y-0 w-px bg-brand" style={{ left: `${launchAt}%` }} />
+          <span
+            className="font-display absolute -top-1 -translate-x-full whitespace-nowrap pr-2 text-[0.6875rem] font-semibold uppercase leading-none text-brand-text"
+            style={{ left: `${launchAt}%` }}
+          >
+            {launchLabel}
+          </span>
         </div>
       </div>
 
-      <ol className="order-2 space-y-4 lg:order-1">
-        {items.map((s) => (
-          <li key={s.no} data-step className="grid gap-x-6 gap-y-2 rounded-[1.25rem] border border-line bg-ink-3 p-6 sm:grid-cols-[3.5rem_1fr] sm:p-7">
-            <span aria-hidden className="font-display text-[clamp(1.6rem,2.6vw,2.2rem)] font-extrabold leading-none tabular-nums text-brand">
-              {s.no}
-            </span>
-            <div>
-              <h3 className="font-display text-[clamp(1.05rem,1.7vw,1.35rem)] font-extrabold uppercase leading-[1.14] text-snow">{s.title}</h3>
-              <p className="mt-2 leading-relaxed text-fog">{s.body}</p>
-            </div>
-          </li>
-        ))}
+      <ol className="space-y-4">
+        {items.map((s, i) => {
+          const last = i === items.length - 1;
+          return (
+            <li
+              key={s.no}
+              data-row
+              className="grid gap-6 rounded-[1.5rem] border border-line bg-ink-3 p-6 sm:p-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-center lg:gap-12"
+            >
+              <div className="flex items-baseline gap-5">
+                <span aria-hidden className={cn("font-display text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold leading-none tabular-nums", last ? "text-brand" : "text-stroke")}>
+                  {s.no}
+                </span>
+                <div>
+                  <h3 className="font-display text-[clamp(1.05rem,1.7vw,1.35rem)] font-extrabold uppercase leading-[1.14] text-snow">{s.title}</h3>
+                  <p className="mt-2 leading-relaxed text-fog">{s.body}</p>
+                </div>
+              </div>
+
+              {/* This stage's place on the shared scale. */}
+              <div aria-hidden className="relative hidden h-3 lg:block">
+                <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-line opacity-60" />
+                {Array.from({ length: N + 1 }, (_, t) => (
+                  <span key={t} className="absolute top-1/2 h-1.5 w-px -translate-y-1/2 bg-line" style={{ left: `${(t / N) * 100}%` }} />
+                ))}
+                <span className="absolute inset-y-0 w-px bg-brand/40" style={{ left: `${launchAt}%` }} />
+                <span
+                  className={cn(
+                    "absolute top-1/2 h-2.5 -translate-y-1/2",
+                    // The last stage has no end. A bar that fades off the right
+                    // of the scale says "continues" without inventing a date;
+                    // a dashed box would read as a placeholder.
+                    last ? "rounded-l-full bg-gradient-to-r from-brand via-brand to-transparent" : "rounded-full bg-brand",
+                  )}
+                  style={{
+                    left: `${(i / N) * 100}%`,
+                    width: last ? `${100 - (i / N) * 100}%` : `${(1 / N) * 100 + 2}%`,
+                  }}
+                />
+              </div>
+            </li>
+          );
+        })}
       </ol>
     </div>
   );

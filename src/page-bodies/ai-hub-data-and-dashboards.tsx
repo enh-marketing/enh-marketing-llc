@@ -119,7 +119,7 @@ export function DataAndDashboardsPage() {
         <section id="process" data-section="How the Dashboard Project Works" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="05" title={c.process.title} strokeTitle={c.process.strokeTitle} markNode={<DashboardMark variant="stack" />} className="mb-12" />
-            <BuildSteps items={c.process.items} />
+            <BuildSteps items={c.process.items} launchLabel={c.process.launchLabel} />
           </Container>
         </section>
 
