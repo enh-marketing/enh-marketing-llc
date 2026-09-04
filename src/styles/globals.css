@@ -107,6 +107,20 @@ html.dark {
   --color-brand-text: #ff2e3a;
 }
 
+/* ---- A dark chapter inside a light page ----
+   Every token below is a role, not a colour, so redefining the set on one
+   element turns everything inside it dark: `bg-ink-3`, `text-snow`, a drawing
+   using `currentColor`, all of it, with no per-component work.
+   
+   This exists because a page whose sections alternate #ffffff and #f7f7f6 has
+   no chapters. One step apart in a near-white palette is not art direction, it
+   is a single flat ground, and it is what makes a long page read as ordinary.
+   A chapter that changes world gives the page a spine and lets one section be
+   a single-purpose viewport.
+   
+   It stays dark in both themes on purpose: the chapter is a fixed part of the
+   page's structure, not a theme response. */
+
 /* Atmosphere is tuned for the dark page and is too heavy on paper, so the
    light default carries it at half strength and dark restores it. */
 .grain::after {
