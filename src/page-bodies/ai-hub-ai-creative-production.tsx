@@ -10,12 +10,12 @@ import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ServiceHero } from "@/components/service/ServiceHero";
-import { ReviewLine } from "@/components/service/ReviewLine";
-import { ProduceGrid } from "@/components/service/ProduceGrid";
-import { FatigueRelay } from "@/components/service/FatigueRelay";
-import { ReviewWaist } from "@/components/service/ReviewWaist";
-import { Swimlanes } from "@/components/service/Swimlanes";
-import { ScopeCard } from "@/components/service/ScopeCard";
+import { ReelHero } from "@/components/service/ReelHero";
+import { MonitorRack } from "@/components/service/MonitorRack";
+import { OnAirRelay } from "@/components/service/OnAirRelay";
+import { ReviewBench } from "@/components/service/ReviewBench";
+import { ProductionTimeline } from "@/components/service/ProductionTimeline";
+import { ScopeManifest } from "@/components/service/ScopeManifest";
 import { CreativeMark } from "@/components/service/CreativeMark";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
@@ -44,7 +44,7 @@ export function AiCreativeProductionPage() {
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.hero.primary}
-          visual={<ReviewLine key="review-line" stages={c.hero.stages} />}
+          visual={<ReelHero key="reel-hero" stages={c.hero.stages} />}
         />
 
         {/* GATE. "See the Work" is an instruction in the source, not content:
@@ -52,19 +52,19 @@ export function AiCreativeProductionPage() {
             what each example must state. Nothing is rendered for it and nothing
             is invented. Supply approved examples and the section goes in here. */}
 
-        {/* Four kinds of output, each drawn as the thing it is. See ProduceGrid. */}
+        {/* Four kinds of output, each a live monitor on a shelf. See MonitorRack. */}
         <section id="produce" data-section="What We Produce" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="01" title={c.produce.title} strokeTitle={c.produce.strokeTitle} markNode={<CreativeMark variant="frames" />} className="mb-12" />
-            <ProduceGrid items={c.produce.items} />
+            <MonitorRack items={c.produce.items} />
           </Container>
         </section>
 
-        {/* Why volume: audiences tire, the next version takes over. See FatigueRelay. */}
+        {/* Why volume: one version tires, the next takes over. See OnAirRelay. */}
         <section id="volume" data-section="Built for Campaign Volume" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="02" title={c.volume.title} strokeTitle={c.volume.strokeTitle} markNode={<CreativeMark variant="relay" />} className="mb-12" />
-            <FatigueRelay lead={c.volume.lead} caveat={c.volume.caveat} labels={c.volume.labels} />
+            <OnAirRelay lead={c.volume.lead} caveat={c.volume.caveat} labels={c.volume.labels} />
           </Container>
         </section>
 
@@ -80,23 +80,23 @@ export function AiCreativeProductionPage() {
           </div>
           <Container className="relative">
             <SectionHeader index="03" title={c.review.title} strokeTitle={c.review.strokeTitle} markNode={<CreativeMark variant="strip" />} className="mb-12" />
-            <ReviewWaist items={c.review.items} />
+            <ReviewBench items={c.review.items} />
           </Container>
         </section>
 
-        {/* Six steps in two lanes: where the client comes in. See Swimlanes. */}
+        {/* Six steps on the reel's own timeline; your two approvals are the holds. See ProductionTimeline. */}
         <section id="process" data-section="How the Work Moves" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="04" title={c.process.title} strokeTitle={c.process.strokeTitle} markNode={<CreativeMark variant="lanes" />} className="mb-12" />
-            <Swimlanes items={c.process.items} />
+            <ProductionTimeline items={c.process.items} />
           </Container>
         </section>
 
-        {/* One-off or monthly, and what is never included unless added. See ScopeCard. */}
+        {/* One-off or monthly; included inside the bundle, exclusions tethered outside. See ScopeManifest. */}
         <section id="monthly" data-section="Monthly AI Creative Production" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="05" title={c.monthly.title} strokeTitle={c.monthly.strokeTitle} markNode={<CreativeMark variant="scope" />} className="mb-12" />
-            <ScopeCard lead={c.monthly.lead} exclusion={c.monthly.exclusion} options={c.monthly.options} included={c.monthly.included} excluded={c.monthly.excluded} includedLabel={c.monthly.includedLabel} excludedLabel={c.monthly.excludedLabel} />
+            <ScopeManifest lead={c.monthly.lead} exclusion={c.monthly.exclusion} options={c.monthly.options} included={c.monthly.included} excluded={c.monthly.excluded} includedLabel={c.monthly.includedLabel} excludedLabel={c.monthly.excludedLabel} />
           </Container>
         </section>
 

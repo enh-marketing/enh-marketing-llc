@@ -852,6 +852,15 @@ summary {
   animation: ci-slide-x 6s ease-in-out infinite;
 }
 
+/* On-Air Relay: the warmth of a running version drains as its audience becomes
+   familiar. Applied inline and only when motion is allowed, so it needs no
+   reduced-motion override; at rest the version keeps its full warmth. */
+@keyframes onair-cool {
+  0% { opacity: 1; }
+  70% { opacity: 0.28; }
+  100% { opacity: 0.12; }
+}
+
 @media (prefers-reduced-motion: reduce) {
 
   .ci-breach,
