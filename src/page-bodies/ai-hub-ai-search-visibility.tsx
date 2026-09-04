@@ -18,7 +18,7 @@ import { VisibilityChapter } from "@/components/service/VisibilityChapter";
 import { VisibilityMark } from "@/components/service/VisibilityMark";
 import { SiteFork } from "@/components/service/SiteFork";
 import { ReturnLadder } from "@/components/service/ReturnLadder";
-import { SupportOutline } from "@/components/service/SupportOutline";
+import { SupportSet } from "@/components/service/SupportSet";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
@@ -120,7 +120,7 @@ export function AiSearchVisibilityPage() {
               markNode={<VisibilityMark variant="bookends" />}
               className="mb-10"
             />
-            <VisibilityChapter items={c.services.items} readingLabel={c.services.readingLabel} />
+            <VisibilityChapter items={c.services.items} />
           </Container>
         </section>
 
@@ -153,8 +153,7 @@ export function AiSearchVisibilityPage() {
           </Container>
         </section>
 
-        {/* Nine duties, set as the shape they make. See SupportOutline. Lifted to its own
-            chapter treatment, as the managed section is on AI Automation. */}
+        {/* Nine duties, set as one block rather than nine rows. See SupportSet. */}
         {/* The closing chapter, on the deepest paper ground. The nine duties are
             what recurs after everything above is done, so the page settles
             rather than staying on the same white it opened on. */}
@@ -179,7 +178,7 @@ export function AiSearchVisibilityPage() {
               markNode={<VisibilityMark variant="months" />}
               className="mb-12"
             />
-            <SupportOutline lead={c.support.lead} items={c.support.items.map((d, i) => ({ no: String(i + 1).padStart(2, "0"), title: d.text }))} scope={c.support.scope} />
+            <SupportSet lead={c.support.lead} items={c.support.items} scope={c.support.scope} />
           </Container>
         </section>
 

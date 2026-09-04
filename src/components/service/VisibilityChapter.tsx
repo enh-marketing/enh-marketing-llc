@@ -58,20 +58,12 @@ const DRAWINGS = [
  *  NOTHING IS REORDERED. 01 outside, 02 find, 03 to 05 understand, 06
  *  reference, 07 outside: contiguous in the client's own numbering, so the
  *  numbers ascend strictly top to bottom. */
-export function VisibilityChapter({
-  items,
-  readingLabel,
-}: {
-  items: Service[];
-  /** What the two readings are taken against; the caption 01 and 07 share. */
-  readingLabel: string;
-}) {
+export function VisibilityChapter({ items }: { items: Service[] }) {
   const enhanced = useEnhanced("(min-width: 1024px)");
   const reduced = usePrefersReducedMotion();
   const pinned = enhanced && !reduced;
 
   const root = useRef<HTMLDivElement>(null);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const [active, setActive] = useState(0);
 
   /* Scroll drives the chapter. One screen of travel per service, so each gets
@@ -102,134 +94,49 @@ export function VisibilityChapter({
     return () => mm.revert();
   }, [items.length, pinned]);
 
-  /** Jump to a service by scrolling the chapter to its share of the travel. */
-  const goTo = (i: number) => {
-    const el = root.current;
-    if (!el || !pinned) {
-      setActive(i);
-      return;
-    }
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    const travel = el.offsetHeight - window.innerHeight;
-    /* Land in the middle of the service's band rather than on its edge, so a
-       jump does not sit on the boundary and immediately read as the next one. */
-    window.scrollTo({ top: top + ((i + 0.5) / items.length) * travel, behavior: "smooth" });
-  };
-
-  function onKeyDown(e: React.KeyboardEvent) {
-    const last = items.length - 1;
-    let next: number | null = null;
-    if (e.key === "ArrowDown" || e.key === "ArrowRight") next = active === last ? 0 : active + 1;
-    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = active === 0 ? last : active - 1;
-    else if (e.key === "Home") next = 0;
-    else if (e.key === "End") next = last;
-    if (next === null) return;
-    e.preventDefault();
-    goTo(next);
-    tabs.current[next]?.focus();
-  }
-
-  const index = (
-    <div
-      role="tablist"
-      aria-label="AI Search Visibility services"
-      aria-orientation="vertical"
-      onKeyDown={onKeyDown}
-      className="shrink-0"
-    >
-      {items.map((s, i) => {
-        const on = i === active;
-        /* A caption at every change of stage, not only at the three bays. Bay
-           captions alone put 07 under REFERENCE, because it follows 06 and
-           nothing closed the bay: a monitoring service filed as an
-           external-references one. */
-        const opens = i === 0 || items[i - 1].stage !== s.stage;
-        const caption = s.stage === "reading" ? readingLabel : s.stage;
-        return (
-          <div key={s.no}>
-            {opens && (
-              <span
-                aria-hidden
-                className={cn(
-                  // Not border-line: on this dark chapter --color-line is
-                  // #2e2e2e against #101010, 1.4:1, and does not appear.
-                  "font-display block border-b pb-1.5 text-[0.6875rem] font-extrabold uppercase tracking-[0.12em] transition-colors duration-500 motion-reduce:transition-none",
-                  i === 0 ? "mb-0.5 mt-0" : "mb-0.5 mt-5",
-                  items[active].stage === s.stage
-                    ? "border-brand text-brand-text"
-                    : "border-ash/35 text-ash",
-                )}
-              >
-                {caption}
-              </span>
-            )}
-            <button
-              ref={(el) => {
-                tabs.current[i] = el;
-              }}
-              type="button"
-              role="tab"
-              id={`vis-tab-${i}`}
-              aria-selected={on}
-              aria-controls={`vis-panel-${i}`}
-              tabIndex={on ? 0 : -1}
-              onClick={() => goTo(i)}
-              className="group relative flex w-full items-baseline gap-3 py-1.5 pl-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-            >
-              <span
-                aria-hidden
-                className={cn(
-                  "absolute bottom-1 left-0 top-1 w-[2px] origin-top transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
-                  on ? "scale-y-100 bg-brand" : "scale-y-0 bg-ash/50 group-hover:scale-y-100",
-                )}
-              />
-              <span
-                className={cn(
-                  "font-display w-5 shrink-0 text-[0.6875rem] font-bold tabular-nums transition-colors duration-300 motion-reduce:transition-none",
-                  on ? "text-brand-text" : "text-ash group-hover:text-brand-text",
-                )}
-              >
-                {s.no}
-              </span>
-              <span
-                className={cn(
-                  "font-display text-[0.75rem] font-bold uppercase leading-[1.3] transition-colors duration-300 motion-reduce:transition-none",
-                  on ? "text-snow" : "text-fog group-hover:text-snow",
-                )}
-              >
-                {s.title}
-              </span>
-            </button>
-          </div>
-        );
-      })}
-    </div>
-  );
-
   /** One service. The same markup pinned and unpinned; only its positioning
    *  and whether it is the visible one differ. */
   const panel = (s: Service, i: number) => {
     const Drawing = DRAWINGS[i] ?? DRAWINGS[0];
     const on = i === active;
     return (
-      <div
+      <article
         key={s.no}
         id={`vis-panel-${i}`}
-        role={pinned ? "tabpanel" : undefined}
-        aria-labelledby={pinned ? `vis-tab-${i}` : undefined}
-        aria-hidden={pinned && !on ? true : undefined}
+        aria-label={`${s.no}. ${s.title}`}
+        data-on={on ? "" : undefined}
         className={cn(
+          "group/panel",
           pinned
             ? cn(
-                "absolute inset-0 flex flex-col justify-center transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                on ? "opacity-100" : "pointer-events-none opacity-0",
+                /* The seven travel through the frame rather than dissolving in
+                   it: the one behind you has gone up and out, the one ahead is
+                   still below, and only the current one sits on the line. A
+                   plain crossfade gave no sense of direction, which on a
+                   chapter whose whole point is a run through seven things is
+                   the one thing the motion has to carry. */
+                "absolute inset-0 flex flex-col justify-center",
+                "transition-[opacity,transform,filter] duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+                "motion-reduce:transition-none",
+                on
+                  ? "translate-y-0 opacity-100 blur-0"
+                  : i < active
+                    ? "pointer-events-none -translate-y-10 opacity-0 blur-[3px] motion-reduce:blur-none"
+                    : "pointer-events-none translate-y-10 opacity-0 blur-[3px] motion-reduce:blur-none",
               )
             : "border-t border-ash/25 pt-10 first:border-t-0 first:pt-0 [&+&]:mt-14",
         )}
       >
         {/* The clause from this service's own body that places it, printed
             rather than asserted. Verified verbatim against the source. */}
-        <div className="flex gap-4">
+        <div
+          className={cn(
+            "flex gap-4",
+            pinned &&
+              "translate-y-3 opacity-0 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-data-[on]/panel:translate-y-0 group-data-[on]/panel:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
+          )}
+          style={pinned ? { transitionDelay: "120ms" } : undefined}
+        >
           <span aria-hidden className="mt-0.5 hidden h-8 w-8 shrink-0 text-brand sm:block">
             <CapabilityGlyph variant={s.glyph} />
           </span>
@@ -265,7 +172,14 @@ export function VisibilityChapter({
           </div>
         </div>
 
-        <div className="mt-7 gap-x-12 sm:grid sm:grid-cols-[minmax(0,0.62fr)_minmax(0,1fr)]">
+        <div
+          className={cn(
+            "mt-7 gap-x-12 sm:grid sm:grid-cols-[minmax(0,0.62fr)_minmax(0,1fr)]",
+            pinned &&
+              "translate-y-4 opacity-0 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-data-[on]/panel:translate-y-0 group-data-[on]/panel:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none",
+          )}
+          style={pinned ? { transitionDelay: "220ms" } : undefined}
+        >
           <h3 className="font-display text-lg font-extrabold uppercase leading-[1.15] text-snow sm:text-xl">
             <span aria-hidden className="mr-2 text-ash">
               {s.no}
@@ -276,7 +190,7 @@ export function VisibilityChapter({
             {s.body}
           </p>
         </div>
-      </div>
+      </article>
     );
   };
 
@@ -284,12 +198,7 @@ export function VisibilityChapter({
      also what a crawler, a reader with JavaScript off, and anyone who has asked
      for reduced motion receives. */
   if (!pinned) {
-    return (
-      <div>
-        <div className="mb-12">{index}</div>
-        <div>{items.map(panel)}</div>
-      </div>
-    );
+    return <div>{items.map(panel)}</div>;
   }
 
   return (
@@ -298,22 +207,14 @@ export function VisibilityChapter({
           retracting toolbar does not crop the last line, and top-0 with the
           padding clearing the fixed masthead. */}
       <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden pb-10 pt-24">
-        <div className="flex w-full items-start gap-10 xl:gap-16">
-          {/* The index, permanent, so the whole offer stays on screen while any
-              one part of it is being read. */}
-          <div className="w-[13.5rem] shrink-0 xl:w-[15rem]">
-            {index}
-
-            {/* How far through the chapter the reader is. */}
-            <div aria-hidden className="mt-7 h-[2px] w-full bg-ash/25">
-              <div
-                className="h-full origin-left bg-brand transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                style={{ transform: `scaleX(${(active + 1) / items.length})` }}
-              />
-            </div>
-          </div>
-
-          <div className="relative min-w-0 flex-1 self-stretch">{items.map(panel)}</div>
+        {/* Nothing here but the drawing and its words. The index that used to
+            run down the left is gone: it kept the whole offer on screen, but it
+            also put a second thing to read beside the thing being read, and on
+            a chapter that is already one subject per screen the reader does not
+            need a table of contents to know where they are. The number sits on
+            the heading where it belongs. */}
+        <div className="relative mx-auto w-full max-w-[62rem] self-stretch">
+          {items.map(panel)}
         </div>
       </div>
     </div>
