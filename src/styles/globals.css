@@ -827,6 +827,17 @@ summary {
   animation: ci-slide 7s ease-in-out infinite;
 }
 
+/* A field out of register, brought into line and released again. */
+@keyframes ci-slide-x {
+  0%, 12% { transform: translateX(0); }
+  46%, 70% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}
+
+.ci-slide-x {
+  animation: ci-slide-x 6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
 
   .ci-breach,
@@ -852,7 +863,9 @@ summary {
   }
 
   .ci-grow-x,
-  .ci-slide {
+  .ci-slide,
+  /* Its finished state is the field in register, which is where it rests. */
+  .ci-slide-x {
     animation: none !important;
   }
 

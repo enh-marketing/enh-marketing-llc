@@ -80,11 +80,22 @@ export type Service = {
    *  searches and record[s] changes". Those two measure; the five between them
    *  change things. The section is laid out as exactly that. */
   role: ServiceRole;
+  /** For the five levers only: where the boundary between "on the page" and
+   *  "beyond your website" falls on this row, as a percentage of the content
+   *  width. Each value is decided by the item's own sentence, cited above it. */
+  boundary?: number;
+  /** For the two readings only: the captions on their question strip. */
+  labels?: [string, string];
 };
 
 export const services = {
   title: "Our AI Search",
   strokeTitle: "Visibility Services",
+  /** The two territories the section is divided into. Both are the document's
+   *  own words: 05 says the markup must match what people can see "on the
+   *  page", and 06 says answers may use information from "sources beyond your
+   *  website". */
+  territories: ["on the page", "beyond your website"] as [string, string],
   items: [
     {
       no: "01",
@@ -100,6 +111,10 @@ export const services = {
       body: "AI search systems cannot use a page if their search crawler cannot reach or process it. We review indexing, crawler access, robots.txt rules, noindex settings, canonical tags, sitemaps and other technical controls. We also check whether important content depends on scripts that make it difficult to access. Only public pages that you want people and search systems to find should be made accessible.",
       glyph: "crawler",
       role: "lever",
+      // "AI search systems cannot use a page if their search crawler cannot
+      // reach or process it": the crawler is outside and has to get in, so the
+      // boundary sits mid-row with the approach on its far side.
+      boundary: 53,
     },
     {
       no: "03",
@@ -107,6 +122,9 @@ export const services = {
       body: "We review whether your website gives clear answers to the questions people ask about your business. This may involve improving service pages, location pages, product information, FAQs, comparisons and educational content. Important information should appear clearly on the page and be supported by accurate details. The aim is to make the content useful to people while also making its meaning easier for search and AI systems to understand.",
       glyph: "text",
       role: "lever",
+      // "Important information should appear clearly on the page": almost all of
+      // this work is inside, so the boundary runs near the far edge.
+      boundary: 84,
     },
     {
       no: "04",
@@ -114,6 +132,10 @@ export const services = {
       body: "Your company name, services, locations, contact information, and other important details should remain consistent across the web. We review your website and relevant external profiles to find missing, outdated, or conflicting information. We then identify which details need correcting. This is particularly important for UAE businesses serving specific locations or operating under several brand names.",
       glyph: "entity",
       role: "lever",
+      // "should remain consistent across the web ... your website and relevant
+      // external profiles": the only item that lives on both sides at once, so
+      // the boundary passes through its drawing.
+      boundary: 75,
     },
     {
       no: "05",
@@ -121,6 +143,8 @@ export const services = {
       body: "Structured data gives search engines clear information about the content and organisations shown on a page. We implement relevant schema markup for areas such as your organisation, services, locations, products, people and articles. The markup must match the information people can see on the page. There is no special AI schema that guarantees inclusion in an AI-generated answer. Structured data remains one part of the wider technical setup.",
       glyph: "schema",
       role: "lever",
+      // "The markup must match the information people can see on the page."
+      boundary: 84,
     },
     {
       no: "06",
@@ -128,6 +152,10 @@ export const services = {
       body: "AI-generated answers may use information from sources beyond your website. We review relevant business listings, reviews, partner websites, industry publications, news coverage and other public sources. The aim is to build accurate and credible information around the brand. We do not create false reviews, manufactured mentions or paid links presented as independent coverage.",
       glyph: "offsite",
       role: "lever",
+      // "AI-generated answers may use information from sources beyond your
+      // website": this one is almost entirely outside, so the boundary steps
+      // back to the near edge and the row inverts.
+      boundary: 15,
     },
     {
       no: "07",

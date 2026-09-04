@@ -13,7 +13,7 @@ import { ServiceHero } from "@/components/service/ServiceHero";
 import { ReviewLine } from "@/components/service/ReviewLine";
 import { ProduceGrid } from "@/components/service/ProduceGrid";
 import { FatigueRelay } from "@/components/service/FatigueRelay";
-import { ReviewStrip } from "@/components/service/ReviewStrip";
+import { ReviewWaist } from "@/components/service/ReviewWaist";
 import { Swimlanes } from "@/components/service/Swimlanes";
 import { ScopeCard } from "@/components/service/ScopeCard";
 import { CreativeMark } from "@/components/service/CreativeMark";
@@ -68,7 +68,7 @@ export function AiCreativeProductionPage() {
           </Container>
         </section>
 
-        {/* Five review stages as five frames on a strip. See ReviewStrip. Lifted
+        {/* Five review stages, drawn as the shape the material takes. See ReviewWaist. Lifted
             to its own chapter treatment: this is the page's differentiator. */}
         <section id="review" data-section="Quality and Human Review" className="relative overflow-x-clip py-20 sm:py-24">
           <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
@@ -80,7 +80,7 @@ export function AiCreativeProductionPage() {
           </div>
           <Container className="relative">
             <SectionHeader index="03" title={c.review.title} strokeTitle={c.review.strokeTitle} markNode={<CreativeMark variant="strip" />} className="mb-12" />
-            <ReviewStrip items={c.review.items} />
+            <ReviewWaist items={c.review.items} />
           </Container>
         </section>
 

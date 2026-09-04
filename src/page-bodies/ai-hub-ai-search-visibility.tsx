@@ -14,11 +14,11 @@ import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { SignalPath } from "@/components/service/SignalPath";
 import { Narrative } from "@/components/service/Narrative";
-import { VisibilityBookends } from "@/components/service/VisibilityBookends";
+import { VisibilityBoundary } from "@/components/service/VisibilityBoundary";
 import { VisibilityMark } from "@/components/service/VisibilityMark";
 import { SiteFork } from "@/components/service/SiteFork";
 import { ReturnLadder } from "@/components/service/ReturnLadder";
-import { MonthlyBoard } from "@/components/service/MonthlyBoard";
+import { SupportOutline } from "@/components/service/SupportOutline";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
@@ -93,7 +93,7 @@ export function AiSearchVisibilityPage() {
               markNode={<VisibilityMark variant="bookends" />}
               className="mb-12"
             />
-            <VisibilityBookends items={c.services.items} />
+            <VisibilityBoundary items={c.services.items} territories={c.services.territories} />
           </Container>
         </section>
 
@@ -126,7 +126,7 @@ export function AiSearchVisibilityPage() {
           </Container>
         </section>
 
-        {/* Nine duties on a monthly rhythm. See MonthlyBoard. Lifted to its own
+        {/* Nine duties, set as the shape they make. See SupportOutline. Lifted to its own
             chapter treatment, as the managed section is on AI Automation. */}
         <section id="support" data-section="Ongoing AI Visibility Support" className="relative overflow-x-clip py-20 sm:py-24">
           <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
@@ -149,7 +149,7 @@ export function AiSearchVisibilityPage() {
               markNode={<VisibilityMark variant="months" />}
               className="mb-12"
             />
-            <MonthlyBoard lead={c.support.lead} items={c.support.items} scope={c.support.scope} />
+            <SupportOutline lead={c.support.lead} items={c.support.items.map((d, i) => ({ no: String(i + 1).padStart(2, "0"), title: d.text }))} scope={c.support.scope} />
           </Container>
         </section>
 
