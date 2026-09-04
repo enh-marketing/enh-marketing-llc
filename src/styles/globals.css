@@ -438,6 +438,9 @@ summary {
   .animate-marquee,
   .animate-feed,
   .animate-readout,
+  /* A marching dash on a glyph stroke. Its finished state is the dashed line
+     itself, so stopping it leaves the glyph exactly as drawn. */
+  .animate-dash,
   /* Tailwind's own looping utility. The search caret on the TikTok page uses
      it, and a caret that never stops blinking is the standard example of what
      this query exists to switch off. */
@@ -727,6 +730,12 @@ summary {
 .ci-draw {
   stroke-dasharray: 100;
   stroke-dashoffset: 0;
+  /* As with .ci-flow: the dash is meant against pathLength="100", so one
+     keyframe serves any length. Under non-scaling-stroke Chromium measures the
+     dash in screen pixels instead, and a path longer than 100px renders as a
+     100px stroke, a gap, then a stub, both mid-loop and at rest. Every drawn
+     path therefore sets its width for the viewBox scale instead. */
+  vector-effect: none;
   animation: ci-draw 5s ease-in-out infinite;
 }
 
@@ -739,7 +748,83 @@ summary {
 
 .ci-flow {
   stroke-dasharray: 14 100;
+  /* The dash pattern is meant against pathLength="100", one packet per path.
+     Under non-scaling-stroke Chromium measures dashes in screen pixels instead
+     and the packet repeats every 114px, so the effect is switched off here for
+     every flow path; their widths are set for the viewBox scale instead. */
+  vector-effect: none;
   animation: ci-flow 2.8s linear infinite;
+}
+
+/* A beam sweeping down a page, clipped to it. */
+@keyframes ci-scan-y {
+  0% { transform: translateY(0); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { transform: translateY(54px); opacity: 0; }
+}
+
+.ci-scan-y {
+  animation: ci-scan-y 3s ease-in-out infinite;
+}
+
+/* One tick lit at a time along a strip: give each tick the same duration and
+   a delay of duration/count, and the light walks the strip. */
+@keyframes ci-blink {
+  0%, 6% { opacity: 1; transform: scale(1); }
+  10%, 100% { opacity: 0; transform: scale(0.6); }
+}
+
+.ci-blink {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ci-blink 6s linear infinite;
+}
+
+/* A tick that is a tinted wash rather than a solid mark: the wash keeps its own
+   fill-opacity (a presentation attribute this rule does not touch) and only its
+   element opacity blinks. Use ci-blink-soft with fillOpacity, never opacity. */
+.ci-blink-soft {
+  opacity: 0;
+  animation: ci-blink 6s linear infinite;
+}
+
+/* A refresh sweeping across a view, clipped to it. */
+@keyframes ci-scan-x {
+  0% { transform: translateX(-30px); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { transform: translateX(200px); opacity: 0; }
+}
+
+.ci-scan-x {
+  animation: ci-scan-x 4.2s ease-in-out infinite;
+}
+
+/* A horizontal bar growing from its left edge. */
+@keyframes ci-grow-x {
+  0%, 8% { transform: scaleX(0.04); }
+  40%, 88% { transform: scaleX(1); }
+  100% { transform: scaleX(0.04); }
+}
+
+.ci-grow-x {
+  transform-box: fill-box;
+  transform-origin: left;
+  animation: ci-grow-x 4.6s ease-in-out infinite;
+}
+
+/* A marker travelling a track and back. */
+@keyframes ci-slide {
+  0%, 10% { left: 0; }
+  50%, 60% { left: calc(100% - 0.875rem); }
+  100% { left: 0; }
+}
+
+.ci-slide {
+  left: 0;
+  animation: ci-slide 7s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -757,6 +842,28 @@ summary {
   .ci-flow {
     animation: none !important;
     opacity: 0 !important;
+  }
+
+  /* A beam with nowhere to sweep is removed; a tick strip rests on its first. */
+  .ci-scan-y,
+  .ci-scan-x {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .ci-grow-x,
+  .ci-slide {
+    animation: none !important;
+  }
+
+  .ci-blink,
+  .ci-blink-soft {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  [data-first-tick] .ci-blink {
+    opacity: 1 !important;
   }
 }
 
