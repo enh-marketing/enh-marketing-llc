@@ -14,7 +14,7 @@ import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { SignalPath } from "@/components/service/SignalPath";
 import { Narrative } from "@/components/service/Narrative";
-import { VisibilityBoundary } from "@/components/service/VisibilityBoundary";
+import { VisibilityStage } from "@/components/service/VisibilityStage";
 import { VisibilityMark } from "@/components/service/VisibilityMark";
 import { SiteFork } from "@/components/service/SiteFork";
 import { ReturnLadder } from "@/components/service/ReturnLadder";
@@ -93,7 +93,7 @@ export function AiSearchVisibilityPage() {
               markNode={<VisibilityMark variant="bookends" />}
               className="mb-12"
             />
-            <VisibilityBoundary items={c.services.items} territories={c.services.territories} />
+            <VisibilityStage items={c.services.items} />
           </Container>
         </section>
 
