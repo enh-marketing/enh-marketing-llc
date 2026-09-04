@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/cn";
 import { useEnhanced, usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { CapabilityGlyph } from "@/components/service/CapabilityGlyph";
+import { VisibilityReach } from "@/components/service/VisibilityReach";
 import type { Service } from "@/content/services/ai-search-visibility";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -50,12 +51,15 @@ export function VisibilityBays({
   items,
   stages,
   readingLabel,
+  territories,
 }: {
   items: Service[];
   /** The three bay captions, the document's own words in its own order. */
   stages: [string, string, string];
   /** What the two readings are taken against. */
   readingLabel: string;
+  /** The drawing's two sides, the document's own words. */
+  territories: [string, string];
 }) {
   const enhanced = useEnhanced("(min-width: 1024px)");
   const reduced = usePrefersReducedMotion();
@@ -358,7 +362,7 @@ export function VisibilityBays({
               role="tabpanel"
               aria-labelledby={`bay-tab-${i}`}
               hidden={!on}
-              className="grid gap-x-12 gap-y-7 border-t border-ash/25 pt-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+              className="grid gap-x-14 gap-y-9 border-t border-ash/25 pt-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
             >
               {/* The left half is the reason this service sits where it sits,
                   in its own words. It is set at display scale because it is the
@@ -367,20 +371,27 @@ export function VisibilityBays({
                   it. The glyph is small, like the glyphs on the page this
                   client approved; it sizes itself h-full w-full, so it gets a
                   box rather than utility classes it would win against. */}
-              <div className="flex gap-5">
-                <span aria-hidden className="mt-1 hidden h-9 w-9 shrink-0 text-brand sm:block">
-                  <CapabilityGlyph variant={s.glyph} />
-                </span>
-                <p className="font-display text-balance text-[1.375rem] font-extrabold uppercase leading-[1.15] tracking-[0.01em] text-brand-text sm:text-[1.625rem]">
-                  &ldquo;{s.evidence}&rdquo;
-                </p>
-              </div>
-
               <div>
-                <h3 className="font-display mb-3 text-xl font-extrabold uppercase leading-[1.15] text-snow sm:text-2xl">
+                <div className="flex gap-5">
+                  <span aria-hidden className="mt-1 hidden h-9 w-9 shrink-0 text-brand sm:block">
+                    <CapabilityGlyph variant={s.glyph} />
+                  </span>
+                  <p className="font-display text-balance text-[1.375rem] font-extrabold uppercase leading-[1.15] tracking-[0.01em] text-brand-text sm:text-[1.5rem]">
+                    &ldquo;{s.evidence}&rdquo;
+                  </p>
+                </div>
+
+                <h3 className="font-display mb-3 mt-7 text-xl font-extrabold uppercase leading-[1.15] text-snow sm:text-2xl">
                   {s.title}
                 </h3>
                 <p className="max-w-[62ch] text-[0.9375rem] leading-relaxed text-fog">{s.body}</p>
+              </div>
+
+              {/* The second axis, drawn: whose property this work happens on.
+                  Only rendered for the open panel's own service, so the six
+                  collapsed panels do not each carry a copy of it. */}
+              <div className="lg:pt-1">
+                <VisibilityReach reach={s.reach} territories={territories} />
               </div>
             </div>
           );

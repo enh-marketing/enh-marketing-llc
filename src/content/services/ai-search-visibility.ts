@@ -88,6 +88,17 @@ export type ServiceRole = "baseline" | "lever" | "monitor";
  *  that item says so. */
 export type ServiceStage = "reading" | "find" | "understand" | "reference";
 
+/** Where the work happens. The section's second axis, and the document draws
+ *  the line itself: 05 says the markup must match "the information people can
+ *  see on the page", and 06 says answers may use "sources beyond your website".
+ *  `both` is for the items whose own sentences straddle it.
+ *
+ *  This is not the same question as `stage`. A service's stage says which of
+ *  find, understand and reference it works on; its reach says whose property
+ *  the work is done on. Two services can share a stage and differ here, which
+ *  is the point: it stops the drawing standing still across a bay. */
+export type ServiceReach = "page" | "beyond" | "both";
+
 export type Service = {
   no: string;
   title: string;
@@ -99,6 +110,7 @@ export type Service = {
    *  change things. The section is laid out as exactly that. */
   role: ServiceRole;
   stage: ServiceStage;
+  reach: ServiceReach;
   /** The item's own words, verbatim, that place it in its stage. This is the
    *  evidence for the grouping and it is printed on the page, so the reader
    *  sees the reason rather than being asked to trust a diagram.
@@ -125,6 +137,10 @@ export const services = {
   stages: ["find", "understand", "reference"] as [string, string, string],
   /** What the two readings are, for the bracket that stands around the bays. */
   readingLabel: "an agreed list of questions",
+  /** The two territories the drawing is divided into, in the document's own
+   *  words: 05 "the information people can see on the page", 06 "sources
+   *  beyond your website". */
+  territories: ["on the page", "beyond your website"] as [string, string],
   items: [
     {
       no: "01",
@@ -135,6 +151,9 @@ export const services = {
       // A reading, not a change: it "creates a baseline that can be used to
       // measure future changes".
       stage: "reading",
+      // A reading of both: it tests platforms out on the web and records
+      // "which pages are cited", which are yours.
+      reach: "both",
       evidence: "record whether your brand appears",
     },
     {
@@ -145,6 +164,9 @@ export const services = {
       role: "lever",
       // Reaching the page is finding it. Its own first sentence.
       stage: "find",
+      // "indexing, crawler access, robots.txt rules, noindex settings,
+      // canonical tags, sitemaps": every control named is on your own site.
+      reach: "page",
       evidence: "cannot reach or process it",
     },
     {
@@ -155,6 +177,8 @@ export const services = {
       role: "lever",
       // Its own closing sentence uses the word.
       stage: "understand",
+      // "Important information should appear clearly on the page."
+      reach: "page",
       evidence: "easier for search and AI systems to understand",
     },
     {
@@ -170,6 +194,9 @@ export const services = {
       // understanding it, so it sits in the middle bay. Its printed clause is
       // its own, not the hero's.
       stage: "understand",
+      // "We review your website and relevant external profiles": the one item
+      // whose own sentence names both sides.
+      reach: "both",
       evidence: "should remain consistent across the web",
     },
     {
@@ -181,6 +208,8 @@ export const services = {
       // "gives search engines clear information about" is understanding, in
       // its own opening sentence.
       stage: "understand",
+      // "The markup must match the information people can see on the page."
+      reach: "page",
       evidence: "clear information about the content and organisations shown on a page",
     },
     {
@@ -192,6 +221,9 @@ export const services = {
       // What a generated answer draws on when it references something. Its own
       // first sentence.
       stage: "reference",
+      // "business listings, reviews, partner websites, industry publications,
+      // news coverage and other public sources": all of it off your site.
+      reach: "beyond",
       evidence: "sources beyond your website",
     },
     {
@@ -202,6 +234,8 @@ export const services = {
       role: "monitor",
       // The same reading as 01, taken again. Its own first words.
       stage: "reading",
+      // The same both-sided reading as 01, taken again.
+      reach: "both",
       evidence: "repeat the agreed searches",
     },
   ] as Service[],

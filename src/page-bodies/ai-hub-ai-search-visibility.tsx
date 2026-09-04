@@ -119,6 +119,7 @@ export function AiSearchVisibilityPage() {
               items={c.services.items}
               stages={c.services.stages}
               readingLabel={c.services.readingLabel}
+              territories={c.services.territories}
             />
           </Container>
         </section>
