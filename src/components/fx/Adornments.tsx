@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { cn } from "@/lib/cn";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 
 /* Reusable animated SVG adornments — the decorative motion language of V3. */
 
@@ -229,22 +230,30 @@ export function NodeWeb({ className }: { className?: string }) {
   );
 }
 
-/** Floating emblem with ripple rings around arbitrary glyph content. */
+/** Floating emblem with ripple rings around arbitrary glyph content.
+ *
+ *  The rings ripple for ever, so they are the one adornment that has to ask
+ *  about motion: the site-wide CSS collapse does not reach a WAAPI animation
+ *  driven by motion/react. Under prefers-reduced-motion the rings rest at
+ *  their start, which is the emblem as drawn. usePrefersReducedMotion is
+ *  hydration-safe (its server snapshot is false), so the markup never differs
+ *  between server and client. */
 export function RippleEmblem({ children, className }: { children: React.ReactNode; className?: string }) {
+  const still = usePrefersReducedMotion();
   return (
     <div className={cn("relative flex h-20 w-20 items-center justify-center", className)} aria-hidden>
       <motion.span
         className="absolute inset-0 rounded-full border border-brand/50"
-        animate={{ scale: [1, 1.45], opacity: [0.7, 0] }}
+        animate={still ? undefined : { scale: [1, 1.45], opacity: [0.7, 0] }}
         transition={{ duration: 2.6, repeat: Infinity, ease: "easeOut" }}
       />
       <motion.span
         className="absolute inset-0 rounded-full border border-brand/30"
-        animate={{ scale: [1, 1.45], opacity: [0.7, 0] }}
+        animate={still ? undefined : { scale: [1, 1.45], opacity: [0.7, 0] }}
         transition={{ duration: 2.6, repeat: Infinity, ease: "easeOut", delay: 1.3 }}
       />
       <motion.div
-        animate={{ y: [0, -4, 0] }}
+        animate={still ? undefined : { y: [0, -4, 0] }}
         transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
       >
         {children}

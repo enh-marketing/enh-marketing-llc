@@ -1,0 +1,33 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/ai-search-visibility";
+import { brand } from "@/lib/content";
+import { AiSearchVisibilityPage } from "@/page-bodies/ai-hub-ai-search-visibility";
+
+/* Head tags are handed to the layout as props; the structured data is emitted
+   here as static HTML rather than through the island, as on every route. */
+
+const HREF = "/ai-hub/ai-search-visibility";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "AI Search Visibility",
+  serviceType:
+    "AI visibility baseline, technical access, answer-led content, business and entity consistency, structured data, external references and brand mentions, visibility monitoring and reporting",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <AiSearchVisibilityPage client:load />
+</Base>

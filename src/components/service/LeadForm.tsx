@@ -1,5 +1,7 @@
 "use client";
 
+import { useId } from "react";
+
 import { Field, TextareaField, SelectField, SubmitButton } from "@/components/ui/Field";
 
 export type FormField = {
@@ -24,6 +26,12 @@ export type FormField = {
  *  entirely from the shared field system in @/components/ui/Field, which the
  *  homepage contact form also uses.
  *
+ *  IDS. A page can mount this twice, in the hero dialog and in the closing
+ *  block, and a section anchor elsewhere on the page may share a field's name
+ *  ("services"). Each instance therefore prefixes its DOM ids with a useId, so
+ *  every label points at its own control; the submitted `name` stays the plain
+ *  field id.
+ *
  *  TODO(backend): no submit endpoint exists yet. */
 export function LeadForm({
   fields,
@@ -32,6 +40,8 @@ export function LeadForm({
   fields: FormField[];
   submitLabel: string;
 }) {
+  const uid = useId();
+  const domId = (id: string) => `${uid}-${id}`;
   return (
     <form className="relative" onSubmit={(e) => e.preventDefault()}>
       <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
@@ -39,7 +49,8 @@ export function LeadForm({
           f.options ? (
             <SelectField
               key={f.id}
-              id={f.id}
+              id={domId(f.id)}
+              name={f.id}
               label={f.label}
               options={f.options}
               // SelectField requires one; the field set supplies it.
@@ -50,7 +61,8 @@ export function LeadForm({
           ) : f.textarea ? (
             <TextareaField
               key={f.id}
-              id={f.id}
+              id={domId(f.id)}
+              name={f.id}
               label={f.label}
               required={f.required}
               className={f.wide ? "sm:col-span-2" : undefined}
@@ -58,7 +70,8 @@ export function LeadForm({
           ) : (
             <Field
               key={f.id}
-              id={f.id}
+              id={domId(f.id)}
+              name={f.id}
               label={f.label}
               type={f.type}
               required={f.required}

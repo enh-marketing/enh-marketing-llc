@@ -1,0 +1,33 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/data-and-dashboards";
+import { brand } from "@/lib/content";
+import { DataAndDashboardsPage } from "@/page-bodies/ai-hub-data-and-dashboards";
+
+/* Head tags are handed to the layout as props; the structured data is emitted
+   here as static HTML rather than through the island, as on every route. */
+
+const HREF = "/ai-hub/data-and-dashboards";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Data and Dashboard Services",
+  serviceType:
+    "Marketing performance dashboards, sales and lead dashboards, ecommerce and revenue dashboards, marketing attribution reporting, management dashboards, data integration and preparation",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <DataAndDashboardsPage client:load />
+</Base>

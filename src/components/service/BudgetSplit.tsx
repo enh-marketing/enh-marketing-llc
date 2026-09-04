@@ -114,7 +114,7 @@ export function BudgetSplit({ channels, className }: { channels: Channel[]; clas
             y="8"
             className="font-display"
             fill="var(--color-ash)"
-            fontSize="6.4"
+            fontSize="6.6"
             fontWeight="600"
             letterSpacing="0.7"
           >
@@ -146,7 +146,7 @@ export function BudgetSplit({ channels, className }: { channels: Channel[]; clas
             y="45"
             className="font-display"
             fill="var(--color-ash)"
-            fontSize="6.4"
+            fontSize="6.6"
             fontWeight="600"
             letterSpacing="0.7"
           >
@@ -173,7 +173,7 @@ export function BudgetSplit({ channels, className }: { channels: Channel[]; clas
             y="82"
             className="font-display"
             fill="var(--color-brand-text)"
-            fontSize="6.4"
+            fontSize="6.6"
             fontWeight="600"
             letterSpacing="0.7"
           >
