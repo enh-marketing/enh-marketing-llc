@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Container } from "@/components/ui/Container";
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { Modal } from "@/components/ui/Modal";
@@ -47,7 +48,7 @@ function MagneticCta({
   onClick: () => void;
 }) {
   const ref = useRef<HTMLButtonElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, { stiffness: 240, damping: 20, mass: 0.3 });
@@ -75,8 +76,16 @@ function MagneticCta({
       onClick={onClick}
       onPointerMove={track}
       onPointerLeave={release}
-      style={reduced ? undefined : { x: sx, y: sy }}
-      className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-brand px-9 py-4 text-center text-xs font-bold uppercase leading-tight text-white sm:text-sm sm:"
+      /* ALWAYS THE MOTION VALUES, never a branch on `reduced`.
+         Branching here produced a hydration mismatch on every page that mounts
+         this band: the server has no media query, so it rendered the motion
+         style and emitted transform:none, while a client that prefers reduced
+         motion rendered no style at all, and React reported the attributes as
+         unmatched. Passing them unconditionally is identical in behaviour,
+         because `track` already returns early under reduced motion and both
+         springs stay at zero, so the transform never leaves none. */
+      style={{ x: sx, y: sy }}
+      className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-brand px-9 py-4 text-center text-xs font-bold uppercase leading-tight text-white sm:text-sm"
     >
       {/* Fill sweep, behind the label. */}
       <span

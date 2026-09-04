@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
@@ -53,7 +54,7 @@ export function TierScale({
 }) {
   const ref = useRef<HTMLOListElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const play = reduced || inView;
 
   return (

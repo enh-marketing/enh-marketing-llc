@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 
 /** The hero visual: a defined area, and the Snaps inside it carrying a brand.
@@ -35,7 +35,7 @@ const SNAPS = [
 
 export function GeoLens({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = root.current;

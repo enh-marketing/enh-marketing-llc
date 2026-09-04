@@ -9,7 +9,7 @@ import { RippleEmblem } from "@/components/fx/Adornments";
 
 import { Crosslink } from "@/components/ui/Crosslink";
 
-type Faq = { q: string; a: string; aLink?: { label: string; href: string } };
+import type { Faq } from "@/content/services/performance-marketing";
 
 /** Mirrors src/components/sections/FAQ.tsx exactly: same section chrome, grid
  *  ratio, emblem, numerals, question scale, plus/cross icon and disclosure
@@ -52,7 +52,7 @@ export function FaqList({
     mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      acceptedAnswer: { "@type": "Answer", text: Array.isArray(f.a) ? f.a.join(" ") : f.a },
     })),
   };
 
@@ -135,29 +135,40 @@ export function FaqList({
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden"
                   >
-                    <p className="max-w-2xl pb-7 pl-10 leading-relaxed text-fog">
-                      {/* Where the source names another page, the phrase links.
-                          The surrounding sentence is untouched, so the answer
-                          reads the same with or without the link. */}
-                      {f.aLink && f.a.includes(f.aLink.label)
-                        ? (() => {
-                            const at = f.a.indexOf(f.aLink.label);
-                            return (
-                              <>
-                                {f.a.slice(0, at)}
-                                <Crosslink
-                                  href={f.aLink.href}
-                                  className="text-snow underline decoration-line underline-offset-4 transition-colors duration-300 hover:text-brand hover:decoration-brand"
-                                  pendingClassName="text-snow"
-                                >
-                                  {f.aLink.label}
-                                </Crosslink>
-                                {f.a.slice(at + f.aLink.label.length)}
-                              </>
-                            );
-                          })()
-                        : f.a}
-                    </p>
+                    {/* One paragraph, or several where the source writes more
+                        than one; each gets its own <p>. */}
+                    {(Array.isArray(f.a) ? f.a : [f.a]).map((para, pi, all) => (
+                      <p
+                        key={pi}
+                        className={cn(
+                          "max-w-2xl pl-10 leading-relaxed text-fog",
+                          pi === all.length - 1 ? "pb-7" : "pb-4",
+                        )}
+                      >
+                        {/* Where the source names another page, the phrase links.
+                            The surrounding sentence is untouched, so the answer
+                            reads the same with or without the link. */}
+                        {f.aLink && para.includes(f.aLink.label)
+                          ? (() => {
+                              const link = f.aLink!;
+                              const at = para.indexOf(link.label);
+                              return (
+                                <>
+                                  {para.slice(0, at)}
+                                  <Crosslink
+                                    href={link.href}
+                                    className="text-snow underline decoration-line underline-offset-4 transition-colors duration-300 hover:text-brand hover:decoration-brand"
+                                    pendingClassName="text-snow"
+                                  >
+                                    {link.label}
+                                  </Crosslink>
+                                  {para.slice(at + link.label.length)}
+                                </>
+                              );
+                            })()
+                          : para}
+                      </p>
+                    ))}
                   </motion.div>
                 </div>
               );

@@ -112,6 +112,20 @@ html.dark {
   --color-brand-text: #ff2e3a;
 }
 
+/* ---- A dark chapter inside a light page ----
+   Every token below is a role, not a colour, so redefining the set on one
+   element turns everything inside it dark: `bg-ink-3`, `text-snow`, a drawing
+   using `currentColor`, all of it, with no per-component work.
+   
+   This exists because a page whose sections alternate #ffffff and #f7f7f6 has
+   no chapters. One step apart in a near-white palette is not art direction, it
+   is a single flat ground, and it is what makes a long page read as ordinary.
+   A chapter that changes world gives the page a spine and lets one section be
+   a single-purpose viewport.
+   
+   It stays dark in both themes on purpose: the chapter is a fixed part of the
+   page's structure, not a theme response. */
+
 /* Atmosphere is tuned for the dark page and is too heavy on paper, so the
    light default carries it at half strength and dark restores it. */
 .grain::after {
@@ -460,6 +474,9 @@ summary {
   .animate-marquee,
   .animate-feed,
   .animate-readout,
+  /* A marching dash on a glyph stroke. Its finished state is the dashed line
+     itself, so stopping it leaves the glyph exactly as drawn. */
+  .animate-dash,
   /* Tailwind's own looping utility. The search caret on the TikTok page uses
      it, and a caret that never stops blinking is the standard example of what
      this query exists to switch off. */
@@ -679,6 +696,223 @@ summary {
      rather than freezing part-drawn. */
   .agent-sweep {
     opacity: 0 !important;
+  }
+}
+
+/* ---- Campaign Intelligence drawings ----
+   Every drawing on that page runs its own short loop, the way the AI Automation
+   hero does, so a reader who has stopped scrolling still sees the thing the
+   drawing is about happening rather than a still of it having happened.
+
+   EVERY LOOP RETURNS TO THE STATE THE MARKUP RENDERS. The resting styles are the
+   finished picture — the reading already outside its range, the bars at full
+   height, the needle at the level set, the line drawn — so a browser that never
+   animates, a failed hydration and a reader who has asked for no motion all land
+   on something whole. The reduced-motion block below simply stops them there. */
+
+/* A reading drifting out of its expected range. */
+@keyframes ci-breach {
+  0%, 12% { transform: translateX(-46px); }
+  55%, 88% { transform: translateX(0); }
+  100% { transform: translateX(-46px); }
+}
+
+/* A result rising to meet the forecast it is being read against. */
+@keyframes ci-grow {
+  0%, 8% { transform: scaleY(0.04); }
+  38%, 88% { transform: scaleY(1); }
+  100% { transform: scaleY(0.04); }
+}
+
+/* Peers in a category, none of them the subject. */
+@keyframes ci-twinkle {
+  0%, 100% { opacity: 0.26; }
+  50% { opacity: 0.6; }
+}
+
+/* A level being set. */
+@keyframes ci-sweep {
+  0%, 10% { transform: rotate(-30deg); }
+  45%, 88% { transform: rotate(0deg); }
+  100% { transform: rotate(-30deg); }
+}
+
+/* A line arriving. Paths carry pathLength="100", so one keyframe serves every
+   length and nothing has to be measured. */
+@keyframes ci-draw {
+  0%, 8% { stroke-dashoffset: 100; }
+  50%, 90% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 100; }
+}
+
+.ci-breach {
+  animation: ci-breach 4.2s ease-in-out infinite;
+}
+
+.ci-grow {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: ci-grow 4.6s ease-in-out infinite;
+}
+
+.ci-twinkle {
+  animation: ci-twinkle 3.4s ease-in-out infinite;
+}
+
+.ci-sweep {
+  animation: ci-sweep 5s ease-in-out infinite;
+}
+
+.ci-draw {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  /* As with .ci-flow: the dash is meant against pathLength="100", so one
+     keyframe serves any length. Under non-scaling-stroke Chromium measures the
+     dash in screen pixels instead, and a path longer than 100px renders as a
+     100px stroke, a gap, then a stub, both mid-loop and at rest. Every drawn
+     path therefore sets its width for the viewBox scale instead. */
+  vector-effect: none;
+  animation: ci-draw 5s ease-in-out infinite;
+}
+
+/* Data arriving at the diagnostic, continuously. Paths carry pathLength="100",
+   so the dash below is a percentage of each wire however long it is. */
+@keyframes ci-flow {
+  from { stroke-dashoffset: 114; }
+  to { stroke-dashoffset: -14; }
+}
+
+.ci-flow {
+  stroke-dasharray: 14 100;
+  /* The dash pattern is meant against pathLength="100", one packet per path.
+     Under non-scaling-stroke Chromium measures dashes in screen pixels instead
+     and the packet repeats every 114px, so the effect is switched off here for
+     every flow path; their widths are set for the viewBox scale instead. */
+  vector-effect: none;
+  animation: ci-flow 2.8s linear infinite;
+}
+
+/* A beam sweeping down a page, clipped to it. */
+@keyframes ci-scan-y {
+  0% { transform: translateY(0); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { transform: translateY(54px); opacity: 0; }
+}
+
+.ci-scan-y {
+  animation: ci-scan-y 3s ease-in-out infinite;
+}
+
+/* One tick lit at a time along a strip: give each tick the same duration and
+   a delay of duration/count, and the light walks the strip. */
+@keyframes ci-blink {
+  0%, 6% { opacity: 1; transform: scale(1); }
+  10%, 100% { opacity: 0; transform: scale(0.6); }
+}
+
+.ci-blink {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ci-blink 6s linear infinite;
+}
+
+/* A tick that is a tinted wash rather than a solid mark: the wash keeps its own
+   fill-opacity (a presentation attribute this rule does not touch) and only its
+   element opacity blinks. Use ci-blink-soft with fillOpacity, never opacity. */
+.ci-blink-soft {
+  opacity: 0;
+  animation: ci-blink 6s linear infinite;
+}
+
+/* A refresh sweeping across a view, clipped to it. */
+@keyframes ci-scan-x {
+  0% { transform: translateX(-30px); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { transform: translateX(200px); opacity: 0; }
+}
+
+.ci-scan-x {
+  animation: ci-scan-x 4.2s ease-in-out infinite;
+}
+
+/* A horizontal bar growing from its left edge. */
+@keyframes ci-grow-x {
+  0%, 8% { transform: scaleX(0.04); }
+  40%, 88% { transform: scaleX(1); }
+  100% { transform: scaleX(0.04); }
+}
+
+.ci-grow-x {
+  transform-box: fill-box;
+  transform-origin: left;
+  animation: ci-grow-x 4.6s ease-in-out infinite;
+}
+
+/* A marker travelling a track and back. */
+@keyframes ci-slide {
+  0%, 10% { left: 0; }
+  50%, 60% { left: calc(100% - 0.875rem); }
+  100% { left: 0; }
+}
+
+.ci-slide {
+  left: 0;
+  animation: ci-slide 7s ease-in-out infinite;
+}
+
+/* A field out of register, brought into line and released again. */
+@keyframes ci-slide-x {
+  0%, 12% { transform: translateX(0); }
+  46%, 70% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}
+
+.ci-slide-x {
+  animation: ci-slide-x 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .ci-breach,
+  .ci-grow,
+  .ci-twinkle,
+  .ci-sweep,
+  .ci-draw {
+    animation: none !important;
+  }
+
+  /* A travelling packet's finished state is "gone", so it is removed rather
+     than frozen part-way along its wire. */
+  .ci-flow {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  /* A beam with nowhere to sweep is removed; a tick strip rests on its first. */
+  .ci-scan-y,
+  .ci-scan-x {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .ci-grow-x,
+  .ci-slide,
+  /* Its finished state is the field in register, which is where it rests. */
+  .ci-slide-x {
+    animation: none !important;
+  }
+
+  .ci-blink,
+  .ci-blink-soft {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  [data-first-tick] .ci-blink {
+    opacity: 1 !important;
   }
 }
 

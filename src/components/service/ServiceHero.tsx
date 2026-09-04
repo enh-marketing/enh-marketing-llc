@@ -35,12 +35,11 @@ export function ServiceHero({
   sub: string;
   /** Opens the enquiry form in a dialog. */
   primary: string;
-  /** Places a call, unless secondaryHref sends it somewhere else. */
-  secondary: string;
-  /** Where the second button goes when its label does not promise a phone
-   *  call. The Event Video document asks for "View Our Portfolio" here, and a
-   *  button saying that must not dial a number; it points at this page's own
-   *  Work section, which is the portfolio. Omit for the usual call button. */
+  /** Places a call by default. Optional: a document with a single call to
+   *  action renders the primary alone rather than an invented second label. */
+  secondary?: string;
+  /** Where the secondary goes instead of the phone. Given as a path or hash,
+   *  rendered without the phone icon. */
   secondaryHref?: string;
   phoneHref: string;
   formTitle: string;
@@ -93,7 +92,14 @@ export function ServiceHero({
 
         {/* The copy stays on a reading measure; the button row is deliberately
             outside it, because together the two labels need ~567px and would
-            wrap inside max-w-lg. */}
+            wrap inside max-w-lg.
+
+            The buttons themselves wrap their own label below `sm`. They were
+            whitespace-nowrap at every width, so a long primary label — "Book a
+            Campaign Intelligence Diagnostic" is the longest on the site — ran
+            354px wide inside a 327px column on a 375px phone. The body clips
+            horizontal overflow, so there was no scrollbar to notice: the button
+            was simply cut off at the screen edge on an iPhone SE and smaller. */}
         <div className="mt-12 max-w-xl lg:max-w-lg">
           <Rise delay={0.15}>
             {/* Also height-aware, for the same reason as the heading: this
@@ -112,7 +118,7 @@ export function ServiceHero({
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="group inline-flex shrink-0 items-center justify-center gap-3 whitespace-nowrap rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-deep"
+            className="group inline-flex max-w-full shrink-0 items-center justify-center gap-3 whitespace-normal rounded-full bg-brand px-7 py-3.5 text-center text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-deep sm:whitespace-nowrap"
           >
             {primary}
             <span className="relative flex h-4 w-4 items-center justify-center overflow-hidden">
@@ -121,34 +127,24 @@ export function ServiceHero({
             </span>
           </button>
 
-          <a
-            href={secondaryHref ?? `tel:${phoneHref}`}
-            className="inline-flex shrink-0 items-center justify-center gap-3 whitespace-nowrap rounded-full border border-line px-7 py-3.5 text-sm font-semibold text-snow transition-colors duration-300 hover:border-brand hover:text-brand"
-          >
-            {/* The handset belongs to a call and nothing else. A button that
-                sends the reader down the page gets the arrow instead. */}
-            {secondaryHref ? (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path
-                  d="M12 4.5v15M6 13.5 12 19.5l6-6"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ) : (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path
-                  d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-            {secondary}
-          </a>
+          {secondary && (
+            <a
+              href={secondaryHref ?? `tel:${phoneHref}`}
+              className="inline-flex max-w-full shrink-0 items-center justify-center gap-3 whitespace-normal rounded-full border border-line px-7 py-3.5 text-center text-sm font-semibold text-snow transition-colors duration-300 hover:border-brand hover:text-brand sm:whitespace-nowrap"
+            >
+              {!secondaryHref && (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+              {secondary}
+            </a>
+          )}
         </Rise>
       </Container>
 

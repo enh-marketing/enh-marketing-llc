@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 
 /** The hero visual: a shortlist being made, not a follower count being admired.
  *
@@ -35,7 +35,7 @@ const CHECKS = 4;
 
 export function CreatorVetting({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = root.current;

@@ -1,13 +1,14 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { ChannelIcon } from "@/components/service/ChannelIcon";
 
 /** Hero visual: six channels orbiting one budget. Relevant to the page without
  *  asserting anything, so no figure is implied. Labels and marks are the
  *  channels from the page's own content. */
 export function ChannelOrbit({ channels }: { channels: string[] }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const R = 196;
   const BOX = 560;
   const SPIN = 52;

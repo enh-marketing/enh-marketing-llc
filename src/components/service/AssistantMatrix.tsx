@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
@@ -55,7 +56,7 @@ export function AssistantMatrix({
   // Width only. Tabs are not motion, so reduced-motion users keep them.
   const enhanced = useEnhanced("(min-width: 1024px)");
   const [active, setActive] = useState(0);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   function onKeyDown(e: React.KeyboardEvent) {
