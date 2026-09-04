@@ -69,10 +69,10 @@ export function MeasureTable({
         aria-hidden
         className="grid grid-cols-[minmax(0,1fr)] gap-x-10 border-b border-line pb-3 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]"
       >
-        <span className="mt-in text-[0.62rem] font-semibold uppercase text-ash">
+        <span className="mt-in text-[0.6875rem] font-semibold uppercase text-ash">
           {headTrack}
         </span>
-        <span className="mt-in hidden text-[0.62rem] font-semibold uppercase text-ash md:block">
+        <span className="mt-in hidden text-[0.6875rem] font-semibold uppercase text-ash md:block">
           {headTells}
         </span>
       </div>

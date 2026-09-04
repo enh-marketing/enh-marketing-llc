@@ -67,7 +67,7 @@ export function ProofQuestions({
 
       {/* The questions, in the order a buyer needs them. */}
       <p
-        className="pq-in mt-12 text-[0.62rem] font-semibold uppercase tracking-wide text-ash"
+        className="pq-in mt-12 text-[0.6875rem] font-semibold uppercase tracking-wide text-ash"
         style={{ animationDelay: "80ms" }}
       >
         {needLead}

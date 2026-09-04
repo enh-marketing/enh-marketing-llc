@@ -114,7 +114,7 @@ export function StandaloneAnswer({
           {/* What is left when the question goes. A closed answer has nothing
               to stand on, so its panel empties out. */}
           {gone && !survives && (
-            <span className="mt-2 block text-[0.62rem] font-semibold uppercase tracking-wide text-ash">
+            <span className="mt-2 block text-[0.6875rem] font-semibold uppercase tracking-wide text-ash">
               &mdash;
             </span>
           )}
