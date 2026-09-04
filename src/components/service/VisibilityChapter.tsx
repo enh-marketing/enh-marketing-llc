@@ -238,8 +238,31 @@ export function VisibilityChapter({
           </p>
         </div>
 
-        <div className="mt-6">
-          <Drawing />
+        {/* The drawings are composed at 900x340. Fitted to a phone's width
+            that is a 342px strip whose internal features land at 2 to 3px,
+            which is not a small drawing, it is an unreadable one. So below the
+            small breakpoint the drawing keeps a legible minimum width and
+            scrolls inside its own track instead of being squashed into the
+            column. The track bleeds to both screen edges so the cut-off edge is
+            visible and it is obvious there is more to see; the labels beneath
+            it stay in the text column at full width, because they are the part
+            that must never need scrolling to read. */}
+        <div
+          className={cn(
+            "-mx-6 mt-6 overflow-x-auto px-6 [scrollbar-width:thin]",
+            "sm:mx-0 sm:overflow-x-visible sm:px-0",
+            // The drawing keeps a legible minimum width and scrolls; the labels
+            // do not. Sticky at the left of the scrollport, sized to the
+            // visible width, they stay put and wrap normally while the picture
+            // moves under them. They are the part that must never need
+            // scrolling to read.
+            "[&_figcaption]:sticky [&_figcaption]:left-0 [&_figcaption]:w-[calc(100vw-3rem)]",
+            "sm:[&_figcaption]:static sm:[&_figcaption]:w-auto",
+          )}
+        >
+          <div className="min-w-[560px] sm:min-w-0">
+            <Drawing />
+          </div>
         </div>
 
         <div className="mt-7 gap-x-12 sm:grid sm:grid-cols-[minmax(0,0.62fr)_minmax(0,1fr)]">
