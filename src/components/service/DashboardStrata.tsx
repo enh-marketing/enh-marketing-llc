@@ -253,7 +253,7 @@ export function DashboardStrata({
               key={item.no}
               data-bed
               className={cn(
-                "relative grid items-center gap-x-10 bg-ink-3 px-6 py-8 sm:px-9",
+                "group relative grid items-center gap-x-10 bg-ink-3 px-6 py-8 sm:px-9",
                 i > 0 && (last ? "border-t-2 border-brand" : "border-t border-line"),
                 "lg:grid-cols-[3.5rem_minmax(0,520px)_minmax(0,1fr)]",
               )}
@@ -272,16 +272,18 @@ export function DashboardStrata({
                 </span>
               )}
 
-              <p className="font-display relative text-[0.9375rem] font-bold tabular-nums text-brand-text lg:self-start lg:pt-1">
+              <p className="font-display relative text-[0.9375rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text lg:self-start lg:pt-1">
                 {item.no}
               </p>
               <div className="relative mt-2 lg:mt-0">
                 <h3 className="font-display text-[clamp(1.15rem,1.9vw,1.6rem)] font-extrabold uppercase leading-[1.12] text-snow">
                   {item.title}
                 </h3>
+                {/* The rule that grows on hover, as on the approved pages. */}
+                <span aria-hidden className="mt-3 block h-px w-8 bg-line transition-all duration-500 group-hover:w-20 group-hover:bg-brand motion-reduce:transition-none" />
                 <p className="mt-3 leading-relaxed text-fog">{item.body}</p>
               </div>
-              <div className="relative mt-6 h-[110px] lg:mt-0 lg:h-[130px]">
+              <div className="relative mt-6 h-[110px] text-fog transition-colors duration-500 group-hover:text-snow lg:mt-0 lg:h-[130px]">
                 {caps.length > 0 && (
                   <p className="font-display mb-2 flex flex-wrap gap-x-4 text-[0.6875rem] font-semibold uppercase leading-none">
                     {caps.map((c, ci) => (

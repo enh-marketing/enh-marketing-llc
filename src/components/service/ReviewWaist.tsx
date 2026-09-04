@@ -153,7 +153,7 @@ export function ReviewWaist({ items }: { items: ReviewStage[] }) {
               key={s.no}
               data-register
               className={cn(
-                "relative mx-auto border-x border-line px-6 py-9 sm:px-10",
+                "group relative mx-auto border-x border-line px-6 py-9 transition-colors duration-500 hover:bg-ink-3 motion-reduce:transition-none sm:px-10",
                 i === 0 && "border-t",
                 last && "border-b",
                 // Below lg the measure cannot narrow, so the contour becomes an
@@ -196,13 +196,13 @@ export function ReviewWaist({ items }: { items: ReviewStage[] }) {
 
               <div className={cn(last ? "lg:block" : "lg:flex lg:items-center lg:gap-12")}>
                 <div className={cn(last && "lg:mx-auto lg:max-w-3xl lg:text-center")}>
-                  <p className="font-display text-[0.6875rem] font-bold tabular-nums text-brand-text">{s.no}</p>
+                  <p className="font-display text-[0.6875rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text">{s.no}</p>
                   <h3 className="font-display mt-2 text-[clamp(1.1rem,1.8vw,1.45rem)] font-extrabold uppercase leading-[1.14] text-snow">
                     {s.title}
                   </h3>
                   <p className="mt-3 leading-relaxed text-fog">{s.body}</p>
                 </div>
-                <div className={cn(last ? "mt-9 lg:mt-10" : "mt-7 lg:mt-0 lg:shrink-0")}>
+                <div className={cn("transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100", last ? "mt-9 lg:mt-10" : "mt-7 lg:mt-0 lg:shrink-0")}>
                   {last ? <FormatPlates /> : <Matter stage={i} />}
                 </div>
               </div>

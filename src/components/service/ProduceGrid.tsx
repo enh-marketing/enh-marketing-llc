@@ -163,7 +163,11 @@ export function ProduceGrid({ items }: { items: OutputItem[] }) {
   return (
     <div ref={root} className="grid gap-5 lg:grid-cols-2">
       {items.map((item) => (
-        <article key={item.no} data-card className="flex flex-col rounded-[1.5rem] border border-line bg-ink-3 p-7 sm:p-8">
+        <article
+          key={item.no}
+          data-card
+          className="group flex flex-col rounded-[1.5rem] border border-line bg-ink-3 p-7 transition-colors duration-500 hover:border-ash/50 motion-reduce:transition-none sm:p-8"
+        >
           <div className="rounded-xl border border-line bg-ink-2 p-3">
             <p className="font-display mb-3 flex items-baseline justify-between gap-3 text-[0.6875rem] font-semibold uppercase leading-none">
               <span className="text-ash">{item.labels[0]}</span>
@@ -172,10 +176,13 @@ export function ProduceGrid({ items }: { items: OutputItem[] }) {
             {sketch(item.kind)}
           </div>
           <div className="mt-7 flex items-start gap-4">
-            <span className="h-9 w-9 shrink-0 text-brand"><CapabilityGlyph variant={item.glyph} /></span>
+            <span className="block h-9 w-9 shrink-0 text-brand transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100">
+              <CapabilityGlyph variant={item.glyph} />
+            </span>
             <div>
-              <p className="font-display text-[0.6875rem] font-bold tabular-nums text-brand-text">{item.no}</p>
+              <p className="font-display text-[0.6875rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text">{item.no}</p>
               <h3 className="font-display mt-1.5 text-[clamp(1.15rem,1.9vw,1.5rem)] font-extrabold uppercase leading-[1.12] text-snow">{item.title}</h3>
+              <span aria-hidden className="mt-3 block h-px w-8 bg-line transition-all duration-500 group-hover:w-16 group-hover:bg-brand motion-reduce:transition-none" />
             </div>
           </div>
           <p className="mt-4 leading-relaxed text-fog">{item.body}</p>

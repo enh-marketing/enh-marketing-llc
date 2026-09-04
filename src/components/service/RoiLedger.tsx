@@ -107,12 +107,12 @@ export function RoiLedger({
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {models.map((m, i) => (
             <Rise key={m.name} delay={0.12 + i * 0.06}>
-              <div className="h-full rounded-[1.25rem] border border-line bg-ink-3 p-6">
+              <div className="group h-full rounded-[1.25rem] border border-line bg-ink-3 p-6 transition-colors duration-500 hover:border-ash/50 motion-reduce:transition-none">
                 <p className="font-display text-[clamp(1rem,1.5vw,1.2rem)] font-extrabold uppercase leading-tight text-snow">{m.name}</p>
                 <p className="font-display mt-4 text-[0.6875rem] font-semibold uppercase text-ash">{reportsLabel}</p>
                 <ul className="mt-2 flex flex-wrap gap-2">
                   {m.reports.map((r) => (
-                    <li key={r} className="rounded-full border border-brand/40 bg-brand/[0.05] px-3 py-1 text-sm text-snow">
+                    <li key={r} className="rounded-full border border-brand/40 bg-brand/[0.05] px-3 py-1 text-sm text-snow transition-colors duration-500 hover:border-brand motion-reduce:transition-none">
                       {r}
                     </li>
                   ))}

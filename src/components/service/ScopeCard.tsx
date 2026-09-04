@@ -45,7 +45,7 @@ export function ScopeCard({
           <p className="font-display text-[0.6875rem] font-semibold uppercase text-ash">{includedLabel}</p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {included.map((x) => (
-              <li key={x} className="rounded-full border border-line bg-ink-3 px-3 py-1 text-sm text-snow">{x}</li>
+              <li key={x} className="rounded-full border border-line bg-ink-3 px-3 py-1 text-sm text-snow transition-colors duration-500 hover:border-ash motion-reduce:transition-none">{x}</li>
             ))}
           </ul>
         </Rise>
@@ -55,7 +55,7 @@ export function ScopeCard({
           <p className="font-display text-[0.6875rem] font-semibold uppercase text-brand-text">{excludedLabel}</p>
           <ul className="mt-5 flex flex-wrap gap-3">
             {excluded.map((x) => (
-              <li key={x} className="flex items-center gap-3 rounded-full border border-dashed border-line px-4 py-2">
+              <li key={x} className="flex items-center gap-3 rounded-full border border-dashed border-line px-4 py-2 transition-colors duration-500 hover:border-ash motion-reduce:transition-none">
                 <svg aria-hidden viewBox="0 0 16 16" className="h-3 w-3 shrink-0 text-brand" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
                   <path d="M3 3l10 10M13 3L3 13" />
                 </svg>

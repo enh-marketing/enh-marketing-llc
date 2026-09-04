@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/cn";
@@ -33,6 +33,9 @@ const N = 7;
 
 export function BuildSteps({ items, launchLabel }: { items: BuildStep[]; launchLabel: string }) {
   const root = useRef<HTMLDivElement>(null);
+  /** Whether the reader has passed the launch boundary. The label and its rule
+   *  answer to this, which is the one moment in the schedule that matters. */
+  const [past, setPast] = useState(false);
 
   useEffect(() => {
     const el = root.current;
@@ -45,15 +48,36 @@ export function BuildSteps({ items, launchLabel }: { items: BuildStep[]; launchL
       // 0.55 is the site's reveal floor: a stage not yet reached is dimmed,
       // never hidden. The bars are never scaled from zero — a schedule with
       // invisible bars is not a schedule.
-      gsap.set(rows, { opacity: 0.55 });
-      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 68%", end: "bottom 80%", scrub: 0.7 } });
+      gsap.set(rows, { opacity: 0.55, x: -10 });
+      const fill = q("[data-scale-fill]")[0];
+      const walker = q("[data-walker]")[0];
+      if (fill) gsap.set(fill, { scaleX: 0 });
+      if (walker) gsap.set(walker, { left: 0, xPercent: -50 });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: "top 68%",
+          end: "bottom 80%",
+          scrub: 0.7,
+          // The launch boundary is the one event in this schedule, so the
+          // label answers to the reader crossing it rather than to a timer.
+          onUpdate: (self) => {
+            const p = self.progress >= (N - 1) / N;
+            setPast((prev) => (prev === p ? prev : p));
+          },
+        },
+      });
+      // The scale fills and a marker walks it, so the rows are not the only
+      // thing that moves as the reader descends.
+      if (fill) tl.to(fill, { scaleX: 1, duration: 1, ease: "none" }, 0);
+      if (walker) tl.to(walker, { left: "100%", duration: 1, ease: "none" }, 0);
       rows.forEach((r, i) => {
-        tl.to(r, { opacity: 1, duration: 0.6 / rows.length, ease: "none" }, i / rows.length);
+        tl.to(r, { opacity: 1, x: 0, duration: 0.6 / rows.length, ease: "power2.out" }, i / rows.length);
       });
       return () => {
         tl.scrollTrigger?.kill();
         tl.kill();
-        gsap.set(rows, { clearProps: "all" });
+        gsap.set([rows, fill, walker].flat().filter(Boolean), { clearProps: "all" });
       };
     });
     return () => mm.revert();
@@ -69,6 +93,8 @@ export function BuildSteps({ items, launchLabel }: { items: BuildStep[]; launchL
         <span />
         <div className="relative h-6">
           <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-line" />
+          <span data-scale-fill className="absolute inset-x-0 top-1/2 h-px origin-left -translate-y-1/2 bg-brand/60" />
+          <span data-walker className="absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full border-2 border-brand bg-ink" />
           {/* A packet running the whole track, so the scale is alive. */}
           <svg className="absolute inset-0 h-full w-full" preserveAspectRatio="none" viewBox="0 0 100 6">
             <path d="M0 3 H100" pathLength="100" stroke="var(--color-brand)" strokeWidth="1" strokeLinecap="butt" fill="none" className="ci-flow" style={{ animationDuration: "5.5s" }} />
@@ -78,9 +104,15 @@ export function BuildSteps({ items, launchLabel }: { items: BuildStep[]; launchL
           ))}
           {/* Launch: the document's own word, and the point its last step
               begins after. */}
-          <span className="absolute inset-y-0 w-px bg-brand" style={{ left: `${launchAt}%` }} />
           <span
-            className="font-display absolute -top-1 -translate-x-full whitespace-nowrap pr-2 text-[0.6875rem] font-semibold uppercase leading-none text-brand-text"
+            className={cn("absolute inset-y-0 w-px transition-colors duration-500 motion-reduce:transition-none", past ? "bg-brand" : "bg-line")}
+            style={{ left: `${launchAt}%` }}
+          />
+          <span
+            className={cn(
+              "font-display absolute -top-1 -translate-x-full whitespace-nowrap pr-2 text-[0.6875rem] font-semibold uppercase leading-none transition-colors duration-500 motion-reduce:transition-none",
+              past ? "text-brand-text" : "text-ash",
+            )}
             style={{ left: `${launchAt}%` }}
           >
             {launchLabel}
@@ -95,10 +127,10 @@ export function BuildSteps({ items, launchLabel }: { items: BuildStep[]; launchL
             <li
               key={s.no}
               data-row
-              className="grid gap-6 rounded-[1.5rem] border border-line bg-ink-3 p-6 sm:p-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-center lg:gap-12"
+              className="group grid gap-6 rounded-[1.5rem] border border-line bg-ink-3 p-6 transition-colors duration-500 hover:border-ash/50 motion-reduce:transition-none sm:p-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-center lg:gap-12"
             >
               <div className="flex items-baseline gap-5">
-                <span aria-hidden className={cn("font-display text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold leading-none tabular-nums", last ? "text-brand" : "text-stroke")}>
+                <span aria-hidden className={cn("font-display text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold leading-none tabular-nums transition-colors duration-500", last ? "text-brand" : "text-stroke group-hover:text-brand-text")}>
                   {s.no}
                 </span>
                 <div>
@@ -116,7 +148,7 @@ export function BuildSteps({ items, launchLabel }: { items: BuildStep[]; launchL
                 <span className="absolute inset-y-0 w-px bg-brand/40" style={{ left: `${launchAt}%` }} />
                 <span
                   className={cn(
-                    "absolute top-1/2 h-2.5 -translate-y-1/2",
+                    "absolute top-1/2 h-2.5 -translate-y-1/2 transition-[height] duration-500 group-hover:h-4 motion-reduce:transition-none motion-reduce:group-hover:h-2.5",
                     // The last stage has no end. A bar that fades off the right
                     // of the scale says "continues" without inventing a date;
                     // a dashed box would read as a placeholder.

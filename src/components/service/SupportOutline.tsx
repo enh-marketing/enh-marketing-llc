@@ -93,17 +93,22 @@ export function SupportOutline({
     mm.add({ motion: "(min-width: 1024px) and (prefers-reduced-motion: no-preference)" }, (ctx) => {
       if (!ctx.conditions?.motion) return;
       const lines = gsap.utils.toArray<HTMLElement>(el.querySelectorAll("[data-line]"));
+      const outline = el.querySelector<SVGPathElement>("[data-outline]");
       gsap.set(lines, { opacity: 0.55 });
+      const len = outline?.getTotalLength?.() ?? 0;
+      if (outline && len) gsap.set(outline, { strokeDasharray: len, strokeDashoffset: len });
       const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 78%", end: "bottom 85%", scrub: 0.6 } });
+      if (outline && len) tl.to(outline, { strokeDashoffset: 0, duration: 1, ease: "none" }, 0);
       lines.forEach((l, i) => tl.to(l, { opacity: 1, duration: 0.6 / lines.length, ease: "none" }, i / lines.length));
       return () => {
         tl.scrollTrigger?.kill();
         tl.kill();
         gsap.set(lines, { clearProps: "all" });
+        if (outline) gsap.set(outline, { clearProps: "all" });
       };
     });
     return () => mm.revert();
-  }, [items.length]);
+  }, [items.length, path]);
 
   return (
     <div>
@@ -122,7 +127,9 @@ export function SupportOutline({
             height={box.h}
             viewBox={`0 0 ${box.w} ${box.h}`}
           >
-            <path d={path} fill="none" stroke="var(--color-line)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+            {/* The silhouette draws itself as the reader goes down the run,
+                so the shape is arrived at rather than simply present. */}
+            <path data-outline d={path} fill="none" stroke="var(--color-line)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
             {/* One bright segment circulating the perimeter for ever. Under
                 reduced motion the outline itself is the finished state. */}
             <path
@@ -139,13 +146,13 @@ export function SupportOutline({
         )}
         <ol className="relative">
           {items.map((d, i) => (
-            <li key={d.no} data-line className="grid grid-cols-[2.5rem_auto] items-baseline py-[0.55rem] lg:grid-cols-[3.5rem_auto]">
-              <span className="font-display text-[0.8125rem] font-bold tabular-nums text-brand-text">{d.no}</span>
+            <li key={d.no} data-line className="group grid grid-cols-[2.5rem_auto] items-baseline py-[0.55rem] lg:grid-cols-[3.5rem_auto]">
+              <span className="font-display text-[0.8125rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text">{d.no}</span>
               <span
                 ref={(n) => {
                   spans.current[i] = n;
                 }}
-                className="font-display justify-self-start font-extrabold uppercase leading-[1.16] text-snow text-[clamp(1.05rem,2.55vw,2.25rem)] lg:whitespace-nowrap"
+                className="font-display justify-self-start font-extrabold uppercase leading-[1.16] text-snow transition-colors duration-500 hover:text-brand text-[clamp(1.05rem,2.55vw,2.25rem)] lg:whitespace-nowrap"
               >
                 {d.title}
               </span>

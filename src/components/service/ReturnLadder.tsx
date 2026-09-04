@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/cn";
@@ -41,6 +41,9 @@ export function ReturnLadder({
   const spine = useRef<SVGPathElement>(null);
   const flow = useRef<SVGPathElement>(null);
   const tag = useRef<SVGTextElement>(null);
+  /** Which rung the reader has reached. Drives the rung marker only; every
+   *  card stays fully readable whatever this is. */
+  const [active, setActive] = useState(-1);
 
   useEffect(() => {
     const el = root.current;
@@ -101,7 +104,16 @@ export function ReturnLadder({
       const cards = gsap.utils.selector(el)("[data-step]");
       gsap.set(cards, { opacity: 0.55, x: 14 });
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: el, start: "top 72%", end: "bottom 78%", scrub: 0.7 },
+        scrollTrigger: {
+          trigger: el,
+          start: "top 74%",
+          end: "bottom 76%",
+          scrub: 0.7,
+          onUpdate: (self) => {
+            const i = Math.min(cards.length - 1, Math.floor(self.progress * cards.length));
+            setActive((prev) => (prev === i ? prev : i));
+          },
+        },
       });
       tl.to(cards, { opacity: 1, x: 0, duration: 0.22, stagger: 0.12, ease: "power2.out" }, 0);
       return () => {
@@ -148,20 +160,23 @@ export function ReturnLadder({
 
       <ol className="relative space-y-4">
         {items.map((s, i) => (
-          <li key={s.no} data-step className="relative">
+          <li key={s.no} data-step className="group relative">
             {/* The rung: the number, on the spine. */}
             <span
               ref={(n) => {
                 rungs.current[i] = n;
               }}
               aria-hidden
-              className="font-display absolute -left-36 top-7 hidden h-11 w-11 items-center justify-center rounded-full border border-brand bg-ink-2 text-base font-extrabold tabular-nums text-brand-text lg:flex"
+              className={cn(
+                "font-display absolute -left-36 top-7 hidden h-11 w-11 items-center justify-center rounded-full border bg-ink-2 text-base font-extrabold tabular-nums transition-all duration-500 group-hover:scale-110 group-hover:border-brand group-hover:text-brand-text motion-reduce:transition-none motion-reduce:group-hover:scale-100 lg:flex",
+                i <= active ? "scale-110 border-brand text-brand-text" : "border-line text-ash",
+              )}
             >
               {s.no}
             </span>
             <div
               className={cn(
-                "grid gap-x-10 gap-y-3 rounded-[1.5rem] border border-line bg-ink-3 p-7 sm:p-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] lg:items-baseline",
+                "group grid gap-x-10 gap-y-3 rounded-[1.5rem] border border-line bg-ink-3 p-7 transition-colors duration-500 hover:border-ash/50 motion-reduce:transition-none sm:p-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] lg:items-baseline",
               )}
             >
               <div className="flex items-baseline gap-4">
