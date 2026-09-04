@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useInView, useReducedMotion, animate } from "motion/react";
+import { motion, useInView, animate } from "motion/react";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -29,7 +30,7 @@ export function Chars({
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const play = playProp ?? (immediate || inView);
 
   // Characters are grouped into words, each word an inline-block that cannot
@@ -88,7 +89,7 @@ export function Rise({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   return (
     <motion.div
       ref={ref}

@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { cn } from "@/lib/cn";
 
@@ -65,7 +66,7 @@ export function DeliverableFirst({
   outputsTail: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const inView = useInView(ref, { once: true, margin: "-90px" });
   const play = reduced || inView;
   const [hot, setHot] = useState<number | null>(null);

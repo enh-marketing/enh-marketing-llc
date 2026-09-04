@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
 import { cn } from "@/lib/cn";
@@ -253,7 +254,7 @@ export function SetupSwitch({
 }) {
   const stage = useRef<HTMLDivElement>(null);
   const warn = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const inView = useInView(stage, { once: true, margin: "-80px" });
   const warnIn = useInView(warn, { once: true, margin: "-80px" });
   const [active, setActive] = useState(0);

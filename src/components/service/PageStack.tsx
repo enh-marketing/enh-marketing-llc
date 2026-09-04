@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useEnhanced } from "@/lib/useEnhanced";
-import { motion, useReducedMotion } from "motion/react";
+import { useEnhanced, usePrefersReducedMotion } from "@/lib/useEnhanced";
+import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
@@ -173,7 +173,7 @@ export function PageStack({
   caveatGate: string;
   caveatGateMark: string;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   /* Only above this width can a Page stand on its spine. Below it every Page
      is open and the row is swiped instead, which is why the names exist once
      in the markup rather than once per layout. */

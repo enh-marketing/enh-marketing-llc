@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { LocalPromiseIcon, type PromiseMark } from "@/components/service/LocalPromiseIcon";
 import { cn } from "@/lib/cn";
@@ -49,7 +50,7 @@ type Item = { title: string; body: string; mark: PromiseMark; avoid?: string };
 
 function Card({ item, no, span, delay }: { item: Item; no: number; span: number; delay: number }) {
   const ref = useRef<HTMLLIElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const inView = useInView(ref, { once: true, margin: "-70px" });
   const play = reduced || inView;
   const wide = span >= 7;
@@ -139,7 +140,7 @@ export function PromiseGrid({
   tail: string;
 }) {
   const tailRef = useRef<HTMLParagraphElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const tailIn = useInView(tailRef, { once: true, margin: "-70px" });
 
   return (

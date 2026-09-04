@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Crosslink } from "@/components/ui/Crosslink";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -52,7 +53,7 @@ export function BoundaryBand({
   tail: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const play = reduced || inView;
 

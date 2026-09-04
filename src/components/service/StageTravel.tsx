@@ -1,8 +1,9 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { Rise } from "@/components/fx/Reveal";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 import type { Stage } from "@/content/services/b2b-lead-generation";
 
@@ -60,7 +61,7 @@ export function StageTravel({
   const sideOf = (i: number) => (i <= crossing ? "near" : "far");
 
   /* A reader who asked for no motion gets the list where it already is. */
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   const marked = (() => {
     if (!outputs.length) return verdict;

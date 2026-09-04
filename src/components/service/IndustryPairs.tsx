@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MetaMark } from "@/components/service/MetaMark";
 import { Marked } from "@/components/service/Marked";
@@ -58,7 +59,7 @@ export function IndustryPairs({
   noteMark: string;
 }) {
   /* A reader who asked for no motion gets the list where it already is. */
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   return (
     <section id={id} data-section={label} className="relative overflow-x-clip py-14 sm:py-16">

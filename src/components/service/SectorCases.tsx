@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
 import { cn } from "@/lib/cn";
@@ -108,7 +109,7 @@ export function SectorCases({
   const [hot, setHot] = useState<0 | 1 | null>(null);
 
   /* A reader who asked for no motion gets the list where it already is. */
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   const linked = CASE_KEYS.map((key) => items.findIndex((s) => s.toLowerCase().includes(key)));
 

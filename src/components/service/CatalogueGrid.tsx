@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
 
@@ -158,7 +159,7 @@ export function CatalogueGrid({
   /** The qualifier the document attaches to the list rather than to any entry. */
   note: string;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
 
   return (
     <section id={id} data-section={label} className="relative overflow-x-clip py-14 sm:py-16">

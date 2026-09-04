@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
 import { Marked } from "@/components/service/Marked";
@@ -203,7 +204,7 @@ export function ShowDay({
   eventLabel: string;
   items: Commitment[];
 }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const [litBefore, setLitBefore] = useState(false);
 
   const before = items.filter((p) => p.side === "before");

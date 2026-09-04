@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
 import { cn } from "@/lib/cn";
@@ -288,7 +289,7 @@ export function ScopeRoute({
   limitOutside: string;
   limitConditional: string;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = usePrefersReducedMotion();
   const [hot, setHot] = useState<number | null>(null);
   const lit = (...n: number[]) => n.some((k) => k === hot);
 
