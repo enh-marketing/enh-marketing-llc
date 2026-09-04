@@ -85,7 +85,7 @@ Looping SVG classes live in `globals.css` under the Campaign Intelligence block:
 
 Shared: `ServiceHero`, `SectionHeader`, `CtaBand`, `GrowthCta`, `FaqList`, `StickyCTABar`, `Work`, `Insights`, `TrustStrip`, `LeadForm`, `Crosslink` (renders unbuilt routes as plain text; a link to a 404 is worse than no link).
 
-Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, sorted index and stage.
+Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, pinned chapter with an index.
 
 Withdrawn, and not to be revived: stepped boundary, narrowing measure, measured type silhouette, staged canvas. All four were rejected as "just a list", and the reason is worth keeping. Each changed the ornament and kept the skeleton: one item per row, copy on one side, a picture on the other. A stepped hairline, a tinted bed, a measured outline and a pinned canvas are four coats on the same list.
 
@@ -106,4 +106,6 @@ The rules this yields outrank any amount of conceptual cleverness:
 3. **Show the working.** Where a section sorts its items, print the clause the sort was read from. It makes the arrangement checkable, and it stops items in one group from feeling identical, which is what makes a category drawing sit still across consecutive selections.
 4. **No quantities.** These pages promise "no counts, no scores". A percentage nobody can measure by eye is both a broken promise and unreadable.
 5. **`--color-line` is 1.4:1 on the dark chapter.** Any line carrying meaning there is inked in `ash`, not `line`.
-6. **A GSAP `from` tween renders its start state on creation.** A timeline waiting on a ScrollTrigger that never fires (deep link, restored scroll, refresh mid-page) leaves its targets at `scaleX(0)` permanently. Pass `immediateRender: false` on every entrance tween.
+6. **A drawing per subject, not one drawing per section.** Seven services need seven pictures. A single drawing that only changes state cannot depict a crawler meeting robots.txt AND a page that answers AND markup matching what is visible: it collapses into the one abstract shape all seven have in common, which is what "same random diagram with no meaning" named. Each drawing answers one question about its own service, in its own copy's words.
+7. **`useEnhanced` reports false on the first paint**, by design, so server and client agree. An effect that reads a ref only rendered in the enhanced branch must list the enhanced flag in its dependencies, or it runs once against a null ref and never again.
+8. **A GSAP `from` tween renders its start state on creation.** A timeline waiting on a ScrollTrigger that never fires (deep link, restored scroll, refresh mid-page) leaves its targets at `scaleX(0)` permanently. Pass `immediateRender: false` on every entrance tween.

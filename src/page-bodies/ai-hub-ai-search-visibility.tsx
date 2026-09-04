@@ -14,7 +14,7 @@ import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { SignalPath } from "@/components/service/SignalPath";
 import { Narrative } from "@/components/service/Narrative";
-import { VisibilityBays } from "@/components/service/VisibilityBays";
+import { VisibilityChapter } from "@/components/service/VisibilityChapter";
 import { VisibilityMark } from "@/components/service/VisibilityMark";
 import { SiteFork } from "@/components/service/SiteFork";
 import { ReturnLadder } from "@/components/service/ReturnLadder";
@@ -91,7 +91,7 @@ export function AiSearchVisibilityPage() {
         <section
           id="services"
           data-section="Our AI Search Visibility Services"
-          className="chapter-dark relative overflow-x-clip pb-24 pt-20 sm:pb-28 sm:pt-24"
+          className="chapter-dark relative overflow-x-clip pb-24 pt-20 sm:pt-24"
         >
           {/* The chapter's own atmosphere: a faint grid and one warm bloom
               behind the scene, both absent from the paper sections. */}
@@ -113,14 +113,9 @@ export function AiSearchVisibilityPage() {
               title={c.services.title}
               strokeTitle={c.services.strokeTitle}
               markNode={<VisibilityMark variant="bookends" />}
-              className="mb-12"
+              className="mb-10"
             />
-            <VisibilityBays
-              items={c.services.items}
-              stages={c.services.stages}
-              readingLabel={c.services.readingLabel}
-              territories={c.services.territories}
-            />
+            <VisibilityChapter items={c.services.items} readingLabel={c.services.readingLabel} />
           </Container>
         </section>
 
