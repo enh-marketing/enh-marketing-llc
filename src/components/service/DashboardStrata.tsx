@@ -40,17 +40,22 @@ export type StratumItem = {
 
 const S = { fill: "none", stroke: "currentColor", strokeWidth: 1.3, strokeLinecap: "round" as const, vectorEffect: "non-scaling-stroke" as const };
 
-/** Bed depth in pixels at the large breakpoint, and how deep the ground is
- *  tinted. Depths differ by at least 16px so the grain is legible, and the
- *  tint deepens with depth: alternating two surface tokens was not enough
- *  separation and the mass read as a six-row table. */
-const BED: Record<DashboardKind, { h: number; wash: number }> = {
-  marketing: { h: 232, wash: 0 },
-  sales: { h: 196, wash: 0.022 },
-  ecommerce: { h: 200, wash: 0.042 },
-  attribution: { h: 216, wash: 0.062 },
-  management: { h: 236, wash: 0.082 },
-  integration: { h: 268, wash: 0.11 },
+/** Bed depth in pixels at the large breakpoint, and how far down the site's own
+ *  surface scale the ground sits.
+ *
+ *  Depths differ by at least 16px so the grain is legible. The ground steps
+ *  from the lightest surface to the deepest, which is what a section drawing
+ *  does and, being neutral, is also what the theme already has tokens for:
+ *  --color-ink-3 to --color-void reads as white to warm grey in the light
+ *  theme and as near-black deepening in the dark one. An earlier version mixed
+ *  the brand red into each bed instead, which turned the whole section pink. */
+const BED: Record<DashboardKind, { h: number; depth: number }> = {
+  marketing: { h: 232, depth: 0 },
+  sales: { h: 196, depth: 20 },
+  ecommerce: { h: 200, depth: 40 },
+  attribution: { h: 216, depth: 60 },
+  management: { h: 236, depth: 80 },
+  integration: { h: 268, depth: 100 },
 };
 
 /* Every drawing is composed to continue past the right edge of its bed. Each
@@ -66,8 +71,8 @@ function MarketingCut() {
       {rows.map((y, i) => (
         <g key={y}>
           <rect x="0" y={y - 4} width="44" height="3.4" rx="1.7" fill="currentColor" opacity="0.45" />
-          <rect x="54" y={y - 7} width={[286, 232, 180, 128][i]} height="5" rx="2.5" fill="currentColor" opacity="0.4" className="ci-grow-x" style={{ animationDelay: `${i * 160}ms` }} />
-          <rect x="54" y={y - 0.5} width={[214, 250, 108, 156][i]} height="5" rx="2.5" fill="var(--color-brand)" opacity="0.85" className="ci-grow-x" style={{ animationDelay: `${i * 160 + 90}ms` }} />
+          <rect x="54" y={y - 7} width={[286, 232, 180, 128][i]} height="5" rx="2.5" fill="currentColor" opacity="0.4" />
+          <rect x="54" y={y - 0.5} width={[214, 250, 108, 156][i]} height="5" rx="2.5" fill="var(--color-brand)" opacity="0.85" />
         </g>
       ))}
     </svg>
@@ -99,7 +104,7 @@ function EcommerceCut() {
             {seg.map((h, s) => {
               y -= h;
               return (
-                <rect key={s} x={4 + c * 48} y={y} width="34" height={h - 2} rx="1.5" fill={s === 0 ? "var(--color-brand)" : "currentColor"} opacity={s === 0 ? 0.9 : 0.55 - s * 0.18} className="ci-grow" style={{ animationDelay: `${c * 120}ms` }} />
+                <rect key={s} x={4 + c * 48} y={y} width="34" height={h - 2} rx="1.5" fill={s === 0 ? "var(--color-brand)" : "currentColor"} opacity={s === 0 ? 0.9 : 0.55 - s * 0.18} />
               );
             })}
           </g>
@@ -140,7 +145,7 @@ function ManagementCut() {
       <rect x="14" y="60" width="80" height="3.4" rx="1.7" fill="currentColor" opacity="0.4" />
       <path d="M170 66 C 210 58, 244 40, 300 26 S 336 18, 340 16" {...S} strokeWidth="1.6" opacity="0.55" />
       {[186, 224, 262, 300].map((x, i) => (
-        <rect key={x} x={x} y={70 - i * 4} width="26" height={i * 4 + 10} rx="1.5" fill="currentColor" opacity="0.28" className="ci-grow" style={{ transformOrigin: "bottom", animationDelay: `${i * 150}ms` }} />
+        <rect key={x} x={x} y={70 - i * 4} width="26" height={i * 4 + 10} rx="1.5" fill="currentColor" opacity="0.28" />
       ))}
       {/* Access, limited by role. */}
       <rect x="316" y="30" width="22" height="16" rx="3" {...S} className="text-brand" />
@@ -168,8 +173,8 @@ function IntegrationCut() {
       ))}
       <path d="M112 50 H 168" {...S} className="text-line" />
       <path d="M112 50 H 168" pathLength="100" stroke="var(--color-brand)" strokeWidth="1.5" strokeLinecap="round" fill="none" className="ci-flow" style={{ animationDuration: "2.2s" }} />
-      {[10, 26, 42, 58].map((y, i) => (
-        <path key={y} d={`M190 ${y + 4} H 340`} pathLength="100" stroke="var(--color-snow)" strokeWidth="5" strokeLinecap="butt" fill="none" className="ci-draw" style={{ animationDelay: `${i * 300}ms` }} />
+      {[10, 26, 42, 58].map((y) => (
+        <path key={y} d={`M190 ${y + 4} H 340`} stroke="currentColor" strokeWidth="5" strokeLinecap="butt" fill="none" opacity="0.55" />
       ))}
       <path d="M190 78 H 340" {...S} className="text-brand" strokeWidth="2" />
     </svg>
@@ -206,16 +211,11 @@ export function DashboardStrata({
     mm.add({ motion: "(min-width: 1024px) and (prefers-reduced-motion: no-preference)" }, (ctx) => {
       if (!ctx.conditions?.motion) return;
       const probe = el.querySelector("[data-probe]");
-      const beds = gsap.utils.toArray<HTMLElement>(el.querySelectorAll("[data-bed]"));
-      if (!probe || !beds.length) return;
-      gsap.set(beds, { opacity: 0.62 });
+      if (!probe) return;
+      // Nothing is dimmed. Holding the beds at 0.62 and lighting them one at a
+      // time put a grey film over the copy in five of the six.
       const tl = gsap.timeline({ repeat: -1, paused: true });
       tl.fromTo(probe, { yPercent: 0 }, { yPercent: 100, duration: 7, ease: "none" }, 0);
-      beds.forEach((bed, i) => {
-        const at = (i / beds.length) * 7;
-        tl.to(bed, { opacity: 1, duration: 0.5, ease: "none" }, at)
-          .to(bed, { opacity: 0.62, duration: 0.5, ease: "none" }, at + 7 / beds.length);
-      });
       const st = ScrollTrigger.create({
         trigger: el,
         start: "top 85%",
@@ -228,7 +228,6 @@ export function DashboardStrata({
       return () => {
         st.kill();
         tl.kill();
-        gsap.set(beds, { clearProps: "all" });
       };
     });
     return () => mm.revert();
@@ -260,8 +259,12 @@ export function DashboardStrata({
               )}
               style={{ minHeight: bed.h }}
             >
-              {/* The ground, deepening with depth. */}
-              <span aria-hidden className="pointer-events-none absolute inset-0" style={{ backgroundColor: `color-mix(in oklab, var(--color-brand) ${bed.wash * 100}%, transparent)` }} />
+              {/* The ground, stepping down the surface scale. */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{ backgroundColor: `color-mix(in oklab, var(--color-void) ${bed.depth}%, var(--color-ink-3))` }}
+              />
               {/* The phrase that puts this bed under the others. */}
               {last && (
                 <span className="font-display absolute -top-[0.55rem] left-6 z-10 rounded-full border border-brand bg-ink px-2.5 py-0.5 text-[0.6875rem] font-semibold uppercase leading-none text-brand-text sm:left-9">
