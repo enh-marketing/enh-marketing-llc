@@ -82,9 +82,31 @@ export function AiSearchVisibilityPage() {
           </Rise>
         </Narrative>
 
-        {/* Seven services as bookends: two that measure, five that change
-            things, and the two that measure either side. See VisibilityBookends. */}
-        <section id="services" data-section="Our AI Search Visibility Services" className="relative overflow-x-clip py-14 sm:py-16">
+        {/* THE DARK CHAPTER. The seven services are the heart of the page and
+            the longest thing on it, and they are all about one subject: whether
+            an AI system can reach, read, identify, parse and corroborate your
+            web presence. So the page changes world here. Everything above and
+            below is paper; this is not, which gives the page a spine and lets
+            the scene be the only thing on screen. See VisibilityStage. */}
+        <section
+          id="services"
+          data-section="Our AI Search Visibility Services"
+          className="chapter-dark relative overflow-x-clip pb-24 pt-20 sm:pb-28 sm:pt-24"
+        >
+          {/* The chapter's own atmosphere: a faint grid and one warm bloom
+              behind the scene, both absent from the paper sections. */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+            <div
+              className="absolute inset-0 opacity-[0.16]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)",
+                backgroundSize: "72px 72px",
+                maskImage: "radial-gradient(ellipse at 50% 22%, black, transparent 72%)",
+              }}
+            />
+            <div className="aurora-b absolute left-1/2 top-[6%] h-[38vw] w-[52vw] -translate-x-1/2 rounded-full bg-brand/[0.10] blur-[170px]" />
+          </div>
           <Container className="relative">
             <SectionHeader
               index="01"
@@ -128,7 +150,10 @@ export function AiSearchVisibilityPage() {
 
         {/* Nine duties, set as the shape they make. See SupportOutline. Lifted to its own
             chapter treatment, as the managed section is on AI Automation. */}
-        <section id="support" data-section="Ongoing AI Visibility Support" className="relative overflow-x-clip py-20 sm:py-24">
+        {/* The closing chapter, on the deepest paper ground. The nine duties are
+            what recurs after everything above is done, so the page settles
+            rather than staying on the same white it opened on. */}
+        <section id="support" data-section="Ongoing AI Visibility Support" className="relative overflow-x-clip bg-void py-24 sm:py-28">
           <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
             <div
               className="absolute inset-0 opacity-[0.05]"

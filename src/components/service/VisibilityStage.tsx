@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
+import { cn } from "@/lib/cn";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -195,6 +196,23 @@ function Scene() {
 export function VisibilityStage({ items }: { items: StageItem[] }) {
   const root = useRef<HTMLDivElement>(null);
   const still = usePrefersReducedMotion();
+  /** Which service the stage is on. Drives the rail only; every paragraph is
+   *  in the DOM regardless. */
+  const [active, setActive] = useState(0);
+
+  /** Scroll to a step. The stage's height is the scroll its steps consume, so
+   *  step i sits at i/(n-1) of the distance between the section's top and the
+   *  point where its last screen has been reached. */
+  const goTo = useCallback(
+    (i: number) => {
+      const el = root.current;
+      if (!el || items.length < 2) return;
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      const travel = el.offsetHeight - window.innerHeight;
+      window.scrollTo({ top: top + (i / (items.length - 1)) * travel, behavior: "smooth" });
+    },
+    [items.length],
+  );
 
   useEffect(() => {
     const el = root.current;
@@ -206,7 +224,7 @@ export function VisibilityStage({ items }: { items: StageItem[] }) {
       const blocks = q("[data-copy]");
       const boxes = q("[data-focus-box]");
       const frame = q("[data-focus]")[0];
-      const ticks = q("[data-tick]");
+      
       const n = blocks.length;
       if (!n) return;
 
@@ -216,30 +234,38 @@ export function VisibilityStage({ items }: { items: StageItem[] }) {
       if (frame) gsap.set(frame, { opacity: 1 });
       boxes.forEach((bx) => gsap.set(bx, { attr: FOCUS[0] }));
       gsap.set(blocks, { visibility: "visible" });
-      gsap.set(ticks, { opacity: 0.35 });
-      gsap.set(ticks[0], { opacity: 1 });
+      
 
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: el, start: "top top", end: "bottom bottom", scrub: 0.5 },
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.5,
+          onUpdate: (self) => {
+            const i = Math.round(self.progress * (n - 1));
+            setActive((prev) => (prev === i ? prev : i));
+          },
+        },
       });
-      // The handover is a hard one: the outgoing paragraph is fully gone before
-      // the next arrives, so stopping mid-scroll never leaves two sentences
-      // printed over each other.
+      // The handover overlaps by a quarter of its own length. A hard handover
+      // with a gap between the two looked cleaner in theory and left the copy
+      // area blank at any scroll position inside the gap; overlapping means one
+      // paragraph is always readable, and the outgoing one is below a quarter
+      // opacity by the time the next appears, so they never compete.
       const step = 1 / (n - 1);
       for (let i = 1; i < n; i += 1) {
         const at = (i - 1) * step;
         const out = step * 0.34;
-        const gap = step * 0.1;
+        const gap = -out * 0.25;
         tl.to(blocks[i - 1], { opacity: 0, y: -12, pointerEvents: "none", duration: out, ease: "power2.in" }, at)
-          .to(ticks[i - 1], { opacity: 0.35, duration: out * 0.6, ease: "none" }, at)
           .to(boxes, { attr: FOCUS[i] ?? FOCUS[0], duration: out * 2 + gap, ease: "power2.inOut" }, at)
-          .to(blocks[i], { opacity: 1, y: 0, pointerEvents: "auto", duration: out, ease: "power2.out" }, at + out + gap)
-          .to(ticks[i], { opacity: 1, duration: out * 0.6, ease: "none" }, at + out + gap);
+          .to(blocks[i], { opacity: 1, y: 0, pointerEvents: "auto", duration: out, ease: "power2.out" }, at + out + gap);
       }
       return () => {
         tl.scrollTrigger?.kill();
         tl.kill();
-        gsap.set([...blocks, ...boxes, ...ticks], { clearProps: "all" });
+        gsap.set([...blocks, ...boxes], { clearProps: "all" });
       };
     });
     return () => mm.revert();
@@ -311,12 +337,34 @@ export function VisibilityStage({ items }: { items: StageItem[] }) {
             </div>
 
             {/* Where the reader is, across the foot. */}
-            <div aria-hidden className="absolute bottom-1 right-0 flex items-end gap-5">
-              {items.map((s) => (
-                <span key={s.no} data-tick className="flex flex-col items-center gap-2.5">
-                  <span className="font-display text-[0.8125rem] font-bold tabular-nums text-brand-text">{s.no}</span>
-                  <span className="block h-12 w-0.5 bg-brand" />
-                </span>
+            {/* The rail is where the reader is, and also how they move. Each
+                tick jumps the stage to its service. */}
+            <div className="pointer-events-auto absolute bottom-1 right-0 flex items-end gap-4">
+              {items.map((s, i) => (
+                <button
+                  key={s.no}
+                  type="button"
+                  data-tick
+                  onClick={() => goTo(i)}
+                  aria-label={`${s.no}. ${s.title}`}
+                  aria-current={active === i ? "true" : undefined}
+                  className="group/tick -mx-1 flex flex-col items-center gap-2.5 rounded-sm px-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                >
+                  <span
+                    className={cn(
+                      "font-display text-[0.8125rem] font-bold tabular-nums transition-colors duration-300",
+                      active === i ? "text-brand-text" : "text-ash group-hover/tick:text-brand-text",
+                    )}
+                  >
+                    {s.no}
+                  </span>
+                  <span
+                    className={cn(
+                      "block w-0.5 origin-bottom bg-brand transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
+                      active === i ? "h-12 opacity-100" : "h-8 opacity-40 group-hover/tick:h-10 group-hover/tick:opacity-70",
+                    )}
+                  />
+                </button>
               ))}
             </div>
           </div>
