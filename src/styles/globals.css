@@ -855,6 +855,26 @@ summary {
 /* On-Air Relay: the warmth of a running version drains as its audience becomes
    familiar. Applied inline and only when motion is allowed, so it needs no
    reduced-motion override; at rest the version keeps its full warmth. */
+/* The output wall: columns of format frames drifting continuously. The track
+   holds two copies of its column, so translating it by half its height loops
+   seamlessly. Stopped outright under reduced motion, where the wall simply
+   rests as a dense static board. */
+@keyframes wall-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -50%, 0); }
+}
+.wall-drift {
+  animation-name: wall-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wall-drift {
+    animation: none !important;
+  }
+}
+
 @keyframes onair-cool {
   0% { opacity: 1; }
   70% { opacity: 0.28; }
