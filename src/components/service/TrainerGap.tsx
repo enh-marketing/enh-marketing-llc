@@ -72,18 +72,22 @@ export function TrainerGap({
           {/* ── the run that stops ─────────────────────────────────────── */}
           <div>
             <Head name={trainer.label} tone="ash" />
-            <div className="relative mt-5 hidden h-16 lg:block" aria-hidden>
+            {/* Drawn at every width. The comparison is the section, and hiding
+                it below lg left a phone with two paragraphs and no argument. */}
+            <div className="relative mt-5 h-12 sm:h-16" aria-hidden>
               <Channel reach={STOP} tone="ash" show={show} reduced={reduced} delay={0} />
-              {/* The buffer. */}
               <motion.span
-                className="absolute top-0 h-16 w-1 bg-ash"
+                className="absolute top-0 h-12 w-1 bg-ash sm:h-16"
                 style={{ left: `calc(${STOP * 100}% - 2px)` }}
                 initial={reduced ? false : { scaleY: 0 }}
                 animate={show ? { scaleY: 1 } : { scaleY: 0 }}
                 transition={{ duration: 0.4, ease: EASE, delay: 0.85 }}
               />
+              {/* On a wide screen the clause labels the buffer where it stands.
+                  On a phone there is no room beside it, so it sits under the
+                  track instead, still as the thing the run ends on. */}
               <motion.p
-                className="font-display absolute top-1/2 max-w-[30ch] -translate-y-1/2 pl-6 text-[0.9375rem] font-bold uppercase leading-tight text-ash"
+                className="font-display absolute top-1/2 hidden max-w-[30ch] -translate-y-1/2 pl-6 text-[0.9375rem] font-bold uppercase leading-tight text-ash lg:block"
                 style={{ left: `${STOP * 100}%` }}
                 initial={reduced ? false : { opacity: 0 }}
                 animate={show ? { opacity: 1 } : { opacity: 0 }}
@@ -92,11 +96,11 @@ export function TrainerGap({
                 {trainer.stop}
               </motion.p>
             </div>
-            <p className="mt-6 max-w-[68ch] text-base leading-relaxed text-fog sm:text-lg">
-              {trainer.body}
-            </p>
             <p className="font-display mt-4 max-w-[34ch] text-[0.9375rem] font-bold uppercase leading-tight text-ash lg:hidden">
               {trainer.stop}
+            </p>
+            <p className="mt-6 max-w-[68ch] text-base leading-relaxed text-fog sm:text-lg">
+              {trainer.body}
             </p>
           </div>
 
@@ -107,17 +111,16 @@ export function TrainerGap({
                 where the page does. */}
             <div
               aria-hidden
-              className="relative mt-5 hidden h-16 lg:block"
+              className="relative mt-5 h-12 sm:h-16"
               style={{ marginRight: "calc((100vw - 100%) / -2)" }}
             >
               <Channel reach={1} tone="brand" show={show} reduced={reduced} delay={0.45} />
-              {/* What the extra distance is spent on, standing on the run. */}
               {ours.work.map((w, i) => {
                 const at = STOP + ((1 - STOP) * (i + 0.5)) / ours.work.length;
                 return (
                   <motion.span
                     key={w}
-                    className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2"
+                    className="absolute top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
                     style={{ left: `${at * 88}%` }}
                     initial={reduced ? false : { opacity: 0, y: 10 }}
                     animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
@@ -130,10 +133,7 @@ export function TrainerGap({
                 );
               })}
             </div>
-            <p className="mt-6 max-w-[68ch] text-base leading-relaxed text-fog sm:text-lg">
-              {ours.body}
-            </p>
-            <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 lg:hidden">
+            <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 lg:hidden">
               {ours.work.map((w) => (
                 <li
                   key={w}
@@ -143,6 +143,9 @@ export function TrainerGap({
                 </li>
               ))}
             </ul>
+            <p className="mt-6 max-w-[68ch] text-base leading-relaxed text-fog sm:text-lg">
+              {ours.body}
+            </p>
           </div>
         </div>
 
