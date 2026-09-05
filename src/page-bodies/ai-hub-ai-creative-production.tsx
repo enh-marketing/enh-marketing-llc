@@ -10,7 +10,7 @@ import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ServiceHero } from "@/components/service/ServiceHero";
-import { ReelHero } from "@/components/service/ReelHero";
+import { ProductionRun } from "@/components/service/ProductionRun";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
 import { StageTimeline } from "@/components/service/StageTimeline";
 import { ProcessLanes } from "@/components/service/ProcessLanes";
@@ -44,7 +44,7 @@ export function AiCreativeProductionPage() {
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.hero.primary}
-          visual={<ReelHero key="reel-hero" stages={c.hero.stages} />}
+          visual={<ProductionRun key="run" stages={c.hero.stages} />}
         />
 
         {/* GATE. "See the Work" is an instruction in the source, not content:
@@ -104,7 +104,7 @@ export function AiCreativeProductionPage() {
           strokeTitle={c.review.strokeTitle}
           stages={c.review.items}
           axis={["Approved direction", "Final variants"]}
-          mark={{ variant: "progression", label: "Five stages of review" }}
+          markNode={<CreativeMark variant="strip" />}
         />
 
         {/* Six steps in two lanes, on the site's own ProcessLanes. The lane
@@ -120,6 +120,7 @@ export function AiCreativeProductionPage() {
           laneOurs="ENH Marketing"
           laneYours="Your team"
           lanes={c.process.items.map((s) => (s.actor === "You" ? 1 : 0))}
+          markNode={<CreativeMark variant="lanes" />}
         />
 
         {/* One-off or monthly; included inside the bundle, exclusions tethered outside. See ScopeManifest. */}

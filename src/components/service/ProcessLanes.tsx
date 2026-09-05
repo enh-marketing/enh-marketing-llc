@@ -5,6 +5,7 @@ import { motion, useInView, useScroll, useTransform } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -66,6 +67,7 @@ export function ProcessLanes({
   laneOurs,
   laneYours,
   lanes = LANE,
+  markNode,
 }: {
   id: string;
   label: string;
@@ -77,6 +79,8 @@ export function ProcessLanes({
   laneYours: string;
   /** Per stage: 0 for the agency's lane, 1 for the client's. */
   lanes?: number[];
+  /** A page's own mark, where the shared set has nothing that fits. */
+  markNode?: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
@@ -94,7 +98,8 @@ export function ProcessLanes({
           index={index}
           title={title}
           strokeTitle={strokeTitle}
-          mark={{ variant: "progression", label: "Five stages ours, one yours" }}
+          mark={markNode ? undefined : { variant: "progression", label: "Five stages ours, one yours" }}
+          markNode={markNode}
           className="mb-12"
         />
 
