@@ -5,6 +5,7 @@ import { motion, useMotionValueEvent, useScroll, useTransform } from "motion/rea
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 type Stage = { no: string; title: string; body: string };
@@ -25,6 +26,7 @@ export function StageTimeline({
   outro,
   axis = ["Day 0", "Day 90"],
   mark = { variant: "progression", label: "Four stages across ninety days" },
+  markNode,
 }: {
   /** DevTools handle: id anchors the section, data-section names it. */
   id: string;
@@ -40,6 +42,8 @@ export function StageTimeline({
    *  never a duration the document does not state. */
   axis?: [string, string];
   mark?: { variant: "progression" | "growth" | "network" | "contrast" | "ecosystem"; label: string };
+  /** A page's own mark, where the shared set has nothing that fits. */
+  markNode?: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
@@ -63,7 +67,8 @@ export function StageTimeline({
           title={title}
           strokeTitle={strokeTitle}
           lede={lede}
-          mark={mark}
+          mark={markNode ? undefined : mark}
+          markNode={markNode}
           className="mb-20"
         />
 

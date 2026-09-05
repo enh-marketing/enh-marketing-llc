@@ -26,6 +26,7 @@ import { AdsAccount } from "@/components/service/AdsAccount";
 import { CycleTrack } from "@/components/service/CycleTrack";
 import { OutputBoard } from "@/components/service/OutputBoard";
 import { HandoverMap } from "@/components/service/HandoverMap";
+import { CreativeOutputs } from "@/components/service/CreativeOutputs";
 import type { ServiceAnchor } from "@/content/services/instagram-marketing";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -69,6 +70,8 @@ export type DiagramSpec =
   | { kind: "adsaccount" }
   | { kind: "cycle" }
   | { kind: "outputs" }
+  /** The four AI creative outputs, each drawn as the thing it is. */
+  | { kind: "creative" }
   /** Seven automation services against the one thing that separates them:
    *  whether the work stops for a person. `loop` is per item, in item order,
    *  and each flag is cited in the content file against the sentence it was
@@ -113,6 +116,7 @@ export function PinnedExplorer({
   title,
   strokeTitle,
   mark,
+  markNode,
   aside,
   bodyLabel,
   noteLabel,
@@ -129,6 +133,9 @@ export function PinnedExplorer({
   title: string;
   strokeTitle: string;
   mark?: { variant: "growth" | "network" | "progression" | "contrast" | "ecosystem"; label: string };
+  /** A page's own mark, where the shared set has nothing that fits. Takes
+   *  precedence over `mark`, exactly as it does on SectionHeader. */
+  markNode?: ReactNode;
   aside?: ReactNode;
   /** Labels for the body and note, where the source names them — a table's
    *  column headers, for instance, which would otherwise be lost when the table
@@ -251,6 +258,8 @@ export function PinnedExplorer({
         return <CycleTrack active={active} pin={pin} count={items.length} />;
       case "outputs":
         return <OutputBoard active={active} pin={pin} count={items.length} />;
+      case "creative":
+        return <CreativeOutputs active={active} pin={pin} count={items.length} />;
       case "handover":
         return (
           <HandoverMap active={active} pin={pin} count={items.length} loop={diagram.loop} />
@@ -299,7 +308,8 @@ export function PinnedExplorer({
           index={index}
           title={title}
           strokeTitle={strokeTitle}
-          mark={aside ? undefined : mark}
+          mark={aside || markNode ? undefined : mark}
+          markNode={markNode}
           aside={aside}
           className="mb-12"
         />

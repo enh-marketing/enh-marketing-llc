@@ -153,7 +153,7 @@ const aiHub: NavNode = {
   children: [
     { label: "AI Search Visibility (AEO & GEO)", href: "/ai-hub/ai-search-visibility" },
     { label: "AI & Automation", href: "/ai-hub/ai-automation" },
-    { label: "AI Creative Production", href: AI_HUB_HREF, external: true },
+    { label: "AI Creative Production", href: "/ai-hub/ai-creative-production" },
     { label: "Campaign Intelligence", href: "/ai-hub/campaign-intelligence" },
     { label: "Intelligent Web", href: AI_HUB_HREF, external: true },
     { label: "Data & Dashboards", href: "/ai-hub/data-and-dashboards" },
@@ -253,6 +253,7 @@ const BUILT = new Set([
   "/ai-hub/campaign-intelligence",
   "/ai-hub/ai-search-visibility",
   "/ai-hub/data-and-dashboards",
+  "/ai-hub/ai-creative-production",
   "/services/lead-generation/b2b-lead-generation",
   "/services/video-marketing/corporate-video",
   "/services/video-marketing/event-video",

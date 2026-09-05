@@ -5,6 +5,7 @@ import { motion, useInView, useScroll, useTransform } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -51,7 +52,9 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 export type Stage = { no: string; title: string; body: string };
 
 /** Which lane each stage sits in, read off its own sentence: 0 is the agency,
- *  1 is the client. Only stage four says "Your team". */
+ *  1 is the client. Defaults to the Social Media page's run, where only stage
+ *  four says "Your team"; any page whose document puts the client somewhere
+ *  else passes its own reading in through `lanes`. */
 const LANE = [0, 0, 0, 1, 0, 0];
 
 export function ProcessLanes({
@@ -63,6 +66,8 @@ export function ProcessLanes({
   stages,
   laneOurs,
   laneYours,
+  lanes = LANE,
+  markNode,
 }: {
   id: string;
   label: string;
@@ -72,6 +77,10 @@ export function ProcessLanes({
   stages: Stage[];
   laneOurs: string;
   laneYours: string;
+  /** Per stage: 0 for the agency's lane, 1 for the client's. */
+  lanes?: number[];
+  /** A page's own mark, where the shared set has nothing that fits. */
+  markNode?: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
@@ -89,7 +98,8 @@ export function ProcessLanes({
           index={index}
           title={title}
           strokeTitle={strokeTitle}
-          mark={{ variant: "progression", label: "Five stages ours, one yours" }}
+          mark={markNode ? undefined : { variant: "progression", label: "Five stages ours, one yours" }}
+          markNode={markNode}
           className="mb-12"
         />
 
@@ -124,7 +134,7 @@ export function ProcessLanes({
 
           <ol className="relative grid gap-y-6">
             {stages.map((s, i) => {
-              const mine = LANE[i] === 0;
+              const mine = lanes[i] === 0;
               const on = hot === i;
               return (
                 <motion.li
