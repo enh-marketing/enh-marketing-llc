@@ -63,7 +63,7 @@ export function AiCreativeProductionPage() {
           strokeTitle={c.produce.strokeTitle}
           mark={{ variant: "ecosystem", label: "Four kinds of output" }}
           items={c.produce.items}
-          diagram={{ kind: "adformat" }}
+          diagram={{ kind: "creative" }}
           diagramSide="left"
         />
 
