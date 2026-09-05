@@ -112,13 +112,13 @@ export function DiagnosticSort({
               <motion.span
                 className="absolute left-1/2 top-0 h-7 w-0.5 -translate-x-1/2 origin-top bg-brand"
                 initial={reduced ? false : { scaleY: 0 }}
-                animate={show ? { scaleY: 1 } : undefined}
+                animate={show ? { scaleY: 1 } : { scaleY: 0 }}
                 transition={{ duration: 0.4, ease: EASE }}
               />
               <motion.span
                 className="absolute left-[calc(25%-20px)] right-[calc(25%-20px)] top-7 h-0.5 bg-brand"
                 initial={reduced ? false : { scaleX: 0 }}
-                animate={show ? { scaleX: 1 } : undefined}
+                animate={show ? { scaleX: 1 } : { scaleX: 0 }}
                 transition={{ duration: 0.5, ease: EASE, delay: 0.35 }}
               />
               {/* Column centres, not quarters: a 2.5rem gutter moves each one
@@ -132,7 +132,7 @@ export function DiagnosticSort({
                   className="absolute top-7 h-7 w-0.5 origin-top bg-brand"
                   style={{ [side]: off } as React.CSSProperties}
                   initial={reduced ? false : { scaleY: 0 }}
-                  animate={show ? { scaleY: 1 } : undefined}
+                  animate={show ? { scaleY: 1 } : { scaleY: 0 }}
                   transition={{ duration: 0.35, ease: EASE, delay: 0.8 }}
                 />
               ))}
@@ -180,7 +180,7 @@ function Arm({
   return (
     <motion.div
       initial={reduced ? false : { opacity: 0, y: 12 }}
-      animate={show ? { opacity: 1, y: 0 } : undefined}
+      animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
       transition={{ duration: 0.5, ease: EASE, delay }}
       className={`rounded-[1.25rem] border-2 px-6 py-7 sm:px-8 sm:py-8 ${
         brand ? "border-brand/45 bg-ink-3" : "border-line bg-ink-2"

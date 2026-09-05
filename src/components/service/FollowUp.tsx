@@ -54,6 +54,10 @@ export function FollowUp({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const reduced = usePrefersReducedMotion();
+  /* Reduced motion resolves after hydration, so a reader who has asked for no
+     motion still starts on the hidden frame for one paint. Treating it as shown
+     is what puts them straight on the finished one. */
+  const show = inView || reduced;
 
   const out = items.slice(0, 4);
   /** Reversed, because the return leg is travelled the other way. */
@@ -92,18 +96,12 @@ export function FollowUp({
               style={{ height: LEG_H }}
             />
 
-            <Leg
-              entries={out}
-              startDelay={0}
-              reduced={reduced}
-              inView={inView}
-              height={LEG_H}
-            />
+            <Leg entries={out} startDelay={0} reduced={reduced} show={show} height={LEG_H} />
             <Leg
               entries={back}
               startDelay={0.5}
               reduced={reduced}
-              inView={inView}
+              show={show}
               height={LEG_H}
               rtl
             />
@@ -133,14 +131,14 @@ function Leg({
   entries,
   startDelay,
   reduced,
-  inView,
+  show,
   height,
   rtl = false,
 }: {
   entries: string[];
   startDelay: number;
   reduced: boolean;
-  inView: boolean;
+  show: boolean;
   height: number;
   rtl?: boolean;
 }) {
@@ -157,7 +155,7 @@ function Leg({
             key={entry}
             dir="ltr"
             initial={reduced ? false : { opacity: 0, y: 12 }}
-            animate={inView || reduced ? { opacity: 1, y: 0 } : undefined}
+            animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ duration: 0.5, ease: EASE, delay: startDelay + i * 0.09 }}
             className={rtl ? "text-right" : undefined}
           >

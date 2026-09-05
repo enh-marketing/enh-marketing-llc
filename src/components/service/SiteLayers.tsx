@@ -57,6 +57,10 @@ export function SiteLayers({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const reduced = usePrefersReducedMotion();
+  /* Reduced motion resolves after hydration, so a reader who has asked for no
+     motion still starts on the hidden frame for one paint. Treating it as shown
+     is what puts them straight on the finished one. */
+  const show = inView || reduced;
   const [lifted, setLifted] = useState<number | null>(null);
 
   return (
@@ -77,7 +81,7 @@ export function SiteLayers({
               <motion.li
                 key={el.no}
                 initial={reduced ? false : { opacity: 0, x: -18 }}
-                animate={inView || reduced ? { opacity: 1, x: 0 } : undefined}
+                animate={show ? { opacity: 1, x: 0 } : { opacity: 0, x: -18 }}
                 transition={{ duration: 0.55, ease: EASE, delay: i * 0.07 }}
                 onMouseEnter={() => setLifted(i)}
                 onMouseLeave={() => setLifted(null)}

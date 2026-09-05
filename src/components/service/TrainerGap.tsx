@@ -158,7 +158,7 @@ function Rail({
             className={`absolute left-0 top-0 h-full origin-left ${line}`}
             style={{ width: `${reach * 100}%` }}
             initial={reduced ? false : { scaleX: 0 }}
-            animate={show ? { scaleX: 1 } : undefined}
+            animate={show ? { scaleX: 1 } : { scaleX: 0 }}
             transition={{ duration: 0.9, ease: EASE, delay }}
           />
           {/* Where it gets to. */}
@@ -167,7 +167,7 @@ function Rail({
             className={`absolute top-1/2 h-4 w-0.5 -translate-y-1/2 ${line}`}
             style={{ left: `calc(${reach * 100}% - 1px)` }}
             initial={reduced ? false : { opacity: 0 }}
-            animate={show ? { opacity: 1 } : undefined}
+            animate={show ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.4, ease: EASE, delay: delay + 0.85 }}
           />
         </div>
@@ -181,7 +181,7 @@ function Rail({
               className="absolute top-3 hidden -translate-x-1/2 lg:block"
               style={{ left: `${at * 100}%` }}
               initial={reduced ? false : { opacity: 0, y: 8 }}
-              animate={show ? { opacity: 1, y: 0 } : undefined}
+              animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
               transition={{ duration: 0.45, ease: EASE, delay: delay + 0.9 + i * 0.08 }}
             >
               <span aria-hidden className="mx-auto block h-3 w-px bg-brand/60" />
@@ -199,7 +199,7 @@ function Rail({
           className="font-display mt-4 max-w-[34ch] text-[0.9375rem] font-bold uppercase leading-tight text-ash"
           style={{ marginLeft: `min(${reach * 100}%, calc(100% - 34ch))` }}
           initial={reduced ? false : { opacity: 0 }}
-          animate={show ? { opacity: 1 } : undefined}
+          animate={show ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.5, ease: EASE, delay: delay + 0.95 }}
         >
           {terminal}

@@ -12,7 +12,7 @@ import { HandoverThread } from "@/components/service/HandoverThread";
 import { Narrative } from "@/components/service/Narrative";
 import { AgentScreens } from "@/components/service/AgentScreens";
 import { DiagnosticSort } from "@/components/service/DiagnosticSort";
-import { ControlledLaunch } from "@/components/service/ControlledLaunch";
+import { ProjectSpine } from "@/components/service/ProjectSpine";
 import { AgentWatch } from "@/components/service/AgentWatch";
 import { ConversationJoins } from "@/components/service/ConversationJoins";
 import { GrowthCta } from "@/components/service/GrowthCta";
@@ -85,16 +85,18 @@ export function ConversationalAiPage() {
           paid={c.diagnostic.paid}
         />
 
-        {/* Six steps, drawn around the fifth: "introduced gradually where
-            necessary" is the sentence a cautious buyer is looking for. */}
-        <ControlledLaunch
+        {/* Six steps, drawn around the fifth. The gutter is empty until the
+            controlled launch, opens through it, and never resolves after: a
+            reader can see when the agent starts talking to their customers
+            without reading a word. */}
+        <ProjectSpine
           id="process"
           label="How the Conversational AI Project Works"
           index="03"
           title={c.process.title}
           strokeTitle={c.process.strokeTitle}
           stages={c.process.items}
-          rampAt={c.process.rampAt}
+          liveAt={c.process.liveAt}
         />
 
         {/* The managed service, in the position it occupies: between two

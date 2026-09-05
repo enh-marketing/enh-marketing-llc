@@ -229,10 +229,28 @@ export const diagnostic = {
   paid: "The initial discussion is free. The detailed diagnostic is paid because it includes conversation mapping, technical review, and a written recommendation.",
 };
 
-export type Stage = { no: string; title: string; body: string };
+/** One step of the project.
+ *
+ *  Every step in this document ends in a list, and the list is the step: what is
+ *  discussed, what is reviewed, what the recommendation states, what testing
+ *  covers, what early conversations are checked for, what monitoring does. So
+ *  each step carries `coversLabel` plus `covers`, and the two of them
+ *  reconstruct that sentence word for word. `body` holds only the sentences the
+ *  list is not part of, which is why four of the six have none: their whole
+ *  content is the list. */
+export type Stage = {
+  no: string;
+  title: string;
+  /** Sentences that are not part of the step's list. Often none. */
+  body?: string;
+  /** The clause that introduces the list, verbatim. */
+  coversLabel: string;
+  /** The list itself, verbatim, in the document's order. */
+  covers: string[];
+};
 
-/** "How the Conversational AI Project Works". Six steps, drawn around the one
- *  the document singles out: the launch is controlled, not thrown open. */
+/** "How the Conversational AI Project Works". Six steps, and one fact the run
+ *  is drawn around: the agent carries nothing at all until the fifth. */
 export const process = {
   title: "How the Conversational",
   strokeTitle: "AI Project Works",
@@ -240,37 +258,75 @@ export const process = {
     {
       no: "01",
       title: "Initial Discussion",
-      body: "We discuss the conversations you want to improve, the channels being used, and the team members currently responsible for them.",
+      coversLabel: "We discuss",
+      covers: [
+        "the conversations you want to improve",
+        "the channels being used",
+        "the team members currently responsible for them",
+      ],
     },
     {
       no: "02",
       title: "Conversation Diagnostic",
-      body: "We review common questions, existing chat or call records, available business information, and the systems involved in each request.",
+      coversLabel: "We review",
+      covers: [
+        "common questions",
+        "existing chat or call records",
+        "available business information",
+        "the systems involved in each request",
+      ],
     },
     {
       no: "03",
       title: "Scope and Recommendation",
-      body: "You receive a written recommendation explaining what the agent will handle, which channels and systems will be connected, when human handover is required, and what the project will cost.",
+      coversLabel: "You receive a written recommendation explaining",
+      covers: [
+        "what the agent will handle",
+        "which channels and systems will be connected",
+        "when human handover is required",
+        "what the project will cost",
+      ],
     },
     {
       no: "04",
       title: "Development and Testing",
-      body: "The agent, knowledge base, and required integrations are developed. Testing covers common questions, unclear requests, missing information, unusual wording, and conversations that should be escalated.",
+      body: "The agent, knowledge base, and required integrations are developed.",
+      coversLabel: "Testing covers",
+      covers: [
+        "common questions",
+        "unclear requests",
+        "missing information",
+        "unusual wording",
+        "conversations that should be escalated",
+      ],
     },
     {
       no: "05",
       title: "Controlled Launch",
-      body: "The agent is introduced gradually where necessary. Early conversations are reviewed to identify missing knowledge, incorrect routing, and areas where the response needs adjustment.",
+      body: "The agent is introduced gradually where necessary.",
+      coversLabel: "Early conversations are reviewed to identify",
+      covers: [
+        "missing knowledge",
+        "incorrect routing",
+        "areas where the response needs adjustment",
+      ],
     },
     {
       no: "06",
       title: "Monitoring and Improvement",
-      body: "After launch, we monitor the agent, review failed or escalated conversations, and update its knowledge as the business changes.",
+      coversLabel: "After launch, we",
+      covers: [
+        "monitor the agent",
+        "review failed or escalated conversations",
+        "update its knowledge as the business changes",
+      ],
     },
   ] as Stage[],
-  /** The step whose own sentence is the reason this run is drawn as a ramp
-   *  rather than a line: "The agent is introduced gradually where necessary." */
-  rampAt: 4,
+  /** Zero-based index of the step at which the agent first carries live
+   *  conversations. Its own sentence is the reason: "The agent is introduced
+   *  gradually where necessary." Everything before it is agreement and testing,
+   *  and nothing before it is live. */
+  liveAt: 4,
 };
 
 /** "Ongoing AI Agent Management". Ten things the monthly service covers, and
