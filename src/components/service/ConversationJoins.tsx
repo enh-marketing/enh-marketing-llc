@@ -71,9 +71,13 @@ export function ConversationJoins({
         <ol className="mt-14 grid gap-x-10 gap-y-12 lg:grid-cols-3">
           {items.map((c, i) => (
             <Rise key={c.agent} delay={0.06 + i * 0.08}>
-              <li>
+              <li className="group">
                 <Join at={i} />
-                <p className="mt-7 max-w-[30ch] text-[1.0625rem] leading-snug text-snow">
+                <span
+                  aria-hidden
+                  className="mt-7 block h-px w-8 bg-line transition-all duration-500 group-hover:w-20 group-hover:bg-brand motion-reduce:transition-none"
+                />
+                <p className="mt-4 max-w-[30ch] text-[1.0625rem] leading-snug text-fog transition-colors duration-500 group-hover:text-snow motion-reduce:transition-none">
                   <span className="font-display font-bold uppercase text-brand-text">{c.agent}</span>{" "}
                   {c.join}
                 </p>
@@ -105,14 +109,35 @@ function Join({ at }: { at: number }) {
         stroke="var(--color-ash)"
         strokeWidth="1.6"
       />
-      <rect x="120" y="38" width="42" height="5" rx="2.5" fill="var(--color-ash)" fillOpacity="0.5" />
-      <rect x="120" y="50" width="56" height="5" rx="2.5" fill="var(--color-ash)" fillOpacity="0.35" />
+      <rect
+        className="ci-grow-x"
+        x="120"
+        y="38"
+        width="42"
+        height="5"
+        rx="2.5"
+        fill="var(--color-ash)"
+        fillOpacity="0.5"
+      />
+      <rect
+        className="ci-grow-x"
+        x="120"
+        y="50"
+        width="56"
+        height="5"
+        rx="2.5"
+        fill="var(--color-ash)"
+        fillOpacity="0.35"
+        style={{ animationDelay: "0.7s" }}
+      />
 
       {at === 0 && (
         <>
           {/* Upstream: the campaign that sent them. */}
           <path
+            className="ci-flow"
             d="M96 48 H62"
+            pathLength={100}
             stroke="var(--color-brand)"
             strokeWidth="2"
             strokeLinecap="round"
@@ -133,7 +158,14 @@ function Join({ at }: { at: number }) {
       {at === 1 && (
         <>
           {/* Downstream: the record that has to change. */}
-          <path d="M204 48 H238" stroke="var(--color-brand)" strokeWidth="2" strokeLinecap="round" />
+          <path
+            className="ci-flow"
+            d="M204 48 H238"
+            pathLength={100}
+            stroke="var(--color-brand)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
           <path
             d="M226 40 234 48 226 56"
             stroke="var(--color-brand)"
@@ -151,7 +183,14 @@ function Join({ at }: { at: number }) {
       {at === 2 && (
         <>
           {/* Across: the person, and what travels with the conversation. */}
-          <path d="M204 48 H236" stroke="var(--color-brand)" strokeWidth="2" strokeLinecap="round" />
+          <path
+            className="ci-flow"
+            d="M204 48 H236"
+            pathLength={100}
+            stroke="var(--color-brand)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
           <path
             d="M228 40 236 48 228 56"
             stroke="var(--color-brand)"

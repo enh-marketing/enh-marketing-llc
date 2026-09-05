@@ -74,6 +74,20 @@ export function AgentScreens({
 
   const staged = enhanced && !reduced;
 
+  /** Scroll to the middle of a service's own slice of the track. Six viewports
+   *  of scrolling is a lot to ask of someone who wants the fourth one. */
+  const jump = (i: number) => {
+    const el = track.current;
+    if (!el) return;
+    /* getBoundingClientRect, not offsetTop: the section is position:relative, so
+       it is the track's offsetParent and offsetTop measures from the section
+       rather than from the page. That silently lands the reader on the wrong
+       service. */
+    const start = el.getBoundingClientRect().top + window.scrollY;
+    const run = el.getBoundingClientRect().height - window.innerHeight;
+    window.scrollTo({ top: start + ((i + 0.5) / items.length) * run, behavior: reduced ? "auto" : "smooth" });
+  };
+
   return (
     <section id={id} data-section={label} className="relative">
       <Container className="relative pt-14 sm:pt-16">
@@ -92,7 +106,7 @@ export function AgentScreens({
           <div className="sticky top-0 flex h-screen items-center overflow-hidden">
             <Container className="w-full">
               <div className="grid items-center gap-x-14 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)]">
-                <Index items={items} active={active} label={label} />
+                <Index items={items} active={active} label={label} onJump={jump} />
                 <div className="relative">
                   <AgentScreen screen={screens[active]} step={active} />
                 </div>
@@ -137,10 +151,12 @@ function Index({
   items,
   active,
   label,
+  onJump,
 }: {
   items: PinnedItem[];
   active: number;
   label: string;
+  onJump: (i: number) => void;
 }) {
   const s = items[active];
   return (
@@ -151,31 +167,37 @@ function Index({
       </p>
       <ol className="mb-9 border-t border-line">
         {items.map((it, i) => (
-          <li
-            key={it.no}
-            className={cn(
-              "flex items-center gap-4 border-b border-line py-2.5 transition-colors duration-500",
-              i === active ? "text-snow" : "text-ash",
-            )}
-          >
-            <span className="font-display shrink-0 text-[0.625rem] font-bold tabular-nums">
-              {it.no}
-            </span>
-            <span
-              className={cn(
-                "font-display text-[0.8125rem] font-bold uppercase leading-tight transition-colors duration-500",
-                i === active ? "text-snow" : "text-ash",
-              )}
+          <li key={it.no} className="border-b border-line">
+            <button
+              type="button"
+              onClick={() => onJump(i)}
+              aria-current={i === active ? "true" : undefined}
+              className="group flex w-full items-center gap-4 py-2.5 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
-              {it.title}
-            </span>
-            <span
-              aria-hidden
-              className={cn(
-                "ml-auto h-0.5 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                i === active ? "w-14 bg-brand" : "w-4 bg-line",
-              )}
-            />
+              <span
+                className={cn(
+                  "font-display shrink-0 text-[0.625rem] font-bold tabular-nums transition-colors duration-500 motion-reduce:transition-none",
+                  i === active ? "text-brand-text" : "text-ash group-hover:text-brand-text",
+                )}
+              >
+                {it.no}
+              </span>
+              <span
+                className={cn(
+                  "font-display text-[0.8125rem] font-bold uppercase leading-tight transition-colors duration-500 motion-reduce:transition-none",
+                  i === active ? "text-snow" : "text-ash group-hover:text-snow",
+                )}
+              >
+                {it.title}
+              </span>
+              <span
+                aria-hidden
+                className={cn(
+                  "ml-auto h-0.5 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
+                  i === active ? "w-14 bg-brand" : "w-4 bg-line group-hover:w-9 group-hover:bg-ash",
+                )}
+              />
+            </button>
           </li>
         ))}
       </ol>

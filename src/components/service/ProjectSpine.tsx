@@ -112,6 +112,25 @@ function Step({
           )}
         />
 
+        {/* The project is running from step one, whether or not the agent is
+            carrying anything yet. One packet per segment says so. */}
+        <svg
+          aria-hidden
+          viewBox="0 0 4 100"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute inset-y-0 right-0 h-full w-1"
+        >
+          <path
+            className="ci-flow"
+            d="M2 0 V100"
+            pathLength={100}
+            stroke="var(--color-brand)"
+            strokeWidth={i < liveAt ? 1.6 : 3}
+            fill="none"
+            style={{ animationDelay: `${(i * 0.45).toFixed(2)}s` }}
+          />
+        </svg>
+
         {opening && (
           <motion.svg
             viewBox="0 0 100 100"
@@ -149,6 +168,28 @@ function Step({
         )}
 
         {live && (
+          <>
+            {/* Live means live: a beam runs the open channel for as long as the
+                section is on screen, on the site's own looping vocabulary. */}
+            <svg
+              aria-hidden
+              viewBox="0 0 20 54"
+              preserveAspectRatio="none"
+              className="pointer-events-none absolute inset-0 h-full w-full"
+            >
+              <rect
+                className="ci-scan-y"
+                x="0"
+                y="-10"
+                width="20"
+                height="10"
+                fill="var(--color-brand)"
+                fillOpacity="0.22"
+              />
+            </svg>
+          </>
+        )}
+        {live && (
           <motion.span
             className="absolute inset-0 bg-ash/[0.16]"
             initial={reduced ? false : { opacity: 0 }}
@@ -173,15 +214,15 @@ function Step({
         animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
         transition={{ duration: 0.55, ease: EASE }}
         className={cn(
-          "min-w-0 flex-1 border-t border-line py-8 sm:py-10",
+          "group min-w-0 flex-1 border-t border-line py-8 transition-colors duration-500 motion-reduce:transition-none sm:py-10",
           last && "border-b",
         )}
       >
         <div className="flex items-baseline gap-4">
           <span
             className={cn(
-              "font-display shrink-0 text-[0.625rem] font-bold tabular-nums",
-              i >= liveAt ? "text-brand-text" : "text-ash",
+              "font-display shrink-0 text-[0.625rem] font-bold tabular-nums transition-colors duration-500 motion-reduce:transition-none",
+              i >= liveAt ? "text-brand-text" : "text-ash group-hover:text-brand-text",
             )}
           >
             {s.no}
@@ -189,6 +230,10 @@ function Step({
           <h3 className="font-display text-[clamp(1.15rem,2.4vw,1.75rem)] font-extrabold uppercase leading-[1.1] text-snow">
             {s.title}
           </h3>
+          <span
+            aria-hidden
+            className="ml-auto hidden h-px shrink-0 bg-line transition-all duration-500 group-hover:w-16 group-hover:bg-brand motion-reduce:transition-none sm:block sm:w-8"
+          />
         </div>
 
         {s.body && (
@@ -216,8 +261,10 @@ function Step({
                 animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
                 transition={{ duration: 0.4, ease: EASE, delay: 0.2 + k * 0.07 }}
                 className={cn(
-                  "rounded-full border px-3.5 py-1.5 text-[0.8125rem] leading-none",
-                  i >= liveAt ? "border-brand/45 text-snow" : "border-line text-fog",
+                  "cursor-default rounded-full border px-3.5 py-1.5 text-[0.8125rem] leading-none transition-colors duration-300 motion-reduce:transition-none",
+                  i >= liveAt
+                    ? "border-brand/45 text-snow hover:border-brand hover:bg-brand/[0.06]"
+                    : "border-line text-fog hover:border-ash hover:text-snow",
                 )}
               >
                 {c}

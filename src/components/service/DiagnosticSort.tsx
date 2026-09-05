@@ -93,8 +93,22 @@ export function DiagnosticSort({
                   key={q}
                   className="group flex items-baseline gap-3 border-b border-line py-3.5 pr-6 transition-colors duration-500 hover:bg-ink-2"
                 >
-                  <span className="font-display shrink-0 pl-1 text-[0.625rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text">
-                    {String(i + 1).padStart(2, "0")}
+                  <span className="relative flex shrink-0 items-baseline gap-2 pl-1">
+                    {/* The review is a pass over all of them, so the light walks
+                        the register one row at a time. */}
+                    <svg aria-hidden viewBox="0 0 8 8" className="h-1.5 w-1.5 self-center">
+                      <circle
+                        className="ci-blink"
+                        cx="4"
+                        cy="4"
+                        r="3.4"
+                        fill="var(--color-brand)"
+                        style={{ animationDelay: `${((i * 6) / criteria.length).toFixed(2)}s` }}
+                      />
+                    </svg>
+                    <span className="font-display text-[0.625rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text motion-reduce:transition-none">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
                   </span>
                   <span className="text-[0.9375rem] leading-snug text-fog transition-colors duration-500 group-hover:text-snow">
                     {q}
@@ -109,6 +123,24 @@ export function DiagnosticSort({
             {/* The stem, and the two arms. Drawn with borders so the corners
                 stay square at every container width. */}
             <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-14 hidden h-14 lg:block">
+              {/* Conversations arriving at the diagnostic, continuously. This is
+                  what ci-flow was written for; the path carries pathLength="100"
+                  so the packet is a percentage of the stem however tall it is. */}
+              <svg
+                aria-hidden
+                viewBox="0 0 4 28"
+                preserveAspectRatio="none"
+                className="pointer-events-none absolute left-1/2 top-0 h-7 w-1 -translate-x-1/2"
+              >
+                <path
+                  className="ci-flow"
+                  d="M2 0 V28"
+                  pathLength={100}
+                  stroke="var(--color-brand)"
+                  strokeWidth="2.4"
+                  fill="none"
+                />
+              </svg>
               <motion.span
                 className="absolute left-1/2 top-0 h-7 w-0.5 -translate-x-1/2 origin-top bg-brand"
                 initial={reduced ? false : { scaleY: 0 }}
@@ -182,12 +214,34 @@ function Arm({
       initial={reduced ? false : { opacity: 0, y: 12 }}
       animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
       transition={{ duration: 0.5, ease: EASE, delay }}
-      className={`rounded-[1.25rem] border-2 px-6 py-7 sm:px-8 sm:py-8 ${
-        brand ? "border-brand/45 bg-ink-3" : "border-line bg-ink-2"
+      className={`group relative overflow-hidden rounded-[1.25rem] border-2 px-6 py-7 transition-colors duration-500 motion-reduce:transition-none sm:px-8 sm:py-8 ${
+        brand
+          ? "border-brand/45 bg-ink-3 hover:border-brand/70"
+          : "border-line bg-ink-2 hover:border-ash/60"
       }`}
     >
+      {/* Only the side the agent takes is live. The other one is people, and
+          people are not a running process. */}
+      {brand && (
+        <svg
+          aria-hidden
+          viewBox="0 0 200 100"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute inset-0 h-full w-full"
+        >
+          <rect
+            className="ci-scan-x"
+            x="-4"
+            y="0"
+            width="4"
+            height="100"
+            fill="var(--color-brand)"
+            fillOpacity="0.1"
+          />
+        </svg>
+      )}
       <p
-        className={`font-display max-w-[18ch] text-[clamp(1.15rem,2.3vw,1.75rem)] font-extrabold uppercase leading-[1.12] ${
+        className={`font-display relative max-w-[18ch] text-[clamp(1.15rem,2.3vw,1.75rem)] font-extrabold uppercase leading-[1.12] ${
           brand ? "text-brand" : "text-snow"
         }`}
       >
