@@ -11,10 +11,10 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { ReelHero } from "@/components/service/ReelHero";
-import { ProduceSpecimens } from "@/components/service/ProduceSpecimens";
-import { OnAirRelay } from "@/components/service/OnAirRelay";
-import { ReviewBench } from "@/components/service/ReviewBench";
-import { ProductionTimeline } from "@/components/service/ProductionTimeline";
+import { PinnedExplorer } from "@/components/service/PinnedExplorer";
+import { StageTimeline } from "@/components/service/StageTimeline";
+import { ProcessLanes } from "@/components/service/ProcessLanes";
+import { Rise } from "@/components/fx/Reveal";
 import { ScopeManifest } from "@/components/service/ScopeManifest";
 import { CreativeMark } from "@/components/service/CreativeMark";
 import { FaqList } from "@/components/service/FaqList";
@@ -52,45 +52,75 @@ export function AiCreativeProductionPage() {
             what each example must state. Nothing is rendered for it and nothing
             is invented. Supply approved examples and the section goes in here. */}
 
-        {/* Four outputs as four specimens: honest artboards, not fake ads. See ProduceSpecimens. */}
-        <section id="produce" data-section="What We Produce" className="relative overflow-x-clip py-20 sm:py-28">
-          <Container className="relative">
-            <SectionHeader index="01" title={c.produce.title} strokeTitle={c.produce.strokeTitle} markNode={<CreativeMark variant="frames" />} className="mb-12" />
-            <ProduceSpecimens items={c.produce.items} />
-          </Container>
-        </section>
+        {/* The four outputs, on the site's own formats pattern: one named
+            selector, one drawing, one panel. Same component the video pages use
+            for "The Explainer Videos Businesses Use". */}
+        <PinnedExplorer
+          id="produce"
+          label="What We Produce"
+          index="01"
+          title={c.produce.title}
+          strokeTitle={c.produce.strokeTitle}
+          mark={{ variant: "ecosystem", label: "Four kinds of output" }}
+          items={c.produce.items}
+          diagram={{ kind: "adformat" }}
+          diagramSide="left"
+        />
 
-        {/* Why volume: one version tires, the next takes over. See OnAirRelay. */}
+        {/* Why volume, in the document's own two paragraphs: the claim, the
+            four things one direction adapts into, and the caveat on the site's
+            own Caveat component. */}
         <section id="volume" data-section="Built for Campaign Volume" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="02" title={c.volume.title} strokeTitle={c.volume.strokeTitle} markNode={<CreativeMark variant="relay" />} className="mb-12" />
-            <OnAirRelay lead={c.volume.lead} caveat={c.volume.caveat} labels={c.volume.labels} />
+            <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
+              <Rise>
+                <p className="max-w-[56ch] text-base leading-relaxed text-fog">{c.volume.lead}</p>
+              </Rise>
+              <Rise delay={0.08}>
+                <p className="font-display text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-brand-text">
+                  {c.volume.labels.direction}
+                </p>
+                <ul className="mt-4 grid gap-px overflow-hidden rounded-[1.25rem] border border-line bg-line sm:grid-cols-2">
+                  {c.volume.labels.adapted.map((n) => (
+                    <li key={n} className="bg-ink-2 px-5 py-4 transition-colors duration-500 hover:bg-ink-3">
+                      <span className="font-display text-[0.9375rem] font-bold uppercase text-snow">{n}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Rise>
+            </div>
           </Container>
         </section>
 
-        {/* Five review stages, drawn as the shape the material takes. See ReviewWaist. Lifted
-            to its own chapter treatment: this is the page's differentiator. */}
-        <section id="review" data-section="Quality and Human Review" className="relative overflow-x-clip py-20 sm:py-24">
-          <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
-            <div
-              className="absolute inset-0 opacity-[0.05]"
-              style={{ backgroundImage: "linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)", backgroundSize: "88px 88px", maskImage: "radial-gradient(ellipse at 50% 30%, black, transparent 76%)" }}
-            />
-            <div className="aurora-b absolute left-1/2 top-[8%] h-[30vw] w-[30vw] -translate-x-1/2 rounded-full bg-brand/[0.07] blur-[150px]" />
-          </div>
-          <Container className="relative">
-            <SectionHeader index="03" title={c.review.title} strokeTitle={c.review.strokeTitle} markNode={<CreativeMark variant="strip" />} className="mb-12" />
-            <ReviewBench items={c.review.items} />
-          </Container>
-        </section>
+        {/* Five passes over one asset, on the site's own stage timeline. The
+            axis ends are the first and last stage's own titles, so no duration
+            the document does not state is implied. */}
+        <StageTimeline
+          id="review"
+          label="Quality and Human Review"
+          index="03"
+          title={c.review.title}
+          strokeTitle={c.review.strokeTitle}
+          stages={c.review.items}
+          axis={["Approved direction", "Final variants"]}
+          mark={{ variant: "progression", label: "Five stages of review" }}
+        />
 
-        {/* Six steps on the reel's own timeline; your two approvals are the holds. See ProductionTimeline. */}
-        <section id="process" data-section="How the Work Moves" className="relative overflow-x-clip py-14 sm:py-16">
-          <Container className="relative">
-            <SectionHeader index="04" title={c.process.title} strokeTitle={c.process.strokeTitle} markNode={<CreativeMark variant="lanes" />} className="mb-12" />
-            <ProductionTimeline items={c.process.items} />
-          </Container>
-        </section>
+        {/* Six steps in two lanes, on the site's own ProcessLanes. The lane
+            per step is read from that step's own sentence: the client acts at
+            three ("shared for approval") and five ("Your team checks"). */}
+        <ProcessLanes
+          id="process"
+          label="How the Work Moves"
+          index="04"
+          title={c.process.title}
+          strokeTitle={c.process.strokeTitle}
+          stages={c.process.items}
+          laneOurs="ENH Marketing"
+          laneYours="Your team"
+          lanes={c.process.items.map((s) => (s.actor === "You" ? 1 : 0))}
+        />
 
         {/* One-off or monthly; included inside the bundle, exclusions tethered outside. See ScopeManifest. */}
         <section id="monthly" data-section="Monthly AI Creative Production" className="relative overflow-x-clip py-14 sm:py-16">
