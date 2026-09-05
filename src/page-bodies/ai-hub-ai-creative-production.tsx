@@ -11,7 +11,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { ReelHero } from "@/components/service/ReelHero";
-import { ProduceShowcase } from "@/components/service/ProduceShowcase";
+import { ProduceSpecimens } from "@/components/service/ProduceSpecimens";
 import { OnAirRelay } from "@/components/service/OnAirRelay";
 import { ReviewBench } from "@/components/service/ReviewBench";
 import { ProductionTimeline } from "@/components/service/ProductionTimeline";
@@ -52,11 +52,11 @@ export function AiCreativeProductionPage() {
             what each example must state. Nothing is rendered for it and nothing
             is invented. Supply approved examples and the section goes in here. */}
 
-        {/* Four outputs, four different stages. See ProduceShowcase. */}
-        <section id="produce" data-section="What We Produce" className="relative overflow-x-clip bg-void py-20 sm:py-28">
+        {/* Four outputs as four specimens: honest artboards, not fake ads. See ProduceSpecimens. */}
+        <section id="produce" data-section="What We Produce" className="relative overflow-x-clip py-20 sm:py-28">
           <Container className="relative">
             <SectionHeader index="01" title={c.produce.title} strokeTitle={c.produce.strokeTitle} markNode={<CreativeMark variant="frames" />} className="mb-12" />
-            <ProduceShowcase items={c.produce.items} />
+            <ProduceSpecimens items={c.produce.items} />
           </Container>
         </section>
 
