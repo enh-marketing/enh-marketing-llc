@@ -61,6 +61,22 @@ export const narrative = {
 
 export type Capability = { no: string; title: string; body: string; glyph?: GlyphVariant };
 
+/** One service's screen.
+ *
+ *  Five of the six bodies end in a list of nouns, and those nouns are what each
+ *  screen is built from: the six stages of a build, the seven signals a
+ *  personalisation rule may use, the seven kinds of live value, the four parts
+ *  of a readable structure, the four things carried through a migration. Every
+ *  label below is a verbatim clause of its own service's paragraph. Nothing is
+ *  written for the screen. */
+export type Screen = {
+  kind: "build" | "improve" | "rules" | "live" | "readable" | "migrate";
+  /** What the screen's own controls are labelled with, verbatim, in order. */
+  parts: string[];
+  /** The clause the drawing was read from, printed with it. */
+  cite: string;
+};
+
 /** "Our AI Website Development Services". Six, each a single short paragraph in
  *  the source, which is why they run as a card set rather than a selector: there
  *  is no second paragraph to reveal. */
@@ -105,6 +121,60 @@ export const services = {
       glyph: "index",
     },
   ] as Capability[],
+  /** One screen per service, in items order. */
+  screens: [
+    {
+      kind: "build",
+      parts: ["Planning", "Design", "Development", "Content migration", "Testing", "Launch"],
+      cite: "businesses that need a new online presence",
+    },
+    {
+      kind: "improve",
+      parts: ["Within the existing platform"],
+      cite: "added without rebuilding the entire website",
+    },
+    {
+      kind: "rules",
+      parts: [
+        "Location",
+        "Language",
+        "Industry",
+        "Referral source",
+        "Campaign",
+        "Previous visits",
+        "Client status",
+      ],
+      cite: "based on what is known about the visitor",
+    },
+    {
+      kind: "live",
+      parts: [
+        "Pricing",
+        "Stock",
+        "Availability",
+        "Bookings",
+        "Project progress",
+        "Course capacity",
+        "Opening hours",
+      ],
+      cite: "current information from your existing systems",
+    },
+    {
+      kind: "readable",
+      parts: [
+        "Clear page structures",
+        "Structured data",
+        "Consistent business information",
+        "Access for relevant crawlers",
+      ],
+      cite: "search engines and supported AI systems can access and understand",
+    },
+    {
+      kind: "migrate",
+      parts: ["Existing URLs", "Content", "Tracking", "Search visibility"],
+      cite: "considered during the migration",
+    },
+  ] as Screen[],
 };
 
 /** "The Main Elements of an Intelligent Website". Six elements, and then a
@@ -197,6 +267,14 @@ export const process = {
       body: "After launch, we monitor the website through the managed service. We also review the connected features when your systems or business requirements change.",
     },
   ] as Stage[],
+  /** Zero-based index of the step that decides the shape of everything after
+   *  it: "whether the existing website can support them". Improve, or rebuild.
+   *  It is the same question the whole page keeps returning to. */
+  forkAt: 1,
+  /** The two outcomes, in the document's own words, from "We can design and
+   *  build a new website, improve an existing one" and FAQ 2's "Bigger changes
+   *  may require new templates or a rebuild". */
+  fork: ["Improve an existing one", "New templates or a rebuild"],
 };
 
 /** "Managed Monitoring and Support". Six things covered, and then the sentence

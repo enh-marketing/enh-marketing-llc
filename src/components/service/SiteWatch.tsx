@@ -71,10 +71,27 @@ export function SiteWatch({
               {items.map((entry, i) => (
                 <li
                   key={entry}
-                  className="group flex items-baseline gap-4 border-b border-line py-4 transition-colors duration-500 hover:bg-ink-2"
+                  className="group flex items-center gap-4 border-b border-line py-4 transition-colors duration-500 hover:bg-ink-2"
                 >
-                  <span className="font-display shrink-0 text-[0.625rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text">
-                    {String(i + 1).padStart(2, "0")}
+                  {/* Monitoring is a pass over all of them, so the light walks
+                      the register one row at a time. The ring stays, because
+                      ci-blink rests at opacity 0 and would otherwise vanish
+                      under prefers-reduced-motion. */}
+                  <span className="flex w-10 shrink-0 items-center gap-2 self-center">
+                    <svg aria-hidden viewBox="0 0 8 8" className="h-2 w-2 shrink-0">
+                      <circle cx="4" cy="4" r="3.2" fill="none" stroke="var(--color-brand)" strokeWidth="1.4" />
+                      <circle
+                        className="ci-blink"
+                        cx="4"
+                        cy="4"
+                        r="3.2"
+                        fill="var(--color-brand)"
+                        style={{ animationDelay: `${((i * 6) / items.length).toFixed(2)}s` }}
+                      />
+                    </svg>
+                    <span className="font-display text-[0.625rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text motion-reduce:transition-none">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
                   </span>
                   <span className="text-[0.9375rem] leading-snug text-fog transition-colors duration-500 group-hover:text-snow">
                     {entry}

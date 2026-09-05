@@ -10,9 +10,9 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { PageSwap } from "@/components/service/PageSwap";
 import { Narrative } from "@/components/service/Narrative";
-import { CapabilityCarousel } from "@/components/service/CapabilityCarousel";
-import { SiteLayers } from "@/components/service/SiteLayers";
-import { StageTimeline } from "@/components/service/StageTimeline";
+import { SiteScreens } from "@/components/service/SiteScreens";
+import { SiteStack } from "@/components/service/SiteStack";
+import { SiteRun } from "@/components/service/SiteRun";
 import { SiteWatch } from "@/components/service/SiteWatch";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
@@ -55,21 +55,23 @@ export function IntelligentWebPage() {
           outro={c.narrative.outro}
         />
 
-        {/* Six services, each a single short paragraph in the source. There is
-            no second paragraph to reveal, so they run on the site's own card
-            stack rather than a selector: nothing is hidden behind a click. */}
-        <CapabilityCarousel
+        {/* Six services, each drawn as what it does to a website, held while
+            the scroll moves through them. Every label on every screen is a
+            verbatim clause of that service's own paragraph. */}
+        <SiteScreens
           id="services"
           label="Our AI Website Development Services"
           index="01"
           title={c.services.title}
           strokeTitle={c.services.strokeTitle}
           items={c.services.items}
+          screens={c.services.screens}
         />
 
-        {/* Six elements as the layers of one site, and the seventh heading set
-            apart because it is the rule that decides which layers you get. */}
-        <SiteLayers
+        {/* Six elements as the layers of one site, drawn as a stack with
+            depth rather than a column of rows, and the seventh heading set
+            apart because it decides which layers you get. */}
+        <SiteStack
           id="elements"
           label="The Main Elements of an Intelligent Website"
           index="02"
@@ -79,17 +81,18 @@ export function IntelligentWebPage() {
           depends={c.elements.depends}
         />
 
-        {/* Five steps on the site's own timeline. The axis ends are the first
-            and last stage's own titles, so no duration the document does not
-            state is implied. */}
-        <StageTimeline
+        {/* Five steps, drawn around the second: whether the existing website
+            can support the features is the question the whole page returns to,
+            and a run of five equal rows buries it. */}
+        <SiteRun
           id="process"
           label="How the Project Works"
           index="03"
           title={c.process.title}
           strokeTitle={c.process.strokeTitle}
           stages={c.process.items}
-          axis={["Website Diagnostic", "Monitoring and Support"]}
+          forkAt={c.process.forkAt}
+          fork={c.process.fork}
         />
 
         {/* The managed service, and the sentence about who updates content,
