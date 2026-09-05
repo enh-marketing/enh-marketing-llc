@@ -74,6 +74,42 @@ Looping SVG classes live in `globals.css` under the Campaign Intelligence block:
 - `.ci-draw` and `.ci-flow` set `vector-effect: none` on purpose. Under `non-scaling-stroke` Chromium measures the dash in screen pixels, so any path longer than 100px renders as a dash, a gap and a stub. Their stroke widths are therefore in viewBox units.
 - `.ci-blink` sets `opacity` as a stylesheet rule, which beats an `opacity="0.1"` attribute. For a tinted wash use `.ci-blink-soft` with `fillOpacity`.
 
+## Entrance motion is not motion
+
+Measured across `/ai-hub/ai-automation` (approved) and the first build of the
+three AI Hub pages (rejected as "the whole page is motionless"):
+
+| per section | approved | rejected |
+|---|---|---|
+| elements with a CSS transition | 30 to 45 | 0 |
+| animations still running at rest | 13 to 27 | 0 |
+| elements with a hover state | 16 to 33 | 0 |
+
+Four sections had **literally zero** of all three. Every one of them animated on
+entry and then stopped, which reads as a static page to anyone who arrives after
+the fade has finished, and as a broken one to anyone who scrolls back up.
+
+The fix is not more entrances. It is the two things the approved pages have and
+entrance-only sections do not:
+
+1. **Something still running.** Use the `ci-*` classes in this file, not a
+   bespoke loop: they are already correct about `vector-effect`, they already
+   stop under `prefers-reduced-motion`, and they register in `getAnimations()`
+   where a motion/react `repeat: Infinity` on a transform sometimes does not.
+   `ci-blink` walks a light along a strip when each tick shares a duration and
+   takes a delay of duration/count. `ci-flow` sends a packet down any path that
+   carries `pathLength="100"`. `ci-scan-x` and `ci-scan-y` sweep a beam, and
+   their travel is in **user units**, so they belong inside a stretched viewBox
+   rather than on an HTML box.
+2. **The hover vocabulary**, applied to every row, chip and card. It is set out
+   under "The interaction vocabulary" above and it is not optional decoration:
+   it is most of the transition count on every approved page.
+
+A hover state on something that cannot be interacted with is a lie. Where a
+section wanted hover but had no action, the fix was to give it one: the six
+services became a clickable index that jumps the scroll to its own slice of the
+track, which is worth having anyway in a section six viewports tall.
+
 ## Layout
 
 - `Container` holds a 1240px measure at `xl`.
@@ -85,7 +121,25 @@ Looping SVG classes live in `globals.css` under the Campaign Intelligence block:
 
 Shared: `ServiceHero`, `SectionHeader`, `CtaBand`, `GrowthCta`, `FaqList`, `StickyCTABar`, `Work`, `Insights`, `TrustStrip`, `LeadForm`, `Crosslink` (renders unbuilt routes as plain text; a link to a 404 is worse than no link).
 
-Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, pinned chapter with an index.
+Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, pinned chapter with an index, scope boundary with tethers, room plans, curriculum run, contents pack, switchback, unequal runs, criteria register with a fork, launch profile, drift sandwich, directional joins, layer stack, watched register.
+
+The last twelve are the AI Hub pages. Three of them are worth naming because
+the reason they work is transferable:
+
+- **Room plans** (AI Workshops, formats). Four formats that differ only in who
+  is in the room are drawn as four floor plans. Furniture and orientation only,
+  never seats, because FAQ 8 declines to give a headcount.
+- **Launch profile** (Conversational AI, process). Six steps drawn as how much
+  the agent carries: flat, a ramp at the step whose own sentence says
+  "gradually", then level and open. The stations are HTML positioned on the
+  path's own y values, so nothing drifts off the line.
+- **Unequal runs** (AI Workshops, experience). Two rails of different length.
+  The document draws the comparison itself; the length is the whole argument.
+
+Two hero visuals also earned their shape from one sentence of the banner rather
+than from the service category: `HandoverThread` draws the boundary because the
+banner sells the boundary, and `PageSwap` keeps its frame fixed because
+personalisation is a rule, not a second website.
 
 Withdrawn, and not to be revived: stepped boundary, narrowing measure, measured type silhouette, staged canvas. All four were rejected as "just a list", and the reason is worth keeping. Each changed the ornament and kept the skeleton: one item per row, copy on one side, a picture on the other. A stepped hairline, a tinted bed, a measured outline and a pinned canvas are four coats on the same list.
 
@@ -109,4 +163,11 @@ The rules this yields outrank any amount of conceptual cleverness:
 6. **Do not give one section its own theme.** A `chapter-dark` class forced this section to near-black in both themes, so the light theme ran white, cut to #101010 for one section, then cut back. Nothing else on the site does that, and it read as a seam rather than a chapter. A section is set apart by scale, pacing and structure, not by opting out of the palette.
 7. **A drawing per subject, not one drawing per section.** Seven services need seven pictures. A single drawing that only changes state cannot depict a crawler meeting robots.txt AND a page that answers AND markup matching what is visible: it collapses into the one abstract shape all seven have in common, which is what "same random diagram with no meaning" named. Each drawing answers one question about its own service, in its own copy's words.
 8. **`useEnhanced` reports false on the first paint**, by design, so server and client agree. An effect that reads a ref only rendered in the enhanced branch must list the enhanced flag in its dependencies, or it runs once against a null ref and never again.
-9. **A GSAP `from` tween renders its start state on creation.** A timeline waiting on a ScrollTrigger that never fires (deep link, restored scroll, refresh mid-page) leaves its targets at `scaleX(0)` permanently. Pass `immediateRender: false` on every entrance tween.
+9. **`pathLength` and `vector-effect: non-scaling-stroke` do not mix.** motion's
+   `pathLength` animates `stroke-dasharray`, and under `non-scaling-stroke`
+   Chromium measures that dash in screen pixels, so any path longer than 100px
+   renders as a dash, a gap and a stub. This is the same trap already recorded
+   for `.ci-draw` and `.ci-flow`, and it caught `ControlledLaunch` too. Either
+   drop the vector-effect or, better, do not animate the path: give the motion
+   to the stations on it, which is more legible anyway.
+10. **A GSAP `from` tween renders its start state on creation.** A timeline waiting on a ScrollTrigger that never fires (deep link, restored scroll, refresh mid-page) leaves its targets at `scaleX(0)` permanently. Pass `immediateRender: false` on every entrance tween.
