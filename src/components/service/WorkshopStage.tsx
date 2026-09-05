@@ -8,68 +8,34 @@ import { useEnhanced, usePrefersReducedMotion } from "@/lib/useEnhanced";
 import type { Format } from "@/content/services/ai-workshops-and-training";
 import { cn } from "@/lib/cn";
 
-/** Scroll length per room. The stage holds for the rest of the track. */
+/** Scroll length per format. The stage holds for the rest of the track. */
 const VH_PER = 95;
 
-/* ---------------------------------------------------------- the room box ----
+/** The four workshop formats, each drawn as what happens in it, travelled
+ *  through sideways while the section holds.
  *
- *  One-point perspective. Room space is x from -1 (left wall) to 1 (right) and
- *  z from 0 (nearest the viewer) to 1 (against the back wall); the two helpers
- *  below project that onto the viewBox, so furniture is placed in the room and
- *  the perspective is arithmetic rather than eyeballed.
+ *  WHY NOT FOUR ROOMS. The version before this drew all four as the same room in
+ *  perspective with the furniture rearranged. The room had presence, but it was
+ *  the constant and the differences between the four were a few tables moved
+ *  around: cover the titles and you could not tell them apart, which is the
+ *  whole test. The formats do not differ by where they are held. They differ by
+ *  what happens.
  *
- *  An earlier version of this section drew four flat top-down plans at
- *  thumbnail size inside four cards. They were honest and completely without
- *  presence. A room you are standing in the back of is the same information
- *  with a body. */
-const W = 720;
-const H = 440;
-/** Floor edges: full width at the front, narrowed to the back wall. */
-const FRONT_HALF = 348;
-const BACK_HALF = 152;
-const FRONT_Y = 436;
-const BACK_Y = 262;
-const CENTRE = W / 2;
-/** Back wall top, and the ceiling line at the front. */
-const BACK_TOP = 96;
-const FRONT_TOP = 8;
-
-const halfWidth = (z: number) => FRONT_HALF - z * (FRONT_HALF - BACK_HALF);
-const px = (x: number, z: number) => CENTRE + x * halfWidth(z);
-const py = (z: number) => FRONT_Y - z * (FRONT_Y - BACK_Y);
-
-/** A rectangle of floor, in perspective. */
-function quad(x0: number, x1: number, z0: number, z1: number) {
-  return `${px(x0, z0)},${py(z0)} ${px(x1, z0)},${py(z0)} ${px(x1, z1)},${py(z1)} ${px(x0, z1)},${py(z1)}`;
-}
-
-/** A solid standing on the floor: the same footprint, lifted by `h` viewBox
- *  units at the front and proportionally less at the back, so tabletops read as
- *  tabletops rather than as rugs. */
-function solid(x0: number, x1: number, z0: number, z1: number, h: number) {
-  const lift = (z: number) => h * (1 - z * 0.42);
-  return {
-    top: `${px(x0, z0)},${py(z0) - lift(z0)} ${px(x1, z0)},${py(z0) - lift(z0)} ${px(x1, z1)},${py(z1) - lift(z1)} ${px(x0, z1)},${py(z1) - lift(z1)}`,
-    front: `${px(x0, z0)},${py(z0) - lift(z0)} ${px(x1, z0)},${py(z0) - lift(z0)} ${px(x1, z0)},${py(z0)} ${px(x0, z0)},${py(z0)}`,
-  };
-}
-
-/** The four workshop formats, each drawn as the room it is held in, and the
- *  four rooms travelled through sideways while the section holds.
+ *  So each gets its own object, its own camera and its own composition. A half
+ *  day is a demonstration, seen head on: an output on a board with the fault in
+ *  it marked, because the session is about "what current AI tools can do and
+ *  where they commonly fail". A full day is hands on a table, seen from
+ *  overhead, producing the shortlist. A leadership session is a judgement on
+ *  proposals, seen as the proposals themselves, because that session reviews
+ *  "costs, operational requirements and risks" and exists to "challenge
+ *  unrealistic claims". A multi-session programme is a period, seen as the
+ *  schedule, because its subject is the working gaps between sittings.
  *
- *  WHY A ROOM, AND WHY IN PERSPECTIVE. The four formats are not four products.
- *  They are the same subject at four shapes of session, and what separates them
- *  is who is in the room and how the room is laid out: a half day faces a board,
- *  a full day breaks into tables and works, a leadership session is one table,
- *  a multi-session programme is the same room returned to. Drawn flat and small
- *  that reads as four diagrams. Drawn as a room you are standing at the back of,
- *  it reads as a place you would be sitting in, which is what is being sold.
- *
- *  NO PEOPLE, NO HEADCOUNT. The document declines to give one: FAQ 8 says only
- *  that "hands-on workshops work best with smaller groups". So the rooms hold
- *  furniture, a board and orientation, and nothing in them can be counted. The
- *  clause each arrangement was read from is printed with it, so the picture is
- *  checkable against the source.
+ *  NO PEOPLE, NO HEADCOUNT, NO CONTENT. The document declines to give a number:
+ *  FAQ 8 says only that "hands-on workshops work best with smaller groups". And
+ *  no drawing writes an AI output, names a use case or scores a proposal, since
+ *  the document writes none. Text is bars, marks are marks. The clause each
+ *  drawing was read from is printed with it.
  *
  *  THE STAGE HOLDS, THE PAGE DOES NOT STOP. A tall track with a sticky stage and
  *  a track that travels sideways, not a GSAP pin: the reader keeps their scroll.
@@ -177,7 +143,7 @@ export function WorkshopStage({
               {items.map((f, i) => (
                 <div key={f.no} className="w-screen shrink-0 px-6 sm:px-10">
                   <div className="mx-auto grid max-w-[1320px] items-center gap-x-14 lg:grid-cols-[minmax(0,1.32fr)_minmax(0,0.85fr)]">
-                    <Room kind={f.room} on={i === active} />
+                    <Scene kind={f.scene} on={i === active} />
                     <div>
                       <p className="text-[0.9375rem] leading-relaxed text-fog">{f.body}</p>
                       <p className="mt-4 border-l-2 border-brand/40 pl-4 text-[0.9375rem] leading-relaxed text-fog">
@@ -185,7 +151,7 @@ export function WorkshopStage({
                       </p>
                       <p className="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                         <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
-                          Room read from
+                          Read from
                         </span>
                         <span className="font-display text-[0.9375rem] font-bold uppercase leading-tight text-brand-text">
                           {f.cite}
@@ -210,7 +176,7 @@ export function WorkshopStage({
                   {f.title}
                 </h3>
                 <div className="mt-6">
-                  <Room kind={f.room} on still />
+                  <Scene kind={f.scene} on />
                 </div>
                 <p className="mt-6 text-[0.9375rem] leading-relaxed text-fog">{f.body}</p>
                 <p className="mt-4 border-l-2 border-brand/40 pl-4 text-[0.9375rem] leading-relaxed text-fog">
@@ -218,7 +184,7 @@ export function WorkshopStage({
                 </p>
                 <p className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                   <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
-                    Room read from
+                    Read from
                   </span>
                   <span className="font-display text-[0.9375rem] font-bold uppercase leading-tight text-brand-text">
                     {f.cite}
@@ -233,238 +199,351 @@ export function WorkshopStage({
   );
 }
 
-/* --------------------------------------------------------------- the room -- */
 
-/** One room, seen from the back. Same box every time, so only the arrangement
- *  differs, which is the only thing the document distinguishes. */
-function Room({ kind, on, still = false }: { kind: Format["room"]; on: boolean; still?: boolean }) {
-  const mark = on ? "var(--color-brand)" : "var(--color-ash)";
-  /** Four rooms render at once inside one document, so the gradient ids have to
-   *  differ or every room paints with the first one's. */
-  const gid = `room-${kind}`;
+/* -------------------------------------------------------------- the scenes -- */
 
+const W = 720;
+const H = 440;
+
+/** One format, drawn as its own thing. The frame is shared so the four read as
+ *  a set; nothing inside it is. */
+function Scene({ kind, on }: { kind: Format["scene"]; on: boolean }) {
   return (
     <div className="relative overflow-hidden rounded-[1.5rem] border border-line bg-ink-2">
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        className="h-auto w-full"
-        aria-hidden
-        style={{ display: "block" }}
-      >
-        <defs>
-          {/* Front-to-back falloff on the floor, so the room has a direction of
-              light instead of five surfaces at one value. Shading is painted as
-              void over ink-3 rather than as a chosen grey, so it inverts with
-              the theme like every other surface on the site. */}
-          <linearGradient id={`${gid}-floor`} x1="0" y1="1" x2="0" y2="0">
-            <stop offset="0%" stopColor="var(--color-void)" stopOpacity="0.30" />
-            <stop offset="100%" stopColor="var(--color-void)" stopOpacity="0.04" />
-          </linearGradient>
-          {/* The board is the only thing in the room that is lit. */}
-          <radialGradient id={`${gid}-lamp`} cx="0.5" cy="0.42" r="0.55">
-            <stop offset="0%" stopColor="var(--color-snow)" stopOpacity="0.10" />
-            <stop offset="100%" stopColor="var(--color-snow)" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-
-        {/* Every surface starts at the top surface tone, then takes its own
-            amount of shade: ceiling darkest, side walls next, back wall lit. */}
+      <svg viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full" aria-hidden>
         <rect x="0" y="0" width={W} height={H} fill="var(--color-ink-3)" />
-        <polygon
-          points={`0,${FRONT_TOP} ${px(-1, 1)},${BACK_TOP} ${px(1, 1)},${BACK_TOP} ${W},${FRONT_TOP}`}
-          fill="var(--color-void)"
-          fillOpacity="0.16"
-        />
-        <polygon
-          points={`0,${FRONT_TOP} ${px(-1, 1)},${BACK_TOP} ${px(-1, 1)},${BACK_Y} 0,${FRONT_Y}`}
-          fill="var(--color-void)"
-          fillOpacity="0.10"
-        />
-        <polygon
-          points={`${W},${FRONT_TOP} ${px(1, 1)},${BACK_TOP} ${px(1, 1)},${BACK_Y} ${W},${FRONT_Y}`}
-          fill="var(--color-void)"
-          fillOpacity="0.055"
-        />
-        <polygon points={quad(-1, 1, 0, 1)} fill={`url(#${gid}-floor)`} />
-        {/* The wall-to-floor and wall-to-ceiling creases. */}
-        {[
-          `M0,${FRONT_TOP} L${px(-1, 1)},${BACK_TOP}`,
-          `M${W},${FRONT_TOP} L${px(1, 1)},${BACK_TOP}`,
-          `M0,${FRONT_Y} L${px(-1, 1)},${BACK_Y}`,
-          `M${W},${FRONT_Y} L${px(1, 1)},${BACK_Y}`,
-          `M${px(-1, 1)},${BACK_TOP} L${px(1, 1)},${BACK_TOP}`,
-          `M${px(-1, 1)},${BACK_Y} L${px(1, 1)},${BACK_Y}`,
-          `M${px(-1, 1)},${BACK_TOP} L${px(-1, 1)},${BACK_Y}`,
-          `M${px(1, 1)},${BACK_TOP} L${px(1, 1)},${BACK_Y}`,
-        ].map((d) => (
-          <path key={d} d={d} stroke="var(--color-line)" strokeWidth="1.25" fill="none" />
-        ))}
-        {/* What the board throws back into the room. */}
-        <rect
-          x={px(-1, 1)}
-          y={BACK_TOP}
-          width={px(1, 1) - px(-1, 1)}
-          height={BACK_Y - BACK_TOP}
-          fill={`url(#${gid}-lamp)`}
-        />
-
-        {/* Floor grid, so the depth is legible rather than asserted. */}
-        {[0.2, 0.4, 0.6, 0.8].map((z) => (
-          <line
-            key={z}
-            x1={px(-1, z)}
-            y1={py(z)}
-            x2={px(1, z)}
-            y2={py(z)}
-            stroke="var(--color-line)"
-            strokeWidth="1"
-          />
-        ))}
-        {[-0.66, -0.33, 0, 0.33, 0.66].map((x) => (
-          <line
-            key={x}
-            x1={px(x, 0)}
-            y1={py(0)}
-            x2={px(x, 1)}
-            y2={py(1)}
-            stroke="var(--color-line)"
-            strokeWidth="1"
-          />
-        ))}
-
-        {/* The board on the back wall. Every format has one; what changes is
-            what the room in front of it is doing. */}
-        <rect
-          x={px(-0.62, 1)}
-          y={BACK_TOP + 26}
-          width={px(0.62, 1) - px(-0.62, 1)}
-          height="64"
-          fill="var(--color-ink-2)"
-          stroke={mark}
-          strokeWidth="2"
-        />
-        {/* Something written on it, always working. */}
-        {[0, 1, 2].map((r) => (
-          <rect
-            key={r}
-            className="ci-grow-x"
-            x={px(-0.55, 1)}
-            y={BACK_TOP + 40 + r * 15}
-            width={(px(0.55, 1) - px(-0.55, 1)) * [0.82, 0.6, 0.7][r]}
-            height="5"
-            rx="2.5"
-            fill={mark}
-            fillOpacity={on ? 0.6 : 0.3}
-            style={still ? { animation: "none" } : { animationDelay: `${r * 0.9}s` }}
-          />
-        ))}
-
-        <Furniture kind={kind} on={on} />
+        {kind === "fail" && <Fail on={on} />}
+        {kind === "work" && <Work on={on} />}
+        {kind === "judge" && <Judge on={on} />}
+        {kind === "period" && <Period on={on} />}
       </svg>
     </div>
   );
 }
 
-/** A tabletop and its front edge, so it stands up off the floor. */
-function Slab({
-  x0,
-  x1,
-  z0,
-  z1,
-  h,
-  tone,
-  edge,
+/** A run of text on a surface. Bars, never words. */
+function Lines({
+  x,
+  y,
+  w,
+  gap = 16,
+  widths,
+  fill = "var(--color-ash)",
+  opacity = 0.42,
+  h = 7,
 }: {
-  x0: number;
-  x1: number;
-  z0: number;
-  z1: number;
-  h: number;
-  tone: string;
-  edge: string;
+  x: number;
+  y: number;
+  w: number;
+  gap?: number;
+  widths: number[];
+  fill?: string;
+  opacity?: number;
+  h?: number;
 }) {
-  const s = solid(x0, x1, z0, z1, h);
   return (
     <>
-      <polygon points={s.front} fill={edge} fillOpacity="0.9" />
-      <polygon points={s.top} fill={tone} stroke="var(--color-line)" strokeWidth="1" />
+      {widths.map((f, i) => (
+        <rect
+          key={i}
+          x={x}
+          y={y + i * gap}
+          width={w * f}
+          height={h}
+          rx={h / 2}
+          fill={fill}
+          fillOpacity={opacity}
+        />
+      ))}
     </>
   );
 }
 
-function Furniture({ kind, on }: { kind: Format["room"]; on: boolean }) {
-  const top = "var(--color-ink-2)";
-  const edge = "var(--color-void)";
+/* -- 01 ---------------------------------------------------------------------- */
+
+/** THE DEMONSTRATION. Head on at the board, because everyone in the room is.
+ *  One output, and the line in it that is wrong: the session is about what the
+ *  tools do and where they commonly fail, and the failure is the subject. */
+function Fail({ on }: { on: boolean }) {
   const mark = on ? "var(--color-brand)" : "var(--color-ash)";
-
-  if (kind === "rows") {
-    /* Faces the board. Long benches, an aisle down the middle, all one way. */
-    return (
-      <>
-        {[0.14, 0.4, 0.66].map((z) => (
-          <g key={z}>
-            <Slab x0={-0.78} x1={-0.08} z0={z} z1={z + 0.13} h={26} tone={top} edge={edge} />
-            <Slab x0={0.08} x1={0.78} z0={z} z1={z + 0.13} h={26} tone={top} edge={edge} />
-          </g>
-        ))}
-      </>
-    );
-  }
-
-  if (kind === "clusters") {
-    /* Breaks into tables and works. The mark on each table is the work. */
-    const TABLES: [number, number, number][] = [
-      [-0.74, -0.16, 0.14],
-      [0.16, 0.74, 0.14],
-      [-0.66, -0.14, 0.52],
-      [0.14, 0.66, 0.52],
-    ];
-    return (
-      <>
-        {TABLES.map(([x0, x1, z]) => {
-          const s = solid(x0 + 0.14, x1 - 0.14, z + 0.05, z + 0.14, 44);
-          return (
-            <g key={`${x0}-${z}`}>
-              <Slab x0={x0} x1={x1} z0={z} z1={z + 0.2} h={30} tone={top} edge={edge} />
-              <polygon points={s.top} fill={mark} fillOpacity={on ? 0.5 : 0.28} />
-            </g>
-          );
-        })}
-      </>
-    );
-  }
-
-  if (kind === "table") {
-    /* One table, and the decision it is there to make. */
-    const s = solid(-0.24, 0.24, 0.36, 0.5, 46);
-    return (
-      <>
-        <Slab x0={-0.56} x1={0.56} z0={0.3} z1={0.62} h={32} tone={top} edge={edge} />
-        <polygon points={s.top} fill={mark} fillOpacity={on ? 0.5 : 0.28} />
-      </>
-    );
-  }
-
-  /* The same room, returned to over an agreed period: the tables that are
-     there now, and the outline of the same tables at two earlier sittings. */
+  const BAD = 3;
+  const ROWS = [0.92, 0.74, 0.86, 0.7, 0.8, 0.56];
   return (
     <>
-      {[0.62, 0.44].map((z, k) => (
-        <polygon
-          key={z}
-          points={solid(-0.6, 0.6, z, z + 0.16, 30).top}
-          fill="none"
-          stroke="var(--color-ash)"
-          strokeWidth="1.5"
-          strokeDasharray="6 6"
-          opacity={0.32 + k * 0.14}
+      {/* The board. */}
+      <rect x="72" y="44" width="576" height="300" rx="10" fill="var(--color-ink-2)" stroke="var(--color-line)" strokeWidth="2" />
+      {/* What is on it: a prompt, then what came back. */}
+      <rect x="104" y="76" width="240" height="12" rx="6" fill="var(--color-snow)" fillOpacity="0.28" />
+      <line x1="104" y1="108" x2="616" y2="108" stroke="var(--color-line)" strokeWidth="1.5" />
+
+      {ROWS.map((f, i) => (
+        <rect
+          key={i}
+          x="104"
+          y={132 + i * 30}
+          width={512 * f}
+          height="10"
+          rx="5"
+          fill="var(--color-ash)"
+          fillOpacity={i === BAD ? 0.5 : 0.34}
         />
       ))}
-      <Slab x0={-0.62} x1={0.62} z0={0.16} z1={0.34} h={30} tone={top} edge={edge} />
-      <polygon
-        points={solid(-0.2, 0.2, 0.21, 0.3, 44).top}
+
+      {/* The one that is wrong, and the mark a person leaves on it. The mark is
+          drawn statically and the animated stroke traces over it: ci-draw is
+          invisible for part of every cycle, and the fault is the whole subject
+          of this format, so it may not blink out of existence. */}
+      <rect x="80" y={132 + BAD * 30 - 6} width="8" height="22" rx="4" fill={mark} />
+      <rect
+        x="100"
+        y={132 + BAD * 30 + 14}
+        width={512 * ROWS[BAD] + 12}
+        height="4"
+        rx="2"
         fill={mark}
-        fillOpacity={on ? 0.5 : 0.28}
+        fillOpacity="0.35"
+      />
+      <path
+        className="ci-draw"
+        d={`M100 ${132 + BAD * 30 + 16} H${104 + 512 * ROWS[BAD] + 8}`}
+        pathLength={100}
+        stroke={mark}
+        strokeWidth="4"
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* The room, implied at the very front: bench tops, nothing to count. */}
+      <rect x="8" y="382" width="300" height="18" rx="9" fill="var(--color-void)" fillOpacity="0.16" />
+      <rect x="330" y="382" width="382" height="18" rx="9" fill="var(--color-void)" fillOpacity="0.16" />
+      <rect x="56" y="414" width="250" height="16" rx="8" fill="var(--color-void)" fillOpacity="0.09" />
+      <rect x="332" y="414" width="330" height="16" rx="8" fill="var(--color-void)" fillOpacity="0.09" />
+    </>
+  );
+}
+
+/* -- 02 ---------------------------------------------------------------------- */
+
+/** HANDS ON THE TABLE, from overhead. The camera changes completely, because
+ *  what changes is that people are working rather than watching. Their own
+ *  tasks are on the table, and the shortlist is forming in the middle of it. */
+function Work({ on }: { on: boolean }) {
+  const mark = on ? "var(--color-brand)" : "var(--color-ash)";
+  return (
+    <>
+      {/* The table, seen from directly above. */}
+      <rect x="26" y="26" width="668" height="388" rx="18" fill="var(--color-ink-2)" stroke="var(--color-line)" strokeWidth="2" />
+
+      {/* Four places, each with a machine and the task that belongs to it. */}
+      {[
+        { x: 58, y: 58, r: -4 },
+        { x: 470, y: 52, r: 5 },
+        { x: 52, y: 250, r: 3 },
+        { x: 476, y: 254, r: -6 },
+      ].map((s, i) => (
+        <g key={i} transform={`rotate(${s.r} ${s.x + 90} ${s.y + 60})`}>
+          <rect x={s.x} y={s.y} width="180" height="118" rx="8" fill="var(--color-ink-3)" stroke="var(--color-line)" strokeWidth="1.5" />
+          <rect x={s.x + 10} y={s.y + 10} width="160" height="78" rx="4" fill="var(--color-void)" fillOpacity="0.1" />
+          <Lines x={s.x + 20} y={s.y + 22} w={140} gap={13} widths={[0.9, 0.66, 0.8]} h={6} />
+          <rect x={s.x + 62} y={s.y + 96} width="56" height="8" rx="4" fill="var(--color-ash)" fillOpacity="0.3" />
+        </g>
+      ))}
+
+      {/* Paper: their own tasks, brought to the day. */}
+      <g transform="rotate(-7 300 150)">
+        <rect x="266" y="96" width="120" height="150" rx="5" fill="var(--color-ink-3)" stroke="var(--color-line)" strokeWidth="1.5" />
+        <Lines x={280} y={112} w={92} gap={13} widths={[0.94, 0.7, 0.86, 0.6, 0.9, 0.5]} h={5} />
+      </g>
+
+      {/* What the day ends with, forming in the middle of the table. */}
+      <g transform="rotate(4 372 300)">
+        <rect x="292" y="238" width="160" height="150" rx="5" fill="var(--color-ink-3)" stroke={mark} strokeWidth="2" />
+        <rect x="306" y="252" width="76" height="8" rx="4" fill={mark} fillOpacity="0.75" />
+        {[0, 1, 2, 3, 4].map((i) => (
+          <g key={i}>
+            <circle cx="312" cy={280 + i * 21} r="4.5" fill="none" stroke={mark} strokeWidth="1.6" />
+            <circle
+              className="ci-blink"
+              cx="312"
+              cy={280 + i * 21}
+              r="4.5"
+              fill={mark}
+              style={{ animationDelay: `${(i * 1.2).toFixed(2)}s` }}
+            />
+            <rect x="324" y={276 + i * 21} width={112 * [0.92, 0.74, 0.86, 0.6, 0.78][i]} height="7" rx="3.5" fill="var(--color-ash)" fillOpacity="0.36" />
+          </g>
+        ))}
+      </g>
+    </>
+  );
+}
+
+/* -- 03 ---------------------------------------------------------------------- */
+
+/** THE JUDGEMENT. Not a room at all: the proposals themselves, and what this
+ *  session reviews them against. One is taken forward and one is set aside,
+ *  because the session exists to "evaluate proposed AI projects, challenge
+ *  unrealistic claims and make informed decisions". Nothing is scored: the rows
+ *  on each card are the three things the document names, unfilled. */
+function Judge({ on }: { on: boolean }) {
+  const mark = on ? "var(--color-brand)" : "var(--color-ash)";
+  const CARDS = [
+    { x: 44, y: 118, rot: -6, state: "aside" },
+    { x: 262, y: 74, rot: 0, state: "up" },
+    { x: 480, y: 122, rot: 6, state: "held" },
+  ] as const;
+  return (
+    <>
+      {[...CARDS].map((c) => {
+        const up = c.state === "up";
+        const aside = c.state === "aside";
+        return (
+          <g key={c.x} transform={`rotate(${c.rot} ${c.x + 98} ${c.y + 110})`} opacity={aside ? 0.45 : 1}>
+            <rect
+              x={c.x}
+              y={c.y}
+              width="196"
+              height="222"
+              rx="10"
+              fill="var(--color-ink-3)"
+              stroke={up ? mark : "var(--color-line)"}
+              strokeWidth={up ? 3 : 2}
+            />
+            {/* What is being proposed. */}
+            <rect x={c.x + 20} y={c.y + 22} width="120" height="10" rx="5" fill="var(--color-snow)" fillOpacity="0.3" />
+            <line x1={c.x + 20} y1={c.y + 50} x2={c.x + 176} y2={c.y + 50} stroke="var(--color-line)" strokeWidth="1.5" />
+            {/* The three the session reviews it against. */}
+            {[0, 1, 2].map((r) => (
+              <g key={r}>
+                <rect x={c.x + 20} y={c.y + 66 + r * 34} width="52" height="7" rx="3.5" fill="var(--color-ash)" fillOpacity="0.4" />
+                <rect x={c.x + 84} y={c.y + 64 + r * 34} width="92" height="12" rx="6" fill="var(--color-void)" fillOpacity="0.07" />
+                <rect
+                  x={c.x + 84}
+                  y={c.y + 64 + r * 34}
+                  width={92 * [0.72, 0.44, 0.86][r]}
+                  height="12"
+                  rx="6"
+                  fill={up ? mark : "var(--color-ash)"}
+                  fillOpacity={up ? 0.5 : 0.24}
+                />
+              </g>
+            ))}
+            {/* Taken forward, or set aside. */}
+            {up && (
+              <path
+                className="ci-draw"
+                d={`M${c.x + 66} ${c.y + 190} l16 16 l32 -38`}
+                pathLength={100}
+                stroke={mark}
+                strokeWidth="6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            )}
+            {aside && (
+              <path
+                d={`M${c.x + 74} ${c.y + 178} L${c.x + 122} ${c.y + 210} M${c.x + 122} ${c.y + 178} L${c.x + 74} ${c.y + 210}`}
+                stroke="var(--color-ash)"
+                strokeWidth="4"
+                strokeLinecap="round"
+                fill="none"
+              />
+            )}
+          </g>
+        );
+      })}
+
+      {/* The one that is taken forward stands proud of the other two. */}
+      <rect x="262" y="308" width="196" height="6" rx="3" fill={mark} fillOpacity="0.25" />
+    </>
+  );
+}
+
+/* -- 04 ---------------------------------------------------------------------- */
+
+/** THE PERIOD. Also not a room: the schedule, because this format's subject is
+ *  the time between sittings. Departments run down, the agreed period runs
+ *  across, sessions are the marks on it and the spans between them are where
+ *  the applying happens. Nothing is dated and nothing is counted in weeks: the
+ *  document names no duration. */
+function Period({ on }: { on: boolean }) {
+  const mark = on ? "var(--color-brand)" : "var(--color-ash)";
+  const ROWS = [96, 174, 252, 330];
+  const SESSIONS = [140, 300, 460, 620];
+  return (
+    <>
+      {/* The period. */}
+      <line x1="112" y1="56" x2="656" y2="56" stroke="var(--color-line)" strokeWidth="2" />
+      {SESSIONS.map((x, i) => (
+        <g key={x}>
+          <line x1={x} y1="46" x2={x} y2="366" stroke="var(--color-line)" strokeWidth="1.5" strokeDasharray="5 7" />
+          <circle
+            className="ci-blink"
+            cx={x}
+            cy="56"
+            r="7"
+            fill={mark}
+            style={{ animationDelay: `${(i * 1.5).toFixed(2)}s` }}
+          />
+          <circle cx={x} cy="56" r="7" fill="none" stroke={mark} strokeWidth="2" />
+        </g>
+      ))}
+
+      {/* Each department's own run through it. */}
+      {ROWS.map((y) => (
+        <g key={y}>
+          <rect x="40" y={y - 9} width="52" height="18" rx="9" fill="var(--color-ash)" fillOpacity="0.22" />
+          <line x1="112" y1={y} x2="656" y2={y} stroke="var(--color-line)" strokeWidth="1.5" />
+          {/* Every department sits every session. Fading the later ones by row
+              would say some get fewer, which the document does not. */}
+          {SESSIONS.map((x) => (
+            <rect
+              key={x}
+              x={x - 13}
+              y={y - 13}
+              width="26"
+              height="26"
+              rx="6"
+              fill="var(--color-ink-3)"
+              stroke={mark}
+              strokeWidth="2"
+            />
+          ))}
+          {/* The gap between sittings, where what was learned gets applied. */}
+          {SESSIONS.slice(0, -1).map((x, i) => (
+            <rect
+              key={x}
+              x={x + 17}
+              y={y - 3}
+              width={SESSIONS[i + 1] - x - 34}
+              height="6"
+              rx="3"
+              fill="var(--color-ash)"
+              fillOpacity="0.3"
+            />
+          ))}
+        </g>
+      ))}
+
+      {/* Coming back with what the gap produced. */}
+      <path
+        className="ci-draw"
+        d="M300 392 H448 a14 14 0 0 0 14 -14 V72"
+        pathLength={100}
+        stroke={mark}
+        strokeWidth="2"
+        strokeOpacity="0.75"
+        fill="none"
+      />
+      <path
+        d="M456 84 L462 71 L468 84"
+        stroke={mark}
+        strokeWidth="2"
+        strokeOpacity="0.75"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </>
   );

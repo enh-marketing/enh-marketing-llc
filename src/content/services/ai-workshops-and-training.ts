@@ -54,18 +54,25 @@ export const narrative = {
   ],
 };
 
-/** One workshop format. `room` selects the drawing: the four formats differ by
- *  who is in the room and how the room is arranged, so the room is the picture.
- *  Every arrangement is read off the format's own two paragraphs and nothing
- *  else is asserted about it. */
+/** One workshop format. `scene` selects the drawing.
+ *
+ *  An earlier version drew all four as the same room with the furniture moved
+ *  around, which made four pictures that looked like each other: the room was
+ *  the constant and the differences were small. The four formats do not differ
+ *  by where they are held, they differ by what happens. A half day is a
+ *  demonstration of what tools do and where they fail. A full day is hands on a
+ *  table producing a shortlist. A leadership session is a judgement on
+ *  proposals. A multi-session programme is a period with working gaps in it.
+ *  Each therefore gets its own object, its own camera and its own composition,
+ *  and `cite` names the clause its drawing was read from. */
 export type Format = {
   no: string;
   title: string;
   body: string;
   note: string;
-  room: "rows" | "clusters" | "table" | "return";
-  /** The clause the room arrangement was read from. Printed under the drawing,
-   *  so the picture is checkable against the document. */
+  scene: "fail" | "work" | "judge" | "period";
+  /** The clause the drawing was read from. Printed with it, so the picture is
+   *  checkable against the document. */
   cite: string;
 };
 
@@ -78,15 +85,15 @@ export const formats = {
       title: "Half-Day AI Introduction",
       body: "The half-day introduction gives employees a practical understanding of what current AI tools can do and where they commonly fail. It is suitable for teams that have limited experience or have experimented with tools such as ChatGPT without developing a consistent way to use them.",
       note: "The session covers everyday work applications, basic prompting, output checking and safe usage. Examples are adjusted to the department attending so employees can connect the training to their own responsibilities.",
-      room: "rows",
-      cite: "Examples are adjusted to the department attending",
+      scene: "fail",
+      cite: "what current AI tools can do and where they commonly fail",
     },
     {
       no: "02",
       title: "Full-Day Practical Workshop",
       body: "The full-day AI workshop is built around the team’s workflows, tools and real business tasks. Participants work through practical exercises covering research, drafting, analysis, summarising, data preparation and other relevant applications.",
       note: "The session also covers prompt development, output checking and responsible use. It ends with a written shortlist of business processes that may benefit from AI support or automation, ranked by expected value and implementation effort.",
-      room: "clusters",
+      scene: "work",
       cite: "Participants work through practical exercises",
     },
     {
@@ -94,15 +101,15 @@ export const formats = {
       title: "Leadership AI Session",
       body: "The leadership session is designed for founders, COOs, department heads and other decision-makers. It focuses on where AI can support the organisation, what implementation involves and which opportunities deserve attention first.",
       note: "Participants review relevant business use cases, costs, operational requirements and risks. The session helps leadership evaluate proposed AI projects, challenge unrealistic claims and make informed decisions about tools, training, automation and internal governance.",
-      room: "table",
-      cite: "designed for founders, COOs, department heads and other decision-makers",
+      scene: "judge",
+      cite: "evaluate proposed AI projects, challenge unrealistic claims",
     },
     {
       no: "04",
       title: "Multi-Session AI Programme",
       body: "The multi-session programme supports AI upskilling across several teams or departments. Sessions are delivered over an agreed period, giving participants time to apply what they learn and return with questions from their daily work.",
       note: "Each department can receive role-specific exercises, prompts and use cases. Follow-up sessions review adoption, correct poor usage habits and develop more advanced applications once the team has established a reliable foundation.",
-      room: "return",
+      scene: "period",
       cite: "Sessions are delivered over an agreed period",
     },
   ] as Format[],
