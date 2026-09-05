@@ -85,7 +85,25 @@ Looping SVG classes live in `globals.css` under the Campaign Intelligence block:
 
 Shared: `ServiceHero`, `SectionHeader`, `CtaBand`, `GrowthCta`, `FaqList`, `StickyCTABar`, `Work`, `Insights`, `TrustStrip`, `LeadForm`, `Crosslink` (renders unbuilt routes as plain text; a link to a 404 is worse than no link).
 
-Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, pinned chapter with an index.
+Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, pinned chapter with an index, scope boundary with tethers, room plans, curriculum run, contents pack, switchback, unequal runs, criteria register with a fork, launch profile, drift sandwich, directional joins, layer stack, watched register.
+
+The last twelve are the AI Hub pages. Three of them are worth naming because
+the reason they work is transferable:
+
+- **Room plans** (AI Workshops, formats). Four formats that differ only in who
+  is in the room are drawn as four floor plans. Furniture and orientation only,
+  never seats, because FAQ 8 declines to give a headcount.
+- **Launch profile** (Conversational AI, process). Six steps drawn as how much
+  the agent carries: flat, a ramp at the step whose own sentence says
+  "gradually", then level and open. The stations are HTML positioned on the
+  path's own y values, so nothing drifts off the line.
+- **Unequal runs** (AI Workshops, experience). Two rails of different length.
+  The document draws the comparison itself; the length is the whole argument.
+
+Two hero visuals also earned their shape from one sentence of the banner rather
+than from the service category: `HandoverThread` draws the boundary because the
+banner sells the boundary, and `PageSwap` keeps its frame fixed because
+personalisation is a rule, not a second website.
 
 Withdrawn, and not to be revived: stepped boundary, narrowing measure, measured type silhouette, staged canvas. All four were rejected as "just a list", and the reason is worth keeping. Each changed the ornament and kept the skeleton: one item per row, copy on one side, a picture on the other. A stepped hairline, a tinted bed, a measured outline and a pinned canvas are four coats on the same list.
 
@@ -109,4 +127,11 @@ The rules this yields outrank any amount of conceptual cleverness:
 6. **Do not give one section its own theme.** A `chapter-dark` class forced this section to near-black in both themes, so the light theme ran white, cut to #101010 for one section, then cut back. Nothing else on the site does that, and it read as a seam rather than a chapter. A section is set apart by scale, pacing and structure, not by opting out of the palette.
 7. **A drawing per subject, not one drawing per section.** Seven services need seven pictures. A single drawing that only changes state cannot depict a crawler meeting robots.txt AND a page that answers AND markup matching what is visible: it collapses into the one abstract shape all seven have in common, which is what "same random diagram with no meaning" named. Each drawing answers one question about its own service, in its own copy's words.
 8. **`useEnhanced` reports false on the first paint**, by design, so server and client agree. An effect that reads a ref only rendered in the enhanced branch must list the enhanced flag in its dependencies, or it runs once against a null ref and never again.
-9. **A GSAP `from` tween renders its start state on creation.** A timeline waiting on a ScrollTrigger that never fires (deep link, restored scroll, refresh mid-page) leaves its targets at `scaleX(0)` permanently. Pass `immediateRender: false` on every entrance tween.
+9. **`pathLength` and `vector-effect: non-scaling-stroke` do not mix.** motion's
+   `pathLength` animates `stroke-dasharray`, and under `non-scaling-stroke`
+   Chromium measures that dash in screen pixels, so any path longer than 100px
+   renders as a dash, a gap and a stub. This is the same trap already recorded
+   for `.ci-draw` and `.ci-flow`, and it caught `ControlledLaunch` too. Either
+   drop the vector-effect or, better, do not animate the path: give the motion
+   to the stations on it, which is more legible anyway.
+10. **A GSAP `from` tween renders its start state on creation.** A timeline waiting on a ScrollTrigger that never fires (deep link, restored scroll, refresh mid-page) leaves its targets at `scaleX(0)` permanently. Pass `immediateRender: false` on every entrance tween.
