@@ -10,9 +10,9 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { WorkshopLoop } from "@/components/service/WorkshopLoop";
 import { Narrative } from "@/components/service/Narrative";
-import { WorkshopRooms } from "@/components/service/WorkshopRooms";
-import { SkillRun } from "@/components/service/SkillRun";
-import { WorkshopPack } from "@/components/service/WorkshopPack";
+import { WorkshopStage } from "@/components/service/WorkshopStage";
+import { SkillWall } from "@/components/service/SkillWall";
+import { WorkshopOutput } from "@/components/service/WorkshopOutput";
 import { StageLadder } from "@/components/service/StageLadder";
 import { FollowUp } from "@/components/service/FollowUp";
 import { TrainerGap } from "@/components/service/TrainerGap";
@@ -59,8 +59,9 @@ export function AiWorkshopsAndTrainingPage() {
           outro={c.narrative.outro}
         />
 
-        {/* Four formats, drawn as the four rooms they are held in. */}
-        <WorkshopRooms
+        {/* Four formats, each drawn as the room it is held in, travelled
+            through sideways while the section holds. */}
+        <WorkshopStage
           id="formats"
           label="Our AI Workshop Formats in Dubai"
           index="01"
@@ -69,8 +70,8 @@ export function AiWorkshopsAndTrainingPage() {
           items={c.formats.items}
         />
 
-        {/* Twelve capabilities as one curriculum, not twelve cards. */}
-        <SkillRun
+        {/* Twelve verbs at display scale, because the verbs are the answer. */}
+        <SkillWall
           id="skills"
           label="What Your Team Learns to Do With AI"
           index="02"
@@ -82,9 +83,9 @@ export function AiWorkshopsAndTrainingPage() {
           note={c.skills.note}
         />
 
-        {/* Eight deliverables as the one pack they arrive in, with the clause
-            about the shortlist outliving the engagement set on its foot. */}
-        <WorkshopPack
+        {/* The shortlist drawn as the sheet it is, ranked against the two axes
+            the document names, with the rest of the pack beside it. */}
+        <WorkshopOutput
           id="receive"
           label="What You Receive After the Workshop"
           index="03"

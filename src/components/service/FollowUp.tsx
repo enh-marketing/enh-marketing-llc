@@ -92,7 +92,7 @@ export function FollowUp({
                 return leg. Height is exactly one leg, so it lands on both rails. */}
             <span
               aria-hidden
-              className="absolute right-0 top-0 w-16 rounded-r-[2rem] border-y-2 border-r-2 border-brand"
+              className="absolute right-0 top-0 w-16 rounded-r-[2.5rem] border-y-2 border-r-2 border-brand"
               style={{ height: LEG_H }}
             />
 
@@ -110,9 +110,14 @@ export function FollowUp({
           {/* ── one spine, below lg ──────────────────────────────────────── */}
           <ol className="border-l-2 border-brand/60 lg:hidden">
             {items.map((entry) => (
-              <li key={entry} className="flex items-center gap-3 py-3">
-                <span aria-hidden className="h-0.5 w-5 shrink-0 bg-brand/60" />
-                <span className="text-[0.9375rem] leading-snug text-snow">{entry}</span>
+              <li key={entry} className="group flex items-center gap-3 py-3">
+                <span
+                  aria-hidden
+                  className="h-0.5 w-5 shrink-0 bg-brand/60 transition-all duration-500 group-hover:w-9 group-hover:bg-brand motion-reduce:transition-none"
+                />
+                <span className="text-[0.9375rem] leading-snug text-fog transition-colors duration-500 group-hover:text-snow motion-reduce:transition-none">
+                  {entry}
+                </span>
               </li>
             ))}
           </ol>
@@ -145,9 +150,16 @@ function Leg({
   return (
     <div style={{ height }} className="relative">
       {/* The rail. Open at the far end, because the run continues round it. */}
+      <span aria-hidden className="absolute inset-x-0 top-0 block h-0.5 bg-brand" />
+
+      {/* Something going out, and coming back. ci-slide is written for exactly
+          this: a marker travelling a track and returning. The return leg runs
+          it in reverse so the pair reads as one circuit rather than as two
+          markers that happen to move. */}
       <span
         aria-hidden
-        className={`absolute top-0 block h-0.5 bg-brand ${rtl ? "left-0 right-0" : "left-0 right-0"}`}
+        className="ci-slide absolute -top-[3px] block h-2 w-3.5 rounded-full bg-brand"
+        style={{ animationDirection: rtl ? "reverse" : "normal", animationDelay: rtl ? "0.4s" : "0s" }}
       />
       <ol className="grid grid-cols-4 gap-x-8 pt-0" dir={rtl ? "rtl" : "ltr"}>
         {entries.map((entry, i) => (
@@ -157,14 +169,22 @@ function Leg({
             initial={reduced ? false : { opacity: 0, y: 12 }}
             animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ duration: 0.5, ease: EASE, delay: startDelay + i * 0.09 }}
-            className={rtl ? "text-right" : undefined}
+            className={`group ${rtl ? "text-right" : ""}`}
           >
-            {/* The tick that plants the station on the rail. */}
-            <span
-              aria-hidden
-              className={`block h-4 w-0.5 bg-brand ${rtl ? "ml-auto" : ""}`}
-            />
-            <span className="mt-4 block max-w-[26ch] text-[0.9375rem] font-medium leading-snug text-snow">
+            {/* The tick that plants the station on the rail, and the mark it
+                carries. Both respond, because a station a reader can point at
+                should acknowledge being pointed at. */}
+            <span className={`flex items-center gap-2.5 ${rtl ? "flex-row-reverse" : ""}`}>
+              <span
+                aria-hidden
+                className="block h-5 w-0.5 bg-brand transition-all duration-500 group-hover:h-7 motion-reduce:transition-none"
+              />
+              <span
+                aria-hidden
+                className="block h-2.5 w-2.5 rounded-full border-2 border-brand bg-void transition-colors duration-500 group-hover:bg-brand motion-reduce:transition-none"
+              />
+            </span>
+            <span className="mt-4 block max-w-[26ch] text-[0.9375rem] font-medium leading-snug text-fog transition-colors duration-500 group-hover:text-snow motion-reduce:transition-none">
               {entry}
             </span>
           </motion.li>
