@@ -1,0 +1,33 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/conversational-ai";
+import { brand } from "@/lib/content";
+import { ConversationalAiPage } from "@/page-bodies/ai-hub-conversational-ai";
+
+/* Head tags are handed to the layout as props; the structured data is emitted
+   here as static HTML rather than through the island, as on every route. */
+
+const HREF = "/ai-hub/conversational-ai";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Conversational AI",
+  serviceType:
+    "AI chatbot development, AI voice agents, AI customer service agents, knowledge bases for AI agents, appointment booking agents, messaging app automation",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <ConversationalAiPage client:load />
+</Base>

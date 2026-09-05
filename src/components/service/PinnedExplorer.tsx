@@ -27,6 +27,7 @@ import { CycleTrack } from "@/components/service/CycleTrack";
 import { OutputBoard } from "@/components/service/OutputBoard";
 import { HandoverMap } from "@/components/service/HandoverMap";
 import { CreativeOutputs } from "@/components/service/CreativeOutputs";
+import { ConversationOutputs } from "@/components/service/ConversationOutputs";
 import type { ServiceAnchor } from "@/content/services/instagram-marketing";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -72,6 +73,8 @@ export type DiagramSpec =
   | { kind: "outputs" }
   /** The four AI creative outputs, each drawn as the thing it is. */
   | { kind: "creative" }
+  /** The six conversational AI services, each drawn as the thing it is. */
+  | { kind: "conversation" }
   /** Seven automation services against the one thing that separates them:
    *  whether the work stops for a person. `loop` is per item, in item order,
    *  and each flag is cited in the content file against the sentence it was
@@ -260,6 +263,8 @@ export function PinnedExplorer({
         return <OutputBoard active={active} pin={pin} count={items.length} />;
       case "creative":
         return <CreativeOutputs active={active} pin={pin} count={items.length} />;
+      case "conversation":
+        return <ConversationOutputs active={active} pin={pin} count={items.length} />;
       case "handover":
         return (
           <HandoverMap active={active} pin={pin} count={items.length} loop={diagram.loop} />
