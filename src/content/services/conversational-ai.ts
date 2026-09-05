@@ -348,7 +348,9 @@ export const managed = {
     "Providing technical support for the agent",
     "Maintaining records of significant changes",
   ],
-  /** Why any of it is needed: the ground moves on both sides. */
+  /** Why any of it is needed: the ground moves on both sides. Both sentences are
+   *  set whole and face each other, because a sentence broken into chips and a
+   *  trailing "can change after launch." reads as a fragment, not as a claim. */
   drift: {
     yours: "Customer questions, services, prices and internal responsibilities can change after launch.",
     theirs: "Messaging platforms, AI models and connected systems can also be updated.",
