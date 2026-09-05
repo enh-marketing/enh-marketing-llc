@@ -10,7 +10,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { HandoverThread } from "@/components/service/HandoverThread";
 import { Narrative } from "@/components/service/Narrative";
-import { PinnedExplorer } from "@/components/service/PinnedExplorer";
+import { AgentScreens } from "@/components/service/AgentScreens";
 import { DiagnosticSort } from "@/components/service/DiagnosticSort";
 import { ControlledLaunch } from "@/components/service/ControlledLaunch";
 import { AgentWatch } from "@/components/service/AgentWatch";
@@ -56,19 +56,17 @@ export function ConversationalAiPage() {
           outro={c.narrative.outro}
         />
 
-        {/* Six services on the site's own explorer, each with its own drawing.
-            The drawing sits right here, the mirror of the creative production
-            page, so two AI Hub pages never read as the same section twice. */}
-        <PinnedExplorer
+        {/* Six services as the six screens they actually are, held full height
+            while the scroll moves through them. Every label on every screen is
+            a verbatim clause of that service's own paragraphs. */}
+        <AgentScreens
           id="services"
           label="Our Conversational AI Services"
           index="01"
           title={c.services.title}
           strokeTitle={c.services.strokeTitle}
-          mark={{ variant: "network", label: "Six services, one boundary" }}
           items={c.services.items}
-          diagram={{ kind: "conversation" }}
-          diagramSide="right"
+          screens={c.services.screens}
         />
 
         {/* The paid diagnostic, drawn as the sort it performs: eleven things

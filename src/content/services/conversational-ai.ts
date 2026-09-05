@@ -57,9 +57,23 @@ export const narrative = {
   ],
 };
 
-/** The six services. `kind` selects the drawing: each answers one question
- *  about its own service, in that service's own words. */
-export type Kind = "chat" | "voice" | "service" | "knowledge" | "booking" | "messaging";
+/** The six services.
+ *
+ *  Each carries the labels its own screen is built from. Every one of them is a
+ *  verbatim clause of that service's own two paragraphs, lifted out and set as
+ *  interface text: the chips a chatbot offers, the routine enquiries a service
+ *  agent takes, the sources a knowledge base is built from. Nothing is written
+ *  for the screen and no conversation is scripted, because the document scripts
+ *  none. If a label is not in the paragraph above it, it does not belong here. */
+export type Screen = {
+  /** Which screen to draw. */
+  kind: "chat" | "voice" | "console" | "knowledge" | "booking" | "messaging";
+  /** What the screen's own controls are labelled with. Verbatim, in order. */
+  does: string[];
+  /** The second group, where the service's paragraph names one: what is handed
+   *  to a person, what is checked, what the rules cover. */
+  aside?: { label: string; items: string[] };
+};
 
 export const services = {
   title: "Our Conversational",
@@ -97,7 +111,7 @@ export const services = {
       no: "05",
       title: "Appointment Booking Agents",
       body: "We develop AI appointment booking agents that guide customers from their initial enquiry to a confirmed time slot. They can identify the required service, collect booking information, check availability, and connect with an approved calendar or appointment platform.",
-      note: "The agent can also support confirmations, rescheduling, and cancellations according to the business’s rules. Service duration, staff availability, locations, qualification questions, and requests requiring human approval are defined before the booking process is automated.",
+      note: "The agent can also support confirmations, rescheduling, and cancellations according to the business\u2019s rules. Service duration, staff availability, locations, qualification questions, and requests requiring human approval are defined before the booking process is automated.",
       glyph: "tracking",
     },
     {
@@ -108,8 +122,82 @@ export const services = {
       glyph: "fanout",
     },
   ] as PinnedItem[],
-  /** Which drawing belongs to which service, in items order. */
-  kinds: ["chat", "voice", "service", "knowledge", "booking", "messaging"] as Kind[],
+  /** One screen per service, in items order. */
+  screens: [
+    {
+      kind: "chat",
+      does: [
+        "Answer service questions",
+        "Collect customer details",
+        "Qualify enquiries",
+        "Check available information",
+        "Create a lead or support request",
+      ],
+      aside: {
+        label: "Agreed before development begins",
+        items: ["Knowledge", "System access", "Response limits", "Human handover rules"],
+      },
+    },
+    {
+      kind: "voice",
+      does: [
+        "Answer questions",
+        "Collect caller details",
+        "Book appointments",
+        "Direct calls to the correct person or department",
+      ],
+      aside: {
+        label: "Agreed and tested before launch",
+        items: ["Script", "Tone", "Permitted actions", "Escalation points"],
+      },
+    },
+    {
+      kind: "console",
+      does: ["Product", "Delivery", "Account", "Cancellation", "Support"],
+      aside: {
+        label: "Transferred to the customer service team",
+        items: ["Complaints", "Exceptions", "Sensitive matters", "Requests needing judgement"],
+      },
+    },
+    {
+      kind: "knowledge",
+      does: [
+        "Website content",
+        "Service details",
+        "Product catalogues",
+        "Price lists",
+        "Policies",
+        "Procedures",
+        "Existing customer service responses",
+      ],
+      aside: { label: "Reviewed before it is added", items: ["Gaps", "Conflicts", "Outdated material"] },
+    },
+    {
+      kind: "booking",
+      does: [
+        "Identify the required service",
+        "Collect booking information",
+        "Check availability",
+      ],
+      aside: {
+        label: "According to the business\u2019s rules",
+        items: ["Confirmations", "Rescheduling", "Cancellations"],
+      },
+    },
+    {
+      kind: "messaging",
+      does: [
+        "Respond to questions",
+        "Collect customer details",
+        "Qualify enquiries",
+        "Provide approved updates",
+      ],
+      aside: {
+        label: "Reviewed before development begins",
+        items: ["Message templates", "Account permissions", "Provider charges", "Platform restrictions"],
+      },
+    },
+  ] as Screen[],
 };
 
 /** "Every Project Starts With a Conversational AI Diagnostic". Thirteen things
