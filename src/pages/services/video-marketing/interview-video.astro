@@ -1,0 +1,34 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/interview-video";
+import { brand } from "@/lib/content";
+import { InterviewVideoPage } from "@/page-bodies/services-video-marketing-interview-video";
+
+const HREF = "/services/video-marketing/interview-video";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Interview Video Production",
+  serviceType:
+    "Interview video production: corporate and leadership interviews, expert and thought leadership interviews, training interviews, customer and stakeholder interviews, employee interviews, event interviews and video podcasts",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  isPartOf: {
+    "@type": "Service",
+    name: "Video Marketing",
+    url: "https://enhmedia.com/services/video-marketing",
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+  <InterviewVideoPage client:load />
+</Base>

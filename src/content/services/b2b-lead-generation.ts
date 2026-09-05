@@ -74,8 +74,14 @@ export const scope = {
     "Media spend and management fees",
     "Reporting and sales-feedback requirements",
   ],
-  limit:
-    "Lead generation can create the opportunity and support nurturing. Closing the deal remains part of the sales process. Appointment setting can be included when it appears in the agreed scope.",
+  /** The boundary around the service, in the document's own three sentences:
+   *  what the work does, what stays with the sales team, and the one thing that
+   *  depends on the agreement. Split at the document's own full stops so each
+   *  can be placed on its own side of the line. */
+  limitInside: "Lead generation can create the opportunity and support nurturing.",
+  limitOutside: "Closing the deal remains part of the sales process.",
+  limitConditional:
+    "Appointment setting can be included when it appears in the agreed scope.",
 };
 
 export type Channel = { no: string; title: string; body: string; glyph: GlyphVariant };
@@ -266,11 +272,19 @@ export const sectors = {
     "Facilities management and maintenance",
     "Business setup and consultancy",
   ],
-  caveat:
-    "The campaign changes with the sector. A software company may need demonstrations and account-level targeting, while an industrial supplier may gain more from high-intent Google searches and detailed product information.",
+  /** The claim, then the two cases the document works through to prove it.
+   *  Split at the document's own full stop and at its own comma; the two cases
+   *  read back as the one sentence it wrote. Only these two sectors are worked
+   *  through anywhere in the document, and none of the other ten is given a
+   *  campaign here. */
+  caveatLead: "The campaign changes with the sector.",
+  cases: [
+    "A software company may need demonstrations and account-level targeting,",
+    "while an industrial supplier may gain more from high-intent Google searches and detailed product information.",
+  ] as [string, string],
 };
 
-export type Promise = { title: string; body: string };
+export type Promise = { no: string; title: string; body: string; glyph: GlyphVariant };
 
 /** Eight commitments, each written as a short title and one sentence. */
 export const promises = {
@@ -278,35 +292,51 @@ export const promises = {
   strokeTitle: "From ENH Marketing",
   items: [
     {
+      no: "01",
       title: "A written target audience",
+      glyph: "audience",
       body: "Industries, company sizes, locations and job roles are agreed before the campaign begins.",
     },
     {
+      no: "02",
       title: "A qualified-lead definition",
+      glyph: "structure",
       body: "Marketing and sales know which contacts should count in the report.",
     },
     {
+      no: "03",
       title: "Channels chosen around the buyer",
+      glyph: "fanout",
       body: "LinkedIn, Google, email and paid social are added when they have a clear job.",
     },
     {
+      no: "04",
       title: "Campaign content with one consistent offer",
+      glyph: "creative",
       body: "Advertisements, landing pages and email follow-up are planned together.",
     },
     {
+      no: "05",
       title: "A defined sales handoff",
+      glyph: "workflow",
       body: "Your team knows where the leads will arrive and who needs to respond.",
     },
     {
+      no: "06",
       title: "Lead quality reviewed with sales",
+      glyph: "triage",
       body: "Rejection reasons and opportunity feedback help improve the next campaign decision.",
     },
     {
+      no: "07",
       title: "Monthly reporting",
+      glyph: "reporting",
       body: "Performance, lead quality and the movement towards meetings or opportunities are tracked.",
     },
     {
+      no: "08",
       title: "Flexible campaign scope",
+      glyph: "sequence",
       body: "The work can scale according to the audience, channels, budget and sales capacity.",
     },
   ] as Promise[],

@@ -1,0 +1,29 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/web-design-development";
+import { brand } from "@/lib/content";
+import { WebDesignDevelopmentPage } from "@/page-bodies/services-web-design-development";
+
+const HREF = "/services/web-design-development";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Web Design and Development",
+  serviceType:
+    "Web design and development: business websites, ecommerce development, landing pages, responsive design, maintenance and support, hosting, website content and SEO setup, analytics and conversion tracking",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+  <WebDesignDevelopmentPage client:load />
+</Base>

@@ -70,9 +70,17 @@ export default defineConfig({
     },
   },
 
-  // Replaces next/font/google. Same two families, same subsets, same weights,
-  // and the same two CSS variables the stylesheet and <html> class already
-  // use, so nothing downstream has to change.
+  // Replaces next/font/google. Two families, and only two.
+  //
+  // POPPINS IS GONE, AND IT WAS NEVER REACHABLE. It was carried as the second
+  // name in --font-display, behind Cabinet Grotesk. But <Font> emits a complete
+  // stack per variable, generic included, so --font-cabinet already ended in
+  // `sans-serif`: expanded, the display stack read
+  //   "Cabinet Grotesk", <its Arial fallbacks>, sans-serif, Poppins, ...
+  // and a generic family always resolves, so the browser could never get past
+  // it to Poppins. Ten font faces and a Google Fonts stylesheet were being
+  // shipped on every page for a family that was unreachable by construction.
+  // The site is Cabinet Grotesk for display and Inter for body copy.
   fonts: [
     {
       provider: fontProviders.google(),
@@ -91,15 +99,6 @@ export default defineConfig({
       name: "Cabinet Grotesk",
       cssVariable: "--font-cabinet",
       weights: [500, 700, 800, 900],
-      styles: ["normal"],
-    },
-    {
-      provider: fontProviders.google(),
-      name: "Poppins",
-      cssVariable: "--font-poppins",
-      subsets: ["latin"],
-      weights: [500, 600, 700, 800, 900],
-      // next/font requested normal only; Poppins italics would be dead weight.
       styles: ["normal"],
     },
   ],

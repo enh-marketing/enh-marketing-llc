@@ -70,11 +70,11 @@ const canonicalUrl = canonical ? new URL(canonical, Astro.site).href : undefined
 
     <link rel="icon" href="/favicon.ico" sizes="256x256" type="image/x-icon" />
 
-    {/* Replaces next/font/google. Same families and subsets, declared in
-        astro.config.mjs, and still exposed as --font-inter / --font-poppins so
-        the stylesheet's @theme block is untouched. Inter is preloaded because
-        it sets the body copy; Poppins is display-only and can arrive late. */}
-    {/* Inter sets the body copy, so it is preloaded whole.
+    {/* Two families, declared in astro.config.mjs and exposed as
+        --font-inter and --font-cabinet, which is what the stylesheet's @theme
+        block reads.
+
+        Inter sets the body copy, so it is preloaded whole.
 
         Cabinet Grotesk preloads ONE weight, not four. It is declared at 500,
         700, 800 and 900, and preloading all of them put ~86KB of font files at
@@ -83,12 +83,9 @@ const canonicalUrl = canonical ? new URL(canonical, Astro.site).href : undefined
         and accounts for 208 of the 332 font-display usages on the site; the
         other three arrive normally and swap in against Astro's generated
         fallback metrics, so they cost no layout shift.
-
-        Poppins is the second name in --font-display, only reached if Cabinet
-        fails, so it is never preloaded. */}
+ */}
     <Font cssVariable="--font-inter" preload />
     <Font cssVariable="--font-cabinet" preload={[{ weight: 800 }]} />
-    <Font cssVariable="--font-poppins" />
 
     {/* Was <Script strategy="beforeInteractive">. An inline is:raw script in
         the head is the Astro equivalent and runs at the same point: before

@@ -14,10 +14,12 @@ import { ServiceHero } from "@/components/service/ServiceHero";
 import { CatalogueReach } from "@/components/service/CatalogueReach";
 import { Narrative } from "@/components/service/Narrative";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
-import { PlatformStack } from "@/components/service/PlatformStack";
-import { SignalSplit } from "@/components/service/SignalSplit";
-import { IndustryRun } from "@/components/service/IndustryRun";
+import { PlatformDeck } from "@/components/service/PlatformDeck";
+import { SearchToStore } from "@/components/service/SearchToStore";
+import { CatalogueGrid } from "@/components/service/CatalogueGrid";
+import { CapabilityCarousel } from "@/components/service/CapabilityCarousel";
 import { FaqList } from "@/components/service/FaqList";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
@@ -106,7 +108,8 @@ export function EcommerceSeoPage() {
           </Rise>
         </PinnedExplorer>
 
-        {/* Five platforms, five different technical situations. */}
+        {/* Five platforms, five different technical footings, rebuilt on one
+            stage as the reader moves between them. See PlatformDeck. */}
         <section
           id="platforms"
           data-section="Ecommerce Platforms We Work With"
@@ -120,12 +123,13 @@ export function EcommerceSeoPage() {
               mark={{ variant: "contrast", label: "No two stores start from the same place" }}
               className="mb-12"
             />
-            <PlatformStack items={c.platforms.items} />
+            <PlatformDeck items={c.platforms.items} />
           </Container>
         </section>
 
-        {/* Reporting. The document gives no figures anywhere, so this section
-            draws a distinction rather than a trend. See SignalSplit. */}
+        {/* Reporting. The lead asks for search performance and store
+            performance to be connected, so the section is those two sides and
+            the join between them. See SearchToStore. */}
         <section
           id="measure"
           data-section="What We Measure"
@@ -138,9 +142,10 @@ export function EcommerceSeoPage() {
               strokeTitle={c.measure.strokeTitle}
               className="mb-12"
             />
-            <SignalSplit
+            <SearchToStore
               lead={c.measure.lead}
-              tracked={c.measure.tracked}
+              trackedSearch={c.measure.trackedSearch}
+              trackedStore={c.measure.trackedStore}
               brandSplit={c.measure.brandSplit}
               brandTerms={c.measure.brandTerms}
               limit={c.measure.limit}
@@ -148,59 +153,42 @@ export function EcommerceSeoPage() {
           </Container>
         </section>
 
-        <IndustryRun
+        {/* Ten businesses, set inside the object this whole page is about: a
+            category listing, with the product each one sells drawn on it. See
+            CatalogueGrid. */}
+        <CatalogueGrid
           id="sectors"
           label="Ecommerce Businesses We Work With"
           index="05"
           title={c.sectors.title}
           strokeTitle={c.sectors.strokeTitle}
+          items={c.sectors.items}
           note={c.sectors.caveat}
-          items={c.sectors.items.map((label) => ({ label }))}
         />
 
-        {/* Eight promises as a ruled index rather than another card grid: the
-            two sibling pages built this week both close on cards, and three of
-            those in a row stops reading as structure. */}
-        <section
+        {/* The commitments, on the run the site uses for capability sets. */}
+        <CapabilityCarousel
           id="promises"
-          data-section="What You Get From ENH Marketing"
-          className="relative overflow-x-clip py-14 sm:py-16"
-        >
-          <Container className="relative">
-            <SectionHeader
-              index="06"
-              title={c.promises.title}
-              strokeTitle={c.promises.strokeTitle}
-              className="mb-12"
-            />
+          label="What You Get From ENH Marketing"
+          index="06"
+          title={c.promises.title}
+          strokeTitle={c.promises.strokeTitle}
+          items={c.promises.items}
+        />
 
-            <ol className="grid border-t border-line sm:grid-cols-2">
-              {c.promises.items.map((p, i) => (
-                <li key={p.title} className="border-b border-line">
-                  <Rise
-                    delay={0.05 * i}
-                    className={`flex gap-5 py-7 sm:pr-10 ${i % 2 === 1 ? "sm:border-l sm:border-line sm:pl-10" : ""}`}
-                  >
-                    <span
-                      aria-hidden
-                      className="font-display shrink-0 text-sm font-extrabold text-brand"
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="block">
-                      <span className="font-display block text-[1.05rem] font-extrabold uppercase leading-[1.2] text-snow">
-                        {p.title}
-                      </span>
-                      <span className="mt-2.5 block text-sm leading-relaxed text-fog">
-                        {p.body}
-                      </span>
-                    </span>
-                  </Rise>
-                </li>
-              ))}
-            </ol>
-          </Container>
-        </section>
+        {/* The mid-page ask. It takes the heading and the short line; the band
+            at the foot of the page takes the longer recommendation, so no
+            sentence prints twice. */}
+        <GrowthCta
+          id="cta"
+          label="Give More Products a Clear Route Into Search"
+          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
+          support={c.finalCta.body}
+          button={c.finalCta.primary}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.finalCta.primary}
+        />
 
         <Work index="07" label="Summits Reached" ctaHref="#quote" />
 
@@ -211,8 +199,7 @@ export function EcommerceSeoPage() {
           index="09"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.body}
-          note={c.finalCta.note}
+          body={c.finalCta.note}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}
           whatsapp={whatsapp}

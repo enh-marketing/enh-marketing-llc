@@ -256,7 +256,7 @@ export function LeadGenerationPage() {
           }))}
           footer={
             <Rise delay={0.14} className="mt-14">
-              <p className="font-display text-[clamp(1.4rem,3vw,2.4rem)] font-extrabold uppercase leading-[1.12] text-brand">
+              <p className="font-display statement font-extrabold uppercase leading-[1.12] text-brand">
                 {c.sectors.closingLead}
               </p>
               <p className="mt-6 max-w-3xl leading-relaxed text-snow sm:text-lg">

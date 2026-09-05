@@ -1,0 +1,29 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/video-marketing";
+import { brand } from "@/lib/content";
+import { VideoMarketingPage } from "@/page-bodies/services-video-marketing";
+
+const HREF = "/services/video-marketing";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Video Production",
+  serviceType:
+    "Video production: corporate video, event video, explainer video, testimonial video, interview video, animation and motion graphics",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+  <VideoMarketingPage client:load />
+</Base>

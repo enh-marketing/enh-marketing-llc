@@ -162,8 +162,13 @@ export const measure = {
   title: "What",
   strokeTitle: "We Measure",
   lead: "Ecommerce SEO reporting should connect search performance with store performance.",
-  tracked:
-    "We track relevant organic rankings, search impressions, clicks, landing-page traffic and the categories or products receiving that visibility. Ecommerce analytics can then show transactions, revenue, conversion rate, average order value and assisted conversions where tracking is configured correctly.",
+  /** The two sides the lead asks to be connected, in the document's own two
+   *  sentences: what is tracked in search, and what the store's analytics can
+   *  then show. Split at the document's own full stop. */
+  trackedSearch:
+    "We track relevant organic rankings, search impressions, clicks, landing-page traffic and the categories or products receiving that visibility.",
+  trackedStore:
+    "Ecommerce analytics can then show transactions, revenue, conversion rate, average order value and assisted conversions where tracking is configured correctly.",
   /** The document's own split, and why it matters. */
   brandSplit:
     "Brand searches are reviewed separately from non-brand searches when possible. An increase driven mainly by people already searching for the store name tells a different story from growth in customers discovering products for the first time.",
@@ -191,42 +196,58 @@ export const sectors = {
     "Regulated products may require additional review of claims, product information and market-specific requirements before content is published.",
 };
 
-export type Promise = { title: string; body: string };
+export type Promise = { no: string; title: string; body: string; glyph: GlyphVariant };
 
 export const promises = {
   title: "What You Get",
   strokeTitle: "From ENH Marketing",
   items: [
     {
+      no: "01",
       title: "A store audit before recommendations",
+      glyph: "diagnose",
       body: "We review the catalogue, platform, indexation, navigation, templates, structured data, content and current organic performance.",
     },
     {
+      no: "02",
       title: "Commercial prioritisation",
+      glyph: "triage",
       body: "SEO work is ordered around products and categories that the business can stock, fulfil and profitably sell.",
     },
     {
+      no: "03",
       title: "Recommendations suited to your platform",
+      glyph: "tool",
       body: "Shopify, WooCommerce, Magento and custom stores have different technical limits and implementation requirements.",
     },
     {
+      no: "04",
       title: "Original category and product content",
+      glyph: "text",
       body: "Priority pages are developed around useful buying information rather than repeating descriptions already found across other retailers.",
     },
     {
+      no: "05",
       title: "Clear development requirements",
+      glyph: "structure",
       body: "Technical recommendations are documented for your developers, or implementation responsibilities are stated within the ENH scope.",
     },
     {
+      no: "06",
       title: "Product data checks",
+      glyph: "catalogue",
       body: "Website structured data and Merchant Center information can be reviewed for inconsistencies in price, availability, variants and other supported details.",
     },
     {
+      no: "07",
       title: "Reporting linked to revenue",
+      glyph: "reporting",
       body: "Visibility and traffic are assessed alongside transactions, organic revenue and other agreed ecommerce measures where tracking allows.",
     },
     {
+      no: "08",
       title: "Connected digital support",
+      glyph: "fanout",
       body: "As a digital marketing company in Dubai, ENH can align organic search with ecommerce content, paid campaigns and other digital marketing services when included separately.",
     },
   ] as Promise[],

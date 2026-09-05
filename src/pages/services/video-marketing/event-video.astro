@@ -1,0 +1,34 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/event-video";
+import { brand } from "@/lib/content";
+import { EventVideoPage } from "@/page-bodies/services-video-marketing-event-video";
+
+const HREF = "/services/video-marketing/event-video";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Event Video Production",
+  serviceType:
+    "Event video production: conference, trade show, exhibition, product launch, seminar and workshop, awards and corporate event coverage, live streaming, interviews and social edits",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  isPartOf: {
+    "@type": "Service",
+    name: "Video Marketing",
+    url: "https://enhmedia.com/services/video-marketing",
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+  <EventVideoPage client:load />
+</Base>

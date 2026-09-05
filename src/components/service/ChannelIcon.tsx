@@ -1,4 +1,5 @@
 import { cn } from "@/lib/cn";
+import { CapabilityGlyph, type GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 /** Official brand marks, taken verbatim from Simple Icons v13 (CC0) rather
  *  than redrawn or guessed, so no logo is wrong. Single-path, 24x24, and
@@ -45,8 +46,20 @@ export function ChannelIcon({
 }
 
 /** Icon in a ring. The ring rotates its accent on hover and the mark lifts,
- *  which reads as motion without animating the logo itself. */
-export function ChannelIconBadge({ name, className }: { name: string; className?: string }) {
+ *  which reads as motion without animating the logo itself.
+ *
+ *  `glyph` is for runs whose entries are not advertising platforms and so have
+ *  no logo to draw: the SEO pillar's nine scopes use the same card and the same
+ *  ring, with one of the house capability marks inside it instead. */
+export function ChannelIconBadge({
+  name,
+  glyph,
+  className,
+}: {
+  name: string;
+  glyph?: GlyphVariant;
+  className?: string;
+}) {
   return (
     <span
       className={cn(
@@ -60,7 +73,13 @@ export function ChannelIconBadge({ name, className }: { name: string; className?
         style={{ background: "radial-gradient(circle, rgba(232,0,13,0.18), transparent 68%)" }}
       />
       <span className="glyph-rise relative">
-        <ChannelIcon name={name} />
+        {glyph ? (
+          <span className="block h-7 w-7">
+            <CapabilityGlyph variant={glyph} className="h-full w-full" />
+          </span>
+        ) : (
+          <ChannelIcon name={name} />
+        )}
       </span>
     </span>
   );
