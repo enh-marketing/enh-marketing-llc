@@ -198,6 +198,38 @@ export function SiteScreens({
   );
 }
 
+
+/** Where each screen's labels sit, in viewBox units, paired with `parts` by
+ *  index.
+ *
+ *  THEY ARE HTML, NOT SVG TEXT. SVG text is measured in user units, so a 13-unit
+ *  label is 13px on a desktop-width drawing and 5.8px on a phone, which is half
+ *  the type floor and unreadable. Rendering them over the drawing instead keeps
+ *  11px at 11px whatever width the screen is drawn at. Same lesson as the
+ *  callouts on the elements section. */
+const LABELS: Record<Screen["kind"], { x: number; y: number; anchor: "start" | "middle" | "end"; tone?: "brand" }[]> = {
+  build: Array.from({ length: 6 }, (_, i) => ({
+    x: 48 + ((W - 96) / 6) * (i + 0.5),
+    y: 368,
+    anchor: "middle" as const,
+    ...(i === 5 ? { tone: "brand" as const } : {}),
+  })),
+  improve: [{ x: 88, y: 200, anchor: "start", tone: "brand" }],
+  rules: Array.from({ length: 7 }, (_, i) => ({
+    x: 100,
+    y: 62 + i * 52 + 20,
+    anchor: "start" as const,
+    ...(i === 4 ? { tone: "brand" as const } : {}),
+  })),
+  live: Array.from({ length: 7 }, (_, i) => ({ x: 742, y: 50 + i * 56 + 14, anchor: "end" as const })),
+  readable: Array.from({ length: 4 }, (_, i) => ({ x: 438, y: 252 + i * 44, anchor: "start" as const })),
+  migrate: Array.from({ length: 4 }, (_, i) => ({
+    x: 88 + i * ((W - 140) / 4),
+    y: 382,
+    anchor: "start" as const,
+  })),
+};
+
 /* -------------------------------------------------------------- the screen -- */
 
 function SiteScreen({ screen, step, still = false }: { screen: Screen; step: number; still?: boolean }) {
@@ -217,36 +249,53 @@ function SiteScreen({ screen, step, still = false }: { screen: Screen; step: num
         <span className="h-2.5 w-2.5 rounded-full bg-ash/35" />
         <span className="ml-3 h-2 flex-1 rounded-full bg-line" />
       </div>
-      <svg viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full">
-        <rect x="0" y="0" width={W} height={H} fill="var(--color-ink-3)" />
-        {screen.kind === "build" && <Build parts={screen.parts} />}
-        {screen.kind === "improve" && <Improve />}
-        {screen.kind === "rules" && <Rules parts={screen.parts} />}
-        {screen.kind === "live" && <Live parts={screen.parts} />}
-        {screen.kind === "readable" && <Readable parts={screen.parts} />}
-        {screen.kind === "migrate" && <Migrate parts={screen.parts} />}
-      </svg>
-    </motion.div>
-  );
-}
+      <div className="relative">
+        <svg viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full">
+          <rect x="0" y="0" width={W} height={H} fill="var(--color-ink-3)" />
+          {screen.kind === "build" && <Build parts={screen.parts} />}
+          {screen.kind === "improve" && <Improve />}
+          {screen.kind === "rules" && <Rules parts={screen.parts} />}
+          {screen.kind === "live" && <Live parts={screen.parts} />}
+          {screen.kind === "readable" && <Readable parts={screen.parts} />}
+          {screen.kind === "migrate" && <Migrate parts={screen.parts} />}
+        </svg>
 
-/** A label on a screen. HTML sizes would not survive the viewBox, so these are
- *  SVG text at a size that stays above the floor once the box is drawn at its
- *  rendered width. */
-function Tag({ x, y, children, tone = "ash", anchor = "start" }: {
-  x: number; y: number; children: string; tone?: "ash" | "brand" | "snow"; anchor?: "start" | "middle" | "end";
-}) {
-  const fill = tone === "brand" ? "var(--color-brand)" : tone === "snow" ? "var(--color-snow)" : "var(--color-ash)";
-  return (
-    <text
-      x={x}
-      y={y}
-      fill={fill}
-      textAnchor={anchor}
-      style={{ font: "700 13px var(--font-display, sans-serif)", letterSpacing: "0.06em", textTransform: "uppercase" }}
-    >
-      {children.toUpperCase()}
-    </text>
+        {/* On a phone the drawing is scaled to about 45%, but an 11px label is
+            still 11px, so the long ones run off the frame. Below sm the parts
+            are listed under the screen instead of pinned onto it: the same
+            words, still the document's, and readable. */}
+        {screen.parts.map((part, i) => {
+          const at = LABELS[screen.kind][i];
+          if (!at) return null;
+          return (
+            <span
+              key={part}
+              className={cn(
+                "font-display pointer-events-none absolute hidden -translate-y-1/2 whitespace-nowrap text-[0.6875rem] font-bold uppercase leading-none tracking-[0.05em] sm:block",
+                at.anchor === "middle" ? "-translate-x-1/2" : at.anchor === "end" ? "-translate-x-full" : "",
+                at.tone === "brand" ? "text-brand-text" : "text-ash",
+              )}
+              style={{ left: `${(at.x / W) * 100}%`, top: `${(at.y / H) * 100}%` }}
+            >
+              {part}
+            </span>
+          );
+        })}
+      </div>
+
+      {/* The same parts, under the drawing, where it is too small to carry
+          them. */}
+      <ul className="flex flex-wrap gap-x-4 gap-y-2 border-t border-line px-4 py-4 sm:hidden">
+        {screen.parts.map((part) => (
+          <li
+            key={part}
+            className="font-display text-[0.6875rem] font-bold uppercase leading-none tracking-[0.05em] text-ash"
+          >
+            {part}
+          </li>
+        ))}
+      </ul>
+    </motion.div>
   );
 }
 
@@ -298,9 +347,6 @@ function Build({ parts }: { parts: string[] }) {
               fill="var(--color-brand)"
               style={{ animationDelay: `${(i).toFixed(2)}s` }}
             />
-            <Tag x={cx} y={368} anchor="middle" tone={i === parts.length - 1 ? "brand" : "ash"}>
-              {p}
-            </Tag>
           </g>
         );
       })}
@@ -322,7 +368,6 @@ function Improve() {
 
       {/* The one thing that changes. */}
       <rect x="68" y="176" width={W - 136} height="96" rx="8" fill="var(--color-ink-3)" stroke="var(--color-brand)" strokeWidth="2.5" />
-      <Tag x={88} y={206} tone="brand">Within the existing platform</Tag>
       <Copy x={88} y={224} w={W - 176} rows={[0.5, 0.34]} op={0.35} />
       <circle cx={W - 96} cy="224" r="9" fill="none" stroke="var(--color-brand)" strokeWidth="2" />
       <circle className="ci-blink" cx={W - 96} cy="224" r="5" fill="var(--color-brand)" />
@@ -355,7 +400,6 @@ function Rules({ parts }: { parts: string[] }) {
             <rect x="60" y={y} width="260" height="40" rx="6" fill={on ? "var(--color-ink-3)" : "transparent"} stroke={on ? "var(--color-brand)" : "var(--color-line)"} strokeWidth={on ? 2.5 : 1.5} />
             <circle cx="82" cy={y + 20} r="6" fill="none" stroke={on ? "var(--color-brand)" : "var(--color-ash)"} strokeWidth="2" />
             {on && <circle className="ci-blink" cx="82" cy={y + 20} r="3.5" fill="var(--color-brand)" />}
-            <Tag x={100} y={y + 25} tone={on ? "brand" : "ash"}>{p}</Tag>
           </g>
         );
       })}
@@ -426,7 +470,6 @@ function Live({ parts }: { parts: string[] }) {
               fill="none"
             />
             <rect x="562" y={y} width="176" height="28" rx="5" fill="var(--color-ink-2)" stroke="var(--color-line)" strokeWidth="1.5" />
-            <Tag x={576} y={y + 19}>{p}</Tag>
           </g>
         );
       })}
@@ -478,7 +521,6 @@ function Readable({ parts }: { parts: string[] }) {
             fill="var(--color-brand)"
             style={{ animationDelay: `${(i * 1.5).toFixed(2)}s` }}
           />
-          <Tag x={438} y={257 + i * 44}>{p}</Tag>
         </g>
       ))}
     </>
@@ -530,7 +572,6 @@ function Migrate({ parts }: { parts: string[] }) {
             fill="var(--color-brand)"
             style={{ animationDelay: `${(i * 1.5).toFixed(2)}s` }}
           />
-          <Tag x={88 + i * ((W - 140) / parts.length)} y={387}>{p}</Tag>
         </g>
       ))}
     </>

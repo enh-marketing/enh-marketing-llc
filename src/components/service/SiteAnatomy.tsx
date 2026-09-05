@@ -90,7 +90,7 @@ export function SiteAnatomy({
 
         <div ref={ref} className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)]">
           {/* The site. */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <div className="relative lg:sticky lg:top-24 lg:self-start">
             <motion.svg
               viewBox={`0 0 ${W} ${H}`}
               className="block h-auto w-full"
@@ -219,30 +219,32 @@ export function SiteAnatomy({
                 />
               ))}
 
-              {/* The numbers, on the parts they name. */}
-              {items.map((el, i) => {
-                const [cx, cy] = SPOTS[i].at;
-                return (
-                  <g
-                    key={el.no}
-                    onMouseEnter={() => setOn(i)}
-                    onMouseLeave={() => setOn(null)}
-                    style={{ cursor: "default" }}
-                  >
-                    <circle cx={cx} cy={cy} r="15" fill={lit(i) ? "var(--color-brand)" : "var(--color-ink-3)"} stroke="var(--color-brand)" strokeWidth="2" />
-                    <text
-                      x={cx}
-                      y={cy + 5}
-                      textAnchor="middle"
-                      fill={lit(i) ? "var(--color-ink-3)" : "var(--color-brand)"}
-                      style={{ font: "700 13px var(--font-display, sans-serif)" }}
-                    >
-                      {el.no}
-                    </text>
-                  </g>
-                );
-              })}
             </motion.svg>
+
+            {/* The numbers, on the parts they name. HTML, not SVG text, so 11px
+                is 11px whatever width the drawing is rendered at. */}
+            {items.map((el, i) => {
+              const [cx, cy] = SPOTS[i].at;
+              return (
+                <button
+                  key={el.no}
+                  type="button"
+                  onMouseEnter={() => setOn(i)}
+                  onMouseLeave={() => setOn(null)}
+                  onFocus={() => setOn(i)}
+                  onBlur={() => setOn(null)}
+                  aria-label={el.title}
+                  className={cn(
+                    "font-display absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-brand text-[0.6875rem] font-bold tabular-nums transition-colors duration-300 motion-reduce:transition-none",
+                    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                    lit(i) ? "bg-brand text-white" : "bg-ink-3 text-brand-text hover:bg-brand hover:text-white",
+                  )}
+                  style={{ left: `${(cx / W) * 100}%`, top: `${(cy / H) * 100}%` }}
+                >
+                  {el.no}
+                </button>
+              );
+            })}
           </div>
 
           {/* What each one is. All six present: a drawing whose labels only
