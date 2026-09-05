@@ -161,18 +161,25 @@ export const process = {
 };
 
 /** "Monthly AI Creative Production". Two paragraphs: how it can be scoped, and
- *  what it does not include. The exclusions are the second sentence's own list. */
+ *  what it does not include.
+ *
+ *  Both paragraphs are set in full, but split across the drawing instead of
+ *  printed as prose. `shape` is the first sentence. `includedLabel` and
+ *  `included` reconstruct the second sentence word for word, and `commitment`
+ *  is the third. `excludedLabel`, `excluded` and `excludedTail` reconstruct the
+ *  second paragraph word for word. Nothing is dropped and nothing is added. */
 export const monthly = {
   title: "Monthly AI",
   strokeTitle: "Creative Production",
-  lead: "AI creative production can be scoped as a one-off project or a monthly service. An ongoing scope may include new concepts, videos, images, platform versions, language adaptations and revisions. The number of finished assets is agreed before production starts.",
-  exclusion: "The service does not include media spend, campaign management, influencer fees or conventional filming unless these are added separately.",
-  /** Panel headings, both verbatim clauses of the two paragraphs above. */
+  shape: "AI creative production can be scoped as a one-off project or a monthly service.",
   includedLabel: "An ongoing scope may include",
-  excludedLabel: "The service does not include",
-  options: ["a one-off project", "a monthly service"],
   included: ["new concepts", "videos", "images", "platform versions", "language adaptations", "revisions"],
+  /** The commitment the section exists to make. Set at display scale rather
+   *  than left as the tail of a paragraph. */
+  commitment: "The number of finished assets is agreed before production starts.",
+  excludedLabel: "The service does not include",
   excluded: ["media spend", "campaign management", "influencer fees", "conventional filming"],
+  excludedTail: "unless these are added separately.",
 };
 
 export const faqs: Faq[] = [

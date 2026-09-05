@@ -15,7 +15,7 @@ import { PinnedExplorer } from "@/components/service/PinnedExplorer";
 import { StageTimeline } from "@/components/service/StageTimeline";
 import { ProcessLanes } from "@/components/service/ProcessLanes";
 import { Rise } from "@/components/fx/Reveal";
-import { ScopeManifest } from "@/components/service/ScopeManifest";
+import { ScopeLine } from "@/components/service/ScopeLine";
 import { CreativeMark } from "@/components/service/CreativeMark";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
@@ -123,11 +123,20 @@ export function AiCreativeProductionPage() {
           markNode={<CreativeMark variant="lanes" />}
         />
 
-        {/* One-off or monthly; included inside the bundle, exclusions tethered outside. See ScopeManifest. */}
+        {/* One rule is the scope: six things stand on it, four hang beneath it
+            on dashed tethers, and the commitment closes the section. See ScopeLine. */}
         <section id="monthly" data-section="Monthly AI Creative Production" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="05" title={c.monthly.title} strokeTitle={c.monthly.strokeTitle} markNode={<CreativeMark variant="scope" />} className="mb-12" />
-            <ScopeManifest lead={c.monthly.lead} exclusion={c.monthly.exclusion} options={c.monthly.options} included={c.monthly.included} excluded={c.monthly.excluded} includedLabel={c.monthly.includedLabel} excludedLabel={c.monthly.excludedLabel} />
+            <ScopeLine
+              shape={c.monthly.shape}
+              includedLabel={c.monthly.includedLabel}
+              included={c.monthly.included}
+              commitment={c.monthly.commitment}
+              excludedLabel={c.monthly.excludedLabel}
+              excluded={c.monthly.excluded}
+              excludedTail={c.monthly.excludedTail}
+            />
           </Container>
         </section>
 
