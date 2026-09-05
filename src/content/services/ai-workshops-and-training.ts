@@ -194,6 +194,9 @@ export const process = {
       body: "Additional sessions or implementation support can be arranged where the business wants to develop the identified use cases further.",
     },
   ] as Stage[],
+  /** Zero-based index of the step that is the session itself. Four of the six
+   *  happen before anyone is in a room, which is the shape of the service. */
+  dayAt: 4,
 };
 
 /** "Keeping the Training Useful After the Session". Eight things follow-up

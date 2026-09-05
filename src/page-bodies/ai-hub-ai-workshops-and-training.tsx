@@ -13,7 +13,7 @@ import { Narrative } from "@/components/service/Narrative";
 import { WorkshopStage } from "@/components/service/WorkshopStage";
 import { SkillWall } from "@/components/service/SkillWall";
 import { WorkshopOutput } from "@/components/service/WorkshopOutput";
-import { StageLadder } from "@/components/service/StageLadder";
+import { TrainingRun } from "@/components/service/TrainingRun";
 import { FollowUp } from "@/components/service/FollowUp";
 import { TrainerGap } from "@/components/service/TrainerGap";
 import { GrowthCta } from "@/components/service/GrowthCta";
@@ -98,17 +98,18 @@ export function AiWorkshopsAndTrainingPage() {
           closing={c.receive.closing}
         />
 
-        {/* Six steps on the site's own ladder: the panel holds while the
-            stages travel past it. `tail` is off because the document's sixth
-            step is numbered like the rest, not open-ended. */}
-        <StageLadder
+        {/* Six steps, four of which happen before anyone is in a room. The
+            shared StageLadder renders six identical bordered cards, which is
+            the arrangement this client rejected by name; it is right for the
+            five live pages that use it, so this page has its own instead. */}
+        <TrainingRun
           id="process"
           label="How the AI Training Programme Works"
           index="04"
           title={c.process.title}
           strokeTitle={c.process.strokeTitle}
           stages={c.process.items}
-          tail={false}
+          dayAt={c.process.dayAt}
         />
 
         {/* Follow-up, drawn as the doubling back the section describes. */}
