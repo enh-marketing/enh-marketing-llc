@@ -1,0 +1,33 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/ai-workshops-and-training";
+import { brand } from "@/lib/content";
+import { AiWorkshopsAndTrainingPage } from "@/page-bodies/ai-hub-ai-workshops-and-training";
+
+/* Head tags are handed to the layout as props; the structured data is emitted
+   here as static HTML rather than through the island, as on every route. */
+
+const HREF = "/ai-hub/ai-workshops-and-training";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "AI Workshops & Training",
+  serviceType:
+    "Corporate AI training, half-day AI introduction, full-day practical AI workshop, leadership AI session, multi-session AI programme",
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <AiWorkshopsAndTrainingPage client:load />
+</Base>
