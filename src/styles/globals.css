@@ -875,6 +875,37 @@ summary {
   }
 }
 
+/* A horizontal strip that loops: the track holds two copies of its row, so
+   translating by half its width is seamless. Used by the video stage's
+   filmstrip. Stopped under reduced motion. */
+/* Variants stage: each format breathes in place, staggered, so the spread
+   reads as one idea still multiplying rather than a static collage. It rests
+   fully visible, so reduced motion simply stops it. */
+@keyframes variant-pop {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+.variant-pop {
+  animation: variant-pop 4.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .variant-pop { animation: none !important; }
+}
+
+@keyframes strip-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.strip-drift {
+  animation-name: strip-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .strip-drift { animation: none !important; }
+}
+
 @keyframes onair-cool {
   0% { opacity: 1; }
   70% { opacity: 0.28; }
