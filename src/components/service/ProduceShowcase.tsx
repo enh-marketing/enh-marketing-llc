@@ -5,12 +5,22 @@ import { cn } from "@/lib/cn";
 import { useEnhanced, usePrefersReducedMotion } from "@/lib/useEnhanced";
 import type { Output } from "@/content/services/ai-creative-production";
 
-/* The two washes every stage is built from. NEUTRAL uses ash and fog rather
-   than ink-3 and void: the stage ground is near-white in the light theme, so a
-   white-to-off-white gradient vanished on it. ash to fog is a true mid grey in
-   light and a light grey in dark, so the frames read in both. */
-const HOT = "linear-gradient(140deg, var(--color-brand) 0%, var(--color-brand-deep) 72%)";
-const NEUTRAL = "linear-gradient(140deg, var(--color-ash) 0%, var(--color-fog) 85%)";
+/* THE STAGE IS DARK, THE PAGE IS NOT. Two earlier passes failed in opposite
+   directions: one filled the stages with saturated brand red, which this
+   project's own notes forbid outright (red is an accent and a mark, never a
+   ground); the next replaced it with white frames on a near-white page, which
+   read as empty. Work is shown on a dark surface, the way a viewer, a lightbox
+   or a cinema does. That is a contained device inside a light page, not the
+   section changing theme, and it is what finally gives the frames somewhere to
+   sit: light surfaces read, fine type reads, and a small red mark carries.
+
+   Every frame is a pane of light on that dark ground. Depth comes from a top
+   highlight and a soft shadow, never from saturation. */
+const STAGE_INK = "#121110";
+const PANE =
+  "rounded-xl border border-white/12 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.85)] bg-[linear-gradient(160deg,rgba(255,255,255,0.11)_0%,rgba(255,255,255,0.045)_55%,rgba(255,255,255,0.02)_100%)]";
+const PANE_SOFT =
+  "rounded-lg border border-white/10 bg-[linear-gradient(160deg,rgba(255,255,255,0.085)_0%,rgba(255,255,255,0.03)_100%)]";
 
 /** What we produce: four outputs, four different stages.
  *
@@ -132,7 +142,8 @@ export function ProduceShowcase({ items }: { items: Output[] }) {
           A different object per output, not a re-tint of one. */}
       <div
         id="produce-stage"
-        className="relative mt-8 h-[380px] overflow-hidden rounded-[1.5rem] bg-ink-2 sm:mt-10 sm:h-[460px] lg:h-[520px]"
+        className="relative mt-8 h-[380px] overflow-hidden rounded-[1.5rem] shadow-[0_40px_90px_-50px_rgba(0,0,0,0.55)] sm:mt-10 sm:h-[460px] lg:h-[520px]"
+        style={{ backgroundColor: STAGE_INK }}
       >
         {items.map((it, i) => (
           <div
@@ -175,55 +186,46 @@ export function ProduceShowcase({ items }: { items: Output[] }) {
 }
 
 /* ============================================================== 01 video ==
-   Wide and cinematic. One frame holds the screen; under it a filmstrip of
-   scenes runs sideways, which is the axis a cut is read on. */
+   Wide and cinematic. One pane holds the screen; under it a filmstrip of scenes
+   runs sideways, which is the axis a cut is read on. */
 function VideoStage({ reduced }: { reduced: boolean }) {
   const scenes = [0, 1, 2, 3, 4, 5, 6, 7];
   return (
-    <div className="flex h-full flex-col justify-center gap-5 p-5 sm:gap-7 sm:p-8">
-      <div className="relative mx-auto aspect-[16/9] w-full max-w-[720px] overflow-hidden rounded-xl">
-        <div
-          className="absolute inset-0"
-          style={{ background: HOT }}
-        />
-        <div
+    <div className="flex h-full flex-col justify-center gap-6 p-6 sm:gap-8 sm:p-10">
+      <div className={cn("relative mx-auto aspect-[16/9] w-full max-w-[640px] overflow-hidden", PANE)}>
+        {/* one warm light falling across the pane */}
+        <span
           aria-hidden
           className="absolute inset-0"
-          style={{ background: "radial-gradient(circle at 28% 20%, rgba(255,255,255,0.22), transparent 60%)" }}
+          style={{
+            background:
+              "radial-gradient(120% 95% at 26% 10%, rgba(232,0,13,0.20), transparent 58%), radial-gradient(90% 80% at 85% 95%, rgba(255,255,255,0.06), transparent 60%)",
+          }}
         />
         <span aria-hidden className="absolute inset-0 grid place-items-center">
-          <span className="grid h-16 w-16 place-items-center rounded-full border-2 border-white/80 sm:h-20 sm:w-20">
-            <span className="ml-1 h-0 w-0 border-y-[11px] border-l-[18px] border-y-transparent border-l-white/90" />
+          <span className="grid h-14 w-14 place-items-center rounded-full border border-white/45 backdrop-blur-[1px] sm:h-16 sm:w-16">
+            <span className="ml-[3px] h-0 w-0 border-y-[8px] border-l-[13px] border-y-transparent border-l-white" />
           </span>
         </span>
-        <span aria-hidden className="absolute inset-x-10 bottom-10 space-y-2">
-          <span className="mx-auto block h-2.5 w-3/5 rounded-full bg-white/45" />
-          <span className="mx-auto block h-2.5 w-2/5 rounded-full bg-white/25" />
+        <span className="font-display absolute inset-x-0 bottom-11 text-center text-[0.6875rem] font-semibold uppercase tracking-[0.24em] text-white/55">
+          Short-form
         </span>
-        <span aria-hidden className="absolute inset-x-5 bottom-4 h-1 rounded-full bg-white/25">
-          <span className="block h-full w-1/3 rounded-full bg-white/90" />
+        <span aria-hidden className="absolute inset-x-8 bottom-6 h-px bg-white/18">
+          <span className="block h-full w-1/3 bg-brand" />
         </span>
-        {!reduced && (
-          <span aria-hidden className="ci-scan-x absolute inset-y-0 left-0 w-[2px] bg-white/60" style={{ animationDuration: "6s" }} />
-        )}
       </div>
 
-      {/* the cut: scenes running sideways */}
       <div aria-hidden className="relative overflow-hidden">
-        <div
-          className={cn("flex w-max gap-3", !reduced && "strip-drift")}
-          style={{ animationDuration: "34s" }}
-        >
+        <div className={cn("flex w-max gap-3", !reduced && "strip-drift")} style={{ animationDuration: "38s" }}>
           {[0, 1].map((pass) =>
             scenes.map((n) => (
               <span
                 key={`${pass}-${n}`}
-                className="block aspect-[16/9] w-[104px] shrink-0 rounded-md sm:w-[132px]"
-                style={{
-                  background: n % 3 === 0 ? HOT : NEUTRAL,
-                  opacity: n % 3 === 0 ? 1 : 0.75,
-                }}
-              />
+                className={cn("relative block aspect-[16/9] w-[112px] shrink-0 sm:w-[140px]", PANE_SOFT)}
+              >
+                {n % 4 === 0 && <span className="absolute left-2.5 top-2.5 h-1.5 w-1.5 rounded-full bg-brand" />}
+                <span aria-hidden className="absolute inset-x-2.5 bottom-2.5 block h-px bg-white/15" />
+              </span>
             )),
           )}
         </div>
@@ -233,64 +235,60 @@ function VideoStage({ reduced }: { reduced: boolean }) {
 }
 
 /* ================================================================ 02 ugc ==
-   A rank of vertical phones, each feed scrolling upward at its own speed. The
-   axis is vertical, which is how this format is actually watched. */
+   A rank of vertical phones, each feed scrolling upward at its own speed. */
 function UgcStage({ reduced }: { reduced: boolean }) {
   const phones = [
-    { speed: "26s", lead: false },
-    { speed: "20s", lead: true },
-    { speed: "31s", lead: false },
+    { speed: "30s", lead: false },
+    { speed: "22s", lead: true },
+    { speed: "36s", lead: false },
   ];
   return (
-    <div className="flex h-full items-center justify-center gap-4 p-5 sm:gap-7 sm:p-8">
+    <div className="flex h-full items-center justify-center gap-5 p-6 sm:gap-8 sm:p-10">
       {phones.map((ph, pi) => (
         <div
           key={pi}
           className={cn(
-            "relative aspect-[9/16] shrink-0 overflow-hidden rounded-2xl border",
-            ph.lead ? "h-[92%] border-brand/60" : "hidden h-[74%] border-line sm:block",
+            "relative aspect-[9/16] shrink-0 overflow-hidden",
+            PANE,
+            ph.lead ? "h-[88%] border-brand/45" : "hidden h-[70%] opacity-60 sm:block",
           )}
         >
-          {/* the feed, scrolling */}
           <div
             aria-hidden
-            className={cn("flex flex-col gap-2", !reduced && "wall-drift")}
+            className={cn("flex flex-col", !reduced && "wall-drift")}
             style={{ animationDuration: ph.speed }}
           >
             {[0, 1].map((pass) =>
               [0, 1, 2, 3].map((n) => (
-                <span
-                  key={`${pass}-${n}`}
-                  className="block aspect-[9/14] w-full shrink-0 rounded-lg"
-                  style={{ background: (n + pi) % 2 === 0 ? HOT : NEUTRAL }}
-                />
+                <span key={`${pass}-${n}`} className="block w-full shrink-0 border-b border-white/8 px-3 py-4">
+                  <span className="block aspect-[4/3] w-full rounded-md bg-white/8" />
+                  <span className="mt-2.5 block h-px w-4/5 bg-white/14" />
+                  <span className="mt-2 block h-px w-3/5 bg-white/10" />
+                </span>
               )),
             )}
           </div>
 
           {ph.lead && (
             <>
-              {/* A hold behind the overlay, so the white silhouette, caption and
-                  call to action read whatever the feed is showing. */}
               <span
                 aria-hidden
                 className="absolute inset-0"
-                style={{ background: "linear-gradient(180deg, rgba(10,10,10,0.34) 0%, rgba(10,10,10,0.18) 38%, rgba(10,10,10,0.72) 100%)" }}
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(18,17,16,0.90) 0%, rgba(18,17,16,0.20) 32%, rgba(18,17,16,0.94) 72%)",
+                }}
               />
-              {/* the presenter, a silhouette, never a face */}
-              <svg viewBox="0 0 120 200" className="absolute inset-x-0 bottom-[22%] mx-auto h-[46%]" aria-hidden preserveAspectRatio="xMidYMax meet">
-                <circle cx="60" cy="62" r="30" fill="rgba(255,255,255,0.5)" />
-                <path d="M12 168 a48 48 0 0 1 96 0 Z" fill="rgba(255,255,255,0.5)" />
+              {/* the presenter: a fine line figure, never a face */}
+              <svg viewBox="0 0 120 150" className="absolute inset-x-0 top-[25%] mx-auto h-[34%]" aria-hidden>
+                <circle cx="60" cy="42" r="24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.4" />
+                <path d="M18 130 a42 42 0 0 1 84 0" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.4" />
               </svg>
-              {/* caption + call to action */}
-              <span aria-hidden className="absolute inset-x-4 bottom-[13%] space-y-1.5">
-                <span className="block h-2 w-4/5 rounded-full bg-white/55" />
-                <span className="block h-2 w-3/5 rounded-full bg-white/35" />
+              <span className="font-display absolute inset-x-0 bottom-[27%] text-center text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-white/55">
+                Presenter-led
               </span>
-              <span aria-hidden className="absolute inset-x-4 bottom-[6%] block h-8 rounded-full bg-white/90">
-                <span className="mx-auto mt-[13px] block h-2 w-1/2 rounded-full bg-void/60" />
-              </span>
-              <span className="font-display absolute inset-x-0 top-0 border-b border-white/25 bg-void/55 px-2 py-1.5 text-center text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-white backdrop-blur-sm">
+              <span aria-hidden className="absolute inset-x-5 bottom-[14%] block h-8 rounded-full bg-brand" />
+              <span className="font-display absolute inset-x-0 bottom-[5%] border-t border-white/12 px-2 pt-2.5 text-center text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-brand-hot">
                 Synthetic presenter
               </span>
             </>
@@ -302,62 +300,64 @@ function UgcStage({ reduced }: { reduced: boolean }) {
 }
 
 /* ============================================================ 03 imagery ==
-   The still one. The product never moves; the set changes behind it. The copy
-   is about new settings, seasonal concepts and background variations, so the
-   background is the only thing that changes and it cross-fades rather than
-   drifts. */
+   The still one. The product never moves; the set changes behind it. */
 const SETS = [
-  "linear-gradient(150deg, var(--color-brand) 0%, var(--color-brand-deep) 60%, var(--color-ink) 100%)",
-  "linear-gradient(150deg, var(--color-ink-3) 0%, var(--color-ash) 55%, var(--color-void) 100%)",
-  "linear-gradient(150deg, var(--color-brand-deep) 0%, var(--color-void) 70%)",
-  "linear-gradient(150deg, var(--color-void) 0%, var(--color-ink-3) 60%, var(--color-brand) 130%)",
+  "radial-gradient(120% 100% at 30% 16%, rgba(232,0,13,0.30) 0%, rgba(255,255,255,0.03) 62%)",
+  "radial-gradient(120% 100% at 72% 20%, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.02) 66%)",
+  "linear-gradient(155deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.02) 100%)",
+  "radial-gradient(110% 90% at 50% 92%, rgba(156,0,10,0.34) 0%, rgba(255,255,255,0.02) 64%)",
 ];
 
 function ImageryStage({ reduced, live }: { reduced: boolean; live: boolean }) {
   const [set, setSet] = useState(0);
   useEffect(() => {
     if (reduced || !live) return;
-    const t = window.setInterval(() => setSet((s) => (s + 1) % SETS.length), 2600);
+    const t = window.setInterval(() => setSet((s) => (s + 1) % SETS.length), 3000);
     return () => window.clearInterval(t);
   }, [reduced, live]);
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-5 p-5 sm:gap-6 sm:p-8">
-      <div className="relative aspect-square h-[64%] overflow-hidden rounded-2xl sm:h-[70%]">
+    <div className="flex h-full flex-col items-center justify-center gap-6 p-6 sm:gap-7 sm:p-10">
+      <div className={cn("relative aspect-square h-[62%] overflow-hidden sm:h-[68%]", PANE)}>
         {SETS.map((bg, i) => (
           <span
             key={i}
             aria-hidden
             className={cn(
-              "absolute inset-0 transition-opacity duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
+              "absolute inset-0 transition-opacity duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
               i === set ? "opacity-100" : "opacity-0",
             )}
             style={{ background: bg }}
           />
         ))}
-        <span
-          aria-hidden
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(circle at 32% 24%, rgba(255,255,255,0.2), transparent 62%)" }}
-        />
-        {/* the product, held. It is the one thing that never changes. */}
+        {/* the product, lit and held: an object on a set, not a shape on a colour */}
         <svg viewBox="0 0 200 200" className="absolute inset-0 h-full w-full" aria-hidden>
-          <rect x="82" y="52" width="36" height="88" rx="10" fill="rgba(255,255,255,0.82)" />
-          <rect x="92" y="38" width="16" height="16" rx="4" fill="rgba(255,255,255,0.82)" />
-          <ellipse cx="100" cy="150" rx="44" ry="8" fill="rgba(0,0,0,0.22)" />
+          <defs>
+            <linearGradient id="prodLit" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="rgba(255,255,255,0.96)" />
+              <stop offset="52%" stopColor="rgba(255,255,255,0.72)" />
+              <stop offset="100%" stopColor="rgba(255,255,255,0.42)" />
+            </linearGradient>
+          </defs>
+          <ellipse cx="100" cy="152" rx="42" ry="6" fill="rgba(0,0,0,0.45)" />
+          <rect x="84" y="56" width="32" height="90" rx="11" fill="url(#prodLit)" />
+          <rect x="93" y="42" width="14" height="16" rx="4" fill="url(#prodLit)" />
+          <rect x="90" y="90" width="20" height="2" rx="1" fill="var(--color-brand)" />
         </svg>
+        <span className="font-display absolute inset-x-0 bottom-4 text-center text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-white/50">
+          Background variations
+        </span>
       </div>
 
-      {/* the sets on offer */}
       <div aria-hidden className="flex gap-2.5">
         {SETS.map((bg, i) => (
           <span
             key={i}
             className={cn(
-              "h-8 w-14 rounded-md ring-offset-2 ring-offset-ink-2 transition-all duration-500 motion-reduce:transition-none sm:h-10 sm:w-20",
-              i === set ? "ring-2 ring-brand" : "opacity-55",
+              "h-9 w-16 rounded-md border transition-all duration-500 motion-reduce:transition-none sm:h-10 sm:w-20",
+              i === set ? "border-brand" : "border-white/15 opacity-55",
             )}
-            style={{ background: bg }}
+            style={{ background: bg, backgroundColor: "rgba(255,255,255,0.05)" }}
           />
         ))}
       </div>
@@ -366,61 +366,59 @@ function ImageryStage({ reduced, live }: { reduced: boolean; live: boolean }) {
 }
 
 /* =========================================================== 04 variants ==
-   The multiplication. One approved source at the left, then the same idea in
-   every format spreading out to the right. The axis is a spread, not a drift.
-   This is the only stage that is a mass of frames, because it is the only
-   output that IS a mass of frames. */
+   One approved source at the left, the same idea in every format spreading out
+   to the right. Only the source carries red, so the eye reads one becoming
+   many. */
 const SPREAD = [
-  { x: 46, y: 6, w: 20, h: 11 },
-  { x: 70, y: 4, w: 11, h: 19 },
-  { x: 86, y: 10, w: 12, h: 12 },
-  { x: 47, y: 26, w: 13, h: 16 },
-  { x: 66, y: 30, w: 21, h: 12 },
-  { x: 90, y: 30, w: 9, h: 16 },
-  { x: 46, y: 50, w: 18, h: 10 },
-  { x: 69, y: 50, w: 12, h: 20 },
-  { x: 86, y: 54, w: 13, h: 13 },
-  { x: 48, y: 72, w: 14, h: 17 },
-  { x: 67, y: 76, w: 20, h: 11 },
-  { x: 91, y: 74, w: 8, h: 15 },
+  { x: 46, y: 8, w: 20, h: 11 },
+  { x: 71, y: 5, w: 11, h: 19 },
+  { x: 87, y: 11, w: 11, h: 12 },
+  { x: 47, y: 27, w: 13, h: 16 },
+  { x: 67, y: 31, w: 20, h: 12 },
+  { x: 91, y: 31, w: 8, h: 15 },
+  { x: 46, y: 51, w: 18, h: 10 },
+  { x: 70, y: 51, w: 11, h: 19 },
+  { x: 87, y: 55, w: 12, h: 12 },
+  { x: 48, y: 72, w: 14, h: 16 },
+  { x: 68, y: 76, w: 19, h: 11 },
+  { x: 92, y: 74, w: 7, h: 14 },
 ];
 
 function VariantsStage({ reduced }: { reduced: boolean }) {
   return (
-    <div className="relative h-full p-5 sm:p-8">
-      {/* the one approved source */}
-      <div className="absolute left-5 top-1/2 aspect-[4/5] w-[26%] max-w-[190px] -translate-y-1/2 overflow-hidden rounded-xl sm:left-8">
+    <div className="relative h-full p-6 sm:p-10">
+      <div
+        className={cn(
+          "absolute left-6 top-1/2 aspect-[4/5] w-[24%] max-w-[168px] -translate-y-1/2 overflow-hidden border-brand/55 sm:left-10",
+          PANE,
+        )}
+      >
         <span
           aria-hidden
           className="absolute inset-0"
-          style={{ background: HOT }}
+          style={{ background: "radial-gradient(120% 90% at 30% 14%, rgba(232,0,13,0.28), transparent 62%)" }}
         />
         <span aria-hidden className="absolute inset-0 grid place-items-center">
-          <span className="grid h-11 w-11 place-items-center rounded-full border-2 border-white/85">
-            <span className="ml-[3px] h-0 w-0 border-y-[7px] border-l-[12px] border-y-transparent border-l-white/90" />
+          <span className="grid h-10 w-10 place-items-center rounded-full border border-white/50">
+            <span className="ml-[2px] h-0 w-0 border-y-[6px] border-l-[10px] border-y-transparent border-l-white" />
           </span>
         </span>
-        <span className="font-display absolute inset-x-0 bottom-0 bg-void/55 px-2 py-1.5 text-center text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-white backdrop-blur-sm">
+        <span className="font-display absolute inset-x-0 bottom-3 text-center text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-brand-hot">
           One idea
         </span>
       </div>
 
-      {/* every format it becomes */}
       {SPREAD.map((f, i) => (
         <span
           key={i}
           aria-hidden
-          className={cn(
-            "absolute rounded-md",
-            !reduced && "variant-pop",
-          )}
+          className={cn("absolute", PANE_SOFT, !reduced && "variant-pop")}
           style={{
             left: `${f.x}%`,
             top: `${f.y}%`,
             width: `${f.w}%`,
             height: `${f.h}%`,
-            background: i % 3 === 0 ? HOT : NEUTRAL,
-            animationDelay: `${(i % 6) * 0.35}s`,
+            animationDelay: `${(i % 6) * 0.4}s`,
           }}
         />
       ))}
