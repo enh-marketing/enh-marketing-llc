@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useRef } from "react";
+import { motion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
@@ -47,7 +48,13 @@ export function TrainingRun({
   /** Zero-based index of the step that is the session itself. */
   dayAt: number;
 }) {
+  const ref = useRef<HTMLOListElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-70px" });
   const reduced = usePrefersReducedMotion();
+  /* Reduced motion resolves after hydration, so a reader who has asked for no
+     motion still starts on the hidden frame for one paint. Treating it as shown
+     puts them straight on the finished one. */
+  const show = inView || reduced;
 
   return (
     <section id={id} data-section={label} className="relative overflow-x-clip py-14 sm:py-16">
@@ -60,15 +67,14 @@ export function TrainingRun({
           className="mb-12"
         />
 
-        <ol className="border-t border-line">
+        <ol ref={ref} className="border-t border-line">
           {stages.map((s, i) => {
             const day = i === dayAt;
             return (
               <motion.li
                 key={s.no}
                 initial={reduced ? false : { opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
+                animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.55, ease: EASE }}
                 className={cn(
                   "group grid items-start gap-x-8 border-b border-line py-8 transition-colors duration-500 motion-reduce:transition-none sm:gap-x-12 sm:py-10",

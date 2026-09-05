@@ -212,10 +212,10 @@ function Scene({ kind, on }: { kind: Format["scene"]; on: boolean }) {
     <div className="relative overflow-hidden rounded-[1.5rem] border border-line bg-ink-2">
       <svg viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full" aria-hidden>
         <rect x="0" y="0" width={W} height={H} fill="var(--color-ink-3)" />
-        {kind === "fail" && <Fail on={on} />}
+        {kind === "consistency" && <Consistency on={on} />}
         {kind === "work" && <Work on={on} />}
         {kind === "judge" && <Judge on={on} />}
-        {kind === "period" && <Period on={on} />}
+        {kind === "foundation" && <Foundation on={on} />}
       </svg>
     </div>
   );
@@ -261,63 +261,116 @@ function Lines({
 
 /* -- 01 ---------------------------------------------------------------------- */
 
-/** THE DEMONSTRATION. Head on at the board, because everyone in the room is.
- *  One output, and the line in it that is wrong: the session is about what the
- *  tools do and where they commonly fail, and the failure is the subject. */
-function Fail({ on }: { on: boolean }) {
+/** WHAT THE HALF DAY IS FOR. Not a demonstration of failure: that is what the
+ *  hero of this page already draws, and it is only one of the four things this
+ *  session covers. The sentence that belongs to this format and to no other is
+ *  "have experimented with tools such as ChatGPT without developing a
+ *  consistent way to use them". The subject is inconsistency.
+ *
+ *  So the drawing is the same task attempted four ways by four people, each at
+ *  its own angle and its own length with nothing shared, and then the same four
+ *  after the session: one shape, one order, aligned. The session's own contents
+ *  are what makes them line up, and the document names them: everyday work
+ *  applications, basic prompting, output checking and safe usage.
+ *
+ *  NOTHING IS TRANSCRIBED. The attempts are bars. No prompt is written, no
+ *  output is invented, and neither side is scored: the left is not wrong, it is
+ *  unaligned, which is exactly what the document says. */
+function Consistency({ on }: { on: boolean }) {
   const mark = on ? "var(--color-brand)" : "var(--color-ash)";
-  const BAD = 3;
-  const ROWS = [0.92, 0.74, 0.86, 0.7, 0.8, 0.56];
+  /** Four attempts at one task. Every one a different size, angle and shape,
+   *  because that is the state the session finds them in. */
+  const LOOSE = [
+    { x: 44, y: 62, w: 168, h: 96, rot: -8, rows: [0.86, 0.5] },
+    { x: 176, y: 176, w: 132, h: 118, rot: 6, rows: [0.7, 0.9, 0.44] },
+    { x: 30, y: 236, w: 150, h: 78, rot: 4, rows: [0.92] },
+    { x: 152, y: 322, w: 176, h: 84, rot: -5, rows: [0.6, 0.8] },
+  ];
   return (
     <>
-      {/* The board. */}
-      <rect x="72" y="44" width="576" height="300" rx="10" fill="var(--color-ink-2)" stroke="var(--color-line)" strokeWidth="2" />
-      {/* What is on it: a prompt, then what came back. */}
-      <rect x="104" y="76" width="240" height="12" rx="6" fill="var(--color-snow)" fillOpacity="0.28" />
-      <line x1="104" y1="108" x2="616" y2="108" stroke="var(--color-line)" strokeWidth="1.5" />
-
-      {ROWS.map((f, i) => (
-        <rect
-          key={i}
-          x="104"
-          y={132 + i * 30}
-          width={512 * f}
-          height="10"
-          rx="5"
-          fill="var(--color-ash)"
-          fillOpacity={i === BAD ? 0.5 : 0.34}
-        />
+      {/* Four people, four ways, nothing shared. */}
+      {LOOSE.map((c, i) => (
+        <g key={i} transform={`rotate(${c.rot} ${c.x + c.w / 2} ${c.y + c.h / 2})`}>
+          <rect
+            x={c.x}
+            y={c.y}
+            width={c.w}
+            height={c.h}
+            rx="8"
+            fill="var(--color-ink-2)"
+            stroke="var(--color-line)"
+            strokeWidth="2"
+          />
+          <rect x={c.x + 14} y={c.y + 14} width={c.w * 0.42} height="8" rx="4" fill="var(--color-ash)" fillOpacity="0.55" />
+          {c.rows.map((f, r) => (
+            <rect
+              key={r}
+              x={c.x + 14}
+              y={c.y + 36 + r * 18}
+              width={(c.w - 28) * f}
+              height="7"
+              rx="3.5"
+              fill="var(--color-ash)"
+              fillOpacity="0.3"
+            />
+          ))}
+        </g>
       ))}
 
-      {/* The one that is wrong, and the mark a person leaves on it. The mark is
-          drawn statically and the animated stroke traces over it: ci-draw is
-          invisible for part of every cycle, and the fault is the whole subject
-          of this format, so it may not blink out of existence. */}
-      <rect x="80" y={132 + BAD * 30 - 6} width="8" height="22" rx="4" fill={mark} />
-      <rect
-        x="100"
-        y={132 + BAD * 30 + 14}
-        width={512 * ROWS[BAD] + 12}
-        height="4"
-        rx="2"
-        fill={mark}
-        fillOpacity="0.35"
-      />
-      <path
-        className="ci-draw"
-        d={`M100 ${132 + BAD * 30 + 16} H${104 + 512 * ROWS[BAD] + 8}`}
-        pathLength={100}
-        stroke={mark}
-        strokeWidth="4"
-        strokeLinecap="round"
-        fill="none"
-      />
+      {/* What the session puts between them. */}
+      <line x1="368" y1="40" x2="368" y2="400" stroke="var(--color-line)" strokeWidth="2" strokeDasharray="6 8" />
+      <g>
+        <circle cx="368" cy="220" r="22" fill="var(--color-ink-3)" stroke={mark} strokeWidth="2.5" />
+        <path
+          className="ci-draw"
+          d="M356 220 H380 M372 212 L380 220 L372 228"
+          pathLength={100}
+          stroke={mark}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+        <path
+          d="M356 220 H380 M372 212 L380 220 L372 228"
+          stroke={mark}
+          strokeWidth="2.5"
+          strokeOpacity="0.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      </g>
 
-      {/* The room, implied at the very front: bench tops, nothing to count. */}
-      <rect x="8" y="382" width="300" height="18" rx="9" fill="var(--color-void)" fillOpacity="0.16" />
-      <rect x="330" y="382" width="382" height="18" rx="9" fill="var(--color-void)" fillOpacity="0.16" />
-      <rect x="56" y="414" width="250" height="16" rx="8" fill="var(--color-void)" fillOpacity="0.09" />
-      <rect x="332" y="414" width="330" height="16" rx="8" fill="var(--color-void)" fillOpacity="0.09" />
+      {/* The same four, one way. */}
+      {[0, 1, 2, 3].map((i) => (
+        <g key={i}>
+          <rect
+            x="428"
+            y={62 + i * 86}
+            width="248"
+            height="70"
+            rx="8"
+            fill="var(--color-ink-2)"
+            stroke={mark}
+            strokeWidth="2"
+            strokeOpacity={0.55}
+          />
+          <rect x="444" y={78 + i * 86} width="104" height="8" rx="4" fill={mark} fillOpacity="0.55" />
+          <rect x="444" y={100 + i * 86} width="216" height="7" rx="3.5" fill="var(--color-ash)" fillOpacity="0.32" />
+          <rect x="444" y={114 + i * 86} width="164" height="7" rx="3.5" fill="var(--color-ash)" fillOpacity="0.32" />
+          {/* The light walks the aligned set, because it is one method now. */}
+          <circle cx="666" cy={97 + i * 86} r="4" fill="none" stroke={mark} strokeWidth="1.6" />
+          <circle
+            className="ci-blink"
+            cx="666"
+            cy={97 + i * 86}
+            r="4"
+            fill={mark}
+            style={{ animationDelay: `${(i * 1.5).toFixed(2)}s` }}
+          />
+        </g>
+      ))}
     </>
   );
 }
@@ -462,89 +515,121 @@ function Judge({ on }: { on: boolean }) {
 
 /* -- 04 ---------------------------------------------------------------------- */
 
-/** THE PERIOD. Also not a room: the schedule, because this format's subject is
- *  the time between sittings. Departments run down, the agreed period runs
- *  across, sessions are the marks on it and the spans between them are where
- *  the applying happens. Nothing is dated and nothing is counted in weeks: the
- *  document names no duration. */
-function Period({ on }: { on: boolean }) {
+/** WHAT THE MULTI-SESSION PROGRAMME IS FOR. Not a schedule: departments across
+ *  and sittings down is a Gantt chart, and every programme in every industry
+ *  looks like one. The sentence that belongs to this format and to no other is
+ *  "develop more advanced applications once the team has established a reliable
+ *  foundation". It builds.
+ *
+ *  So it is drawn as courses laid one on another. The foundation runs the full
+ *  width and is shared, because the basics are the same for everyone. Above it,
+ *  each department's courses are its own: "Each department can receive
+ *  role-specific exercises, prompts and use cases", so no two columns are laid
+ *  the same way. The advanced course sits on top and only where the courses
+ *  under it are complete, which is the document's own condition.
+ *
+ *  NOTHING IS COUNTED OR DATED. No weeks, no session count, no department
+ *  names: the document gives none. The number of courses is a structure, not a
+ *  measurement. */
+function Foundation({ on }: { on: boolean }) {
   const mark = on ? "var(--color-brand)" : "var(--color-ash)";
-  const ROWS = [96, 174, 252, 330];
-  const SESSIONS = [140, 300, 460, 620];
+  const L = 56;
+  const R = 664;
+  const GAP = 10;
+  const COLS = 3;
+  const colW = (R - L - GAP * (COLS - 1)) / COLS;
+  /** Each department's own courses. Different bonds, because the material is
+   *  role-specific; same heights, because it is the same programme. */
+  const BONDS = [
+    [[0.46, 0.54], [0.62, 0.38], [1]],
+    [[0.34, 0.66], [1], [0.5, 0.5]],
+    [[0.7, 0.3], [0.4, 0.6], [0.55, 0.45]],
+  ];
+  const courseH = 46;
+  const baseY = 336;
+
   return (
     <>
-      {/* The period. */}
-      <line x1="112" y1="56" x2="656" y2="56" stroke="var(--color-line)" strokeWidth="2" />
-      {SESSIONS.map((x, i) => (
-        <g key={x}>
-          <line x1={x} y1="46" x2={x} y2="366" stroke="var(--color-line)" strokeWidth="1.5" strokeDasharray="5 7" />
-          <circle
-            className="ci-blink"
-            cx={x}
-            cy="56"
-            r="7"
-            fill={mark}
-            style={{ animationDelay: `${(i * 1.5).toFixed(2)}s` }}
-          />
-          <circle cx={x} cy="56" r="7" fill="none" stroke={mark} strokeWidth="2" />
-        </g>
+      {/* The foundation. One course, full width, shared. */}
+      <rect x={L} y={baseY} width={R - L} height={courseH} rx="4" fill="var(--color-ink-2)" stroke={mark} strokeWidth="2.5" />
+      {[0.25, 0.5, 0.75].map((f) => (
+        <line
+          key={f}
+          x1={L + (R - L) * f}
+          y1={baseY}
+          x2={L + (R - L) * f}
+          y2={baseY + courseH}
+          stroke={mark}
+          strokeWidth="1.5"
+          strokeOpacity="0.35"
+        />
       ))}
+      <rect x={L} y={baseY} width={R - L} height={courseH} rx="4" fill={mark} fillOpacity="0.08" />
 
-      {/* Each department's own run through it. */}
-      {ROWS.map((y) => (
-        <g key={y}>
-          <rect x="40" y={y - 9} width="52" height="18" rx="9" fill="var(--color-ash)" fillOpacity="0.22" />
-          <line x1="112" y1={y} x2="656" y2={y} stroke="var(--color-line)" strokeWidth="1.5" />
-          {/* Every department sits every session. Fading the later ones by row
-              would say some get fewer, which the document does not. */}
-          {SESSIONS.map((x) => (
+      {/* Each department's courses, laid on it. */}
+      {BONDS.map((col, c) => {
+        const x0 = L + c * (colW + GAP);
+        return (
+          <g key={c}>
+            {col.map((course, k) => {
+              const y = baseY - (k + 1) * (courseH + 8);
+              let cursor = x0;
+              return course.map((f, b) => {
+                const w = colW * f - (b < course.length - 1 ? 6 : 0);
+                const rect = (
+                  <rect
+                    key={`${k}-${b}`}
+                    x={cursor}
+                    y={y}
+                    width={w}
+                    height={courseH}
+                    rx="4"
+                    fill="var(--color-ink-2)"
+                    stroke="var(--color-line)"
+                    strokeWidth="2"
+                  />
+                );
+                cursor += colW * f;
+                return rect;
+              });
+            })}
+
+            {/* The advanced course, on top, only where what is under it is
+                complete. */}
             <rect
-              key={x}
-              x={x - 13}
-              y={y - 13}
-              width="26"
-              height="26"
-              rx="6"
+              x={x0}
+              y={baseY - 4 * (courseH + 8)}
+              width={colW}
+              height={courseH}
+              rx="4"
               fill="var(--color-ink-3)"
               stroke={mark}
-              strokeWidth="2"
+              strokeWidth="2.5"
             />
-          ))}
-          {/* The gap between sittings, where what was learned gets applied. */}
-          {SESSIONS.slice(0, -1).map((x, i) => (
             <rect
-              key={x}
-              x={x + 17}
-              y={y - 3}
-              width={SESSIONS[i + 1] - x - 34}
-              height="6"
-              rx="3"
-              fill="var(--color-ash)"
-              fillOpacity="0.3"
+              x={x0 + 16}
+              y={baseY - 4 * (courseH + 8) + 18}
+              width={colW - 32}
+              height="10"
+              rx="5"
+              fill={mark}
+              fillOpacity="0.4"
             />
-          ))}
-        </g>
-      ))}
+            <circle cx={x0 + colW / 2} cy={baseY - 4 * (courseH + 8) - 18} r="5" fill="none" stroke={mark} strokeWidth="1.8" />
+            <circle
+              className="ci-blink"
+              cx={x0 + colW / 2}
+              cy={baseY - 4 * (courseH + 8) - 18}
+              r="5"
+              fill={mark}
+              style={{ animationDelay: `${(c * 2).toFixed(2)}s` }}
+            />
+          </g>
+        );
+      })}
 
-      {/* Coming back with what the gap produced. */}
-      <path
-        className="ci-draw"
-        d="M300 392 H448 a14 14 0 0 0 14 -14 V72"
-        pathLength={100}
-        stroke={mark}
-        strokeWidth="2"
-        strokeOpacity="0.75"
-        fill="none"
-      />
-      <path
-        d="M456 84 L462 71 L468 84"
-        stroke={mark}
-        strokeWidth="2"
-        strokeOpacity="0.75"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      {/* The ground it all stands on. */}
+      <line x1="30" y1={baseY + courseH + 6} x2="690" y2={baseY + courseH + 6} stroke="var(--color-ash)" strokeWidth="2" strokeOpacity="0.5" />
     </>
   );
 }

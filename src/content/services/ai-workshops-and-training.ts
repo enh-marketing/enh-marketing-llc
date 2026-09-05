@@ -59,10 +59,12 @@ export const narrative = {
  *  An earlier version drew all four as the same room with the furniture moved
  *  around, which made four pictures that looked like each other: the room was
  *  the constant and the differences were small. The four formats do not differ
- *  by where they are held, they differ by what happens. A half day is a
- *  demonstration of what tools do and where they fail. A full day is hands on a
+ *  by where they are held, they differ by what happens. A half day takes a team
+ *  who have "experimented with tools such as ChatGPT without developing a
+ *  consistent way to use them" and gives them one. A full day is hands on a
  *  table producing a shortlist. A leadership session is a judgement on
- *  proposals. A multi-session programme is a period with working gaps in it.
+ *  proposals. A multi-session programme builds, course by course, "once the
+ *  team has established a reliable foundation".
  *  Each therefore gets its own object, its own camera and its own composition,
  *  and `cite` names the clause its drawing was read from. */
 export type Format = {
@@ -70,7 +72,7 @@ export type Format = {
   title: string;
   body: string;
   note: string;
-  scene: "fail" | "work" | "judge" | "period";
+  scene: "consistency" | "work" | "judge" | "foundation";
   /** The clause the drawing was read from. Printed with it, so the picture is
    *  checkable against the document. */
   cite: string;
@@ -85,8 +87,8 @@ export const formats = {
       title: "Half-Day AI Introduction",
       body: "The half-day introduction gives employees a practical understanding of what current AI tools can do and where they commonly fail. It is suitable for teams that have limited experience or have experimented with tools such as ChatGPT without developing a consistent way to use them.",
       note: "The session covers everyday work applications, basic prompting, output checking and safe usage. Examples are adjusted to the department attending so employees can connect the training to their own responsibilities.",
-      scene: "fail",
-      cite: "what current AI tools can do and where they commonly fail",
+      scene: "consistency",
+      cite: "without developing a consistent way to use them",
     },
     {
       no: "02",
@@ -109,8 +111,8 @@ export const formats = {
       title: "Multi-Session AI Programme",
       body: "The multi-session programme supports AI upskilling across several teams or departments. Sessions are delivered over an agreed period, giving participants time to apply what they learn and return with questions from their daily work.",
       note: "Each department can receive role-specific exercises, prompts and use cases. Follow-up sessions review adoption, correct poor usage habits and develop more advanced applications once the team has established a reliable foundation.",
-      scene: "period",
-      cite: "Sessions are delivered over an agreed period",
+      scene: "foundation",
+      cite: "once the team has established a reliable foundation",
     },
   ] as Format[],
 };

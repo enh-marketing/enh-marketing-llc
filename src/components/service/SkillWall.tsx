@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useRef } from "react";
+import { motion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
@@ -50,7 +51,13 @@ export function SkillWall({
   items: string[];
   note: string;
 }) {
+  const ref = useRef<HTMLUListElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-70px" });
   const reduced = usePrefersReducedMotion();
+  /* Reduced motion resolves after hydration, so a reader who has asked for no
+     motion still starts on the hidden frame for one paint. Treating it as shown
+     puts them straight on the finished one. */
+  const show = inView || reduced;
 
   return (
     <section id={id} data-section={label} className="relative overflow-x-clip py-14 sm:py-16">
@@ -83,7 +90,7 @@ export function SkillWall({
           </svg>
         </div>
 
-        <ul className="grid sm:grid-cols-2 lg:grid-cols-3">
+        <ul ref={ref} className="grid sm:grid-cols-2 lg:grid-cols-3">
           {items.map((skill, i) => {
             const [raw, ...rest] = skill.split(" ");
             /* "Cleaning, organising and reviewing business data" splits with the
@@ -94,8 +101,7 @@ export function SkillWall({
               <motion.li
                 key={skill}
                 initial={reduced ? false : { opacity: 0, y: 22 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-70px" }}
+                animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
                 transition={{ duration: 0.55, ease: EASE, delay: Math.min((i % 3) * 0.08, 0.24) }}
                 className="group border-b border-line py-8 pr-8 transition-colors duration-500 hover:bg-ink-2 motion-reduce:transition-none sm:py-9"
               >
