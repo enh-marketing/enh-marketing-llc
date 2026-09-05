@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Rise } from "@/components/fx/Reveal";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
+import { cn } from "@/lib/cn";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -81,8 +82,9 @@ export function WorkshopOutput({
   const reduced = usePrefersReducedMotion();
   const show = inView || reduced;
 
+  /** The sheet draws the first two: the shortlist, and the ranking that orders
+   *  it. They stay in the list as well, marked rather than removed. */
   const sheet = items.slice(0, 2);
-  const pack = items.slice(2);
 
   return (
     <section id={id} data-section={label} className="relative overflow-x-clip py-14 sm:py-16">
@@ -104,7 +106,7 @@ export function WorkshopOutput({
           </div>
         </Rise>
 
-        <div ref={ref} className="mt-14 grid gap-x-12 gap-y-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+        <div ref={ref} className="mt-14 grid gap-x-14 gap-y-12 lg:grid-cols-2">
           {/* The sheet. */}
           <motion.div
             initial={reduced ? false : { opacity: 0, y: 20 }}
@@ -122,30 +124,42 @@ export function WorkshopOutput({
             <Plot show={show} reduced={reduced} />
           </motion.div>
 
-          {/* The rest of the pack. */}
-          <div>
-            <p className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
-              And in the pack
-            </p>
-            <ol className="mt-5 border-t border-line">
-              {pack.map((entry, i) => (
+          {/* All eight, at the weight of the thing they are: the answer to the
+              question the heading asks. An earlier version lifted the first two
+              out and numbered the remainder from 03, which is accurate and
+              reads as a bug; and it set them at body size beside a large card,
+              which read as an afterthought. The two the sheet draws are marked
+              rather than removed. */}
+          <ol className="self-center border-t border-line">
+            {items.map((entry, i) => {
+              const drawn = i < 2;
+              return (
                 <motion.li
                   key={entry}
                   initial={reduced ? false : { opacity: 0, x: 14 }}
                   animate={show ? { opacity: 1, x: 0 } : { opacity: 0, x: 14 }}
-                  transition={{ duration: 0.45, ease: EASE, delay: 0.25 + i * 0.07 }}
-                  className="group flex items-baseline gap-3.5 border-b border-line py-3.5 transition-colors duration-500 hover:bg-ink-2 motion-reduce:transition-none"
+                  transition={{ duration: 0.45, ease: EASE, delay: 0.2 + i * 0.06 }}
+                  className="group flex items-baseline gap-4 border-b border-line py-5 transition-colors duration-500 hover:bg-ink-2 motion-reduce:transition-none"
                 >
-                  <span className="font-display shrink-0 text-[0.625rem] font-bold tabular-nums text-ash transition-colors duration-500 group-hover:text-brand-text motion-reduce:transition-none">
-                    {String(i + 3).padStart(2, "0")}
-                  </span>
-                  <span className="text-[0.9375rem] leading-snug text-fog transition-colors duration-500 group-hover:text-snow motion-reduce:transition-none">
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "mt-2 h-2 w-2 shrink-0 rounded-full transition-colors duration-500 motion-reduce:transition-none",
+                      drawn ? "bg-brand" : "bg-line group-hover:bg-ash",
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "text-[1.0625rem] leading-snug transition-colors duration-500 motion-reduce:transition-none sm:text-[1.125rem]",
+                      drawn ? "text-snow" : "text-fog group-hover:text-snow",
+                    )}
+                  >
                     {entry}
                   </span>
                 </motion.li>
-              ))}
-            </ol>
-          </div>
+              );
+            })}
+          </ol>
         </div>
 
         {/* The one that outlives the engagement. */}
