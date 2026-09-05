@@ -11,8 +11,8 @@ import { ServiceHero } from "@/components/service/ServiceHero";
 import { PageSwap } from "@/components/service/PageSwap";
 import { Narrative } from "@/components/service/Narrative";
 import { SiteScreens } from "@/components/service/SiteScreens";
-import { SiteStack } from "@/components/service/SiteStack";
-import { SiteRun } from "@/components/service/SiteRun";
+import { SiteAnatomy } from "@/components/service/SiteAnatomy";
+import { SiteBuild } from "@/components/service/SiteBuild";
 import { SiteWatch } from "@/components/service/SiteWatch";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
@@ -68,10 +68,10 @@ export function IntelligentWebPage() {
           screens={c.services.screens}
         />
 
-        {/* Six elements as the layers of one site, drawn as a stack with
-            depth rather than a column of rows, and the seventh heading set
-            apart because it decides which layers you get. */}
-        <SiteStack
+        {/* Six elements marked on one site, because that is what they are:
+            properties of a website, and a website can simply be drawn. The
+            seventh heading is set apart because it decides which you get. */}
+        <SiteAnatomy
           id="elements"
           label="The Main Elements of an Intelligent Website"
           index="02"
@@ -81,10 +81,10 @@ export function IntelligentWebPage() {
           depends={c.elements.depends}
         />
 
-        {/* Five steps, drawn around the second: whether the existing website
-            can support the features is the question the whole page returns to,
-            and a run of five equal rows buries it. */}
-        <SiteRun
+        {/* Five steps drawn as the five things they put in front of you, with
+            the same site changing from the first frame to the last. The fork
+            sits on the scope document, where the question is answered. */}
+        <SiteBuild
           id="process"
           label="How the Project Works"
           index="03"
