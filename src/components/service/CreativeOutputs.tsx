@@ -24,9 +24,10 @@ import type { PinRenderer } from "@/components/service/PinnedExplorer";
  *    03  a product standing on a studio sweep, lit, with its cast shadow. The
  *        curve where the backdrop meets the floor is what says "shot on a set"
  *        rather than "rectangle".
- *    04  one composition, re-cropped. The same motif appears in every frame at
- *        a different aspect ratio, which is the only way a drawing can say
- *        "versions of one idea" rather than "several unrelated boxes".
+ *    04  one approved asset beside the versions it becomes, where each version
+ *        changes exactly one part of it: the opening, the headline, the body or
+ *        the call to action. Re-cropping alone only ever said "formats"; the
+ *        part that changed is what says "versions of one idea".
  *
  *  WORDLESS, like every other drawing on this site. The specificity is carried
  *  by shape, never by a caption, and never by writing ad copy on a client's
@@ -188,50 +189,108 @@ function ProductSet() {
   );
 }
 
-/* ═════════════════════════════════════════════ 04 · one idea, re-cropped */
-/** The motif every frame contains. Drawn from the same instructions each time,
- *  at whatever crop the frame gives it, so the frames are visibly versions of
- *  one composition rather than unrelated boxes. */
-function Motif({ scale = 1 }: { scale?: number }) {
+/* ═══════════════════════════════════════ 04 · one idea, one thing changed */
+/** One version of the approved asset. Every version carries the same four
+ *  parts in the same order, and exactly one of them is different, which is what
+ *  the copy actually describes: "different openings, headlines, scenes,
+ *  formats, languages, offers and calls to action". Showing the same asset
+ *  re-cropped only ever said "formats"; showing which part changed says all of
+ *  it, and it is how a variant set is really read. */
+function Version({
+  changed,
+  master = false,
+  wide = false,
+}: {
+  /** 0 opening, 1 headline, 2 body, 3 call to action. -1 changes nothing. */
+  changed: number;
+  master?: boolean;
+  wide?: boolean;
+}) {
+  const lit = (i: number) => changed === i;
   return (
-    <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid slice" aria-hidden>
-      <circle cx="38" cy="34" r={18 * scale} fill="var(--color-brand)" opacity="0.5" />
-      <rect x="14" y="62" width="58" height="5" rx="2.5" fill={INK} opacity="0.45" />
-      <rect x="14" y="74" width="38" height="5" rx="2.5" fill={INK} opacity="0.3" />
-      <path d="M62 20 l16 14 l-16 14 z" fill={INK} opacity="0.35" />
-    </svg>
+    <div
+      className={cn(
+        "flex flex-col gap-1.5 rounded-lg border p-2",
+        master ? "border-2 border-brand bg-brand/[0.05] gap-2.5 p-3" : "border-line bg-void/40",
+      )}
+    >
+      {/* the opening: the shot the version starts on */}
+      <div
+        className={cn(
+          "relative overflow-hidden rounded",
+          wide ? "aspect-[16/9]" : "aspect-[4/3]",
+          lit(0) ? "bg-brand/15" : "bg-line/70",
+        )}
+      >
+        <svg viewBox="0 0 60 40" className="absolute inset-0 h-full w-full" aria-hidden>
+          <circle
+            cx={lit(0) ? 36 : 24}
+            cy="18"
+            r={master ? 9 : 7}
+            fill={lit(0) ? "var(--color-brand)" : INK}
+            opacity={lit(0) ? 0.75 : 0.4}
+          />
+          <path
+            d={lit(0) ? "M2 40 q 20 -14 34 0" : "M2 40 q 16 -10 30 0"}
+            fill="none"
+            stroke={INK}
+            strokeOpacity="0.3"
+            strokeWidth="1.4"
+          />
+        </svg>
+      </div>
+
+      {/* the headline */}
+      <span
+        aria-hidden
+        className={cn("block rounded-full", master ? "h-2" : "h-1.5", lit(1) ? "bg-brand" : "bg-fog/45")}
+        style={{ width: lit(1) ? "92%" : "72%" }}
+      />
+      {/* the body line */}
+      <span
+        aria-hidden
+        className={cn("block rounded-full", master ? "h-2" : "h-1.5", lit(2) ? "bg-brand" : "bg-line")}
+        style={{ width: lit(2) ? "74%" : "52%" }}
+      />
+      {/* the call to action */}
+      <span
+        aria-hidden
+        className={cn(
+          "mt-0.5 block rounded-full",
+          master ? "h-4" : "h-3",
+          lit(3) ? "bg-brand" : "bg-line",
+        )}
+        style={{ width: lit(3) ? "68%" : "46%" }}
+      />
+    </div>
   );
 }
 
 function VariantSet() {
+  /* Which part each version changes, and which of them are cut wide. The set
+     runs through all four parts, twice, so no single change reads as the only
+     kind of variation. */
+  const VERSIONS: { changed: number; wide?: boolean }[] = [
+    { changed: 1 },
+    { changed: 3, wide: true },
+    { changed: 0 },
+    { changed: 2, wide: true },
+    { changed: 3 },
+    { changed: 1 },
+  ];
+
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex items-center gap-6">
       {/* the one approved idea */}
-      <div className="relative aspect-[4/5] w-[34%] shrink-0 overflow-hidden rounded-xl border-2 border-brand bg-void/50">
-        <Motif />
+      <div className="w-[30%] shrink-0">
+        <Version changed={-1} master />
       </div>
 
-      {/* the same composition, re-cropped into every format */}
-      <div className="flex flex-1 flex-col gap-2.5">
-        <div className="flex gap-2.5">
-          <div className="relative aspect-[16/9] flex-1 overflow-hidden rounded-md border border-line bg-void/40">
-            <Motif scale={0.9} />
-          </div>
-          <div className="relative aspect-square w-[26%] overflow-hidden rounded-md border border-line bg-void/40">
-            <Motif scale={0.85} />
-          </div>
-        </div>
-        <div className="flex gap-2.5">
-          <div className="relative aspect-[9/16] w-[22%] overflow-hidden rounded-md border border-line bg-void/40">
-            <Motif scale={0.8} />
-          </div>
-          <div className="relative aspect-[4/5] w-[28%] overflow-hidden rounded-md border border-line bg-void/40">
-            <Motif scale={0.9} />
-          </div>
-          <div className="relative aspect-[16/10] flex-1 overflow-hidden rounded-md border border-line bg-void/40">
-            <Motif scale={0.95} />
-          </div>
-        </div>
+      {/* the versions it becomes, each with one part changed */}
+      <div className="grid flex-1 grid-cols-3 gap-2.5">
+        {VERSIONS.map((v, i) => (
+          <Version key={i} changed={v.changed} wide={v.wide} />
+        ))}
       </div>
     </div>
   );

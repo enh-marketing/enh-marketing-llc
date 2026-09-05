@@ -116,6 +116,7 @@ export function PinnedExplorer({
   title,
   strokeTitle,
   mark,
+  markNode,
   aside,
   bodyLabel,
   noteLabel,
@@ -132,6 +133,9 @@ export function PinnedExplorer({
   title: string;
   strokeTitle: string;
   mark?: { variant: "growth" | "network" | "progression" | "contrast" | "ecosystem"; label: string };
+  /** A page's own mark, where the shared set has nothing that fits. Takes
+   *  precedence over `mark`, exactly as it does on SectionHeader. */
+  markNode?: ReactNode;
   aside?: ReactNode;
   /** Labels for the body and note, where the source names them — a table's
    *  column headers, for instance, which would otherwise be lost when the table
@@ -304,7 +308,8 @@ export function PinnedExplorer({
           index={index}
           title={title}
           strokeTitle={strokeTitle}
-          mark={aside ? undefined : mark}
+          mark={aside || markNode ? undefined : mark}
+          markNode={markNode}
           aside={aside}
           className="mb-12"
         />

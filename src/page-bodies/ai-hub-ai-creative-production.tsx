@@ -61,7 +61,7 @@ export function AiCreativeProductionPage() {
           index="01"
           title={c.produce.title}
           strokeTitle={c.produce.strokeTitle}
-          mark={{ variant: "ecosystem", label: "Four kinds of output" }}
+          markNode={<CreativeMark variant="frames" />}
           items={c.produce.items}
           diagram={{ kind: "creative" }}
           diagramSide="left"
