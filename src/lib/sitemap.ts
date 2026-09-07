@@ -19,9 +19,12 @@ export type NavNode = {
   children?: NavNode[];
 };
 
-// AI Hub and every child redirect to a separate ENH property, so none of them
-// are pages we build. Destinations are not confirmed yet, so they sit on "#".
-// TODO(client): swap in the real URLs, then flip these to absolute links.
+// Every AI Hub child is now a page on this site; only the hub's own landing
+// page is missing, so AI_HUB_HREF is the one placeholder left here. It stays
+// `external` so buildablePages() does not start demanding a page for "#", and
+// isPending() renders it as a heading rather than as a link.
+// TODO(client): confirm whether the AI Hub gets a landing page of its own or
+// keeps pointing at a separate property, then replace this.
 const AI_HUB_HREF = "#";
 
 /* ------------------------------------------------------------------ services */
@@ -300,8 +303,15 @@ export function routeExists(href: string): boolean {
  *  Off-site nodes are never pending. Their destination lives on another host,
  *  so BUILT has nothing to say about it. */
 export function isPending(node: NavNode): boolean {
+  // A placeholder destination is pending whether it points off-site or not.
+  // This used to return early for external nodes, which meant the one node
+  // still sitting on "#" -- AI Hub itself -- rendered in the navbar and the
+  // footer of all 38 pages as a live link to nowhere, opening a blank tab. The
+  // `external` field's own comment says to guard with isPending() first; that
+  // guard could not work while isPending() exempted externals.
+  if (node.href === "#") return true;
   if (node.external) return false;
-  return node.href === "#" || !BUILT.has(node.href);
+  return !BUILT.has(node.href);
 }
 
 /** Routes named in this file that no page satisfies yet. */
