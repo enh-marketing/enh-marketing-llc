@@ -1,17 +1,16 @@
 "use client";
 
-import { CategoryField } from "@/components/hub/CategoryField";
+import { SearchSurfaces } from "@/components/hub/SearchSurfaces";
 
 /** The AI Hub landing page.
  *
- *  Composed section by section, and this is the first of them: one field of
- *  dots that rearranges itself for each of the eight categories, rather than
- *  eight separate full-height sections. The reasoning for that choice sits in
- *  CategoryField.tsx, next to the code it explains. */
+ *  Eight full-height sections, one per category, each with its own design
+ *  drawn from that category's own document. Built one at a time; this file
+ *  gains them in order. */
 export function AiHubPage() {
   return (
     <main>
-      <CategoryField />
+      <SearchSurfaces />
     </main>
   );
 }
