@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from "motion/react";
 import { ParallaxLayers } from "@/components/fx/ParallaxLayers";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { categories } from "@/content/ai-hub";
-import { BACK, FRONT, LAYER_IMG, MID } from "@/components/hub/parallaxAssets";
 
 /** AI Hub, section 02: AI & Automation.
  *
@@ -26,12 +25,13 @@ import { BACK, FRONT, LAYER_IMG, MID } from "@/components/hub/parallaxAssets";
  *  component as it is; it is recorded here so it is replaced rather than
  *  forgotten.
  *
- *  FULL BLEED, ONE VIEWPORT, WITH THE PARALLAX. The section is the page's own
- *  parallax block at 100vh rather than a card inside the content column, so it
- *  matches the opener and the six scaffolding sections. The three photographic
- *  layers travel at 70, 55 and 10 as everywhere else; the pipeline rides a
- *  fourth layer at 28, which puts it in front of the figure and gives it a
- *  little travel of its own. */
+ *  FULL BLEED, ONE VIEWPORT, PARALLAX WITHOUT PHOTOGRAPHY. The section is
+ *  100vh and the full width of the page. There is no layer artwork here: the
+ *  parallax is the effect on its own, which is the three pieces of the section
+ *  travelling at different rates as it passes. The heading moves most at 55 and
+ *  the card least at 14, so the card reads as the nearest thing and the words
+ *  drift down and pass behind it. The ground is the page's own surface rather
+ *  than a dark plate, so the dark card supplies the contrast by itself. */
 
 const messages = [
   'Received: "Summarize Q3 performance for stakeholder report..."',
@@ -295,32 +295,41 @@ export function AutomationPipeline() {
     <section id="ai-automation" data-section={c.label} className="relative w-full">
       <ParallaxLayers
         className="h-screen w-full"
-        stageClassName="bg-[#0b0f14]"
         layers={[
-          { y: 70, children: <img src={BACK} alt="" aria-hidden loading="lazy" className={LAYER_IMG} /> },
-          { y: 55, children: <img src={MID} alt="" aria-hidden loading="lazy" className={LAYER_IMG} /> },
-          { y: 10, children: <img src={FRONT} alt="" aria-hidden loading="lazy" className={LAYER_IMG} /> },
           {
-            /* In front of the figure, and travelling a little itself. */
-            y: 28,
+            /* Behind, and travelling most, so it slides down and passes behind
+               the card as the section goes by. Depth comes from overlap rather
+               than from a gap: two stacked blocks drifting at different rates
+               either collide or leave the screen, which is exactly what the
+               first attempt did. Measured then: the link sat at 799 to 819 in
+               an 812 viewport, so it fell below the fold. */
+            y: 55,
             children: (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-4 py-10 sm:gap-8 sm:px-8">
-                <div className="text-center">
-                  <p className="font-display flex items-center justify-center gap-3 text-[0.6875rem] font-extrabold uppercase tracking-[0.2em] text-white/60">
-                    <span className="tabular-nums">{c.no}</span>
-                    <span aria-hidden className="block h-px w-8 bg-white/30" />
+              <div className="absolute inset-x-0 top-0 flex h-screen items-start justify-center px-4 pt-[8vh] text-center">
+                <div>
+                  <p className="font-display flex items-center justify-center gap-3 text-[0.6875rem] font-extrabold uppercase tracking-[0.2em] text-ash">
+                    <span className="tabular-nums text-brand-text">{c.no}</span>
+                    <span aria-hidden className="block h-px w-8 bg-line" />
                     AI Hub
                   </p>
-                  <h2 className="font-display mt-3 text-[clamp(1.75rem,5vw,3.25rem)] font-extrabold uppercase leading-[0.96] tracking-[-0.02em] text-white">
-                    AI &amp; Automation
+                  <h2 className="font-display mt-3 text-[clamp(1.75rem,5vw,3.25rem)] font-extrabold uppercase leading-[0.96] tracking-[-0.02em] text-snow">
+                    AI &amp; <span className="text-brand">Automation</span>
                   </h2>
                 </div>
-
+              </div>
+            ),
+          },
+          {
+            /* Nearest, so it barely moves, and last so it is on top. The link
+               rides with the card rather than on its own layer, so the two can
+               never drift apart. */
+            y: 14,
+            children: (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-7 px-4 sm:px-8">
                 <Pipeline />
-
                 <a
                   href={c.href}
-                  className="group inline-flex items-center gap-3 text-[0.8125rem] font-semibold uppercase tracking-[0.12em] text-white"
+                  className="group inline-flex items-center gap-3 text-[0.8125rem] font-semibold uppercase tracking-[0.12em] text-brand-text"
                 >
                   See the service
                   <span
