@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { brand } from "@/lib/content";
-import { topNav, isPending, type NavNode } from "@/lib/sitemap";
+import { topNav, isPending, pages, type NavNode } from "@/lib/sitemap";
 import { cn } from "@/lib/cn";
 import { ThemeToggle } from "@/components/fx/ThemeToggle";
 import { Container } from "@/components/ui/Container";
@@ -22,14 +22,24 @@ const subscribeHover = (cb: () => void) => {
 
 /** Where the header's three calls to action point.
  *
- *  All three pointed at /contact, which the sitemap names but no page serves,
+ *  All three pointed at /contact, which the sitemap named but no page served,
  *  so the site's primary CTA returned a 404 from every page in the build. The
  *  destination it wanted is already on the current page either way: the
  *  homepage closes on LetsTalk (#contact) and all sixteen service pages close
- *  on CtaBand (#quote), so the button now scrolls to the form that is there.
- *  Point this back at pages.contact.href once /contact is built. */
+ *  on CtaBand (#quote), so the button scrolls to the form that is there.
+ *
+ *  The contact page is now built and needs its own case: it closes on neither
+ *  of those anchors, and without this the header CTA on /contact-us pointed at
+ *  a #quote that does not exist there.
+ *
+ *  The wider question -- whether every page's header CTA should now navigate to
+ *  /contact-us instead of scrolling to the form already on the page -- is a
+ *  conversion decision for the team, not a side effect of shipping the page, so
+ *  the existing behaviour is left exactly as it was. */
 function ctaTarget(pathname: string): string {
-  return pathname === "/" ? "#contact" : "#quote";
+  if (pathname === "/") return "#contact";
+  if (pathname === pages.contact.href) return "#brief";
+  return "#quote";
 }
 
 /** Renders the right element for the node: Link internally, anchor off-site,

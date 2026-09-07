@@ -380,6 +380,93 @@ summary {
   animation-direction: reverse;
 }
 
+/* ---- TikTok Ads: three loops that carry the page's argument ----
+
+   The creative queue on the running-account drawing, the inflow at the open
+   edge of the creative bed, and the pulse travelling the selected Spark Ads
+   line. All three are CSS rather than GSAP on purpose: they are ambient,
+   self-contained and must survive a busy main thread, which is the rule the
+   feed marquee above already follows.
+
+   The two feeds hold two identical copies of their run and translate a full
+   -50%, so the loop lands exactly back on the start and never seams. That only
+   holds if the spacing is inside each item rather than a flex `gap`, because a
+   gap adds a gutter between the copies that is not repeated at the seam. */
+@keyframes queue-feed {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-queue {
+  animation: queue-feed 11s linear infinite;
+  will-change: transform;
+}
+
+@keyframes inflow-feed {
+  from {
+    transform: translateY(-50%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-inflow {
+  animation: inflow-feed 5s linear infinite;
+  will-change: transform;
+}
+
+/* A signal travelling a path, done the way that survives a scaled viewBox:
+   pathLength="100" on the path, so the dash numbers are percentages of its
+   length and no transform units are involved. */
+@keyframes spark-travel {
+  from {
+    stroke-dashoffset: 100;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-spark-travel {
+  stroke-dasharray: 14 86;
+  animation: spark-travel 2.4s linear infinite;
+}
+
+/* ---- Google Maps embed (the Contact page's closing plate) ----
+   Google's map is the one surface on this site nobody can restyle, so it is
+   filtered instead: greyed on paper, and inverted through a hue rotation on the
+   dark page, which is the standard way to land a third-party map inside a dark
+   palette without an API key or a custom style id.
+
+   Written as `html.dark .map-tint` rather than as a `dark:` utility because
+   this project's dark mode is an opt-in class and no `dark:` variant is
+   configured for it -- the same reason `.logo-theme` above is written this way.
+
+   `.map-live` is the click-to-activate escape hatch. Lenis's own stylesheet
+   sets `pointer-events: none` on every iframe while smooth scrolling is on, so
+   the map is inert until a visitor asks for it; this rule outranks Lenis's on
+   specificity, and StudioMap pairs it with data-lenis-prevent so an activated
+   map zooms instead of scrolling the page. */
+.map-tint {
+  filter: grayscale(1) contrast(1.05);
+}
+
+html.dark .map-tint {
+  filter: grayscale(1) invert(0.92) hue-rotate(180deg) contrast(0.9) brightness(0.95);
+}
+
+html.lenis.lenis-smooth iframe.map-live {
+  pointer-events: auto;
+}
+
 /* ---- Cursor spotlight ----
    A field of dots that only exists where the pointer is. Both layers read the
    same --mx/--my custom properties, written straight to the element on
@@ -473,6 +560,11 @@ summary {
 
   .animate-marquee,
   .animate-feed,
+  .animate-queue,
+  .animate-inflow,
+  /* The travelling pulse on a Spark Ads line. The line underneath it is drawn
+     in full regardless, so stopping this leaves the join complete. */
+  .animate-spark-travel,
   .animate-readout,
   /* A marching dash on a glyph stroke. Its finished state is the dashed line
      itself, so stopping it leaves the glyph exactly as drawn. */
@@ -483,6 +575,11 @@ summary {
   .animate-pulse,
   .aurora-a,
   .aurora-b,
+  /* The Insights route's summit ring and its flag. The dot under the ring and
+     the fully unfurled pennant are their drawn states, so stopping both leaves
+     the summit marked and the flag out. */
+  .ri-ping,
+  .ri-flag,
   .grain::after {
     animation: none !important;
   }
@@ -2178,4 +2275,560 @@ summary {
     animation: none !important;
     opacity: 0.9 !important;
   }
+}
+
+
+/* ================================================================= AI HUB ==
+   Motion for the redesigned AI Hub sections. Same contract as every block
+   above it: each loop ENDS ON THE STATE THE MARKUP RENDERS, so a browser that
+   never animates, a failed hydration and a reader who has asked for no motion
+   all land on a complete picture. The reduced-motion block at the end of this
+   section stops them there rather than hiding anything.
+
+   Prefix `ah-`. Anything scoped to one section says so in its comment. */
+
+/* ---- AI Search Visibility ---- */
+
+/* The survey sweep. Continuous, because the reading is the one thing in the
+   process that never stops. Rotated about the viewBox centre, not the group's
+   own bounding box: the wedge is a pie slice whose bbox is nowhere near the
+   dial centre, and fill-box would swing it round the wrong point. */
+@keyframes ah-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ah-spin {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: ah-spin 9s linear infinite;
+}
+
+/* A change arriving on one of the three inbound lanes of the watch floor.
+   Travels the lane and is gone, so its finished state is "absent". */
+@keyframes ah-drop {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  18%,
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(320%);
+    opacity: 0;
+  }
+}
+
+.ah-drop {
+  animation: ah-drop 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  animation-delay: inherit;
+}
+
+/* One duty on watch at a time. Every station gets the same duration and a
+   delay of duration/count, so the watch walks the bank. Resting state is
+   "off duty", which is what the markup renders. */
+@keyframes ah-duty {
+  0%,
+  9% {
+    opacity: 1;
+  }
+
+  16%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.ah-duty {
+  opacity: 0;
+  animation: ah-duty 10.8s linear infinite;
+  animation-delay: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .ah-spin {
+    animation: none !important;
+  }
+
+  .ah-drop,
+  .ah-duty {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
+/* A read passing down a page, clipped to it. Longer travel than ci-scan-y,
+   which is sized for a hero panel; this one runs the height of a whole site
+   wireframe. Its finished state is "gone", so reduced motion removes it. */
+@keyframes ah-read {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  88% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(268px);
+    opacity: 0;
+  }
+}
+
+.ah-read {
+  animation: ah-read 4.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ah-read {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
+/* ---- AI Creative Production ---- */
+
+/* One station on the monthly ring, lit as the carrier reaches it. Six stations
+   share one turn, so each is on for a sixth of it and the delays are set from
+   the same period the carrier uses. Resting state is unlit, which is what the
+   markup renders. */
+@keyframes ah-station {
+  0%,
+  15% {
+    opacity: 1;
+  }
+
+  22%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.ah-station {
+  opacity: 0;
+  animation: ah-station 18s linear infinite;
+  animation-delay: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ah-station {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
+/* ---- Website Maintenance & Support ---- */
+
+/* The check sweeping the component stack in the hero. Rendered only on the beat
+   the behind component is found on, and keyed on the run, so it restarts per
+   pass rather than looping against the interval. The stack is fully drawn
+   underneath it, so a browser that never animates still shows the whole
+   picture. */
+@keyframes drift-sweep {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(340%);
+    opacity: 0;
+  }
+}
+
+.drift-sweep {
+  animation: drift-sweep 1.15s cubic-bezier(0.33, 0, 0.67, 1) forwards;
+}
+
+/* A page that is slow, which is the one fault on this page whose symptom is a
+   thing happening rather than a thing missing. The bar moves and never
+   arrives; its resting width is short of the end, so with animation off it
+   still reads as unfinished rather than as complete. */
+@keyframes wm-creep {
+  from {
+    width: 12%;
+  }
+
+  to {
+    width: 62%;
+  }
+}
+
+.wm-creep {
+  width: 62%;
+  animation: wm-creep 3.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* Work travelling in along the approach, and then round the ring, on the
+   process drawing. stroke-dashoffset on a path carrying pathLength="100", which
+   is the one travelling-signal idiom that is immune to transform units inside a
+   scaled viewBox. Both are rendered only when motion is welcome. */
+@keyframes wm-signal {
+  from {
+    stroke-dashoffset: 100;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.wm-signal {
+  stroke-dasharray: 16 84;
+  animation: wm-signal 3.4s linear infinite;
+}
+
+.wm-signal-ring {
+  stroke-dasharray: 11 89;
+  animation: wm-signal 6.5s linear infinite;
+}
+
+/* The open-ended promise: one line that keeps arriving and never lands. The
+   sheet clips it, so the dashes march off the edge indefinitely. With animation
+   off it is still a broken line leaving the page, which is the whole point. */
+@keyframes wm-open {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(70px);
+  }
+}
+
+.wm-open {
+  /* Mostly line, with breaks in it: a sentence that keeps going rather than a
+     row of blocks. The gap is small on purpose — at a wide gap this reads as a
+     dashed rule, which is furniture, not an unfinished promise. */
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-ash) 0 60px,
+    transparent 60px 70px
+  );
+  animation: wm-open 3.2s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .drift-sweep,
+  .wm-creep,
+  .wm-signal,
+  .wm-signal-ring,
+  .wm-open {
+    animation: none !important;
+  }
+}
+
+/* ---- The marked claim (Testimonials) ----
+   Each testimonial has one phrase it is really about, and that phrase carries a
+   drawn brand rule rather than a colour change. On a card this size three words
+   in red read as a link; a rule reads as emphasis.
+
+   DRAWN AS A BACKGROUND, NOT AS AN ::after. These phrases run to ten words and
+   wrap, and an absolutely-positioned pseudo-element on a wrapped inline box
+   anchors to the first fragment only, so the rule would sit under half a phrase
+   and float away from the rest. A background with box-decoration-break: clone
+   gives every line fragment its own rule, so a phrase broken across two lines
+   is underlined on both.
+
+   `--tm-lit` carries its own fallback of 1. Nothing drives it now that the
+   pinned stage is gone, and an unresolved var() would invalidate the whole
+   declaration and leave background-size at `auto` — which for a gradient means
+   a brand-red block behind the words rather than a rule under them. */
+.tm-mark {
+  background-image: linear-gradient(var(--color-brand), var(--color-brand));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: calc(var(--tm-lit, 1) * 100%) 2px;
+  padding-bottom: 0.14em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---- Testimonial archive cards (Testimonials) ----
+   Everything a card does under the pointer is CSS. Two custom properties are
+   written per pointer move and the browser does the rest, so eighteen cards
+   cost eighteen gradients rather than eighteen animation loops.
+
+   NEITHER EFFECT IS LOAD-BEARING. With no pointer, no JavaScript or no motion,
+   a card is still a hairline cell on a raised surface with its quote, its
+   author and its tags: the glow and the rule are the reward for pointing at
+   one, never how it is read. */
+.va-glow {
+  background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(232, 0, 13, 0.1),
+      transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-expo);
+}
+
+.va-card:hover .va-glow {
+  opacity: 1;
+}
+
+/* Drawn left to right across the top edge, which is the same gesture the
+   pinned section makes when a claim's rule draws under it. */
+.va-rule {
+  background-color: var(--color-brand);
+  transform: scaleX(0);
+  transition: transform 0.7s var(--ease-expo);
+}
+
+.va-card:hover .va-rule,
+.va-card:focus-within .va-rule {
+  transform: scaleX(1);
+}
+
+/* The card itself on approach. Border and shadow only: no scale, because a
+   card that grows under the pointer pushes its neighbours' hairlines out of
+   alignment across the whole wall. */
+.va-surface {
+  transition:
+    border-color 0.5s var(--ease-expo),
+    box-shadow 0.5s var(--ease-expo);
+}
+
+.va-card:hover .va-surface,
+.va-card:focus-within .va-surface {
+  border-color: color-mix(in oklab, var(--color-brand) 45%, transparent);
+  box-shadow: 0 18px 44px -22px rgb(0 0 0 / 0.28);
+}
+
+html.dark .va-card:hover .va-surface,
+html.dark .va-card:focus-within .va-surface {
+  /* Black on near-black reads as nothing, so on the dark theme the lift is a
+     brand glow rather than a shadow. */
+  box-shadow: 0 18px 48px -26px rgb(232 0 13 / 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .va-surface {
+    transition: none;
+  }
+}
+
+/* On a touch screen there is no pointer to follow, so a rule that only draws
+   on hover never draws at all. It sits at rest instead, quietly, which also
+   keeps the eighteen cards from reading as one undifferentiated block on a
+   phone. */
+@media (hover: none) {
+
+  .va-rule {
+    transform: scaleX(1);
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .va-glow,
+  .va-rule {
+    transition: none;
+  }
+}
+
+/* ---- The wall of voices (Testimonials hero) ----
+   Two columns of real quote fragments drifting in opposite directions behind a
+   soft mask. Each column holds its list twice and travels exactly half its own
+   height, which is what makes the loop seamless without measuring anything,
+   and means the whole effect is one CSS animation per column rather than
+   anything running on the main thread.
+
+   POINTING AT THE WALL STOPS IT. Otherwise the one card somebody is trying to
+   read walks out from under them, which is the failing of every auto-scrolling
+   wall that cannot be stopped. */
+.vw-wall {
+  /* A wide fade at both ends, wider than it first looks like it needs to be.
+     At a narrow one the card crossing the edge is still near full contrast
+     when the mask runs out, so it reads as a card cut in half rather than as a
+     column continuing past the frame. The fade has to be about as deep as a
+     card is tall — roughly 5rem of a 24rem column — so that a card crossing
+     the edge fades out over its own height rather than over a sliver of it. */
+  mask-image: linear-gradient(to bottom,
+      transparent,
+      black 22%,
+      black 78%,
+      transparent);
+}
+
+@keyframes vw-drift {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.vw-col {
+  animation: vw-drift 46s linear infinite;
+  will-change: transform;
+}
+
+/* The second column runs the other way, and slower, so the two never lock into
+   a rhythm the eye can follow. */
+.vw-col-back {
+  animation-duration: 58s;
+  animation-direction: reverse;
+}
+
+.vw-wall:hover .vw-col {
+  animation-play-state: paused;
+}
+
+.vw-card {
+  transition:
+    border-color 0.4s var(--ease-expo),
+    transform 0.4s var(--ease-expo);
+}
+
+.vw-card:hover {
+  border-color: color-mix(in oklab, var(--color-brand) 55%, transparent);
+  transform: translateX(-6px);
+}
+
+/* Standing still is a complete state: eighteen fragments in two columns behind
+   the same mask, just not moving. */
+@media (prefers-reduced-motion: reduce) {
+
+  .vw-col {
+    animation: none;
+  }
+
+  .vw-card {
+    transition: none;
+  }
+}
+
+/* ---- Insights ----
+   The archive's own additions. Everything else on /insights and
+   /insights/[slug] is built from tokens and utilities that already existed:
+   `animate-dash` marches both the NotePlate ascent and the masthead route,
+   `ri-ping` breathes on their summits, `animate-readout` replaces the
+   route's readout lines, and all three are already switched off by the
+   reduced-motion block above, each resting on its finished picture. */
+
+/* A NotePlate is a card-scale drawing, and animate-dash's 1.1s cycle reads as
+   a flicker at that size rather than as a route being walked. Slower here, and
+   slower again on the compact plate in a related row. */
+.np-route {
+  animation-duration: 2.6s;
+}
+
+/* The ascent thickens under the pointer, so the plate answers a hover the way
+   every other surface on the site does. Kept to stroke-width: a colour change
+   would put a second red on a card that already has one. */
+.group:hover .np-route,
+.group:focus-visible .np-route {
+  stroke-width: 3;
+}
+
+.np-route {
+  transition: stroke-width 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---- Reading progress ----
+   Scale-only, on its own layer, so the bar costs one composited transform per
+   frame and never touches layout. The track is the hairline the header already
+   sits on, so the bar reads as that rule filling rather than as a widget. */
+.reading-progress {
+  transform-origin: 0 50%;
+  will-change: transform;
+}
+
+/* ---- Article body ----
+   The measure and the rhythm are Tailwind utilities on each block, because the
+   renderer draws every block itself and a prose reset would be fighting it.
+   What lives here is only what a utility cannot express. */
+
+/* Ordered lists count in the stylesheet rather than in the markup, so the
+   numbering survives any reordering and stays tabular past nine. */
+.article-ol {
+  counter-reset: article-ol;
+}
+
+.article-ol > li {
+  counter-increment: article-ol;
+}
+
+.article-ol > li::before {
+  content: counter(article-ol) ".";
+  position: absolute;
+  left: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--color-brand-text);
+}
+
+/* A heading a reader has just jumped to must clear the fixed header. The
+   global scroll-padding-top covers a hash on load; Lenis's programmatic
+   scrollTo does not read it, and the contents rail goes through Lenis. */
+.article-body :is(h2, h3) {
+  scroll-margin-top: 7rem;
+}
+
+/* The marker on the newest note, in the route and on every NotePlate summit.
+   Its own class rather than the shared `beacon-ping`: that class was deleted
+   from this stylesheet by other work in flight while these components were
+   being written, and a drawing should not lose its summit because a class it
+   borrowed went away. The solid dot underneath is the finished state, so
+   stopping the ring leaves the summit marked. */
+@keyframes ri-ping {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.85;
+  }
+
+  70%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.ri-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ri-ping 2.8s ease-out infinite;
+}
+
+/* The flag on the newest note in the route. Furls rather than travels: the
+   mast is fixed to the crest, so a translate would lift the whole group off
+   the ground it is standing on. Rests unfurled, which is the drawn state. */
+@keyframes ri-flag {
+
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+
+  50% {
+    transform: scaleX(0.84);
+  }
+}
+
+.ri-flag {
+  animation: ri-flag 2.4s ease-in-out infinite;
 }

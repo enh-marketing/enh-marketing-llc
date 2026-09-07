@@ -182,6 +182,20 @@ export const monthly = {
   excludedTail: "unless these are added separately.",
 };
 
+/** The mid-page CTA band, added 2026-09-07 on the same departure already
+ *  agreed for every other AI Hub page: the band needs a heading, a support
+ *  line and a button, and this document supplies only the call to action.
+ *  The heading is the document's own primary CTA split for typesetting, the
+ *  button is that CTA verbatim, and the support line is the closing block's
+ *  own first sentence, borrowed rather than written. No new words, and the
+ *  withheld portfolio label stays withheld here as everywhere else. */
+export const growthCta = {
+  heading: ["Book a", "Creative Diagnostic"] as [string, string],
+  support:
+    "Tell us what you need to promote, where the content will be used and how many versions the campaign requires.",
+  button: "Book a Creative Diagnostic",
+};
+
 export const faqs: Faq[] = [
   { q: "What is AI creative production?", a: "AI creative production uses generative AI as part of the process for creating video, imagery, voice, motion or campaign variations. The output is still planned, edited and reviewed by a creative team before it is delivered." },
   { q: "Does AI-generated content look obviously AI-generated?", a: "Poorly produced AI content often contains visible errors, inconsistent movement or inaccurate product details. Careful direction, suitable tools and detailed editing can improve the result. Some concepts will still be better suited to conventional production, and we will state that before work begins." },

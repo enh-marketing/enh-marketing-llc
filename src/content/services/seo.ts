@@ -110,8 +110,8 @@ export const reasons = {
   tailMark: "what needs fixing, what deserves investment and what can wait",
 };
 
-/** The nine children. Four of these pages are not built yet; their cards
- *  render in full and simply do not link. See ServiceIndex. */
+/** The six children. One of these pages is not built yet; its card renders
+ *  in full and simply does not link. See ServiceIndex. */
 export const services = {
   title: "Our Search Engine",
   strokeTitle: "Optimization Services",
@@ -139,41 +139,20 @@ export const services = {
     },
     {
       no: "04",
-      title: "Link Building",
-      glyph: "offsite",
-      href: "/services/seo/link-building",
-      body: "Backlinks remain one of the strongest ranking signals, but poor links can trigger penalties. We build relevant editorial links from trusted publications using outreach that keeps your site safe.",
-    },
-    {
-      no: "05",
-      title: "Keyword Research",
-      glyph: "intent",
-      href: "/services/seo/keyword-research",
-      body: "The right keywords decide if your traffic buys or bounces. We map search demand across your services, filter it by intent and commercial value, then prioritise the terms worth targeting.",
-    },
-    {
-      no: "06",
       title: "SEO Audit",
       glyph: "diagnose",
       href: "/services/seo/seo-audit",
       body: "Knowing what is holding your site back is the right place to start. Our audit covers technical health, content, links and rankings, with a prioritised list of fixes.",
     },
     {
-      no: "07",
+      no: "05",
       title: "SEO Content Creation",
       glyph: "creative",
       href: "/services/seo/seo-content-creation",
       body: "Useful content needs to answer the search properly. We create service pages, guides and landing copy for search engines and the people reading them.",
     },
     {
-      no: "08",
-      title: "Blog Creation",
-      glyph: "generate",
-      href: "/services/seo/blog-creation",
-      body: "A consistent blog can build topical authority and attract traffic long after publishing. We plan, write and optimise articles around the questions your customers already search for.",
-    },
-    {
-      no: "09",
+      no: "06",
       title: "AEO and GEO",
       glyph: "answer",
       href: "/services/seo/aeo-and-geo",

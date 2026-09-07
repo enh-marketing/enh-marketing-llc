@@ -5,8 +5,19 @@ import { useState } from "react";
 import { AnimatePresence } from "motion/react";
 
 /** Mobile-only. The hero CTAs scroll away and the next conversion point is
- *  thousands of pixels below, so bring one back once the hero clears. */
-export function StickyCTABar() {
+ *  thousands of pixels below, so bring one back once the hero clears.
+ *
+ *  The destination is a prop with the service pages' own default, because the
+ *  contact page's form is #brief rather than #quote and a bar pointing at an
+ *  anchor that does not exist is a dead button. Every existing call site passes
+ *  nothing and is unchanged. */
+export function StickyCTABar({
+  href = "#quote",
+  label = "Request a quote",
+}: {
+  href?: string;
+  label?: string;
+} = {}) {
   const [show, setShow] = useState(false);
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (v) => setShow(v > 700));
@@ -24,10 +35,10 @@ export function StickyCTABar() {
           {/* WhatsApp is deliberately absent: FloatingContact already owns that
               affordance bottom-right, and the right padding clears its bubble. */}
           <a
-            href="#quote"
+            href={href}
             className="block rounded-full bg-brand px-5 py-3 text-center text-sm font-semibold text-white"
           >
-            Request a quote
+            {label}
           </a>
         </motion.div>
       )}

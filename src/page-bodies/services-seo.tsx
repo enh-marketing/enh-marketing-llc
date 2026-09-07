@@ -75,7 +75,7 @@ export function SeoPage() {
           tailMark={c.reasons.tailMark}
         />
 
-        {/* The point of a hub page: the nine children, run as the pinned
+        {/* The point of a hub page: the six children, run as the pinned
             horizontal track the Performance Marketing channels use. Same
             component, same card: the section holds while the run travels
             sideways and each scope gets a full stage instead of a ninth of a
@@ -87,7 +87,7 @@ export function SeoPage() {
           index="03"
           title={c.services.title}
           strokeTitle={c.services.strokeTitle}
-          mark={{ variant: "ecosystem", label: "Nine scopes under one search strategy" }}
+          mark={{ variant: "ecosystem", label: "Six scopes under one search strategy" }}
           channels={c.services.items.map((s) => ({
             name: s.title,
             href: s.href ?? "",

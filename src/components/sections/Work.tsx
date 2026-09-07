@@ -2,14 +2,38 @@
 
 import { useRef, useState } from "react";
 import { motion, useMotionValueEvent, useMotionValue, animate } from "motion/react";
-import { work, workImages } from "@/lib/content";
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { Container } from "@/components/ui/Container";
 import { RouteLine } from "@/components/fx/Adornments";
+import { CaseMedia } from "@/components/case-studies/CaseMedia";
+import { ArrowRight } from "@/components/ui/Button";
+import { routeExists } from "@/lib/sitemap";
+import { all, hasStory } from "@/content/case-studies";
+import { cn } from "@/lib/cn";
 
 const CARD_GAP = 20;
 
 /** Drag carousel of all 22 live case studies — 3–4 visible, drag or arrows for the rest. */
+/** IT READS FROM THE MIGRATED STUDIES NOW, and that changed three things.
+ *
+ *  THE PICTURES ARE THE PROJECTS. Every card used to carry an Unsplash
+ *  photograph chosen to suggest the client's industry: a stock plate of food
+ *  for a caterer, a stock server rack for an IT distributor. That is a stock
+ *  photo standing in for a piece of work, on a page selling the work, and the
+ *  same rule that keeps a stock photo off an article hero applies here. Each
+ *  card now shows the client's own result card, downloaded from the live case
+ *  study it belongs to.
+ *
+ *  THE CAPTIONS ARE VERBATIM. The figures were always the real ones, but their
+ *  captions had been condensed by hand ("Social reach growth in 30 days" for
+ *  "Exceptional growth in social media reach within 30 days"). The migrated
+ *  labels are the client's reporting in its own words, so those are what a
+ *  card carries.
+ *
+ *  EVERY CARD IS A LINK. Twenty-two case studies were being presented on
+ *  thirty-six pages with nowhere to go; each one is now the entry to its own
+ *  page. `hasStory` gates it, so a study with no page behind it stays an
+ *  <article> with no hover state rather than promising one. */
 /** Reused on service pages, so the section index and DevTools label are
  *  parameterised. Defaults are the homepage's own values. */
 /** `ctaHref` is where the end card points.
@@ -25,11 +49,24 @@ export function Work({
   index = "03",
   label = "Summits Reached",
   ctaHref = "#contact",
+  lede,
 }: {
   index?: string;
   label?: string;
   ctaHref?: string;
+  /** A sentence from the page's own source document, set above the carousel.
+   *  Most pages have none: their source hands this section a bracketed
+   *  instruction rather than copy, and nothing is invented to fill the gap.
+   *  Where a document does supply one, printing it here is better than
+   *  dropping it or floating it between two sections. */
+  lede?: string;
 } = {}) {
+  const studies = all();
+  /** THE CARDS ARE LINKS NOW, SO A DRAG MUST NOT COUNT AS A CLICK. Set on
+   *  drag start, cleared on the next pointer down, and read by each card's
+   *  click handler: without it, letting go of a flung carousel navigates to
+   *  whichever study happened to be under the finger. */
+  const dragged = useRef(false);
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -47,7 +84,9 @@ export function Work({
   });
 
   const step = (dir: 1 | -1) => {
-    const card = trackRef.current?.querySelector("article");
+    // `.wk-card`, not "article": a card is an <a> wherever its study has a
+    // page behind it, and querying the tag silently fell back to 320px.
+    const card = trackRef.current?.querySelector(".wk-card");
     const w = (card?.clientWidth ?? 320) + CARD_GAP;
     const target = Math.max(maxDrag(), Math.min(0, x.get() - dir * w * 2));
     animate(x, target, { type: "spring", stiffness: 120, damping: 22 });
@@ -59,17 +98,37 @@ export function Work({
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-              <span className="text-brand">({index})</span> The proof — {work.length} client stories
+              <span className="text-brand">({index})</span> The proof — {studies.length} client stories
             </p>
             <h2 className="font-display display-xl font-extrabold uppercase text-snow">
               <Chars text="Summits reached." />
             </h2>
           </div>
-          <Rise className="flex items-center gap-3">
+          <Rise className="flex items-center gap-4">
+            {/* The way out of the carousel. Guarded, because this section
+                renders on thirty-six pages and the archive is a route like any
+                other: if it is not built, the link is not offered. */}
+            {routeExists("/case-studies") && (
+              <a
+                href="/case-studies"
+                className="group mr-1 hidden items-center gap-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-snow transition-colors duration-300 hover:text-brand sm:inline-flex"
+              >
+                All {studies.length} case studies
+                <span className="relative flex h-3.5 w-3.5 items-center justify-center overflow-hidden text-brand">
+                  <ArrowRight className="absolute h-3 w-3 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-4" />
+                  <ArrowRight className="absolute h-3 w-3 -translate-x-4 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
+                </span>
+              </a>
+            )}
             <ArrowBtn dir={-1} onClick={() => step(-1)} label="Previous case studies" />
             <ArrowBtn dir={1} onClick={() => step(1)} label="Next case studies" />
           </Rise>
         </div>
+        {lede && (
+          <Rise delay={0.08}>
+            <p className="mt-7 max-w-2xl leading-relaxed text-fog sm:text-lg">{lede}</p>
+          </Rise>
+        )}
         <RouteLine className="mt-8" />
       </Container>
 
@@ -78,50 +137,88 @@ export function Work({
           <motion.div
             ref={trackRef}
             drag="x"
+            onPointerDown={() => {
+              dragged.current = false;
+            }}
+            onDragStart={() => {
+              dragged.current = true;
+            }}
             style={{ x }}
             dragConstraints={viewportRef}
             dragElastic={0.06}
             className="flex w-max cursor-grab items-stretch gap-5 active:cursor-grabbing"
           >
-            {work.map((w, i) => (
-              <article
-                key={w.client}
-                className="group relative flex w-[280px] shrink-0 flex-col overflow-hidden rounded-3xl border border-line bg-ink-2 transition-colors duration-500 hover:border-brand/60 sm:w-[300px]"
-              >
-                <div className="relative aspect-[3/2] overflow-hidden">
-                  {workImages[w.client] ? (
-                    <img
-                      src={workImages[w.client]}
-                      alt={w.client}
-                      loading="lazy"
-                      decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-ink-3" />
+            {studies.map((study) => {
+              const live = hasStory(study);
+              const Card = live ? "a" : "article";
+              return (
+                <Card
+                  key={study.slug}
+                  {...(live
+                    ? {
+                        href: `/case-studies/${study.slug}`,
+                        onClick: (e: React.MouseEvent) => {
+                          if (dragged.current) e.preventDefault();
+                        },
+                      }
+                    : {})}
+                  draggable={false}
+                  className={cn(
+                    "wk-card group relative flex w-[280px] shrink-0 flex-col overflow-hidden rounded-3xl border border-line bg-ink-2 transition-colors duration-500 sm:w-[300px]",
+                    live && "hover:border-brand/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink-2 via-ink-2/40 to-transparent" />
-                  <span className="font-display absolute right-4 top-4 rounded-full bg-void/60 px-2.5 py-1 text-[10px] font-bold text-ash backdrop-blur-sm">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
-                <div className="flex flex-1 flex-col p-6 pt-4">
-                  <h3 className="font-display text-lg font-bold text-snow">{w.client}</h3>
-                  <p className="mt-2 min-h-[3.75rem] text-[13px] leading-snug text-fog">{w.title}</p>
-
-                  <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-5">
-                    {w.metrics.map((m) => (
-                      <div key={m.label}>
-                        <div className="font-display text-2xl font-extrabold leading-none text-brand">
-                          {m.value}
-                        </div>
-                        <div className="mt-1 text-[10.5px] leading-snug text-fog">{m.label}</div>
-                      </div>
-                    ))}
+                >
+                  <div
+                    className="relative overflow-hidden"
+                    style={{ aspectRatio: `${study.thumb.w} / ${study.thumb.h}` }}
+                  >
+                    <CaseMedia
+                      figure={study.thumb}
+                      slot="compact"
+                      className={cn(
+                        "transition-transform duration-700 motion-reduce:transition-none",
+                        live && "group-hover:scale-105",
+                      )}
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink-2 to-transparent" />
+                    <span className="font-display absolute right-4 top-4 rounded-full bg-void/60 px-2.5 py-1 text-[10px] font-bold tabular-nums text-ash backdrop-blur-sm">
+                      {String(study.order + 1).padStart(2, "0")}
+                    </span>
                   </div>
-                </div>
-              </article>
-            ))}
+                  <div className="flex flex-1 flex-col p-6 pt-4">
+                    <h3 className="font-display text-lg font-bold text-snow transition-colors duration-500 group-hover:text-brand motion-reduce:transition-none">
+                      {study.client}
+                    </h3>
+                    <p className="mt-2 line-clamp-3 min-h-[3.75rem] text-[13px] leading-snug text-fog">
+                      {study.title}
+                    </p>
+
+                    <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-5">
+                      {study.metrics.map((m) => (
+                        <div key={m.label}>
+                          <div className="font-display text-2xl font-extrabold leading-none tabular-nums text-brand">
+                            {m.value}
+                          </div>
+                          <div className="mt-1 line-clamp-3 text-[10.5px] leading-snug text-fog">
+                            {m.label}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {live && (
+                      <span className="mt-auto flex items-center gap-2.5 pt-5 text-[10px] font-semibold uppercase tracking-[0.1em] text-snow">
+                        Read the case study
+                        <span className="relative flex h-3 w-3 items-center justify-center overflow-hidden text-brand">
+                          <ArrowRight className="absolute h-2.5 w-2.5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3.5" />
+                          <ArrowRight className="absolute h-2.5 w-2.5 -translate-x-3.5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
+                        </span>
+                      </span>
+                    )}
+                  </div>
+                </Card>
+              );
+            })}
 
             {/* End card */}
             <a

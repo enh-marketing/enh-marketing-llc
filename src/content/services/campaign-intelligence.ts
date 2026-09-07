@@ -31,7 +31,7 @@
 
 import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
-import type { Phase } from "@/components/service/CampaignTimeline";
+import type { Phase } from "@/components/service/CampaignSystem";
 
 export const meta = {
   title: "Campaign Intelligence in Dubai | ENH Marketing",
@@ -90,6 +90,12 @@ export type Covered = {
 export const covers = {
   title: "What Campaign",
   strokeTitle: "Intelligence Covers",
+  /** The three zones of the campaign spine the six marks stand on. The same
+   *  trio the process track already uses further down the page, so a reader
+   *  meets one vocabulary for "before the money moves" and not two. Interface
+   *  labels, not document copy, chosen to match step five's own words: "Once
+   *  the campaign starts". */
+  phaseLabels: ["Before the campaign", "Campaign starts", "Campaign live"] as [string, string, string],
   items: [
     {
       no: "01",
@@ -229,7 +235,10 @@ export const process = {
   labels: { before: "Before the campaign", live: "Campaign starts", after: "Campaign live" },
 };
 
-/** Departures 1 and 2: see the header. */
+/** Departures 1 and 2: see the header. The document places this call to action
+ *  after step 6; on the page it is rendered after the closing chapter instead,
+ *  so the reader is asked once they have the whole argument. A placement
+ *  decision, agreed 2026-09-07 — no word of the copy is changed. */
 export const growthCta = {
   heading: ["Book a", "Consultation"] as [string, string],
   support:
@@ -248,6 +257,21 @@ export const helps = {
     "Once the campaign begins, we compare actual performance with the forecast and identify rising costs, tracking problems or weak results early.",
   closing:
     "If the available data does not support a reliable benchmark, we state that clearly and begin with a wider forecast range.",
+  /** The three things the plan is, split from the first paragraph's own verbs:
+   *  "set a realistic budget, forecast the expected outcome and decide how the
+   *  spend should be divided across suitable channels". */
+  plan: [
+    "set a realistic budget",
+    "forecast the expected outcome",
+    "decide how the spend should be divided",
+  ],
+  /** The clause the second paragraph opens on, used as the line the drawing
+   *  crosses. Verbatim. */
+  beginsLabel: "Once the campaign begins",
+  /** The three things the second paragraph says the comparison identifies, in
+   *  its own words and its own order: "identify rising costs, tracking problems
+   *  or weak results early". Each is drawn as the thing it is. */
+  findings: ["rising costs", "tracking problems", "weak results"],
 };
 
 export const faqs: Faq[] = [

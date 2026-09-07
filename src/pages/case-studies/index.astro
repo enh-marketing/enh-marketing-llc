@@ -1,0 +1,75 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/case-studies";
+import { brand } from "@/lib/content";
+import { CaseStudiesPage } from "@/page-bodies/case-studies";
+
+/* Case studies — the index.
+ *
+ * Same shape as every other page: head tags handed to the layout as props, the
+ * React body mounted as one island, structured data emitted here as static
+ * HTML so a crawler reads it without running any JavaScript.
+ *
+ * CollectionPage + ItemList, NOT a list of Articles. The index is a page that
+ * lists things; each thing it lists has its own Article schema on its own
+ * route. Duplicating the article markup here would put twenty-two headlines
+ * into search results pointing at one URL.
+ *
+ * THE LIST ONLY NAMES STUDIES THAT ANSWER A URL. `published()` is what
+ * [slug].astro walks to build routes, so a study without its sections is
+ * absent from the schema for the same reason it is not a link on the page.
+ *
+ * The route lives at case-studies/index.astro rather than case-studies.astro
+ * so the study route can sit beside it as case-studies/[slug].astro.
+ */
+
+const HREF = "/case-studies";
+const SITE = "https://enhmedia.com";
+
+const studies = c.published();
+
+const collectionSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": `${SITE}${HREF}#collection`,
+  name: "ENH Case Studies",
+  description: c.meta.description,
+  url: `${SITE}${HREF}`,
+  inLanguage: "en-AE",
+  publisher: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: SITE,
+    telephone: brand.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: brand.address,
+      addressCountry: "AE",
+    },
+  },
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: studies.length,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    itemListElement: studies.map((study, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: `${study.client}: ${study.title}`,
+      url: `${SITE}${HREF}/${study.slug}`,
+    })),
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+  ogTitle={c.meta.ogTitle}
+  ogDescription={c.meta.ogDescription}
+  ogImage={c.lead()?.thumb.src}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionSchema)} />
+
+  <CaseStudiesPage client:load />
+</Base>

@@ -14,11 +14,12 @@ import { ProductionRun } from "@/components/service/ProductionRun";
 import { PinnedExplorer } from "@/components/service/PinnedExplorer";
 import { StageTimeline } from "@/components/service/StageTimeline";
 import { ProcessLanes } from "@/components/service/ProcessLanes";
-import { Rise } from "@/components/fx/Reveal";
-import { ScopeLine } from "@/components/service/ScopeLine";
+import { VariantBloom } from "@/components/service/VariantBloom";
+import { ProductionEngine } from "@/components/service/ProductionEngine";
 import { CreativeMark } from "@/components/service/CreativeMark";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
 /* Drives <Breadcrumbs href={HREF} />. A subpage of the AI Hub, so the trail
@@ -67,29 +68,18 @@ export function AiCreativeProductionPage() {
           diagramSide="left"
         />
 
-        {/* Why volume, in the document's own two paragraphs: the claim, the
-            four things one direction adapts into, and the caveat on the site's
-            own Caveat component. */}
+        {/* One approved direction becoming a field, and the familiarity that
+            makes that necessary. The caveat is now set at full weight rather
+            than left off the page. See VariantBloom. */}
         <section id="volume" data-section="Built for Campaign Volume" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="02" title={c.volume.title} strokeTitle={c.volume.strokeTitle} markNode={<CreativeMark variant="relay" />} className="mb-12" />
-            <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
-              <Rise>
-                <p className="max-w-[56ch] text-base leading-relaxed text-fog">{c.volume.lead}</p>
-              </Rise>
-              <Rise delay={0.08}>
-                <p className="font-display text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-brand-text">
-                  {c.volume.labels.direction}
-                </p>
-                <ul className="mt-4 grid gap-px overflow-hidden rounded-[1.25rem] border border-line bg-line sm:grid-cols-2">
-                  {c.volume.labels.adapted.map((n) => (
-                    <li key={n} className="bg-ink-2 px-5 py-4 transition-colors duration-500 hover:bg-ink-3">
-                      <span className="font-display text-[0.9375rem] font-bold uppercase text-snow">{n}</span>
-                    </li>
-                  ))}
-                </ul>
-              </Rise>
-            </div>
+            <VariantBloom
+              lead={c.volume.lead}
+              caveat={c.volume.caveat}
+              directionLabel={c.volume.labels.direction}
+              axes={c.volume.labels.adapted}
+            />
           </Container>
         </section>
 
@@ -123,12 +113,13 @@ export function AiCreativeProductionPage() {
           markNode={<CreativeMark variant="lanes" />}
         />
 
-        {/* One rule is the scope: six things stand on it, four hang beneath it
-            on dashed tethers, and the commitment closes the section. See ScopeLine. */}
-        <section id="monthly" data-section="Monthly AI Creative Production" className="relative overflow-x-clip py-14 sm:py-16">
+        {/* The month as the engine it is: six stations on a ring a carrier goes
+            round, the commitment at its hub, and the four excluded items on
+            couplings that are never made. See ProductionEngine. */}
+        <section id="monthly" data-section="Monthly AI Creative Production" className="relative overflow-x-clip py-16 sm:py-20">
           <Container className="relative">
             <SectionHeader index="05" title={c.monthly.title} strokeTitle={c.monthly.strokeTitle} markNode={<CreativeMark variant="scope" />} className="mb-12" />
-            <ScopeLine
+            <ProductionEngine
               shape={c.monthly.shape}
               includedLabel={c.monthly.includedLabel}
               included={c.monthly.included}
@@ -139,6 +130,18 @@ export function AiCreativeProductionPage() {
             />
           </Container>
         </section>
+
+        {/* The band closes the argument rather than interrupting it: it comes
+            after the last of the page's own sections, so the reader is asked
+            once they have the whole picture. */}
+        <GrowthCta
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.hero.primary}
+        />
 
         <Work index="06" label="Summits Reached" ctaHref="#quote" />
 

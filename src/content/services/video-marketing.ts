@@ -160,13 +160,6 @@ export const services = {
       href: "/services/video-marketing/interview-video",
       body: "Interviews help founders, specialists and team members share their knowledge on camera. We handle the studio or on-site setup, question direction and editing, then prepare long and short versions for LinkedIn, Instagram, YouTube and other channels.",
     },
-    {
-      no: "06",
-      title: "Animation and Motion Graphics",
-      glyph: "generate",
-      href: "/services/video-marketing/animation-motion-graphics",
-      body: "Some ideas need to be visualised rather than filmed. We use 2D and 3D animation, motion graphics, infographic animation and kinetic text to explain data, processes and abstract concepts or add movement to existing footage.",
-    },
   ] as IndexEntry[],
 };
 

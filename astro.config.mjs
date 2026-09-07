@@ -27,6 +27,36 @@ export default defineConfig({
   // redirect page for this in a static build.
   redirects: {
     "/services/ai/ai-automation": "/ai-hub/ai-automation",
+
+    // The maintenance page's canonical slug is the one src/lib/sitemap.ts has
+    // named since the IA was resolved, and the one the pillar and ecommerce
+    // pages link to. The "and" variant reads naturally enough that it gets
+    // typed and sent by hand, so it lands rather than 404s.
+    "/services/web-design-development/website-maintenance-and-support":
+      "/services/web-design-development/website-maintenance-support",
+
+    // Testimonials is plural in src/lib/sitemap.ts, which is where the IA is
+    // resolved and what the navbar and footer of every page link to, so the
+    // plural is the canonical URL and the only one with a page behind it. The
+    // singular gets typed and sent by hand often enough to be worth catching,
+    // for exactly the reason the redirect above exists.
+    "/testimonial": "/testimonials",
+
+    // THE BLOG MOVED TO /insights, AND ITS URLS ARE LIVE AND RANKING. All
+    // seventy-two posts are served today at enhmedia.com/blog/<slug> and the
+    // migrated notes keep those slugs exactly, so one pattern covers every one
+    // of them and any post added later. /blog itself goes to the archive.
+    //
+    // CAVEAT WORTH KNOWING: this is a static build with no adapter, so Astro
+    // emits a <meta http-equiv="refresh"> page rather than a 301. That is
+    // enough for a reader following an old link, and it is what the three
+    // redirects above already do. It is NOT as good for search: a meta refresh
+    // is treated as a soft redirect and passes less signal than a real 301.
+    // Seventy-two ranking URLs is enough to be worth doing properly, so these
+    // should also be configured as 301s at the host (vercel.json, Netlify
+    // _redirects, or a Cloudflare rule) when the deploy target is known.
+    "/blog": "/insights",
+    "/blog/[slug]": "/insights/[slug]",
   },
 
   // Tailwind v4 through the Vite plugin rather than PostCSS. The stylesheet

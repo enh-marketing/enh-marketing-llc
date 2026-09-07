@@ -56,7 +56,7 @@ export function VideoMarketingPage() {
           closing={c.narrative.closing}
         />
 
-        {/* Six children, all of them built -- the only pillar on the site
+        {/* Five children, all of them built -- the only pillar on the site
             where every card links -- run as the pinned horizontal track the
             paid pillar's channels use. Same component, same card, so each
             production gets a full stage. See ChannelScroller. */}
@@ -66,7 +66,7 @@ export function VideoMarketingPage() {
           index="02"
           title={c.services.title}
           strokeTitle={c.services.strokeTitle}
-          mark={{ variant: "ecosystem", label: "Six formats, one production team" }}
+          mark={{ variant: "ecosystem", label: "Five formats, one production team" }}
           channels={c.services.items.map((s) => ({
             name: s.title,
             href: s.href ?? "",

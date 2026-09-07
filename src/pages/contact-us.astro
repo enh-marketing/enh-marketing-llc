@@ -1,0 +1,64 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/contact";
+import { brand } from "@/lib/content";
+import { ContactPage } from "@/page-bodies/contact-us";
+
+const HREF = "/contact-us";
+
+/* ContactPage rather than Service, because that is what this page is, and its
+   mainEntity carries the organisation's real contact points. Every value below
+   comes from `brand` in src/lib/content.ts. Nothing is padded out: no
+   openingHours (none is recorded anywhere), no geo coordinates (nobody has
+   surveyed the building), no aggregateRating.
+
+   The address here is the same `brand.address` the hero's Location block
+   prints, which is what keeps the structured data and the visible copy from
+   ever disagreeing. */
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: c.meta.title,
+  description: c.meta.description,
+  url: `https://enhmedia.com${HREF}`,
+  mainEntity: {
+    "@type": "Organization",
+    name: brand.legal,
+    alternateName: brand.name,
+    url: "https://enhmedia.com",
+    email: brand.email,
+    telephone: brand.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: brand.address,
+      addressLocality: brand.city,
+      addressCountry: "AE",
+    },
+    // ONE contact point, not a list. The WhatsApp number and the studio line
+    // are the same number, so a second entry would restate it; and no language
+    // beyond English is declared, because nothing in this repo records which
+    // languages the studio actually answers in.
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      telephone: brand.phone,
+      email: brand.email,
+      areaServed: "AE",
+      availableLanguage: "en",
+    },
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+  ogTitle="Contact ENH Marketing, Dubai"
+  ogDescription="Let's explore new heights together. Email, phone, live chat, or book a free digital marketing consultation with our strategists."
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(contactSchema)} />
+  {/* One island: the switchboard in the hero and the Services field in the
+      brief share a single piece of state. See src/page-bodies/contact-us.tsx. */}
+  <ContactPage client:load />
+</Base>

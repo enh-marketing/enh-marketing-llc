@@ -1,0 +1,45 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/tiktok-ads";
+import { brand } from "@/lib/content";
+import { TikTokAdsPage } from "@/page-bodies/services-performance-marketing-tiktok-ads";
+
+/* Head tags are handed to the layout as props; the structured data is emitted
+   below as static HTML rather than through the island. serviceType is built
+   from the document rather than written: it is the "What We Run" list, joined,
+   so no wording here is ours. */
+
+const HREF = "/services/performance-marketing/tiktok-ads";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "TikTok Ads",
+  serviceType: `TikTok advertising management: ${c.run.items
+    .map((i) => i.body.replace(/\.$/, ""))
+    .join("; ")}`,
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  isPartOf: {
+    "@type": "Service",
+    name: "Performance Marketing",
+    url: "https://enhmedia.com/services/performance-marketing",
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <TikTokAdsPage client:load />
+</Base>
