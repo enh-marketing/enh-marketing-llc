@@ -1,0 +1,23 @@
+---
+import Base from "@/layouts/Base.astro";
+import { AiHubPage } from "@/page-bodies/ai-hub-index";
+
+/* No navbar and no footer: this page is being composed from nothing, and the
+   shell would decide the top and bottom of it before the design does.
+   `chrome={false}` is a prop on the layout, so the other 38 pages are untouched.
+
+   PLACEHOLDER META. The title and description below are holding the shape of
+   the tags, not stating the page's copy. Neither is written yet and neither is
+   invented here. */
+
+const HREF = "/ai-hub";
+---
+
+<Base
+  title="AI Hub | ENH Marketing"
+  description="ENH Marketing's AI Hub."
+  canonical={HREF}
+  chrome={false}
+>
+  <AiHubPage client:load />
+</Base>

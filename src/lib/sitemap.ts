@@ -250,6 +250,7 @@ const BUILT = new Set([
   "/services/video-marketing",
   "/services/web-design-development",
   "/services/lead-generation/landing-page-development",
+  "/ai-hub",
   "/ai-hub/ai-automation",
   "/ai-hub/campaign-intelligence",
   "/ai-hub/ai-search-visibility",

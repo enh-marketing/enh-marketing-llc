@@ -40,9 +40,22 @@ interface Props {
   canonical?: string;
   ogTitle?: string;
   ogDescription?: string;
+  /** The site shell: navbar and footer. Defaults on, which is every page but
+      one. Off for a page that owns the whole viewport and draws its own way in
+      and out. Everything else in this layout stays: the head tags, the fonts,
+      the theme script, Lenis, the grain, and the floating contact, none of
+      which are chrome in that sense. */
+  chrome?: boolean;
 }
 
-const { title, description, canonical, ogTitle, ogDescription } = Astro.props;
+const {
+  title,
+  description,
+  canonical,
+  ogTitle,
+  ogDescription,
+  chrome = true,
+} = Astro.props;
 
 const og = ogTitle ?? title;
 const ogDesc = ogDescription ?? description;
@@ -109,11 +122,11 @@ const canonicalUrl = canonical ? new URL(canonical, Astro.site).href : undefined
     <SmoothScroll client:load />
 
     <div class="grain">
-      <Navbar client:load pathname={Astro.url.pathname} />
+      {chrome && <Navbar client:load pathname={Astro.url.pathname} />}
       <slot />
       {/* Footer carries no state or effects, so it is rendered to plain HTML
           with no client directive and ships no JavaScript at all. */}
-      <Footer />
+      {chrome && <Footer />}
       <FloatingContact client:visible />
     </div>
   </body>
