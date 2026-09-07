@@ -826,6 +826,36 @@ summary {
   animation: ci-blink 6s linear infinite;
 }
 
+/* ---- A mark travelling the whole length of a connector ----
+   ci-scan-x and ci-scan-y move between fixed pixel offsets (-30px to 200px),
+   which is user units inside a stretched viewBox and correct there. On an HTML
+   box of unknown width they cross a fixed distance and stop, so a 600px
+   connector gets a mark that gives up a third of the way along. These two move
+   in percentages of the element they are positioned in, so they cross whatever
+   they are put on. The element must be absolutely positioned in a relative
+   parent. */
+@keyframes ci-travel-x {
+  0% { left: 0%; opacity: 0; }
+  12%, 88% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+@keyframes ci-travel-y {
+  0% { top: 0%; opacity: 0; }
+  12%, 88% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.ci-travel-x {
+  opacity: 0;
+  animation: ci-travel-x 2.6s linear infinite;
+}
+
+.ci-travel-y {
+  opacity: 0;
+  animation: ci-travel-y 2.6s linear infinite;
+}
+
 /* A refresh sweeping across a view, clipped to it. */
 @keyframes ci-scan-x {
   0% { transform: translateX(-30px); opacity: 0; }
@@ -907,6 +937,12 @@ summary {
 
   .ci-blink,
   .ci-blink-soft {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .ci-travel-x,
+  .ci-travel-y {
     animation: none !important;
     opacity: 0 !important;
   }
