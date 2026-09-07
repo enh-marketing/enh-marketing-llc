@@ -1,6 +1,6 @@
 "use client";
 
-import { AutomationFork } from "@/components/hub/AutomationFork";
+import { AutomationPipeline } from "@/components/hub/AutomationPipeline";
 import { CategoryParallax } from "@/components/hub/CategoryParallax";
 import { HubOpener } from "@/components/hub/HubOpener";
 import { SearchSurfaces } from "@/components/hub/SearchSurfaces";
@@ -19,7 +19,7 @@ export function AiHubPage() {
     <main>
       <HubOpener />
       <SearchSurfaces />
-      <AutomationFork />
+      <AutomationPipeline />
       {/* 03 to 08 are still the empty parallax blocks. */}
       {categories.slice(2).map((c, i) => (
         <CategoryParallax key={c.no} index={i + 2} />
