@@ -1,0 +1,22 @@
+---
+import Base from "@/layouts/Base.astro";
+import { AiHubFilmPage } from "@/page-bodies/ai-hub-film";
+
+/* The film version of /ai-hub, kept beside it so the two can be compared.
+
+   NOINDEX. This is an experiment on a placeholder film, not a page anyone
+   should arrive at from a search result. It is in sitemap.ts's BUILT set only
+   because check:routes requires every real route to be listed there. */
+
+const HREF = "/ai-hub/film";
+---
+
+<Base
+  title="AI Hub, film version | ENH Marketing"
+  description="An experimental version of ENH Marketing's AI Hub, told with a scrubbed film."
+  canonical={HREF}
+  chrome={false}
+  robots="noindex, nofollow"
+>
+  <AiHubFilmPage client:load />
+</Base>

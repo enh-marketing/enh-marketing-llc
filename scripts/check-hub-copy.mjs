@@ -16,12 +16,16 @@
  *  Titles are compared against the sitemap label with any trailing parenthesis
  *  removed, so "AI Search Visibility (AEO & GEO)" in the navigation is allowed
  *  to be "AI Search Visibility" as a display title, and nothing else is. */
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 
-const HUB = "src/content/ai-hub.ts";
+/** Every AI Hub content file: the drawn page's and the film version's, and
+ *  anything added beside them later. Found rather than named, so a new version
+ *  of the page cannot quietly ship copy that nothing checks. */
+const CONTENT = "src/content";
+const HUBS = readdirSync(CONTENT)
+  .filter((f) => /^ai-hub.*\.ts$/.test(f))
+  .map((f) => `${CONTENT}/${f}`);
 const SITEMAP = "src/lib/sitemap.ts";
-
-const hub = readFileSync(HUB, "utf8");
 
 /** The navigation's own name for each AI Hub page, by slug. */
 const labels = new Map(
@@ -31,7 +35,11 @@ const labels = new Map(
 
 /* Beat object literals that name a source. None of them nest braces, so the
    no-inner-brace match is enough to keep one beat from swallowing the next. */
-const beats = [...hub.matchAll(/\{[^{}]*\bquotes:\s*"([^"]+)"[^{}]*\}/g)];
+const beats = HUBS.flatMap((file) =>
+  [...readFileSync(file, "utf8").matchAll(/\{[^{}]*\bquotes:\s*"([^"]+)"[^{}]*\}/g)].map(
+    (m) => [m[0], m[1], file],
+  ),
+);
 
 if (beats.length === 0) {
   console.log("check:copy: no quoted lines to check.");
@@ -41,7 +49,7 @@ if (beats.length === 0) {
 const problems = [];
 const read = (block, key) => block.match(new RegExp(`\\b${key}:\\s*\\n?\\s*"((?:[^"\\\\]|\\\\.)*)"`))?.[1];
 
-for (const [block, slug] of beats) {
+for (const [block, slug, file] of beats) {
   const path = `src/content/services/${slug}.ts`;
   let service;
   try {
@@ -59,7 +67,7 @@ for (const [block, slug] of beats) {
         `${slug}: the hub and ${where} disagree on the ${what}.\n` +
           `    source: ${theirs}\n` +
           `    hub:    ${mine}\n` +
-          `    Fix ${HUB} to match, or the change was not meant to reach the hub.`,
+          `    Fix ${file} to match, or the change was not meant to reach the hub.`,
       );
     }
   };
@@ -84,4 +92,6 @@ if (problems.length) {
   process.exit(1);
 }
 
-console.log(`check:copy: ${beats.length} quoted categor(ies), all verbatim.`);
+console.log(
+  `check:copy: ${beats.length} quoted categor(ies) across ${HUBS.length} file(s), all verbatim.`,
+);

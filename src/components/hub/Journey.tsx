@@ -71,6 +71,11 @@ const FADE = 0.055;
 const BEAT_HOLD = 0.06;
 const BEAT_RAMP = 0.09;
 
+/** A page with more stations than this one needs a shorter window: the rule is
+ *  that hold + ramp must stay inside half the gap between neighbouring beats,
+ *  or two are legible at once. */
+export type BeatWindow = { hold: number; ramp: number };
+
 /** How much of a viewport the scene takes to fade up as the stage arrives.
  *
  *  Long enough that the scene gathers rather than switching on: at an eighth of
@@ -92,7 +97,13 @@ function boundsOf(chapters: Chapter[]) {
   });
 }
 
-export function Journey({ chapters }: { chapters: Chapter[] }) {
+export function Journey({
+  chapters,
+  beatWindow = { hold: BEAT_HOLD, ramp: BEAT_RAMP },
+}: {
+  chapters: Chapter[];
+  beatWindow?: BeatWindow;
+}) {
   const trackRef = useRef<HTMLElement>(null);
   const reduced = usePrefersReducedMotion();
   const [p, setP] = useState(0);
@@ -181,7 +192,11 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
             c.beats.map((b, bi) => {
               const near =
                 ci === lead
-                  ? clamp(1 - (Math.abs(locals[ci] - b.at) - BEAT_HOLD) / BEAT_RAMP, 0, 1)
+                  ? clamp(
+                      1 - (Math.abs(locals[ci] - b.at) - beatWindow.hold) / beatWindow.ramp,
+                      0,
+                      1,
+                    )
                   : 0;
               const shown = reduced ? (ci === 0 && bi === 0 ? 1 : 0) : near;
               return (
