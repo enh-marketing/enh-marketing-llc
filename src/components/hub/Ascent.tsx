@@ -60,11 +60,14 @@ export function Ascent() {
             children: (
               <div className="flex h-full w-full flex-col items-center justify-center px-6 text-center">
                 {opener.eyebrow && (
-                  <p className="font-display mb-5 text-[0.6875rem] font-extrabold uppercase tracking-[0.24em] text-white/70">
+                  <p className="font-display mb-5 text-[0.62rem] font-semibold uppercase tracking-wide text-white/70">
                     {opener.eyebrow}
                   </p>
                 )}
-                <h1 className="max-w-[14ch] text-[2.75rem] font-light leading-[0.98] tracking-[-0.035em] text-white sm:text-6xl lg:text-[5.5rem]">
+                {/* The site's own heading: Cabinet Grotesk, extra bold, upper
+                    case, at the hero size. display-2xl clamps against svh as
+                    well as vw, which is what keeps it inside a short window. */}
+                <h1 className="font-display display-2xl max-w-[16ch] font-extrabold uppercase text-white">
                   {opener.title}
                 </h1>
               </div>

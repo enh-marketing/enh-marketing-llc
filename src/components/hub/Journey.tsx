@@ -56,6 +56,20 @@ export type Chapter = {
 /** Share of the track given to the cross-fade on each side of a join. */
 const FADE = 0.055;
 
+/** How a line is lit as the reader reaches it, in chapter progress either side
+ *  of the beat: full within HOLD, out by HOLD + RAMP.
+ *
+ *  A PLATEAU, AND NARROWER THAN THE GAP BETWEEN BEATS. Both parts matter. A
+ *  plain triangle is at full strength only at the exact point of the beat, so
+ *  the copy is never quite solid; the plateau gives it a stretch to be read in.
+ *  And the beats on this page sit 0.33 apart, so anything reaching further than
+ *  0.165 has two of them legible at once, which showed up as two headlines
+ *  printed over each other the moment the type went to the site's weight. Out
+ *  by 0.15 leaves a small gap of picture with no words in it between one
+ *  category and the next, which is worth having anyway. */
+const BEAT_HOLD = 0.06;
+const BEAT_RAMP = 0.09;
+
 /** How much of a viewport the scene takes to fade up as the stage arrives.
  *
  *  Long enough that the scene gathers rather than switching on: at an eighth of
@@ -164,7 +178,10 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
         <div className="pointer-events-none absolute inset-0 z-10">
           {chapters.map((c, ci) =>
             c.beats.map((b, bi) => {
-              const near = ci === lead ? 1 - clamp(Math.abs(locals[ci] - b.at) / 0.22, 0, 1) : 0;
+              const near =
+                ci === lead
+                  ? clamp(1 - (Math.abs(locals[ci] - b.at) - BEAT_HOLD) / BEAT_RAMP, 0, 1)
+                  : 0;
               const shown = reduced ? (ci === 0 && bi === 0 ? 1 : 0) : near;
               return (
                 <div
@@ -175,12 +192,13 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                 >
                   <div className="max-w-[38rem]">
                     {b.eyebrow && (
-                      <p className="font-display mb-3 flex items-center gap-3 text-[0.6875rem] font-extrabold uppercase tracking-[0.2em] text-white/50">
+                      <p className="font-display mb-3 flex items-center gap-3 text-[0.62rem] font-semibold uppercase tracking-wide text-white/50">
                         <span className="tabular-nums">{b.eyebrow}</span>
                         <span aria-hidden className="block h-px w-8 bg-white/25" />
                       </p>
                     )}
-                    <h2 className="text-[2rem] font-light leading-[1.06] tracking-[-0.03em] text-white sm:text-5xl lg:text-[3.5rem]">
+                    {/* The site's own heading, at the section scale. */}
+                    <h2 className="font-display display-lg font-extrabold uppercase text-white">
                       {b.title}
                     </h2>
                     {b.body && (
