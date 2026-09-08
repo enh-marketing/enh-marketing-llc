@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ComponentType } from "react";
-import { usePrefersReducedMotion } from "@/lib/useEnhanced";
+import { usePrefersReducedMotion, useEnhanced } from "@/lib/useEnhanced";
 import { Starfield } from "@/components/hub/Starfield";
 import { WordReveal } from "@/components/hub/WordReveal";
 import { ServiceChip } from "@/components/hub/ServiceChip";
@@ -86,6 +86,27 @@ export type BeatWindow = { hold: number; ramp: number };
  *  0.8, and the two are never lit together. */
 const REVEAL_OVER = 0.2;
 
+/** How far a line travels as the reader passes it, in viewport heights per unit
+ *  of chapter progress.
+ *
+ *  THE COPY MOVES WITH THE SCROLL RATHER THAN BLINKING IN AND OUT. Fading alone
+ *  reads as a slideshow laid over a moving picture: the scene travels, the words
+ *  do not, and the two look like separate pages. Each line now rises through its
+ *  own window on the same scroll that moves the scene, and the fade is only what
+ *  hides its arrival and its exit.
+ *
+ *  THE NUMBER IS SET BY THE WINDOW, not picked. A line is legible across
+ *  hold + ramp of chapter progress on each side, which this page narrows to
+ *  0.095, so its whole visible life is 0.19 of a chapter. At 160 that is a
+ *  little over 30vh of travel from first light to last: enough to read as
+ *  movement, not so much that the line is crossing the frame while it is being
+ *  read.
+ *
+ *  DESKTOP ONLY. On a phone the copy has a reserved bottom two fifths and
+ *  nothing to move against; sliding it inside that box only collides with its
+ *  own edges. */
+const BEAT_TRAVEL_VH = 160;
+
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
 /** Where each chapter starts and ends along the track, 0 to 1. */
@@ -108,6 +129,7 @@ export function Journey({
 }) {
   const trackRef = useRef<HTMLElement>(null);
   const reduced = usePrefersReducedMotion();
+  const wide = useEnhanced("(min-width: 1024px)");
   const [p, setP] = useState(0);
   /* 0 until the stage is nearly pinned, 1 once it is. */
   const [reveal, setReveal] = useState(0);
@@ -230,6 +252,13 @@ export function Journey({
                  nearer the top of a chapter would otherwise surface halfway up
                  the window with no warning. */
               const shown = reduced ? (ci === 0 && bi === 0 ? 1 : 0) : near * reveal;
+              /* Signed distance from this beat's own point, in chapter
+                 progress: negative on the way in, zero as it is reached,
+                 positive on the way out. Multiplied out it is the line's
+                 travel, so the words climb past the reader at the speed the
+                 scroll is going rather than sitting still and dimming. */
+              const travel =
+                reduced || !wide ? 0 : -(locals[ci] - b.at) * BEAT_TRAVEL_VH;
               return (
                 <div
                   key={`${c.id}-${bi}`}
@@ -256,7 +285,15 @@ export function Journey({
                      stop (focusX 0.62 to 0.72), so the picture is on one side
                      and the words are on the other without the scene moving. */
                   className="absolute inset-x-0 bottom-0 flex h-[40%] flex-col items-center justify-center px-6 text-center transition-opacity duration-500 motion-reduce:transition-none lg:inset-y-0 lg:h-full lg:w-1/2 lg:items-start lg:justify-center lg:pl-16 lg:pr-8 lg:text-left xl:pl-24"
-                  style={{ opacity: shown, pointerEvents: shown > 0.5 ? "auto" : "none" }}
+                  style={{
+                    opacity: shown,
+                    /* No transition on the transform. Opacity is eased because
+                       it is a state change; this is a position read straight
+                       off the scroll, and easing it would make the words lag
+                       the scene they are supposed to be moving with. */
+                    transform: travel ? `translate3d(0, ${travel}vh, 0)` : undefined,
+                    pointerEvents: shown > 0.5 ? "auto" : "none",
+                  }}
                 >
                   <div className="w-full max-w-[34rem] lg:max-w-[44rem]">
                     {b.eyebrow && (

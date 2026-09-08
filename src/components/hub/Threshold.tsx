@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import AirlockHero from "@/components/hub/AirlockHero";
+import { getLenis } from "@/components/fx/SmoothScroll";
 import { ServiceChip } from "@/components/hub/ServiceChip";
 import { threshold } from "@/content/ai-hub";
 
@@ -77,14 +78,50 @@ function Door() {
     const el = slot.current;
     if (!el) return;
     const check = () => {
-      if (el.getBoundingClientRect().top <= 0) setOpen(true);
+      const top = el.getBoundingClientRect().top;
+      if (top > 0) return;
+      /* LAND ON THE DOOR BEFORE HANDING IT OVER. The component decides whether
+         to take the page with `scrollY <= section.offsetTop + 1`, read once
+         when its effect runs. Mounting it as the slot crosses the top is not
+         enough on its own: React renders on the next frame and Lenis keeps
+         easing in the meantime, so by the time that line runs the page has
+         moved a few dozen pixels past its own top and the test is false. It
+         mounted, never engaged, and the reader scrolled past a still frame.
+
+         So the smooth scrolling is stopped and the page is put exactly on the
+         slot's own top first. The component then reads a position that is its
+         offsetTop to the pixel, engages, and pins from there. It takes Lenis
+         back over itself a line later, which is why stopping it here is safe. */
+      const docTop = Math.round(window.scrollY + top);
+      getLenis()?.stop();
+      window.scrollTo(0, docTop);
+      setOpen(true);
     };
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
+    /* AND IT IS NOT ARMED UNTIL THE PAGE HAS FINISHED LAYING OUT. Checked
+       straight away it fires during hydration, when the browser has already
+       restored a deep scroll position but the page is not yet its full height,
+       so the slot is momentarily near the top of the window. Measured on a
+       reload two thirds of the way down, that pinned the body at -12000px,
+       two and a half screens above the door. Waiting for load and two frames
+       past it means the first read is of a settled page. */
+    let armed = false;
+    const arm = () => {
+      armed = true;
+      check();
+    };
+    const onScroll = () => {
+      if (armed) check();
+    };
+    const whenReady = () => requestAnimationFrame(() => requestAnimationFrame(arm));
+    if (document.readyState === "complete") whenReady();
+    else window.addEventListener("load", whenReady, { once: true });
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
+      window.removeEventListener("load", whenReady);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, [open]);
 
