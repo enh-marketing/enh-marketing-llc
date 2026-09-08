@@ -25,10 +25,6 @@ export const CHART_PATH: Array<[number, number]> = [
   [0.88, 0.24],
 ];
 
-/** Where the Sun sits before it joins the chart: the camera's own focus at the
- *  stop before, so the run-in starts from where it already is. */
-export const CHART_ENTRY: [number, number] = [0.62, 0.6];
-
 /** How much of the chart leg is spent getting to the start of the line. The
  *  Sun is mid-frame when the leg opens and the chart begins at the lower left,
  *  so it has to travel there before it can travel the shape. */
@@ -65,16 +61,17 @@ export function chartPointAt(u: number): [number, number] {
   return CHART_PATH[0];
 }
 
-/** Where to put `focus` for a given point in the chart leg: the run-in first,
- *  then the chart itself. */
-export function chartFocus(chart: number): [number, number] {
+/** Where the Sun is at a given point in the chart leg: the run-in from
+ *  wherever the component had it, then the chart itself. `entry` is passed in
+ *  rather than fixed here, because it is the component's own Sun position and
+ *  depends on the viewport. */
+export function chartFocus(chart: number, entry: [number, number]): [number, number] {
   const c = clamp(chart, 0, 1);
   if (c <= RUN_IN) {
     const k = c / RUN_IN;
     const e = k * k * (3 - 2 * k);
-    const [sx, sy] = CHART_ENTRY;
     const [tx, ty] = CHART_PATH[0];
-    return [sx + (tx - sx) * e, sy + (ty - sy) * e];
+    return [entry[0] + (tx - entry[0]) * e, entry[1] + (ty - entry[1]) * e];
   }
   return chartPointAt((c - RUN_IN) / (1 - RUN_IN));
 }

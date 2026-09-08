@@ -7,8 +7,8 @@ import {
   type Planet,
 } from "@/components/hub/OrbitalHeroSection";
 import ParticleDrift from "@/components/hub/ParticleDrift";
-import { chartFocus, RUN_IN } from "@/components/hub/chartPath";
-import { TrackChart } from "@/components/hub/TrackChart";
+import { RUN_IN } from "@/components/hub/chartPath";
+import { TrackChart, type TrackCamera } from "@/components/hub/TrackChart";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
 /** Chapter two: the system.
@@ -117,9 +117,8 @@ const STOPS: Stop[] = [
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
     planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: 0.6,
     trailYears: 5, maxTurns: 6, fade: 1 },
-  // Data & Dashboards. Same camera again. The planets go and the drift eases
-  // off, so the one line left retracts to a length that fits the frame, and
-  // the chart takes it over and bends it.
+  // Campaign Intelligence. Same camera again. The planets go and the Sun
+  // steps onto the chart.
   //
   // THE DRIFT STAYS HIGH HERE, and dropping it was a mistake worth recording.
   // Easing it off shortened the Sun's track to something that fit the frame,
@@ -131,12 +130,32 @@ const STOPS: Stop[] = [
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
     planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: 0.6,
     trailYears: 5, maxTurns: 6, fade: 0 },
+  // Data & Dashboards. Identical again. The chart runs across both of these
+  // two stops rather than one, so the Sun has the room to draw a shape with
+  // two falls in it and a category to read at each end of the climb.
+  { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
+    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: 0.6,
+    trailYears: 5, maxTurns: 6, fade: 0 },
 ];
 
-/** Where the chart runs, in chapter progress: the last leg, after the paths
- *  have straightened. Four gaps between five stops, so the last is the fourth
- *  quarter. */
-const CHART_FROM = 0.75;
+/** Where the chart runs, in chapter progress. Five gaps between six stops, and
+ *  the chart owns the last two of them: it carries two categories, so it needs
+ *  twice the room a single stop would give it. */
+const CHART_FROM = 0.6;
+
+/** The frozen camera the chart is drawn against, read from the stop rather
+ *  than retyped. TrackChart needs it to know where the component had put its
+ *  Sun, which is both where the drawn one starts and where the core it leaves
+ *  behind has to be covered. */
+const CHART_CAMERA: TrackCamera = {
+  spin: STOPS[5].spin,
+  tilt: STOPS[5].tilt,
+  roll: STOPS[5].roll,
+  focusX: STOPS[5].focusX,
+  focusY: STOPS[5].focusY,
+  lead: LEAD,
+  apex: [272, 53],
+};
 
 const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
 
@@ -293,20 +312,19 @@ export function System({
      and then reverses, which is what read as appearing from nowhere. */
   const chart = clamp((t - CHART_FROM) / (1 - CHART_FROM), 0, 1);
 
-  /* THE SUN WALKS THE CHART. `focus` is the prop that places it, so driving
-     that along the path moves the real Sun onto the line: the shape ahead of it
-     is where it is going and the shape behind is where it has been. `lead`
-     pushes the Sun off `focus` by a share of the short side, which is right
-     everywhere else and wrong here, because on the chart the Sun has to sit on
-     the line and not beside it; it is eased to zero across the run-in. */
-  const onChart = chart > 0 ? chartFocus(chart) : null;
-  const chartLead = onChart ? 1 - smooth(clamp(chart / RUN_IN, 0, 1)) : 1;
+  /* NOTHING MOVES BUT THE SUN, WHICH IS WHY THE COMPONENT IS DIMMED RATHER
+     THAN DRIVEN. Walking the component's `focus` along the chart does move its
+     real Sun, and takes the whole scene with it, star field included, because
+     `focus` is the camera centre. There is no prop that moves the Sun on its
+     own. So the camera is left exactly where it was and `glow` is taken to
+     zero across the run-in instead, which removes the planets, the wakes and
+     the Sun's halo but not the stars, since the star field is the one thing
+     `glow` does not scale. TrackChart draws the Sun from there on. */
+  const dim = 1 - smooth(clamp(chart / RUN_IN, 0, 1));
 
-  const focusX = onChart ? onChart[0] : mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
-  const focusY = onChart
-    ? onChart[1]
-    : mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
-  const lead = mix(LEAD, 0, entry) * chartLead;
+  const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
+  const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
+  const lead = mix(LEAD, 0, entry);
   /* The rings belong to the opening, where the orbits are still near-circular
      and nested. Past that they would be a thicket. */
   const showOrbits = cam.alignToCourse < 0.2;
@@ -327,7 +345,7 @@ export function System({
       trailYears={cam.trailYears}
       maxTurns={cam.maxTurns}
       driftSpeed={cam.driftSpeed}
-      glow={cam.glow}
+      glow={cam.glow * dim}
       focus={[focusX, focusY]}
       lead={lead}
       showOrbits={showOrbits}
@@ -345,7 +363,7 @@ export function System({
       scrim="bottom"
       scrimStrength={0.8}
     >
-      {chart > 0 && <TrackChart p={chart} />}
+      {chart > 0 && <TrackChart p={chart} camera={CHART_CAMERA} />}
       {particles > 0.01 && (
         <div
           aria-hidden

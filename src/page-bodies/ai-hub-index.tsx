@@ -20,9 +20,9 @@ import { horizon, system } from "@/content/ai-hub";
  *  from its own lock, which deletes most of it rather than adding anything.
  *
  *  THE BEAT WINDOW IS NARROWER THAN THE DEFAULT because the system chapter's
- *  four lines sit a quarter of the chapter apart, so the rule that stops two
- *  headlines being legible at once needs the window inside 0.125. Full within
- *  0.04 and out by 0.11 clears it.
+ *  five lines sit a fifth of the chapter apart, so the rule that stops two
+ *  headlines being legible at once needs the window inside 0.1. Full within
+ *  0.035 and out by 0.095 clears it.
  *
  *  THE UPLINK IS THE GAP. The story runs system, uplink, horizon, and the
  *  middle one is not built: 04, 05 and 06 have nowhere to be until it is. The
@@ -35,7 +35,7 @@ const CHAPTERS: Chapter[] = [
   /* Six, not four. The chapter gained two stops at the end, where the planets
      are thrown across the frame and then taken away, and those need scroll of
      their own or the scatter is over before it registers. */
-  { id: "system", viewports: 8, Scene: System, beats: system },
+  { id: "system", viewports: 10, Scene: System, beats: system },
   { id: "horizon", viewports: 4, Scene: Horizon, beats: horizon },
 ];
 
@@ -43,7 +43,7 @@ export function AiHubPage() {
   return (
     <main>
       <Ascent />
-      <Journey chapters={CHAPTERS} beatWindow={{ hold: 0.04, ramp: 0.07 }} />
+      <Journey chapters={CHAPTERS} beatWindow={{ hold: 0.035, ramp: 0.06 }} />
     </main>
   );
 }

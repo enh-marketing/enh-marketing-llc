@@ -1,35 +1,77 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { CHART_PATH, chartPointAt, chartTravelled } from "@/components/hub/chartPath";
+import { chartPointAt, chartTravelled, chartFocus } from "@/components/hub/chartPath";
 
-/** The chart the Sun is travelling.
+/** The Sun travelling a chart, with nothing else moving.
  *
- *  THE SHAPE IS THE ROUTE, NOT THE WAKE. The version before this bent the Sun's
- *  trail into a chart, which put the shape behind a Sun that was still going
- *  straight: the chart had already happened and the Sun had nothing to do with
- *  it. Here the line is drawn ahead of the Sun and the chapter walks the
- *  component's `focus` along the same path, so the Sun is on the line and
- *  scrolling moves it up the shape. The line behind it is where it has been.
+ *  WHY THE SUN IS DRAWN HERE NOW. The version before drove the component's
+ *  `focus`, which does move its real Sun along the path, and moves the entire
+ *  scene with it: `focus` is the camera centre, so the star field rode up the
+ *  chart too and the whole frame swung. There is no prop that moves the Sun
+ *  alone. So the component is dimmed to nothing over the run-in, which leaves
+ *  its star field untouched because the stars are the one thing its `glow` does
+ *  not scale, and the Sun is drawn here instead, travelling the path over a sky
+ *  that holds perfectly still.
  *
- *  IT IS THE COMPONENT'S OWN SUN. Nothing here draws one. `focus` is the prop
- *  that places it, so driving that along the path moves the real thing, with
- *  its own halo and its own pulse, rather than a copy that would have to be
- *  matched and would drift.
+ *  THE ONE THING THAT SURVIVES THE DIMMING is the Sun's own core, a hard white
+ *  disc drawn at a fixed alpha that `glow` never touches. It is about 12px
+ *  across and it is still sitting where the camera left it, so it is covered
+ *  here, at a position derived from the same arithmetic the component uses to
+ *  place it. On a black sky a disc that size is nothing; the alternative was to
+ *  push `focus` off frame, which takes the stars with it again.
  *
- *  Corners, not curves: straight segments with a mitred join. A price line
- *  turns, it does not wave. And there are no axes, ticks or numbers, because
- *  the source document for this category is explicit that dashboards are shown
- *  as shapes and never as values. */
+ *  NO GUIDE LINE AND NO COMPANIONS. The route used to be drawn faint ahead of
+ *  the Sun, with the planets' lines beside it. Both are gone: what is left is
+ *  the Sun and the line it is drawing behind itself, so the chart is something
+ *  that happens rather than something already on screen being traced.
+ *
+ *  Corners, not curves. And no axes, ticks or numbers, because the source
+ *  document for this category is explicit that dashboards are shown as shapes
+ *  and never as values. */
 
-/** The planets' lines, beside the Sun's, turning the same corners. */
-const COMPANIONS: Array<{ colour: string; offset: number; from: number }> = [
-  { colour: "#5fd8ff", offset: 0.035, from: 0 },
-  { colour: "#ff9838", offset: -0.028, from: 1 },
-  { colour: "#b48cff", offset: 0.06, from: 2 },
-];
+export type TrackCamera = {
+  spin: number;
+  tilt: number;
+  roll: number;
+  focusX: number;
+  focusY: number;
+  lead: number;
+  apex: [number, number];
+};
 
-export function TrackChart({ p }: { p: number }) {
+const RAD = Math.PI / 180;
+
+/** Where the component draws its Sun, in CSS pixels. Its own arithmetic:
+ *  `focus` sets the camera centre and `lead` pushes the Sun off it along the
+ *  on-screen direction of travel. The projection's scale cancels when that
+ *  direction is normalised, so no zoom term is needed. */
+export function sunScreenPosition(w: number, h: number, c: TrackCamera) {
+  const l = c.apex[0] * RAD;
+  const b = c.apex[1] * RAD;
+  const D = { x: Math.cos(b) * Math.cos(l), y: Math.cos(b) * Math.sin(l), z: Math.sin(b) };
+
+  const A = c.spin * RAD;
+  const B = c.tilt * RAD;
+  const C = c.roll * RAD;
+  const ca = Math.cos(A), sa = Math.sin(A);
+  const cb = Math.cos(B), sb = Math.sin(B);
+  const cr = Math.cos(C), sr = Math.sin(C);
+
+  const r = { x: ca, y: sa, z: 0 };
+  const u = { x: -sa * cb, y: ca * cb, z: sb };
+  const RIGHT = { x: r.x * cr + u.x * sr, y: r.y * cr + u.y * sr, z: r.z * cr + u.z * sr };
+  const UP = { x: -r.x * sr + u.x * cr, y: -r.y * sr + u.y * cr, z: -r.z * sr + u.z * cr };
+
+  const vx = D.x * RIGHT.x + D.y * RIGHT.y + D.z * RIGHT.z;
+  const vy = D.x * UP.x + D.y * UP.y + D.z * UP.z;
+  const len = Math.hypot(vx, -vy) || 1;
+  const push = Math.min(w, h) * c.lead;
+
+  return { x: w * c.focusX + (vx / len) * push, y: h * c.focusY + (-vy / len) * push };
+}
+
+export function TrackChart({ p, camera }: { p: number; camera: TrackCamera }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const at = useRef(0);
 
@@ -66,54 +108,72 @@ export function TrackChart({ p }: { p: number }) {
       ctx.clearRect(0, 0, w, h);
       if (k <= 0) return;
 
-      const px = (v: [number, number]): [number, number] => [v[0] * w, v[1] * h];
+      /* Cover the component's residual Sun core, which its own dimming leaves
+         behind. Sized from its formula, radius max(5, min(w,h) * 0.013), with a
+         soft edge so nothing shows against the stars. */
+      const stale = sunScreenPosition(w, h, camera);
+      const coreR = Math.max(5, Math.min(w, h) * 0.013) * 1.9 + 4;
+      const mask = ctx.createRadialGradient(stale.x, stale.y, 0, stale.x, stale.y, coreR);
+      mask.addColorStop(0, "rgba(0,0,0,1)");
+      mask.addColorStop(0.72, "rgba(0,0,0,1)");
+      mask.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = mask;
+      ctx.beginPath();
+      ctx.arc(stale.x, stale.y, coreR, 0, Math.PI * 2);
+      ctx.fill();
+
+      /* The Sun: from where the component had it, onto the chart, then along
+         it. `chartFocus` returns the whole journey in frame fractions. */
+      const entry = { x: stale.x / w, y: stale.y / h };
+      const spot = chartFocus(k, [entry.x, entry.y]);
+      const sun = { x: spot[0] * w, y: spot[1] * h };
       const done = chartTravelled(k);
 
       ctx.lineJoin = "miter";
       ctx.miterLimit = 8;
       ctx.lineCap = "round";
 
-      const stroke = (pts: Array<[number, number]>, width: number, alpha: number, colour: string) => {
-        if (pts.length < 2) return;
-        ctx.strokeStyle = colour;
-        ctx.globalAlpha = alpha;
-        ctx.lineWidth = width;
-        ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
-        ctx.stroke();
-      };
-
-      /* The whole route, faint: this is the part the Sun has not reached. It
-         appears with the chart rather than being revealed, because a chart you
-         cannot see the end of is a line, not a chart. */
-      const all = CHART_PATH.map(px);
-      const shown = Math.min(1, k / 0.22);
-      stroke(all, 1, 0.16 * shown, "#ffd9a0");
-
-      /* The planets, beside it. */
-      for (const c of COMPANIONS) {
-        const line = CHART_PATH.slice(c.from).map(([x, y]) => px([x, y + c.offset]));
-        stroke(line, 2.5, 0.1 * shown, c.colour);
-        stroke(line, 1, 0.34 * shown, c.colour);
-      }
-
-      /* And the part already travelled, bright, ending under the Sun. */
+      /* Behind it, the line it has drawn. Nothing ahead of it. */
       if (done > 0) {
         const pts: Array<[number, number]> = [];
-        const steps = 40;
-        for (let i = 0; i <= steps; i++) pts.push(px(chartPointAt((done * i) / steps)));
-        const head = pts[pts.length - 1];
-        const grad = ctx.createLinearGradient(head[0], head[1], pts[0][0], pts[0][1]);
+        const steps = 48;
+        for (let i = 0; i <= steps; i++) {
+          const [x, y] = chartPointAt((done * i) / steps);
+          pts.push([x * w, y * h]);
+        }
+        const grad = ctx.createLinearGradient(sun.x, sun.y, pts[0][0], pts[0][1]);
         grad.addColorStop(0, "rgba(255,246,214,1)");
-        grad.addColorStop(0.45, "rgba(255,206,110,0.6)");
-        grad.addColorStop(1, "rgba(255,180,80,0.05)");
-        stroke(pts, 9, 0.14, grad as unknown as string);
-        stroke(pts, 3.4, 0.32, grad as unknown as string);
-        stroke(pts, 1.6, 1, grad as unknown as string);
+        grad.addColorStop(0.5, "rgba(255,206,110,0.55)");
+        grad.addColorStop(1, "rgba(255,180,80,0.04)");
+        ctx.strokeStyle = grad;
+        const run = (width: number, alpha: number) => {
+          ctx.globalAlpha = alpha;
+          ctx.lineWidth = width;
+          ctx.beginPath();
+          ctx.moveTo(pts[0][0], pts[0][1]);
+          for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+          ctx.stroke();
+        };
+        run(9, 0.14);
+        run(3.4, 0.32);
+        run(1.6, 1);
       }
 
+      /* And the Sun itself, drawn to match the one it replaced. */
+      const R = Math.max(5, Math.min(w, h) * 0.013);
       ctx.globalAlpha = 1;
+      const halo = ctx.createRadialGradient(sun.x, sun.y, 0, sun.x, sun.y, R * 9);
+      halo.addColorStop(0, "rgba(255,242,204,0.5)");
+      halo.addColorStop(0.35, "rgba(255,206,110,0.16)");
+      halo.addColorStop(1, "rgba(255,180,80,0)");
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(sun.x, sun.y, R * 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.97)";
+      ctx.beginPath();
+      ctx.arc(sun.x, sun.y, R, 0, Math.PI * 2);
+      ctx.fill();
     };
 
     const tick = () => {
@@ -128,7 +188,7 @@ export function TrackChart({ p }: { p: number }) {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", draw);
     };
-  }, []);
+  }, [camera]);
 
   return (
     <canvas
