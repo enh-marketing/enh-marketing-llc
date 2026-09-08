@@ -52,61 +52,65 @@ export function sunAfterScroll(w: number, h: number, s: number) {
   return { x: at.x, y: at.y - s * (1 - BACK_RATE / 100) };
 }
 
-/** Where the light ends up: the point the camera arrives at, as fractions of
- *  the viewport. Deliberately close to where the sun already is in the
- *  photograph, near the top third, so that crossing over asks it to move as
- *  little as possible. Pulling it to the middle of the frame instead was tried
- *  and swung it down through a quarter of the screen while the reader was
- *  scrolling down, which reads as the sun falling. The move to the middle
- *  happens afterwards, inside the orbital scene, where the camera does it by
- *  drifting `focus` and the whole starfield comes with it.
+/** The layers' opaque edges, as fractions of the image, measured from the
+ *  alpha channel of each layer with dwebp: the median first opaque row across
+ *  every tenth column.
  *
- *  Both halves of the handover read this, which is what stops them
- *  disagreeing. */
-export const HANDOVER_FOCUS = { x: 0.484, y: 0.3 };
+ *  The mountain-and-figure layer begins at 49.8% and the foreground ridge at
+ *  71.1%, and the sun is at 29.6%, above both. That is the whole reason the
+ *  glow can sit between the back layer and the mountain and be occluded by the
+ *  man rather than painted over him: there is nothing of theirs at the height
+ *  the sun is at, and everything of theirs below it. As the glow grows, the
+ *  mountain and the figure cut into its lower half, which is what a light
+ *  behind a thing looks like. */
+export const LAYER_EDGE = { mid: 0.498, front: 0.711 };
 
-/** Scroll positions of the crossing, in viewport heights from the top. */
-export const CROSSING = {
-  /** The light begins to show through the photograph, and from the same
-   *  moment begins to settle toward where it will be handed over. Early, while
-   *  it is still sitting on the photograph's own sun: waking it later meant
-   *  appearing at a sun that had already drifted to the top of the frame. */
-  wake: 0.22,
-  pull: 0.22,
+/** The glow's life, in viewport heights scrolled from the top of the page.
+ *
+ *  IT ENDS BEFORE THE NEXT SCENE BEGINS, and that is the point of these
+ *  numbers rather than any look. The orbital chapter fades up over the last
+ *  0.12 of a viewport before its stage pins, so this is finished at 0.86 and
+ *  there is never a frame with two lights in it. Everything about the crossing
+ *  that used to be position is now the parallax's job, so all that is left
+ *  here is when the light is up and how big it is. */
+export const GLOW = {
+  /** Begins to show through the photograph, on its own sun. */
+  wake: 0.18,
   /** Full strength. */
-  full: 0.8,
-  /** The frame is gone and the canvas draws its own Sun from here. */
-  handover: 1,
-  /** By which point the bridge has handed over completely. */
-  gone: 1.32,
+  full: 0.5,
+  /** And out, before the journey's stage arrives. */
+  out: 0.86,
+  /** How much bigger it gets across its life. */
+  growth: 2.8,
+  /** Its diameter at rest, as a fraction of the smaller viewport side. */
+  size: 0.15,
 };
+
+/** Where the orbital chapter puts its Sun as it opens: above the frame, so the
+ *  star comes down into the second scene from its top edge rather than
+ *  appearing inside the light the first one was holding. It settles onto the
+ *  first camera stop from there.
+ *
+ *  Only just above. Starting it a seventh of a viewport up left the star out of
+ *  frame for the first 135px of the chapter, which is a stretch of scrolling
+ *  with nothing to look at; from here it is over the edge and coming down
+ *  almost at once. */
+export const ENTRY_FOCUS = { x: 0.484, y: -0.05 };
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const between = (v: number, a: number, b: number) => clamp((v - a) / (b - a || 1), 0, 1);
 const smooth = (v: number) => v * v * (3 - 2 * v);
-const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 
-/** The whole crossing as one pure function of scroll, so that what the bridge
- *  draws and what this file claims can never come apart, and so it can be
- *  tested without a browser.
+/** How bright and how big the glow is, given how far the page has scrolled.
  *
- *  It starts on the photograph's sun and is drawn to the centre of the frame as
- *  the frame falls away: the light does not slide off the top with the picture,
- *  it comes to meet you, which is what moving toward something looks like. By
- *  `handover` it is exactly on HANDOVER_FOCUS, which is where the orbital
- *  chapter puts its own Sun, so there is nothing to see at the join. */
-export function bridgeAt(w: number, h: number, scrolled: number) {
+ *  A pure function of scroll, so it can be checked without a browser. There is
+ *  no position in it: the glow is a layer of the parallax now and travels at
+ *  the back layer's rate, which is the sun's own rate, so it cannot drift off
+ *  the photograph's sun however the picture moves. */
+export function glowAt(h: number, scrolled: number) {
   const k = scrolled / h;
-  const photo = sunAfterScroll(w, h, scrolled);
-  const pull = smooth(between(k, CROSSING.pull, CROSSING.handover));
-
   return {
-    x: mix(photo.x, HANDOVER_FOCUS.x * w, pull),
-    y: mix(photo.y, HANDOVER_FOCUS.y * h, pull),
-    scale: 1 + 5.5 * smooth(between(k, CROSSING.wake, CROSSING.gone)),
-    opacity:
-      k < CROSSING.handover
-        ? smooth(between(k, CROSSING.wake, CROSSING.full))
-        : 1 - smooth(between(k, CROSSING.handover, CROSSING.gone)),
+    scale: 1 + GLOW.growth * smooth(between(k, GLOW.wake, GLOW.out)),
+    opacity: smooth(between(k, GLOW.wake, GLOW.full)) * (1 - smooth(between(k, GLOW.full, GLOW.out))),
   };
 }

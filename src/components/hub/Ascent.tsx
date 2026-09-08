@@ -34,10 +34,13 @@ const opener = ascent[0];
  *  page ships. Whatever replaces them needs a sun in it, near enough to where
  *  this one is that hub/sun.ts stays true, because the page turns on it.
  *
- *  THE SUN IS THE HINGE. SunBridge sits over the picture's sun and carries it
- *  across into the orbital scene, where the same star is drawn on canvas. Its
- *  position comes from hub/sun.ts, which measured it, and the back layer's
- *  rate is imported from there too so the two can never be set apart. */
+ *  THE SUN IS THE HINGE, AND IT IS THE SECOND LAYER. SunBridge is stacked
+ *  immediately above the back layer, at the back layer's own rate, so it holds
+ *  the picture's sun exactly and the mountain and the man in front of it cut
+ *  into it as it grows. Painted on top instead, it lit the figure through his
+ *  own body. It goes out behind them as the frame leaves, and the orbital
+ *  chapter brings the same star down from the top of the next scene, so the two
+ *  are never on screen together. */
 export function Ascent() {
   const frame = useRef<HTMLElement>(null);
 
@@ -48,6 +51,9 @@ export function Ascent() {
         stageClassName="bg-[#0b0f14]"
         layers={[
           { y: BACK_RATE, children: <img src={BACK} alt="" aria-hidden loading="eager" className={LAYER_IMG} /> },
+          // The sun's own light, at the sun's own rate, behind everything the
+          // photograph puts in front of it.
+          { y: BACK_RATE, children: <SunBridge frame={frame} /> },
           { y: 55, children: <img src={MID} alt="" aria-hidden loading="eager" className={LAYER_IMG} /> },
           {
             y: 40,
@@ -74,8 +80,6 @@ export function Ascent() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-[24vh] bg-gradient-to-b from-transparent to-black"
       />
-
-      <SunBridge frame={frame} />
     </section>
   );
 }

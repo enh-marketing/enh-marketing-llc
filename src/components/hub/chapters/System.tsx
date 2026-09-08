@@ -2,7 +2,7 @@
 
 import { OrbitalHeroSection } from "@/components/hub/OrbitalHeroSection";
 import ParticleDrift from "@/components/hub/ParticleDrift";
-import { HANDOVER_FOCUS } from "@/components/hub/sun";
+import { ENTRY_FOCUS } from "@/components/hub/sun";
 
 /** Chapter two: the system.
  *
@@ -30,13 +30,15 @@ import { HANDOVER_FOCUS } from "@/components/hub/sun";
  *  is off: the effect draws letters and, separately, fast blue verticals, and
  *  only the letters are wanted. It is mounted only near its own stop.
  *
- *  THE ARRIVAL. The chapter does not open on its first camera stop, it opens
- *  pressed right up against the Sun, with the Sun exactly where the mountain
- *  left it, and pulls back out of it over the first tenth of the chapter. That
- *  is the other half of the hinge: SunBridge holds the light in that spot as
- *  the photograph drops away, and this puts the drawn Sun in the same spot so
- *  there is nothing to notice at the join. `focus` is Orbital's own prop for
- *  where the Sun sits in the frame, so nothing here is faked with transforms.
+ *  THE ARRIVAL. The chapter does not open on its first camera stop. It opens
+ *  with the Sun above the top of the frame and pressed close, and brings it
+ *  down into the scene while pulling back, over the first sixth of the chapter.
+ *  That is the other half of the hinge. The opener's light goes out behind the
+ *  mountain before this is visible at all, so the star arrives from the top of
+ *  the second scene rather than appearing inside the first one's glow: the same
+ *  star, much closer, with nothing merging on screen. `focus` is Orbital's own
+ *  prop for where the Sun sits in the frame, so nothing here is faked with
+ *  transforms.
  *
  *  `lead` has to go with it. Orbital does not draw the Sun at `focus`: it
  *  draws it at `focus` and then pushes it off by `lead` of the short side,
@@ -85,7 +87,7 @@ const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
 
 /** How much of the chapter the pull-back takes, and how close it starts. A
  *  smaller radius is a tighter view; the first stop sits at 2.3. */
-const ENTRY_SPAN = 0.12;
+const ENTRY_SPAN = 0.16;
 const ENTRY_RADIUS = 0.8;
 /** Orbital's own default, which the arrival has to start from zero and reach. */
 const LEAD = 0.12;
@@ -137,8 +139,8 @@ export function System({ t }: { t: number }) {
   /* 1 at the very start of the chapter, 0 once the pull-back is done. */
   const entry = 1 - smooth(clamp(t / ENTRY_SPAN, 0, 1));
   const viewRadius = mix(cam.viewRadius, ENTRY_RADIUS, entry);
-  const focusX = mix(cam.focusX, HANDOVER_FOCUS.x, entry);
-  const focusY = mix(cam.focusY, HANDOVER_FOCUS.y, entry);
+  const focusX = mix(cam.focusX, ENTRY_FOCUS.x, entry);
+  const focusY = mix(cam.focusY, ENTRY_FOCUS.y, entry);
   const lead = mix(LEAD, 0, entry);
   /* The rings belong to the opening, where the orbits are still near-circular
      and nested. Past that they would be a thicket. */
