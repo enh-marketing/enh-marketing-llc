@@ -389,6 +389,16 @@ export function OrbitalHeroSection({
       const target = ECC_FAN[index % ECC_FAN.length];
       const ci = Math.cos(inc), si = Math.sin(inc);
       const cn = Math.cos(node), sn = Math.sin(node);
+      /* WHICH WAY THIS PLANE SWINGS, decided once from the planet's real orbit
+         and never from the fanned-out one. See the note on swingToCourse. */
+      const bi = p.i * RAD, bn = p.node * RAD;
+      const side =
+        Math.sin(bi) * Math.sin(bn) * DIR.x +
+          -Math.sin(bi) * Math.cos(bn) * DIR.y +
+          Math.cos(bi) * DIR.z >=
+        0
+          ? 1
+          : -1;
       return {
         p,
         rgb: parseRGB(p.color),
@@ -399,16 +409,34 @@ export function OrbitalHeroSection({
         cw: Math.cos(p.peri * RAD), sw: Math.sin(p.peri * RAD),
         ci, si, cn, sn,
         M0: p.M0 * RAD,
-        swing: align > 0 ? swingToCourse(si * sn, -si * cn, ci, align) : null,
+        swing: align > 0 ? swingToCourse(si * sn, -si * cn, ci, align, side) : null,
       };
     }
 
     /**
      * Builds the rotation that swings an orbit plane toward the one standing
      * square to the Sun's course.
+     *
+     * `s` says which end of the course to swing toward, and it is passed in
+     * rather than worked out here. Upstream took it from the sign of this
+     * plane's own normal against the course, which picks the nearer end and is
+     * right for a scene that is set once. Under animation it is a
+     * discontinuity: `planeSpread` sweeps each plane's normal around, and the
+     * moment one crosses square to the course the nearer end becomes the other
+     * end, the target flips to the opposite pole and the orbit visibly snaps
+     * into travelling the other way round. With the default apex it happens to
+     * exactly two of the eight, Earth and Uranus, at planeSpread 0.749 and
+     * 0.845, which on this page is the middle of the AI & Automation stretch,
+     * and both of them are the blue-green ones, which is how it was spotted.
+     *
+     * A normal and its opposite describe the same plane, so the choice is
+     * cosmetic: it sets which way round the orbit is drawn and nothing else.
+     * Taking it from the planet's real orbital plane instead makes it a fixed
+     * property of the planet, so it is stable however far the fan is opened.
      */
-    function swingToCourse(nx: number, ny: number, nz: number, align: number): number[] | null {
-      const s = nx * DIR.x + ny * DIR.y + nz * DIR.z >= 0 ? 1 : -1;
+    function swingToCourse(
+      nx: number, ny: number, nz: number, align: number, s: number,
+    ): number[] | null {
       let tx = nx + align * (s * DIR.x - nx);
       let ty = ny + align * (s * DIR.y - ny);
       let tz = nz + align * (s * DIR.z - nz);
