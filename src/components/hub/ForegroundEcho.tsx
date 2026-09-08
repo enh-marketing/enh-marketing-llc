@@ -42,35 +42,6 @@ import { FRONT, LAYER_IMG } from "@/components/hub/parallaxAssets";
  *  setState here would re-render this subtree sixty times a second for a
  *  transform, and it would land on React's schedule instead of the ticker's,
  *  which is the shimmer again by another route. */
-/** How much of the foreground is allowed to occlude, top down.
- *
- *  IT IS THE FIGURE THAT HAS TO BE IN FRONT, NOT THE WHOLE HILLSIDE, and the
- *  difference is the only reason this works at all. Measured off the actual
- *  file, the share of opaque pixels per band down the image is:
- *
- *      0.00 - 0.49    0%          sky, nothing there at all
- *      0.50 - 0.62   25% to 35%   the figure's torso
- *      0.63 - 0.70   14% to 23%   the legs, narrowing
- *      0.709         80%          the ridge line he stands on
- *      0.725 - 1.00  100%         solid ground
- *
- *  Those are sampled across the middle fifth of the columns, where the figure
- *  is, rather than whole rows: averaged across the full width he is a few per
- *  cent of any row and the legs disappear into the noise, which is how an
- *  earlier reading put his feet at 0.65 and cut them off.
- *
- *  Drawn whole, the copy does not occlude the line, it buries it: the ground
- *  is a solid band that sweeps the entire window between roughly a third and
- *  four fifths of a viewport of scroll, so a line that stays on screen to
- *  reach the next section spends that whole stretch behind it. Cut just under
- *  his feet the copy keeps every pixel of the figure and drops the slab
- *  underneath him, which is what was asked for: behind the man.
- *
- *  The cut lands between the last of the legs and the first solid row of
- *  ground, so it removes only ground and never clips the figure. The real foreground in the stack is
- *  untouched and still draws in full; this is a second, shorter copy whose
- *  only job is to stand in front of the words. */
-const FIGURE_END = 0.705;
 
 export function ForegroundEcho() {
   const clip = useRef<HTMLDivElement>(null);
@@ -104,27 +75,18 @@ export function ForegroundEcho() {
       innerEl.style.transform = `translate3d(0, ${l.top - s.top}px, 0)`;
       imgEl.style.height = `${l.height}px`;
 
-      /* THE CUT IS IN THE PICTURE, NOT IN THE BOX, and getting that wrong is
-         invisible on a phone and obvious on a desktop. The image is
-         object-cover, so it is scaled to fill the layer and the overflowing
-         axis is cropped away, centred. On a narrow window the box is taller
-         than the picture's aspect, so the crop is horizontal and a fraction
-         down the box is the same fraction down the picture: every mobile
-         reading of this agreed with the file. On a wide window the crop is
-         vertical instead, only the middle of the picture is shown, and the same
-         fraction of the box lands much further up the picture. At 1440 by 800
-         it lands around 0.62, which is the figure's hip, so the man stopped
-         occluding halfway down and the line crossed his legs in front.
+      /* THE ONLY EDGE IS THE STAGE'S OWN BOTTOM, which is the seam between the
+         opener and the journey. The copy used to be cut a second time, just
+         under the figure's feet, so that the solid ground below him would not
+         bury the line. That second cut is a horizontal edge in the middle of
+         the frame with no picture reason to be there, and the line crosses it:
+         above it the words are occluded, below it they are not, so the copy is
+         sliced straight across. It is the cut in the screenshot.
 
-         So the fraction is applied to the drawn picture and then mapped back
-         into the box. naturalWidth/Height are read each tick rather than
-         cached: they are 0 until the file decodes, and this component can mount
-         before it does. */
-      const nw = imgEl.naturalWidth;
-      const nh = imgEl.naturalHeight;
-      if (!nw || !nh) return;
-      const drawn = nh * Math.max(l.width / nw, l.height / nh);
-      innerEl.style.height = `${Math.max(0, (l.height - drawn) / 2 + FIGURE_END * drawn)}px`;
+         So there is one edge now and it is where the sections meet. Over the
+         opener the line is behind the whole photograph, ground included; past
+         the seam it is over the journey's black and clear. */
+      innerEl.style.height = `${l.height}px`;
     };
 
     tick();

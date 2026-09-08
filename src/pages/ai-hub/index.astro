@@ -27,5 +27,21 @@ const HREF = "/ai-hub";
       here rather than in Base.astro is what keeps the preload off the other
       141 pages. */}
   <Font slot="head" cssVariable="--font-grotesk" preload />
+
+  {/* THIS PAGE IS DARK WHATEVER THE READER'S THEME. It is a photograph of a
+      night mountain that becomes deep space: every surface on it is painted
+      black or near-black in the markup rather than through a theme token,
+      because those tokens are near-black in dark and near-white in light and
+      the story cannot follow them. The shell can, though, and until now did:
+      with the site in light mode the navbar and footer came up pale at the top
+      and bottom of a black page.
+
+      So the class is set here, in the head, after the layout's own theme script
+      and before first paint, which is why there is no flash. localStorage is
+      deliberately not written: this is what one page looks like, not a change
+      to what the reader chose for the site. */}
+  <script slot="head" is:inline>
+    document.documentElement.classList.add("dark");
+  </script>
   <AiHubPage client:load />
 </Base>
