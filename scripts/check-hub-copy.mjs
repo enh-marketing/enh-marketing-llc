@@ -1,39 +1,47 @@
-/** Fails if a line the AI Hub landing page attributes to a service has drifted
- *  from that service's own `meta.description`.
+/** Fails if anything the AI Hub landing page quotes has drifted from its source.
+ *
+ *  The landing page has no copy of its own. Every category title is the label
+ *  that src/lib/sitemap.ts already gives that page, and every category body is
+ *  that service's own `meta.description`. A beat opts in by carrying
+ *  `quotes: "<service slug>"`, and this checks both halves of it.
  *
  *  WHY THIS IS A SCRIPT AND NOT AN IMPORT. src/content/ai-hub.ts used to import
  *  `meta` from the service files, which is the obvious way to guarantee the two
  *  never disagree. It also pulled each service's entire content file into the
  *  landing page's client bundle: 12.9 KB of eagerly loaded copy, measured, to
  *  render a single sentence, and roughly eight times that once every category
- *  is on the page. So the sentence is a literal there and this reads both files
+ *  is on the page. So the strings are literals there and this reads both files
  *  as text instead. Same guarantee, none of the weight.
  *
- *  A beat opts in by carrying `quotes: "<service slug>"` next to its `body`. */
+ *  Titles are compared against the sitemap label with any trailing parenthesis
+ *  removed, so "AI Search Visibility (AEO & GEO)" in the navigation is allowed
+ *  to be "AI Search Visibility" as a display title, and nothing else is. */
 import { readFileSync } from "node:fs";
 
 const HUB = "src/content/ai-hub.ts";
+const SITEMAP = "src/lib/sitemap.ts";
 
 const hub = readFileSync(HUB, "utf8");
+
+/** The navigation's own name for each AI Hub page, by slug. */
+const labels = new Map(
+  [...readFileSync(SITEMAP, "utf8").matchAll(/\{\s*label:\s*"([^"]+)",\s*href:\s*"\/ai-hub\/([^"]+)"\s*\}/g)]
+    .map(([, label, slug]) => [slug, label]),
+);
 
 /* Beat object literals that name a source. None of them nest braces, so the
    no-inner-brace match is enough to keep one beat from swallowing the next. */
 const beats = [...hub.matchAll(/\{[^{}]*\bquotes:\s*"([^"]+)"[^{}]*\}/g)];
 
 if (beats.length === 0) {
-  console.log("check:copy: no attributed lines to check.");
+  console.log("check:copy: no quoted lines to check.");
   process.exit(0);
 }
 
 const problems = [];
+const read = (block, key) => block.match(new RegExp(`\\b${key}:\\s*\\n?\\s*"((?:[^"\\\\]|\\\\.)*)"`))?.[1];
 
 for (const [block, slug] of beats) {
-  const body = block.match(/\bbody:\s*"((?:[^"\\]|\\.)*)"/)?.[1];
-  if (!body) {
-    problems.push(`${slug}: beat carries quotes but no body.`);
-    continue;
-  }
-
   const path = `src/content/services/${slug}.ts`;
   let service;
   try {
@@ -43,19 +51,31 @@ for (const [block, slug] of beats) {
     continue;
   }
 
-  const source = service
-    .match(/export const meta = \{[\s\S]*?\n\};/)?.[0]
-    .match(/\bdescription:\s*\n?\s*"((?:[^"\\]|\\.)*)"/)?.[1];
+  const compare = (what, mine, theirs, where) => {
+    if (mine === undefined) problems.push(`${slug}: beat quotes a service but has no ${what}.`);
+    else if (theirs === undefined) problems.push(`${slug}: could not read the ${what} from ${where}.`);
+    else if (mine !== theirs) {
+      problems.push(
+        `${slug}: the hub and ${where} disagree on the ${what}.\n` +
+          `    source: ${theirs}\n` +
+          `    hub:    ${mine}\n` +
+          `    Fix ${HUB} to match, or the change was not meant to reach the hub.`,
+      );
+    }
+  };
 
-  if (!source) {
-    problems.push(`${slug}: could not read meta.description from ${path}.`);
-  } else if (source !== body) {
-    problems.push(
-      `${slug}: the hub and the service page disagree.\n` +
-        `    service: ${source}\n` +
-        `    hub:     ${body}\n` +
-        `    Fix ${HUB} to match, or the change was not meant to reach the hub.`,
-    );
+  compare("title", read(block, "title"), labels.get(slug)?.replace(/\s*\([^)]*\)\s*$/, ""), SITEMAP);
+
+  compare(
+    "description",
+    read(block, "body"),
+    read(service.match(/export const meta = \{[\s\S]*?\n\};/)?.[0] ?? "", "description"),
+    path,
+  );
+
+  const href = read(block, "href");
+  if (href !== `/ai-hub/${slug}`) {
+    problems.push(`${slug}: href is ${href ?? "missing"}, which does not lead to the page it quotes.`);
   }
 }
 
@@ -64,4 +84,4 @@ if (problems.length) {
   process.exit(1);
 }
 
-console.log(`check:copy: ${beats.length} attributed line(s), all verbatim.`);
+console.log(`check:copy: ${beats.length} quoted categor(ies), all verbatim.`);

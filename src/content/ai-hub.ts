@@ -1,36 +1,37 @@
 // AI Hub — landing page content.
 //
-// WHO WROTE THIS, AND WHAT THAT LIMITS. There is no client document for this
-// page, and on 2026-09-08 Divij asked for the writing to be done here instead.
-// So the narration below is ours: the chapter titles, the connective lines and
-// the close. It is written about a journey, and it claims nothing about the
-// business.
+// NOTHING ON THIS PAGE IS WRITTEN HERE. There is no client document for the
+// landing page, so on 2026-09-08 the decision was made to give it no prose of
+// its own rather than invent connective copy. Every string below is quoted from
+// somewhere already approved, and marked with the slug it came from:
 //
-// WHERE A LINE DESCRIBES A SERVICE, IT IS THAT SERVICE'S OWN SENTENCE, copied
-// exactly and marked with `quotes`. It is a literal rather than an import on
-// purpose: importing `meta` from a service file pulls that entire file into
-// this page's bundle, which measured at 12.9 KB of eagerly loaded copy to
-// render one sentence, and would have been roughly eight times that once every
-// category is on the page. `npm run check:copy` reads both files as text and
-// fails if the two ever differ, so the guarantee an import would have given us
-// is kept without the weight. Change a service description and that gate will
-// tell you this file needs the same edit.
+//   Category titles   the labels in src/lib/sitemap.ts, which are what the
+//                     navigation and the sitemap already call these pages.
+//   Category bodies   that service page's own `meta.description`.
+//   "Explore New Heights"
+//                     the site's existing line, already on the home page in
+//                     src/components/sections/AISection.tsx.
 //
-// The rules those documents set apply here too, and they are worth repeating
-// because this page is the one most tempted to break them:
+// The visuals carry the story between categories. Where earlier drafts had a
+// bridging line, there is now silence and a moving picture, which is the point:
+// the page cannot overclaim in copy it does not have. If a bridging line is
+// ever wanted, it needs to come from a document, not from here.
 //
-//   AI Search Visibility: "No guaranteed placements and no general AI score."
-//   AI & Automation: the only number in the whole set is "15 years".
-//   Data & Dashboards: dashboards show shapes, never values.
-//   Every category: no client examples until permissioned ones are supplied.
+// `npm run check:copy` reads this file and the files it quotes as text and
+// fails if any of them disagree, so a change to a service page's description or
+// to a sitemap label is caught here rather than shipping as a quiet drift.
 //
-// So nothing here carries a figure, a result, a placement or a named client.
+// WHY THE SERVICE FILES ARE NOT IMPORTED. Importing `meta` pulls that service
+// page's entire content file into this page's client bundle, measured at
+// 12.9 KB of eagerly loaded copy to render one sentence and roughly eight times
+// that once every category is on the page. The gate above gives the same
+// guarantee at no runtime cost.
 //
-// THE STORY, AND WHY IT IS THIS ONE. ENH is Explore New Heights. The page takes
-// the name literally, and then goes past where the name stops: a summit, then
-// the door out, then the system, then the thing at the end that you can only
-// see by what it does to everything around it. Each category is a stop on that
-// climb rather than an item in a list.
+// THE RULES THE SOURCE DOCUMENTS SET still apply, and this page is the one most
+// tempted to break them: no guaranteed placements and no general AI score, no
+// figures anywhere except "15 years", dashboards show shapes and never values,
+// and no client examples until permissioned ones are supplied. Quoting rather
+// than writing is what keeps that true by construction.
 
 /** A line of the story, shown at a point within its chapter. */
 export type Beat = {
@@ -42,37 +43,36 @@ export type Beat = {
   href?: string;
   /** Small label above the title. */
   eyebrow?: string;
-  /** Slug of the service whose `meta.description` this body must match word
-   *  for word. Enforced by scripts/check-hub-copy.mjs. */
+  /** Slug of the service this beat quotes. Its title must match that page's
+   *  sitemap label and its body that page's meta.description, word for word.
+   *  Enforced by scripts/check-hub-copy.mjs. */
   quotes?: string;
 };
 
 /* ---------------------------------------------------------------- chapter 0 */
 
-/** The ascent. The name on the door, taken at face value. */
+/** The ascent. The name, and then the picture on its own. */
 export const ascent: Beat[] = [
   {
     at: 0.06,
     eyebrow: "AI Hub",
-    title: "Explore new heights",
-    body: "It is the name on our door. This is the page where it stops being a figure of speech.",
-  },
-  {
-    at: 0.62,
-    title: "The summit was never the ceiling",
-    body: "Climb far enough and the ground runs out. What is worth reaching next is above it.",
+    title: "Explore New Heights",
   },
 ];
 
 /* ---------------------------------------------------------------- chapter 1 */
 
-/** The system. Arrival, then the first category. */
+/** The system. One category at each of the camera's stops.
+ *
+ *  THE ORDER IS THE SITE'S ORDER, taken straight from the AI Hub group in
+ *  sitemap.ts rather than rearranged into a theme. Any other order would be a
+ *  claim about which of these matters most, and that is not a claim to make
+ *  here. The remaining five categories follow in the same order in the chapters
+ *  still to be built.
+ *
+ *  `at` values line up with the camera: 0.34 is the stop the particle field
+ *  belongs to, 0.67 the helix, 1 the wide edge-on view. */
 export const system: Beat[] = [
-  {
-    at: 0.02,
-    title: "Nothing out here holds still",
-    body: "Every system a business runs on is already moving. The work is knowing where it will be, not where it was.",
-  },
   {
     at: 0.34,
     eyebrow: "01",
@@ -83,12 +83,18 @@ export const system: Beat[] = [
   },
   {
     at: 0.67,
-    title: "Then the paths bend",
-    body: "Seen from here, a straight line is only ever the near part of a longer curve.",
+    eyebrow: "02",
+    title: "AI & Automation",
+    body: "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
+    quotes: "ai-automation",
+    href: "/ai-hub/ai-automation",
   },
   {
     at: 1,
-    title: "Further out",
-    body: "Past the last orbit there is still somewhere to go.",
+    eyebrow: "03",
+    title: "AI Creative Production",
+    body: "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
+    quotes: "ai-creative-production",
+    href: "/ai-hub/ai-creative-production",
   },
 ];
