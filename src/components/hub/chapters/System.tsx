@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   OrbitalHeroSection,
   SOLAR_SYSTEM,
   type Planet,
 } from "@/components/hub/OrbitalHeroSection";
 import ParticleDrift from "@/components/hub/ParticleDrift";
-import { ScatterField } from "@/components/hub/ScatterField";
+import { TrackChart, type TrackCamera } from "@/components/hub/TrackChart";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
 /** Chapter two: the system.
@@ -84,15 +84,20 @@ const LEAD = 0.12;
 
 /** The camera at each stop, in the order the chapter passes through them.
  *
- *  THE LAST STOP IS THE THIRD ONE AGAIN. Every camera field in it is copied
- *  from the stop before, and so is every trail field, so that across the last
- *  third of the chapter the camera does not move at all: not the angle, not the
- *  zoom, not where the Sun sits, not the length of the line it is drawing. The
- *  only thing that changes is `fade`, which takes the component's own planets
- *  away. Everything the reader sees moving in that stretch is the scatter drawn
- *  over the top. Moving the camera at the same time was tried and was wrong: it
- *  reads as the view swinging, which competes with the one thing that is
- *  supposed to be happening. */
+ *  THE CAMERA SETTLES AT STOP 2 AND NEVER MOVES AGAIN. Every camera field in
+ *  stops 3 and 4 is copied from stop 2: not the angle, not the zoom, not where
+ *  the Sun sits. Only the wake and the planets change after that. Moving the
+ *  camera at the same time reads as the view swinging, which competes with the
+ *  one thing that is meant to be happening.
+ *
+ *  HOW A PATH BECOMES A STRAIGHT LINE. The component offsets every trail
+ *  backwards along the Sun's own course by `driftSpeed` times its age, so a
+ *  wake is an orbit plus a straight drift. At the values the early stops use
+ *  the orbit dominates and you see loops. Drive `driftSpeed` hard and the drift
+ *  dominates instead: the loops open out until every planet is drawing a long
+ *  line running parallel to the Sun's, which is the shape the chart is made of.
+ *  Both it and `trailYears` are outside the component's rebuild key, so this
+ *  costs nothing per frame. */
 const STOPS: Stop[] = [
   // Straight down on the disc. Rings, near-circular, barely drifting.
   { tilt: 14, spin: 140, roll: -6, viewRadius: 2.3, alignToCourse: 0, eccentricity: 0,
@@ -102,20 +107,48 @@ const STOPS: Stop[] = [
   { tilt: 52, spin: 196, roll: 2, viewRadius: 2.8, alignToCourse: 0.3, eccentricity: 0.12,
     planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46,
     trailYears: 2.6, maxTurns: 3, fade: 1, particles: true },
-  // AI & Automation. The helix, all planes swung onto one axis. The camera
-  // settles here and does not move again.
+  // AI & Automation. The helix. The camera settles here.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
     planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
-  // AI Creative Production. Identical camera. The planets go.
+  // AI Creative Production. Same camera. The drift takes over and every path
+  // straightens into a long line beside the Sun's.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
-    trailYears: 2.6, maxTurns: 3, fade: 0 },
+    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: 0.6,
+    trailYears: 5, maxTurns: 6, fade: 1 },
+  // Data & Dashboards. Same camera again. The planets go and the drift eases
+  // off, so the one line left retracts to a length that fits the frame, and
+  // the chart takes it over and bends it.
+  //
+  // 1.8, and the number is measured rather than chosen. The line's length on
+  // screen is the drift times the trail through the perspective divide, and it
+  // scales with the short side of the viewport while the frame does not, so a
+  // value that looks right on a phone runs off the bottom of a desktop. Solved
+  // across 1440x900, 410x968 and 390x844: at 2.2 and above the tail leaves the
+  // frame on desktop, at 1.8 it is inside on all three, at 724, 330 and 314px.
+  { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
+    planeSpread: 1, driftSpeed: 1.8, glow: 1, focusX: 0.62, focusY: 0.6,
+    trailYears: 4, maxTurns: 6, fade: 0 },
 ];
 
-/** Where the scatter runs, in chapter progress: the last leg, between the two
- *  stops that share a camera. */
-const SCATTER_FROM = 2 / 3;
+/** Where the chart runs, in chapter progress: the last leg, after the paths
+ *  have straightened. Four gaps between five stops, so the last is the fourth
+ *  quarter. */
+const CHART_FROM = 0.75;
+
+/** The camera the chart is drawn against, read from the stop rather than
+ *  retyped. It is the same as stops 2 and 3, which is what lets the chart know
+ *  where the Sun and the tail of its track are without measuring anything. */
+const CHART_CAMERA: TrackCamera = {
+  spin: STOPS[4].spin,
+  tilt: STOPS[4].tilt,
+  roll: STOPS[4].roll,
+  focusX: STOPS[4].focusX,
+  focusY: STOPS[4].focusY,
+  viewRadius: STOPS[4].viewRadius,
+  lead: LEAD,
+  apex: [272, 53],
+};
 
 const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
 
@@ -212,12 +245,6 @@ export function System({
 }) {
   const cam = cameraAt(t);
 
-  /* The originals are not taken away on a schedule. They are taken away once
-     the scatter has actually read them off the canvas, which is what keeps a
-     reader who lands in the middle of this leg from seeing nothing at all. */
-  const [captured, setCaptured] = useState(false);
-  const onCapture = useCallback(() => setCaptured(true), []);
-
   /* THE PLANETS FADE BY BEING SHRUNK AND DIMMED IN PLACE, on one array that is
      never replaced. Three things force this shape and each was read out of the
      component rather than assumed.
@@ -250,14 +277,13 @@ export function System({
        copies are still nearly on top of them. Derived from the scatter rather
        than interpolated between the stops, because it has to run much faster
        than everything else in that leg. */
-    const scat = clamp((t - SCATTER_FROM) / (1 - SCATTER_FROM), 0, 1);
-    const fade = captured ? 1 - smooth(clamp(scat / 0.14, 0, 1)) : 1;
+    const fade = cameraAt(t).fade;
     for (let i = 0; i < PLANETS.length; i++) {
       const base = SOLAR_SYSTEM[i];
       PLANETS[i].size = base.size * fade;
       PLANETS[i].glow = (base.glow ?? 1) * fade;
     }
-  }, [t, captured]);
+  }, [t]);
 
   /* THE ARRIVAL RUNS ACROSS THE JOIN. Half of it happens while the stage is
      still climbing into place, measured by `reveal`, and half after it has
@@ -284,7 +310,7 @@ export function System({
      and nested. Past that they would be a thicket. */
   const showOrbits = cam.alignToCourse < 0.2;
   const particles = particleLevel(t);
-  const scatter = clamp((t - SCATTER_FROM) / (1 - SCATTER_FROM), 0, 1);
+  const chart = clamp((t - CHART_FROM) / (1 - CHART_FROM), 0, 1);
 
 
   return (
@@ -312,12 +338,21 @@ export function System({
          also the second thing moving the camera in a stretch where the camera
          is supposed to be still. */
       interactive={false}
+      /* Handed over the moment the chart appears. The chart draws the identical
+         line on its first frame, so nothing moves at the swap; leaving both on
+         would put a straight line through a bending one. */
+      showSunTrack={chart <= 0}
       scrim="bottom"
       scrimStrength={0.8}
     >
-      {/* Mounted a little before it is needed, so the capture happens while
-          the planets are still lit. It draws nothing until `p` leaves zero. */}
-      {t > SCATTER_FROM - 0.06 && <ScatterField p={scatter} onCapture={onCapture} />}
+      {chart > 0 && (
+        <TrackChart
+          p={chart}
+          camera={CHART_CAMERA}
+          driftSpeed={cam.driftSpeed}
+          trailYears={cam.trailYears}
+        />
+      )}
       {particles > 0.01 && (
         <div
           aria-hidden

@@ -70,14 +70,14 @@ export const ascent: Beat[] = [
  *  here. The remaining five categories follow in the same order in the chapters
  *  still to be built.
  *
- *  `at` values line up with the camera's four stops, a third of the chapter
- *  apart: 0.333 is the stop the particle field belongs to and 0.667 the helix,
- *  where the camera settles and stops moving. 0.9 sits inside the last leg,
- *  where the camera is frozen and the planets are leaving their orbits, so the
- *  line is read against the scatter rather than against its beginning. */
+ *  `at` values line up with the camera's five stops, a quarter of the chapter
+ *  apart: 0.25 is the stop the particle field belongs to, 0.5 the helix where
+ *  the camera settles and stops moving, 0.75 where the drift takes over and
+ *  every path straightens into a line, and 1 where the planets have gone and
+ *  the Sun's own line is bending into a chart. */
 export const system: Beat[] = [
   {
-    at: 0.333,
+    at: 0.25,
     eyebrow: "01",
     title: "AI Search Visibility",
     body: "ENH Marketing helps UAE brands improve how they appear in AI-generated search results.",
@@ -85,7 +85,7 @@ export const system: Beat[] = [
     href: "/ai-hub/ai-search-visibility",
   },
   {
-    at: 0.667,
+    at: 0.5,
     eyebrow: "02",
     title: "AI & Automation",
     body: "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
@@ -93,12 +93,20 @@ export const system: Beat[] = [
     href: "/ai-hub/ai-automation",
   },
   {
-    at: 0.93,
+    at: 0.75,
     eyebrow: "03",
     title: "AI Creative Production",
     body: "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
     quotes: "ai-creative-production",
     href: "/ai-hub/ai-creative-production",
+  },
+  {
+    at: 1,
+    eyebrow: "04",
+    title: "Data & Dashboards",
+    body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
+    quotes: "data-and-dashboards",
+    href: "/ai-hub/data-and-dashboards",
   },
 ];
 
@@ -119,16 +127,8 @@ export const system: Beat[] = [
  */
 export const horizon: Beat[] = [
   {
-    at: 0.28,
-    eyebrow: "07",
-    title: "Data & Dashboards",
-    body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
-    quotes: "data-and-dashboards",
-    href: "/ai-hub/data-and-dashboards",
-  },
-  {
-    at: 0.72,
-    eyebrow: "08",
+    at: 0.5,
+    eyebrow: "05",
     title: "AI Workshops & Training",
     body: "ENH Marketing runs practical corporate AI training in Dubai and across the UAE. Each session is built around the team’s actual workflows, tools and responsibilities.",
     quotes: "ai-workshops-and-training",
