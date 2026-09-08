@@ -6,7 +6,6 @@ import {
   SOLAR_SYSTEM,
   type Planet,
 } from "@/components/hub/OrbitalHeroSection";
-import ParticleDrift from "@/components/hub/ParticleDrift";
 import { RUN_IN } from "@/components/hub/chartPath";
 import { TrackChart, type TrackCamera } from "@/components/hub/TrackChart";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
@@ -27,15 +26,14 @@ import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
  *  planeSpread rebuild the orbital elements, which the component guards behind
  *  a key check and which is eight planets of trigonometry.
  *
- *  THE PARTICLE STOP. One camera position carries a second layer, the Particle
- *  Drift frame, faded in as that stop is approached and out again as it is
- *  left, so the drifting network belongs to AI Search Visibility and nothing
- *  else. `transparent` stops it painting its own black plate over the system,
- *  `mix-blend-mode: screen` adds its light rather than covering, and
- *  `pointer-events: none` leaves the cursor to Orbital, with `followPointer`
- *  posting that same cursor into the frame so both layers answer it. `beams`
- *  is off: the effect draws letters and, separately, fast blue verticals, and
- *  only the letters are wanted. It is mounted only near its own stop.
+ *  THERE IS NO SECOND LAYER ON THE SEARCH STOP, and there was. A Particle
+ *  Drift frame used to fade in across AI Search Visibility, drawing a field of
+ *  letters over the system. It was cut on 2026-09-08: it read as cheap, and
+ *  its faint arcs were being taken for a second orbital system that then
+ *  vanished. Removing it also took out an <iframe srcDoc> that shipped a
+ *  fictional company's landing page in our source and fetched four scripts
+ *  from three third-party CDNs at runtime. If a treatment is ever wanted here
+ *  it should be drawn on the orbital canvas, not layered over it in a frame.
  *
  *  THE ARRIVAL. The chapter does not open on its first camera stop. It opens
  *  with the Sun above the top of the frame and pressed close, and brings it
@@ -76,7 +74,6 @@ type Stop = {
   maxTurns: number;
   /** How much of each planet is left. 1 is drawn, 0 is gone. */
   fade: number;
-  particles?: boolean;
 };
 
 /** Orbital's own default, which the arrival has to start from zero and reach,
@@ -107,7 +104,7 @@ const STOPS: Stop[] = [
   // AI Search Visibility. Camera tips over and the network drifts across it.
   { tilt: 52, spin: 196, roll: 2, viewRadius: 2.8, alignToCourse: 0.3, eccentricity: 0.12,
     planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46,
-    trailYears: 2.6, maxTurns: 3, fade: 1, particles: true },
+    trailYears: 2.6, maxTurns: 3, fade: 1 },
   // AI & Automation. The helix. The camera settles here.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
     planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
@@ -157,8 +154,6 @@ const CHART_CAMERA: TrackCamera = {
   lead: LEAD,
   apex: [272, 53],
 };
-
-const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
 
 /** How much of the chapter the pull-back takes, and how close it starts. A
  *  smaller radius is a tighter view; the first stop sits at 2.3. */
@@ -226,21 +221,6 @@ const q = (v: number) => Math.round(v * 100) / 100;
  *  originals on every change, so nothing accumulates and a remount is correct
  *  on its first frame. */
 const PLANETS: Planet[] = SOLAR_SYSTEM.map((p) => ({ ...p }));
-
-/** Full across the particle stop, ramped either side, gone well before the
- *  neighbouring stops. A plateau rather than a triangle: a triangle is at full
- *  strength only at the exact stop and does not reach zero until a whole stop
- *  away, which measured as the iframe being alive across two thirds of the
- *  chapter in order to be visible for a fifth of it. */
-const PARTICLE_HOLD = 0.2; // stops either side of PARTICLE_AT still at full
-const PARTICLE_RAMP = 0.35; // and fading across this many more
-
-function particleLevel(t: number) {
-  if (PARTICLE_AT < 0) return 0;
-  const pos = clamp(t, 0, 1) * (STOPS.length - 1);
-  const d = Math.abs(pos - PARTICLE_AT);
-  return clamp(1 - (d - PARTICLE_HOLD) / PARTICLE_RAMP, 0, 1);
-}
 
 export function System({
   t,
@@ -329,7 +309,6 @@ export function System({
   /* The rings belong to the opening, where the orbits are still near-circular
      and nested. Past that they would be a thicket. */
   const showOrbits = cam.alignToCourse < 0.2;
-  const particles = particleLevel(t);
 
 
   return (
@@ -382,22 +361,6 @@ export function System({
       scrimStrength={0.8}
     >
       {chart > 0 && <TrackChart p={chart} camera={CHART_CAMERA} />}
-      {particles > 0.01 && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ opacity: particles, mixBlendMode: "screen" }}
-        >
-          <ParticleDrift
-            transparent
-            followPointer
-            beams={false}
-            density={0.9}
-            speed={0.8}
-            className="h-full w-full"
-          />
-        </div>
-      )}
     </OrbitalHeroSection>
   );
 }
