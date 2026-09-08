@@ -27,7 +27,10 @@ import { horizon, system } from "@/content/ai-hub";
  *  Still to come: the airlock before the system, and the uplink before the
  *  horizon. */
 const CHAPTERS: Chapter[] = [
-  { id: "system", viewports: 4, Scene: System, beats: system },
+  /* Six, not four. The chapter gained two stops at the end, where the planets
+     are thrown across the frame and then taken away, and those need scroll of
+     their own or the scatter is over before it registers. */
+  { id: "system", viewports: 6, Scene: System, beats: system },
   { id: "horizon", viewports: 4, Scene: Horizon, beats: horizon },
 ];
 

@@ -1,6 +1,11 @@
 "use client";
 
-import { OrbitalHeroSection } from "@/components/hub/OrbitalHeroSection";
+import { useEffect } from "react";
+import {
+  OrbitalHeroSection,
+  SOLAR_SYSTEM,
+  type Planet,
+} from "@/components/hub/OrbitalHeroSection";
 import ParticleDrift from "@/components/hub/ParticleDrift";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
@@ -64,23 +69,50 @@ type Stop = {
   glow: number;
   focusX: number;
   focusY: number;
+  /** How long a wake each planet drags, and how many orbits it may cover. */
+  trailYears: number;
+  maxTurns: number;
+  /** How much of each planet is left. 1 is drawn, 0 is gone. */
+  fade: number;
   particles?: boolean;
 };
 
-/** The camera at each stop, in the order the chapter passes through them. */
+/** The camera at each stop, in the order the chapter passes through them.
+ *
+ *  WHAT MAKES THE PLANETS CROSS THE WHOLE FRAME is not the camera, it is the
+ *  wake: `driftSpeed` times `trailYears`, capped per planet by `maxTurns`. The
+ *  component offsets each trail backwards along the Sun's course by
+ *  `driftSpeed * age` in world units, so the streak's on-screen length grows
+ *  with both. At the values the first three stops use it spans about 0.9 of a
+ *  half-short-side, which is comfortably inside the frame; at the scatter stop
+ *  it reaches nearly four, which runs off both edges. All three are read fresh
+ *  into the draw each frame, so this costs nothing. */
 const STOPS: Stop[] = [
   // Straight down on the disc. Rings, near-circular, barely drifting.
   { tilt: 14, spin: 140, roll: -6, viewRadius: 2.3, alignToCourse: 0, eccentricity: 0,
-    planeSpread: 0.1, driftSpeed: 0.35, glow: 1, focusX: 0.5, focusY: 0.5 },
+    planeSpread: 0.1, driftSpeed: 0.35, glow: 1, focusX: 0.5, focusY: 0.5,
+    trailYears: 2.6, maxTurns: 3, fade: 1 },
   // AI Search Visibility. Camera tips over and the network drifts across it.
   { tilt: 52, spin: 196, roll: 2, viewRadius: 2.8, alignToCourse: 0.3, eccentricity: 0.12,
-    planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46, particles: true },
-  // Orbital's own default: the helix, all planes swung onto one axis.
+    planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46,
+    trailYears: 2.6, maxTurns: 3, fade: 1, particles: true },
+  // AI & Automation. Orbital's own default: the helix, planes on one axis.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.68, focusY: 0.44 },
-  // Edge on and wide, the coils running away across the frame.
-  { tilt: 84, spin: 306, roll: 22, viewRadius: 4.4, alignToCourse: 1, eccentricity: 0.34,
-    planeSpread: 1, driftSpeed: 2.1, glow: 0.9, focusX: 0.5, focusY: 0.54 },
+    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.68, focusY: 0.44,
+    trailYears: 2.6, maxTurns: 3, fade: 1 },
+  // AI Creative Production. The scatter: in close, planes fanned, orbits pulled
+  // long, and the wake driven hard enough to throw colour clean off both edges.
+  { tilt: 62, spin: 300, roll: 8, viewRadius: 2.4, alignToCourse: 0.35, eccentricity: 0.6,
+    planeSpread: 1, driftSpeed: 5, glow: 1, focusX: 0.5, focusY: 0.5,
+    trailYears: 5, maxTurns: 6, fade: 1 },
+  // Still crossing, and beginning to go.
+  { tilt: 70, spin: 330, roll: 4, viewRadius: 2.6, alignToCourse: 0.2, eccentricity: 0.6,
+    planeSpread: 1, driftSpeed: 5.5, glow: 1, focusX: 0.5, focusY: 0.5,
+    trailYears: 5, maxTurns: 6, fade: 0.3 },
+  // Nothing left but the Sun and the line it is drawing.
+  { tilt: 78, spin: 352, roll: 0, viewRadius: 3, alignToCourse: 0.2, eccentricity: 0.6,
+    planeSpread: 1, driftSpeed: 4, glow: 1, focusX: 0.5, focusY: 0.55,
+    trailYears: 4, maxTurns: 6, fade: 0 },
 ];
 
 const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
@@ -118,8 +150,41 @@ function cameraAt(t: number) {
     glow: mix(a.glow, b.glow, e),
     focusX: mix(a.focusX, b.focusX, e),
     focusY: mix(a.focusY, b.focusY, e),
+    trailYears: mix(a.trailYears, b.trailYears, e),
+    maxTurns: mix(a.maxTurns, b.maxTurns, e),
+    fade: mix(a.fade, b.fade, e),
   };
 }
+
+/** Rounded to a hundredth before it reaches the component.
+ *
+ *  `compress`, `planeSpread`, `eccentricity`, `alignToCourse` and `apex` are
+ *  the props inside the component's rebuild key, and a change to any of them
+ *  rebuilds all eight planets' orbital elements, which is eight sets of
+ *  trigonometry plus a plane swing each. Fed a fresh float every frame, as this
+ *  chapter did, that rebuild ran on every frame of every scroll. Quantised, it
+ *  runs about a hundred times across the whole chapter instead. A hundredth of
+ *  planeSpread is under a degree of inclination, which is not visible, and the
+ *  camera props that carry the motion are left continuous. */
+const q = (v: number) => Math.round(v * 100) / 100;
+
+/** The planet objects this chapter hands the component, and then goes on
+ *  editing in place.
+ *
+ *  MODULE SCOPE, DELIBERATELY, because the identity of this array and of the
+ *  objects in it is load-bearing and no React hook gives that cleanly. The
+ *  component keeps a reference to the objects it last rebuilt from and reads
+ *  each planet's size and glow off that reference every frame, while its
+ *  rebuild key covers only a planet's name, a, e and colour. Replace the array
+ *  and the key still matches, so it never rebuilds, and every later edit lands
+ *  on objects nothing is reading. A ref cannot be read during render, and state
+ *  must not be mutated; this can be both, and the page mounts one system.
+ *
+ *  Copies, because SOLAR_SYSTEM is the component's own module-level export and
+ *  is not ours to edit. The effect below rewrites both fields from those
+ *  originals on every change, so nothing accumulates and a remount is correct
+ *  on its first frame. */
+const PLANETS: Planet[] = SOLAR_SYSTEM.map((p) => ({ ...p }));
 
 /** Full across the particle stop, ramped either side, gone well before the
  *  neighbouring stops. A plateau rather than a triangle: a triangle is at full
@@ -146,6 +211,37 @@ export function System({
   stageOffset: number;
 }) {
   const cam = cameraAt(t);
+
+  /* THE PLANETS FADE BY BEING SHRUNK AND DIMMED IN PLACE, on one array that is
+     never replaced. Three things force this shape and each was read out of the
+     component rather than assumed.
+
+     There is no planets-only opacity. The single global `glow` is shared by the
+     planets, the Sun's track and the Sun, so turning it down takes the Sun with
+     it, and the Sun is the one thing that has to survive.
+
+     Per-planet `glow` is not enough on its own. It scales the trails and the
+     halo, but the white core dot is drawn at a reset alpha and a fixed colour,
+     so at glow 0 eight hard white dots would still be going round. Only
+     per-planet `size` reaches that, because the core's radius is size * 0.5.
+
+     And the values have to be MUTATED, not passed. The component rebuilds its
+     orbital elements only when its key changes, and that key covers a planet's
+     name, a, e and colour but not its size or glow. It also keeps a reference
+     to the planet object it last rebuilt from and reads size and glow off that
+     object every frame. So handing it a freshly mapped array of new objects
+     with the same names changes nothing: the key matches, it returns early, and
+     it goes on reading the old objects. Mutating the objects it is already
+     holding is what actually lands. They are copies, because the component's
+     SOLAR_SYSTEM export is module-level and shared. */
+  useEffect(() => {
+    const fade = cameraAt(t).fade;
+    for (let i = 0; i < PLANETS.length; i++) {
+      const base = SOLAR_SYSTEM[i];
+      PLANETS[i].size = base.size * fade;
+      PLANETS[i].glow = (base.glow ?? 1) * fade;
+    }
+  }, [t]);
 
   /* THE ARRIVAL RUNS ACROSS THE JOIN. Half of it happens while the stage is
      still climbing into place, measured by `reveal`, and half after it has
@@ -179,9 +275,12 @@ export function System({
       spin={cam.spin}
       roll={cam.roll}
       viewRadius={viewRadius}
-      alignToCourse={cam.alignToCourse}
-      eccentricity={cam.eccentricity}
-      planeSpread={cam.planeSpread}
+      planets={PLANETS}
+      alignToCourse={q(cam.alignToCourse)}
+      eccentricity={q(cam.eccentricity)}
+      planeSpread={q(cam.planeSpread)}
+      trailYears={cam.trailYears}
+      maxTurns={cam.maxTurns}
       driftSpeed={cam.driftSpeed}
       glow={cam.glow}
       focus={[focusX, focusY]}

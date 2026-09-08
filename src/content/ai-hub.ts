@@ -70,11 +70,13 @@ export const ascent: Beat[] = [
  *  here. The remaining five categories follow in the same order in the chapters
  *  still to be built.
  *
- *  `at` values line up with the camera: 0.34 is the stop the particle field
- *  belongs to, 0.67 the helix, 1 the wide edge-on view. */
+ *  `at` values line up with the camera, which now has six stops rather than
+ *  four, so each is a fifth of the chapter: 0.2 is the stop the particle field
+ *  belongs to, 0.4 the helix, 0.6 the scatter. The last two stops carry no line
+ *  of their own. They are the planets leaving. */
 export const system: Beat[] = [
   {
-    at: 0.34,
+    at: 0.2,
     eyebrow: "01",
     title: "AI Search Visibility",
     body: "ENH Marketing helps UAE brands improve how they appear in AI-generated search results.",
@@ -82,7 +84,7 @@ export const system: Beat[] = [
     href: "/ai-hub/ai-search-visibility",
   },
   {
-    at: 0.67,
+    at: 0.4,
     eyebrow: "02",
     title: "AI & Automation",
     body: "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
@@ -90,7 +92,7 @@ export const system: Beat[] = [
     href: "/ai-hub/ai-automation",
   },
   {
-    at: 1,
+    at: 0.6,
     eyebrow: "03",
     title: "AI Creative Production",
     body: "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
