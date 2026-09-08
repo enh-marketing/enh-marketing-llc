@@ -219,8 +219,34 @@ const q = (v: number) => Math.round(v * 100) / 100;
  *  Copies, because SOLAR_SYSTEM is the component's own module-level export and
  *  is not ours to edit. The effect below rewrites both fields from those
  *  originals on every change, so nothing accumulates and a remount is correct
- *  on its first frame. */
-const PLANETS: Planet[] = SOLAR_SYSTEM.map((p) => ({ ...p }));
+ *  on its first frame.
+ *
+ *  AND THE ORBITS ARE COMPRESSED, which is why this chapter looked like two
+ *  systems rather than one. SOLAR_SYSTEM carries the real semi-major axes, and
+ *  those span 0.387 AU at Mercury to 30.069 at Neptune: a range of 78 to 1.
+ *  No single viewRadius can hold that. At the 2.3 to 3.4 this chapter uses,
+ *  the four rocky planets draw a tight knot of rings around the Sun while
+ *  Jupiter, Saturn, Uranus and Neptune sit two to eleven times outside the
+ *  frame and cross it only as long arcs with a lone dot on the end. Read on a
+ *  wide screen that is a small system plus a big one, and it was reported as a
+ *  duplicated component.
+ *
+ *  A POWER LAW, NOT A CLAMP, so the order and the sense of falling off with
+ *  distance both survive: a' = 0.6 * a^0.375 puts Mercury at 0.42 and Neptune
+ *  at 2.15, a range of 5.1 to 1, with every planet inside the tightest view
+ *  the chapter uses. Nothing else about them is touched: eccentricity,
+ *  inclination, node, periapsis and phase are all still the real ones, so the
+ *  rosette is the same shape, just gathered.
+ *
+ *  `a` sits inside the component's rebuild key, so this has to be done once
+ *  here at module scope and never per frame. */
+const ORBIT_SCALE = 0.6;
+const ORBIT_FALLOFF = 0.375;
+
+const PLANETS: Planet[] = SOLAR_SYSTEM.map((p) => ({
+  ...p,
+  a: ORBIT_SCALE * Math.pow(p.a, ORBIT_FALLOFF),
+}));
 
 export function System({
   t,
