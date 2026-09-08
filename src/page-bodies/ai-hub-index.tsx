@@ -2,8 +2,9 @@
 
 import { Journey, type Chapter } from "@/components/hub/Journey";
 import { Ascent } from "@/components/hub/Ascent";
+import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
-import { system } from "@/content/ai-hub";
+import { horizon, system } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
  *
@@ -18,9 +19,17 @@ import { system } from "@/content/ai-hub";
  *  chapter two once its video is scrubbed from chapter progress instead of
  *  from its own lock, which deletes most of it rather than adding anything.
  *
- *  Still to come, in order: the airlock between these two, then the uplink and
- *  the horizon after them. */
-const CHAPTERS: Chapter[] = [{ id: "system", viewports: 4, Scene: System, beats: system }];
+ *  THE UPLINK IS THE GAP. The story runs system, uplink, horizon, and the
+ *  middle one is not built: 04, 05 and 06 have nowhere to be until it is. The
+ *  site's order is kept across the chapters rather than inside them, so those
+ *  three slot in between without moving anything that already exists.
+ *
+ *  Still to come: the airlock before the system, and the uplink before the
+ *  horizon. */
+const CHAPTERS: Chapter[] = [
+  { id: "system", viewports: 4, Scene: System, beats: system },
+  { id: "horizon", viewports: 4, Scene: Horizon, beats: horizon },
+];
 
 export function AiHubPage() {
   return (

@@ -98,3 +98,37 @@ export const system: Beat[] = [
     href: "/ai-hub/ai-creative-production",
   },
 ];
+
+/* ---------------------------------------------------------------- chapter 2 */
+
+/** The horizon. The last two categories, at the thing you can only see by
+ *  what it does to the light around it.
+ *
+ *  IT ENDS ON A CATEGORY, NOT ON A CLOSING LINE. A page that has no prose of
+ *  its own does not get to write one for its ending either, however much an
+ *  ending wants one. If a closing line is ever wanted it has to come from a
+ *  document.
+ *
+ *  04, 05 and 06 are missing on purpose. Conversational AI, Campaign
+ *  Intelligence and Intelligent Web belong to the uplink chapter, which is not
+ *  built yet, and the site's order is kept across the chapters rather than
+ *  inside each one: 01-03 in the system, 04-06 in the uplink, 07-08 here.
+ */
+export const horizon: Beat[] = [
+  {
+    at: 0.28,
+    eyebrow: "07",
+    title: "Data & Dashboards",
+    body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
+    quotes: "data-and-dashboards",
+    href: "/ai-hub/data-and-dashboards",
+  },
+  {
+    at: 0.72,
+    eyebrow: "08",
+    title: "AI Workshops & Training",
+    body: "ENH Marketing runs practical corporate AI training in Dubai and across the UAE. Each session is built around the team’s actual workflows, tools and responsibilities.",
+    quotes: "ai-workshops-and-training",
+    href: "/ai-hub/ai-workshops-and-training",
+  },
+];
