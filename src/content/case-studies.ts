@@ -13,10 +13,10 @@
 // for word.
 //
 // NO FIGURE EXISTS THAT THE SOURCE DOES NOT PUBLISH. Not a total, not an
-// average, not a "clients served" count derived from the archive length. The
-// one number this file computes is `rankingCount()`, which counts studies
-// rather than results, is checkable by eye against the cards, and is the
-// sentence the archive's own interlude is built from.
+// average, not a "clients served" count derived from the archive length. This
+// file computes no figure at all now: `rankingCount()` used to count the
+// studies publishing a #1, for the archive's interlude, and both went in the
+// same pass (TEAM DIRECTION, 2026-09-08).
 //
 // THE ORDER IS THE SOURCE'S ORDER. The live index lists these twenty-two in a
 // deliberate sequence and `order` preserves it. It is also the only reason the
@@ -152,12 +152,6 @@ export function bySlug(slug: string): Study | undefined {
   return studies.find((s) => s.slug === slug);
 }
 
-/** The study the live index leads with. This is the only definition of
- *  "featured" on the page, and it belongs to the agency rather than to us. */
-export function lead(): Study | undefined {
-  return all()[0];
-}
-
 /** Sectors present, largest first, then alphabetically so two sectors of the
  *  same size do not swap places between renders. */
 export function sectors(list: Study[] = all()): { label: string; count: number }[] {
@@ -184,7 +178,7 @@ export function neighbours(study: Study): { prev: Study; next: Study } {
 /** What to offer at the end of a study: the same sector first, then the rest
  *  in the source's order, so the set is always full and every entry is a real
  *  relation rather than a random pick. */
-export function relatedTo(study: Study, count = 2): Study[] {
+export function relatedTo(study: Study, count = 3): Study[] {
   const pool = published().filter((s) => s.slug !== study.slug);
   const sameSector = pool.filter((s) => s.sector === study.sector);
   const rest = pool.filter((s) => s.sector !== study.sector);
@@ -192,20 +186,9 @@ export function relatedTo(study: Study, count = 2): Study[] {
 }
 
 /** A figure the source writes as a search position rather than as a quantity:
- *  "#1". Used to sort the four figures on a card so the rank leads, and to
- *  count the studies the interlude is about. */
+ *  "#1". Used to sort the four figures on a card so the rank leads. */
 export function isRank(metric: Metric): boolean {
   return metric.value.trim().startsWith("#");
-}
-
-/** How many studies publish a #1 ranking among their figures.
- *
- *  COMPUTED, NEVER WRITTEN DOWN. It is the one number on the index that is not
- *  lifted from a single study, and it is countable by eye against the cards
- *  below it, which is the test every figure on this site has to pass. If a
- *  study is added or a figure is corrected, the sentence corrects itself. */
-export function rankingCount(list: Study[] = all()): number {
-  return list.filter((s) => s.metrics.some(isRank)).length;
 }
 
 /** The services a study names, resolved to their labels and pages. */
@@ -280,18 +263,19 @@ export const masthead = {
   fieldHint: "Choose a sector to filter the archive",
 };
 
-export const leadStory = {
-  index: "01",
-  title: "The one",
-  strokeTitle: "we lead with.",
-  /** Factual: it says where the position comes from rather than claiming the
-   *  study is the best. The archive below runs in that same published order,
-   *  which is the only thing that makes this study the lead. */
-  note: "The engagement our own index opens with. Everything below runs in that same order.",
-};
-
+/* TEAM DIRECTION, 2026-09-08: the lead-story section was removed from the
+ * index page, so its copy is gone with it. For the record, it read: "The one /
+ * we lead with." over the note "The engagement our own index opens with.
+ * Everything below runs in that same order." The `lead()` selector that picked
+ * the study went with it. Nothing about the archive's own order changed: it
+ * still runs in the order the agency publishes.
+ *
+ * The archive is "01" rather than "02" for the same reason. It follows the
+ * masthead's "00" directly now. The closing band stays "04" because that
+ * number is shared with the individual case-study pages, where the sequence
+ * running up to it is complete. */
 export const archive = {
-  index: "02",
+  index: "01",
   title: "Every",
   strokeTitle: "engagement.",
   lede: "All twenty-two, newest work first. Each card carries the four figures its case study publishes, and nothing that it does not.",
@@ -301,19 +285,12 @@ export const archive = {
   resetLabel: "Show everything",
 };
 
-/** The interlude that breaks the archive in two. Its number is computed from
- *  the studies rather than written here: see `rankingCount`. */
-export const interlude = {
-  /** Reads on from the numeral beside it, which is why it starts lower case
-   *  and carries no count of its own: "7 of 22 engagements" / "report a #1
-   *  position for a term their buyers actually search." Writing the number
-   *  into the sentence as well would be the same fact twice, and the written
-   *  one would be the one that goes stale. */
-  lead: "report a",
-  figure: "#1",
-  trail: "position for a term their buyers actually search.",
-  note: "The rest report what the ranking was for: users, enquiries, calls, installs, orders. The figures on every card are the ones that client's own reporting produced.",
-};
+/* TEAM DIRECTION, 2026-09-08: the interlude is gone from the archive, and so
+ * is its copy. For the record it read: "<n> of 22 engagements" beside "report a
+ * #1 position for a term their buyers actually search.", over the note "The
+ * rest report what the ranking was for: users, enquiries, calls, installs,
+ * orders. The figures on every card are the ones that client's own reporting
+ * produced." The count was computed by `rankingCount`, which went with it. */
 
 export const study = {
   briefLabel: "The brief",

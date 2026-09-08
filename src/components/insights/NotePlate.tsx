@@ -11,8 +11,8 @@ import { cn } from "@/lib/cn";
  *
  *  WHAT IT DRAWS. A range, seen in section: three ridges back to front, a
  *  dashed ascent route over them, and a marker on the summit the route reaches.
- *  It is the site's own metaphor — "Explore New Heights", "Summits reached",
- *  "field notes from the climb" — at card scale, and it is the same drawing
+ *  It is the site's own metaphor — "Explore New Heights", "Summits reached" —
+ *  at card scale, and it is the same drawing
  *  language as RouteLine and PeakDivider in fx/Adornments, which is what makes
  *  a plate read as part of this site rather than as a missing file.
  *

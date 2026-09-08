@@ -10,7 +10,6 @@ import { NoteCard } from "@/components/insights/NoteCard";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 import {
-  byYear,
   matches,
   register,
   SEARCH_THRESHOLD,
@@ -22,39 +21,30 @@ gsap.registerPlugin(ScrollTrigger);
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-/** THE REGISTER: the whole archive, grouped by the year each note was written.
+/** THE REGISTER: the whole archive, newest note first, in one grid.
  *
- *  WHY A REGISTER AND NOT A GRID OF CARDS. Three reasons, and the third is the
- *  one that decided it.
+ *  TEAM DIRECTION, 2026-09-08: no year rows. The archive used to be broken
+ *  into bands, one per calendar year, each opening with the year set at
+ *  display scale beside a hairline and its own count of notes. Every note now
+ *  sits in a single grid. The `byYear` grouping went with the bands.
  *
- *    The year bands give the page a spine. The homepage's Insights section
- *    already argues that the dateline is the structure here — "when a note was
- *    written is part of what it is worth" — and a year set at display scale
- *    across the full measure is that argument at page scale. It is also the one
- *    piece of navigation a long archive genuinely needs and a topic filter
- *    cannot provide.
+ *  What the bands were doing, for the record, in case the argument reopens: a
+ *  long archive needs one piece of navigation that a topic filter cannot
+ *  provide, and they also meant the page's proportions did not depend on how
+ *  many notes existed -- correct at three notes and at three hundred. The
+ *  filter rail and the count line carry the navigation on their own now.
  *
- *    Every card is the same card. There was a second, side-on weight for one
- *    note in five and it is gone: the bands are what give the page its
- *    hierarchy, and a uniform grid is the only arrangement that reads right at
- *    any archive size. `[grid-auto-flow:dense]` went with it — it existed to
- *    fill the holes a two-column card left in the flow.
- *
- *    IT SURVIVES THE ARCHIVE IT DOES NOT HAVE YET. A three-column card grid
- *    holding three notes is two thirds empty, and holding three hundred is an
- *    undifferentiated scroll. Bands sized by year are correct at both ends:
- *    today the page reads as a short, deliberate record, and after a migration
- *    of a hundred posts it reads as an archive with a structure — with no
- *    layout work in between. This is the shape that had to be chosen before the
- *    content arrived, because it is the only one whose proportions do not
- *    depend on the count.
+ *  EVERY CARD IS THE SAME CARD, which was already true and matters more with
+ *  the bands gone. There was a second, side-on weight for one note in five and
+ *  it is long gone, along with the `[grid-auto-flow:dense]` that existed only
+ *  to fill the holes it left in the flow.
  *
  *  THE TOPIC RAIL IS DERIVED. Chips come from the categories actually present,
  *  with their real counts, so a migration that introduces a topic gets a chip
  *  for free and one that retires a topic loses it. Filtering is client-side and
- *  animated by Motion's layout engine — reflowing a dense grid around a card
- *  that just changed width is exactly what it is for, and exactly what GSAP
- *  would need hand-written FLIP to do.
+ *  animated by Motion's layout engine -- reflowing a grid around cards that
+ *  just moved is exactly what it is for, and exactly what GSAP would need
+ *  hand-written FLIP to do.
  *
  *  THE SEARCH FIELD IS CONDITIONAL, and that is the honest version. Over an
  *  archive the reader can already see in one screen, a search box cannot do
@@ -63,7 +53,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
  *  notes, which is where the register runs past a laptop fold on its own.
  *
  *  MOTION IS SPLIT BY WHAT EACH LIBRARY IS FOR. ScrollTrigger.batch drives the
- *  entrance as a wave across the wall — it groups whatever crosses the line in
+ *  entrance as a wave across the wall -- it groups whatever crosses the line in
  *  the same frame, which is the difference between a wall arriving in waves and
  *  every card fading in on its own schedule. It writes to an inner wrapper,
  *  never to the <li> whose transform Motion owns. Under prefers-reduced-motion
@@ -85,7 +75,6 @@ export function NoteRegister({ notes }: { notes: Note[] }) {
     [notes, topic, query],
   );
 
-  const bands = useMemo(() => byYear(shown), [shown]);
   const searchable = notes.length >= SEARCH_THRESHOLD;
   const filtering = topic !== null || query.trim() !== "";
 
@@ -213,41 +202,19 @@ export function NoteRegister({ notes }: { notes: Note[] }) {
           </div>
         </div>
 
-        {/* ---------------------------------------------------- the bands */}
+        {/* ----------------------------------------------------- the wall */}
         <div ref={wall}>
-          {bands.map((band) => (
-            <section key={band.year} className="mb-14 last:mb-0" aria-labelledby={`year-${band.year}`}>
-              {/* THE YEAR RULE. The register's spine: the year at display
-                  scale, a hairline across the rest of the measure, and the
-                  count of notes in it. A heading rather than a decorative
-                  label, so the archive has a real outline for a screen
-                  reader and for a crawler. */}
-              <div className="mb-8 flex items-baseline gap-5">
-                <h3
-                  id={`year-${band.year}`}
-                  className="font-display shrink-0 text-[clamp(1.6rem,3.2vw,2.4rem)] font-extrabold leading-none tabular-nums text-snow"
-                >
-                  {band.year}
-                </h3>
-                <span aria-hidden className="h-px flex-1 bg-line" />
-                <span className="shrink-0 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-ash tabular-nums">
-                  {band.notes.length} {band.notes.length === 1 ? "note" : "notes"}
-                </span>
-              </div>
-
-              <motion.ul
-                layout={!reduced}
-                transition={{ duration: 0.5, ease: EASE }}
-                className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
-              >
-                <AnimatePresence mode="popLayout" initial={false}>
-                  {band.notes.map((note) => (
-                    <NoteCard key={note.slug} note={note} />
-                  ))}
-                </AnimatePresence>
-              </motion.ul>
-            </section>
-          ))}
+          <motion.ul
+            layout={!reduced}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            <AnimatePresence mode="popLayout" initial={false}>
+              {shown.map((note) => (
+                <NoteCard key={note.slug} note={note} />
+              ))}
+            </AnimatePresence>
+          </motion.ul>
         </div>
 
         {/* The count, stated plainly, and only where the reader has narrowed

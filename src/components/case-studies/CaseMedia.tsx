@@ -11,9 +11,9 @@ import type { Figure } from "@/content/case-studies";
  *
  *  TWO WIDTHS, DECLARED. The converter writes a 1400px file and a 700px file
  *  for every card; `sizes` is measured against Container's 1320px cap so a
- *  plate five columns wide fetches the small one and the lead story fetches
- *  the large one. Without it a browser assumes 100vw and pulls the 1400px file
- *  for a 380px box on a phone.
+ *  card in the grid fetches the small one and a study page's own picture
+ *  fetches the large one. Without it a browser assumes 100vw and pulls the
+ *  1400px file for a 380px box on a phone.
  *
  *  astro:assets IS NOT AVAILABLE HERE. These are React islands, so this is a
  *  plain <img> with its intrinsic width and height written out. See AGENTS.md. */
@@ -24,7 +24,7 @@ export function CaseMedia({
   className,
 }: {
   figure: Figure;
-  slot?: "plate" | "plateWide" | "lead" | "hero" | "compact";
+  slot?: "plate" | "hero" | "compact";
   eager?: boolean;
   className?: string;
 }) {
@@ -47,10 +47,12 @@ export function CaseMedia({
   );
 }
 
+/* TEAM DIRECTION, 2026-09-08: `plateWide` and `lead` went with the two things
+ * that declared them, the archive's wide plate and the index's lead story. What
+ * is left is a card in a three-column grid (`plate`), the picture on a study
+ * page (`hero`) and a card in the carousel or the study nav (`compact`). */
 const SIZES: Record<NonNullable<Parameters<typeof CaseMedia>[0]["slot"]>, string> = {
-  plate: "(min-width: 1024px) 520px, (min-width: 640px) 46vw, 92vw",
-  plateWide: "(min-width: 1024px) 740px, (min-width: 640px) 46vw, 92vw",
-  lead: "(min-width: 1024px) 1240px, 92vw",
+  plate: "(min-width: 1024px) 420px, (min-width: 640px) 46vw, 92vw",
   hero: "(min-width: 1024px) 620px, 92vw",
   compact: "(min-width: 1024px) 320px, 40vw",
 };

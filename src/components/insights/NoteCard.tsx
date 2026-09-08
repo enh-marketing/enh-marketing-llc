@@ -146,11 +146,15 @@ export function NoteCardFace({ note }: { note: Note }) {
           )}
         </p>
 
-        {/* An h4, NOT an h3. The register is an h2, each year band an h3,
-            and a card sits inside its band — so at h3 every card was a
-            sibling of the year it belongs to and the archive had no
-            structure for anyone reading the heading outline. */}
-        <h4
+        {/* TEAM DIRECTION, 2026-09-08: no heading tag on a card title. It was
+            an h4 (deliberately, so a card sat under its year band rather than
+            beside it), and it is now a plain <p>. The card is one link, so the
+            title still reaches assistive tech as part of that link's name; what
+            it no longer does is put 90-odd article titles into the heading
+            outline of the archive and 3 into the outline of every other page.
+            Styling is unchanged: the size here is set by the classes, never by
+            the tag. */}
+        <p
           className={cn(
             "font-display mt-4 text-[1.075rem] font-extrabold leading-[1.14] text-snow sm:text-[1.15rem]",
             "transition-colors duration-500 motion-reduce:transition-none",
@@ -158,7 +162,7 @@ export function NoteCardFace({ note }: { note: Note }) {
           )}
         >
           {note.title}
-        </h4>
+        </p>
 
         {note.excerpt && (
           <p className="mt-3.5 line-clamp-3 text-sm leading-relaxed text-fog">{note.excerpt}</p>

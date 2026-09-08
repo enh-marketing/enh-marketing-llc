@@ -31,7 +31,9 @@ import { StickyCTABar } from "@/components/service/StickyCTABar";
  *  sections is absent rather than empty where the source has nothing. */
 export function CaseStudyPage({ study }: { study: Study }) {
   const { prev, next } = neighbours(study);
-  const related = relatedTo(study, 2);
+  /* TEAM DIRECTION, 2026-09-08: three, so the related row is a full row of the
+     one card design rather than two cards and an empty cell. */
+  const related = relatedTo(study, 3);
   const whatsapp = `https://wa.me/${brand.whatsapp}`;
 
   return (

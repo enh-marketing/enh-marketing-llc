@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { brand } from "@/lib/content";
-import { all, finalCta, formFields, lead } from "@/content/case-studies";
+import { all, finalCta, formFields } from "@/content/case-studies";
 
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CaseMasthead } from "@/components/case-studies/CaseMasthead";
-import { LeadCase } from "@/components/case-studies/LeadCase";
 import { CaseArchive } from "@/components/case-studies/CaseArchive";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
@@ -15,11 +14,14 @@ const HREF = "/case-studies";
 
 /** Case studies — the index.
  *
- *  FOUR CHAPTERS. The masthead, which says what the archive is and tallies who
- *  it was for; the cover story, which is whichever study the agency's own
- *  index puts first; the archive itself, as a mosaic broken once by a
- *  statement about the whole set; and the ask. Nothing between them is a
- *  banner.
+ *  THREE CHAPTERS. The masthead, which says what the archive is and tallies
+ *  who it was for; the archive itself, as a mosaic broken once by a statement
+ *  about the whole set; and the ask. Nothing between them is a banner.
+ *
+ *  TEAM DIRECTION, 2026-09-08: there is no cover story. A fourth chapter used
+ *  to sit between the masthead and the archive, promoting whichever study the
+ *  agency's own index puts first, and it was removed. The reader now meets all
+ *  twenty-two at once, which is what the rail's count already promised.
  *
  *  ONE PIECE OF STATE, TWO CONTROLS. The sector lives here because two things
  *  set it: the tally in the masthead, where a reader picks the industry they
@@ -27,15 +29,11 @@ const HREF = "/case-studies";
  *  past the fold changes their mind. They are the same control in two places,
  *  which is why neither owns it.
  *
- *  THE COVER STUDY IS ALSO IN THE ARCHIVE. It is presented above and listed
- *  below, the way a cover story is also in the contents, so the count on the
- *  rail is the truth ("22") rather than the truth minus the one we promoted.
  *
  *  `hasStory` gates every link, so a study added without its sections would be
  *  set as text rather than promising a page that does not exist. */
 export function CaseStudiesPage() {
   const studies = all();
-  const cover = lead();
   const [sector, setSector] = useState<string | null>(null);
 
   const whatsapp = `https://wa.me/${brand.whatsapp}`;
@@ -51,8 +49,6 @@ export function CaseStudiesPage() {
           phoneHref={brand.phoneHref}
           formTitle="Tell us what you are trying to move"
         />
-
-        {cover && <LeadCase study={cover} />}
 
         <CaseArchive studies={studies} active={sector} onSelect={setSector} />
 
