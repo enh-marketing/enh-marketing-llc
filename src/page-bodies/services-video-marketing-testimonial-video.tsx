@@ -23,6 +23,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/video-marketing/testimonial-video";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -78,6 +79,11 @@ export function TestimonialVideoPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* THE PAGE'S ARGUMENT, immediately after the scene that sets it up:
             our questions on one side, their recorded answers on the other, and
@@ -183,10 +189,10 @@ export function TestimonialVideoPage() {
             sentence prints twice. */}
         <GrowthCta
           id="cta"
-          label="Give Prospective Customers a Real Experience to Consider"
-          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
-          support={c.finalCta.body}
-          button={c.finalCta.primary}
+          label="Ready to Let Your Customers Do the Selling"
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}

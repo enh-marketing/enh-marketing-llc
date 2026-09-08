@@ -20,6 +20,7 @@ import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 import { ScopeSheet } from "@/components/service/ScopeSheet";
 import { ClaimCascade } from "@/components/service/ClaimCascade";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/social-media-marketing/content-creation";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -78,6 +79,11 @@ export function ContentCreationPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* Seven services, drawn as the seven things they hand over. The
             document's promise is about what arrives — "you will know how many

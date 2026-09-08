@@ -61,7 +61,7 @@ export function PerformanceMarketingPage() {
           highlight={c.narrative.highlight}
         />
 
-        <ResultStats id="results" label="Results" stats={c.results} />
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         <ReasonList
           id="why-enh"

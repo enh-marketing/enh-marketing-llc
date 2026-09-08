@@ -22,6 +22,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/lead-generation";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -63,6 +64,11 @@ export function LeadGenerationPage() {
           highlight={["B2B", "B2C", "WhatsApp", "pages"]}
           closing={c.narrative.definition}
         />
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* The six routes, in the shape the document gives them rather than a
             flat grid of six: two shaped around who you sell to, the channels

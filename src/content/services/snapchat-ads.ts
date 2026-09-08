@@ -207,3 +207,22 @@ export const growthCta = {
     "Connect With Your Target Audience, Drive More Engagement & Generate Quality Leads With High-Performance Snapchat Ads",
   button: "Get Your Snapchat Ads Plan",
 };
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so a unit is written here in the band's own casing.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "2.6", unit: "x", label: "ROAS ACHIEVED" },
+  { figure: "20M", unit: "+", label: "IMPRESSIONS DELIVERED" },
+  { figure: "25", unit: "%", label: "LOWER COST PER SWIPE UP" },
+  { figure: "65", unit: "%", label: "AUDIENCE UNDER 30" },
+];

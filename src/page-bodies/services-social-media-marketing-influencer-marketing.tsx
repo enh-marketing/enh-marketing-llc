@@ -23,6 +23,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/social-media-marketing/influencer-marketing";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -64,6 +65,11 @@ export function InfluencerMarketingPage() {
           highlight={["selection", "contracts", "reviews", "permit", "reporting"]}
           outro={[c.narrative.turn]}
         />
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         <PinnedExplorer
           id="what-we-handle"

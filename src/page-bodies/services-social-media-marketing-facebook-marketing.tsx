@@ -23,6 +23,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/social-media-marketing/facebook-marketing";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -78,6 +79,11 @@ export function FacebookMarketingPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* Seven areas of the management scope. The document's bracketed link
             to the content-creation page is rendered once beneath, as a real
@@ -201,10 +207,10 @@ export function FacebookMarketingPage() {
             sentence prints twice. */}
         <GrowthCta
           id="cta"
-          label="Give the Page a Clear Role"
-          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
-          support={c.finalCta.body}
-          button={c.finalCta.primary}
+          label="Ready to Grow Your Brand on Facebook"
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}

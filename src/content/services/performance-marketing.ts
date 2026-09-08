@@ -328,7 +328,10 @@ export const growthCta = {
  *
  *  `figure` and `unit` are split so the unit can take the brand colour without
  *  the value being re-typed anywhere. */
-export const results = [
+/* Renamed from `results` on 2026-09-08, when the same band went onto the 32
+ * other pages the ENH updates document lists: they all export `resultStats`,
+ * and one name for one thing is worth the two-line rename here. */
+export const resultStats = [
   { figure: "3.5", unit: "x", label: "ROAS Achieved" },
   { figure: "12–15", unit: "%", label: "Conversion Rate" },
   { figure: "50,000", unit: "+", label: "Qualified Leads" },

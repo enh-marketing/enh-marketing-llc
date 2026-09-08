@@ -274,3 +274,22 @@ export const growthCta = {
     "Uncover Technical Issues, Identify Ranking Opportunities & Get Actionable Insights to Improve Your Website's Search Performance",
   button: "Get a Free SEO Audit",
 };
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so "10 DAYS" is written here as the band already sets its units.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "120", unit: "+", label: "AUDITS DELIVERED" },
+  { figure: "120", unit: "+", label: "CHECKPOINTS PER AUDIT" },
+  { figure: "10", unit: " Days", label: "AUDIT TURNAROUND" },
+  { figure: "75", unit: "%", label: "ISSUES FIXED IN 90 DAYS" },
+];

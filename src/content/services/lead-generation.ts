@@ -323,3 +323,22 @@ export const growthCta = {
     "Reach the Right Audience, Capture High-Intent Prospects & Turn More Leads Into Customers",
   button: "Get a Free Lead Generation Strategy",
 };
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so a unit is written here in the band's own casing.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "12,000", unit: "+", label: "LEADS DELIVERED" },
+  { figure: "40", unit: "%", label: "QUALIFIED LEAD RATE" },
+  { figure: "28", unit: "%", label: "LOWER COST PER LEAD" },
+  { figure: "3.5", unit: "x", label: "PIPELINE RETURN" },
+];

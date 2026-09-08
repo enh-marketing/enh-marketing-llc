@@ -268,3 +268,22 @@ export const growthCta = {
     "Create a High-Converting E-Commerce Website Designed to Grow Your Online Sales",
   button: "Get a Free E-Commerce Quote",
 };
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so a unit is written here in the band's own casing.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "60", unit: "+", label: "STORES BUILT" },
+  { figure: "25,000", unit: "+", label: "PRODUCTS MIGRATED" },
+  { figure: "55", unit: "%", label: "CHECKOUT COMPLETION RATE" },
+  { figure: "20", unit: "%", label: "LOWER CART ABANDONMENT" },
+];

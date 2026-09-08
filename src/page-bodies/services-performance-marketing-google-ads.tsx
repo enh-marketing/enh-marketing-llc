@@ -23,6 +23,7 @@ import { SectorField } from "@/components/service/SectorField";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/performance-marketing/google-ads";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -52,14 +53,14 @@ export function GoogleAdsPage() {
           visual={<SpendSplit key="spend" label={c.opening.thesis} />}
         />
 
-        {/* The opening. The document gives this stretch no heading of its own,
-            so the section carries none and the thesis is the heading: the
-            reporting does not separate the two. The six campaign types and the
-            three commitments are marked inside their own sentences rather than
-            lifted out into chips, which would print them on the page twice. */}
+        {/* The opening. The revised document gives this stretch a heading and a
+            pair of calls to action, both of which the earlier draft lacked. The
+            six campaign types and the three commitments are marked inside their
+            own sentences rather than lifted out into chips, which would print
+            them on the page twice. */}
         <section
           id="story"
-          data-section="The Reporting Does Not Separate the Two"
+          data-section="Turn High Intent Searches Into Business"
           className="relative overflow-x-clip py-16 sm:py-20"
         >
           <div
@@ -73,6 +74,13 @@ export function GoogleAdsPage() {
             }}
           />
           <Container className="relative">
+            <SectionHeader
+              title={c.opening.title}
+              strokeTitle={c.opening.strokeTitle}
+              aside={<p className="statement text-balance text-snow">{c.opening.lead}</p>}
+              className="mb-12"
+            />
+
             <Rise>
               <p className="max-w-3xl text-base leading-relaxed text-fog sm:text-lg">
                 {c.opening.statement}
@@ -110,8 +118,29 @@ export function GoogleAdsPage() {
                 </p>
               </Rise>
             </div>
+
+            {/* The two the revision puts after this section. */}
+            <Rise delay={0.2} className="mt-12 flex flex-wrap items-center gap-3">
+              <a
+                href="#quote"
+                className="inline-flex shrink-0 items-center justify-center gap-3 whitespace-nowrap rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-deep motion-reduce:transition-none"
+              >
+                {c.opening.primary}
+              </a>
+              <a
+                href="#quote"
+                className="inline-flex shrink-0 items-center justify-center gap-3 whitespace-nowrap rounded-full border border-line px-7 py-3.5 text-sm font-semibold text-snow transition-colors duration-300 hover:border-brand hover:text-brand motion-reduce:transition-none"
+              >
+                {c.opening.secondary}
+              </a>
+            </Rise>
           </Container>
         </section>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="proof" label="Results" stats={c.resultStats} />
 
         {/* The comparison on the same interaction the LinkedIn formats section
             uses, because the shape fits: eight criteria, one drawing, a panel
@@ -162,6 +191,7 @@ export function GoogleAdsPage() {
           statement={c.afterClick.statement}
           symptom={c.afterClick.symptom}
           symptomStages={c.afterClick.symptomStages}
+          auctionCost={c.afterClick.auctionCost}
           auctionLead={c.afterClick.auctionLead}
           auction={c.afterClick.auction}
           auctionTail={c.afterClick.auctionTail}
@@ -288,10 +318,10 @@ export function GoogleAdsPage() {
             door; the form band at the foot takes the second. */}
         <GrowthCta
           id="cta"
-          label="Start With an Account Audit"
-          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
-          support={c.finalCta.running}
-          button={c.finalCta.primary}
+          label="Ready to Turn Clicks Into Customers"
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.secondary}
@@ -306,7 +336,8 @@ export function GoogleAdsPage() {
           index="10"
           title={c.finalCta.title}
           strokeTitle={c.finalCta.strokeTitle}
-          body={c.finalCta.scratch}
+          body={c.finalCta.running}
+          note={c.finalCta.scratch}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.secondary}
           whatsapp={whatsapp}

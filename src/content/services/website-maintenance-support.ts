@@ -431,13 +431,15 @@ export const faqs: Faq[] = [
  *  the reader, and the form band at the foot takes what we do with it. Neither
  *  sentence appears twice, and no sentence is invented to fill either.
  *
- *  The heading is the document's own primary CTA label, split across two lines
- *  for typesetting — the same construction the Campaign Intelligence band uses,
- *  where "Book a Consultation" is both the heading and the button. */
+ *  TEAM COPY, 2026-09-08: replaced by copy the team supplied directly, so this
+ *  band and the client document now differ. It previously reused the
+ *  document's own primary CTA label as the heading, which meant the heading and
+ *  the button read identically; they no longer do. */
 export const growthCta = {
-  heading: ["Request a", "Maintenance Review"] as [string, string],
-  support: "Send us your website address and tell us what needs attention.",
-  button: "Request a Maintenance Review",
+  heading: ["Is your website", "overdue for a check-up?"] as [string, string],
+  support:
+    "Prevent Downtime, Security Risks & Slow Load Times With Ongoing Support",
+  button: "Get a Website Maintenance Plan",
 };
 
 export const finalCta = {
@@ -452,3 +454,22 @@ export const finalCta = {
 
 /** One standard set across the site; see content/forms.ts. */
 export { standardFormFields as formFields } from "@/content/forms";
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so "2 HRS" is written here as the band already sets its units.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "99.9", unit: "%", label: "UPTIME MAINTAINED" },
+  { figure: "2", unit: " Hrs", label: "AVERAGE RESPONSE TIME" },
+  { figure: "120", unit: "+", label: "SITES UNDER MANAGEMENT" },
+  { figure: "300", unit: "+", label: "UPDATES DEPLOYED MONTHLY" },
+];
