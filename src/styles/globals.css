@@ -187,6 +187,39 @@ summary {
   font-family: var(--font-display);
 }
 
+/* THE AI HUB'S TYPEFACE, AND ONLY THAT PAGE'S. --font-grotesk is set by the
+   <Font> tag in src/pages/ai-hub/index.astro, so on every other page this
+   variable is undefined and the fallback is what renders. The fallback is the
+   site's own display face, so a stray use of this class elsewhere degrades to
+   the house heading rather than to a system serif. */
+.font-grotesk {
+  font-family: var(--font-grotesk, var(--font-display));
+  /* Space Grotesk's default figures are proportional and its default `1` has
+     no foot; the hub sets category numbers in it, and those want to line up. */
+  font-feature-settings: "ss01";
+}
+
+/* The hub's own two display sizes. They are bigger and tighter than the site's
+   display-2xl and display-lg, which were drawn to sit inside a page with
+   navigation and a footer. This page has neither, and it is read one full
+   screen at a time, so the headline can take the room.
+
+   BOTH CLAMP AGAINST svh AS WELL AS vw. Every one of these sits over a scene
+   with a beat below it, and on a short landscape phone a purely vw-driven size
+   pushes the body copy and the link off the bottom of the frame. min() lets
+   whichever axis is scarcer decide. */
+.hub-display {
+  font-size: clamp(2.9rem, min(7.4vw, 11svh), 6.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.hub-heading {
+  font-size: clamp(2rem, min(4.6vw, 7.4svh), 3.9rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+}
+
 /* Fluid display sizes — restrained for readability on desktop/tablet */
 .mega {
   /* Height-aware, like .display-2xl: the homepage hero is sized to the viewport

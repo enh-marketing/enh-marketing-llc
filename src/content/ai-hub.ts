@@ -43,6 +43,15 @@ export type Beat = {
   href?: string;
   /** Small label above the title. */
   eyebrow?: string;
+  /** Where the beat sits in the frame. Categories read from the bottom left,
+   *  which is where the scene leaves room for them. "center" is for the one
+   *  line that is not a category: the opener's sentence, finishing itself in
+   *  the middle of the frame where the photograph was holding it. */
+  place?: "bottom" | "center";
+  /** Whether the last word takes the site's brand red. Categories do; the
+   *  opener's line does not, because it starts on a photograph where the red
+   *  landed on lit sky and read as a fault. */
+  accent?: boolean;
   /** Slug of the service this beat quotes. Its title must match that page's
    *  sitemap label and its body that page's meta.description, word for word.
    *  Enforced by scripts/check-hub-copy.mjs. */
@@ -51,14 +60,31 @@ export type Beat = {
 
 /* ---------------------------------------------------------------- chapter 0 */
 
-/** The ascent. The name, and then the picture on its own. */
+/** The ascent. The name, and then the picture on its own.
+ *
+ *  THESE TWO LINES CAME FROM DIVIJ DIRECTLY, on 2026-09-08, written out in his
+ *  own message: "change the text to Explore new heights with us" and "the text
+ *  changes to explore new heights with AI". They are recorded here as his
+ *  words, not drafted here and not quoted from a document. The site's existing
+ *  "Explore New Heights", still on the home page in
+ *  src/components/sections/AISection.tsx, is the phrase both extend. If either
+ *  ever needs to trace back to a client document rather than to a message,
+ *  this is the note that says it does not yet.
+ *
+ *  ONE LINE BECOMING ANOTHER is the opener's whole move: it rides the Sun out
+ *  of the photograph and into the system, and swaps its last word on the way.
+ *  So they are a pair and have to stay a pair; changing one alone breaks the
+ *  sentence the transition is built on. */
 export const ascent: Beat[] = [
   {
     at: 0.06,
     eyebrow: "AI Hub",
-    title: "Explore New Heights",
+    title: "Explore New Heights With Us",
   },
 ];
+
+/** What the opener's line becomes once it has crossed into the system. */
+export const ASCENT_HANDOVER = "Explore New Heights With AI";
 
 /* ---------------------------------------------------------------- chapter 1 */
 
@@ -76,6 +102,18 @@ export const ascent: Beat[] = [
  *  every path straightens into a line, and 0.8 and 1 the two stops the Sun
  *  spends climbing the chart. */
 export const system: Beat[] = [
+  /* THE OTHER HALF OF THE OPENER'S SENTENCE, and the first thing the chapter
+     says. It arrives centred, where the photograph was holding the same line,
+     and it is the same words with the last one changed: the reader watches the
+     sentence cross from the mountain into the system and become what the page
+     is actually about. It is out again well before 01, so no category ever
+     shares the frame with it. */
+  {
+    at: 0,
+    place: "center",
+    accent: false,
+    title: ASCENT_HANDOVER,
+  },
   {
     at: 0.2,
     eyebrow: "01",

@@ -1,4 +1,5 @@
 ---
+import { Font } from "astro:assets";
 import Base from "@/layouts/Base.astro";
 import { AiHubPage } from "@/page-bodies/ai-hub-index";
 
@@ -19,5 +20,9 @@ const HREF = "/ai-hub";
   canonical={HREF}
   chrome={false}
 >
+  {/* Space Grotesk is this page's typeface and no other page's. Declaring it
+      here rather than in Base.astro is what keeps the preload off the other
+      141 pages. */}
+  <Font slot="head" cssVariable="--font-grotesk" preload />
   <AiHubPage client:load />
 </Base>
