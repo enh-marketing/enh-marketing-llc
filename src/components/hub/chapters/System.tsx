@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   OrbitalHeroSection,
   SOLAR_SYSTEM,
   type Planet,
 } from "@/components/hub/OrbitalHeroSection";
 import ParticleDrift from "@/components/hub/ParticleDrift";
-import { ScatterField, type ScatterCamera } from "@/components/hub/ScatterField";
+import { ScatterField } from "@/components/hub/ScatterField";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
 /** Chapter two: the system.
@@ -117,18 +117,6 @@ const STOPS: Stop[] = [
  *  stops that share a camera. */
 const SCATTER_FROM = 2 / 3;
 
-/** The frozen camera the scatter is drawn against, so both agree on where the
- *  Sun is. Read from the stop rather than retyped. */
-const SCATTER_CAMERA: ScatterCamera = {
-  spin: STOPS[3].spin,
-  tilt: STOPS[3].tilt,
-  roll: STOPS[3].roll,
-  focusX: STOPS[3].focusX,
-  focusY: STOPS[3].focusY,
-  lead: LEAD,
-  apex: [272, 53],
-};
-
 const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
 
 /** How much of the chapter the pull-back takes, and how close it starts. A
@@ -224,6 +212,12 @@ export function System({
 }) {
   const cam = cameraAt(t);
 
+  /* The originals are not taken away on a schedule. They are taken away once
+     the scatter has actually read them off the canvas, which is what keeps a
+     reader who lands in the middle of this leg from seeing nothing at all. */
+  const [captured, setCaptured] = useState(false);
+  const onCapture = useCallback(() => setCaptured(true), []);
+
   /* THE PLANETS FADE BY BEING SHRUNK AND DIMMED IN PLACE, on one array that is
      never replaced. Three things force this shape and each was read out of the
      component rather than assumed.
@@ -247,13 +241,23 @@ export function System({
      holding is what actually lands. They are copies, because the component's
      SOLAR_SYSTEM export is module-level and shared. */
   useEffect(() => {
-    const fade = cameraAt(t).fade;
+    /* THE ORIGINALS GO QUICKLY, AND THAT IS THE POINT. ScatterField reads the
+       planets off the canvas on the first frame of the scatter and then flies
+       those exact points outward. If the component went on drawing its own
+       planets on their orbits while the copies travelled, both sets would be on
+       screen together and it would read as duplication rather than departure.
+       So the originals are gone within the first seventh of the leg, while the
+       copies are still nearly on top of them. Derived from the scatter rather
+       than interpolated between the stops, because it has to run much faster
+       than everything else in that leg. */
+    const scat = clamp((t - SCATTER_FROM) / (1 - SCATTER_FROM), 0, 1);
+    const fade = captured ? 1 - smooth(clamp(scat / 0.14, 0, 1)) : 1;
     for (let i = 0; i < PLANETS.length; i++) {
       const base = SOLAR_SYSTEM[i];
       PLANETS[i].size = base.size * fade;
       PLANETS[i].glow = (base.glow ?? 1) * fade;
     }
-  }, [t]);
+  }, [t, captured]);
 
   /* THE ARRIVAL RUNS ACROSS THE JOIN. Half of it happens while the stage is
      still climbing into place, measured by `reveal`, and half after it has
@@ -282,8 +286,10 @@ export function System({
   const particles = particleLevel(t);
   const scatter = clamp((t - SCATTER_FROM) / (1 - SCATTER_FROM), 0, 1);
 
+
   return (
     <OrbitalHeroSection
+      data-orbital-host=""
       tilt={cam.tilt}
       spin={cam.spin}
       roll={cam.roll}
@@ -309,7 +315,9 @@ export function System({
       scrim="bottom"
       scrimStrength={0.8}
     >
-      {scatter > 0 && <ScatterField p={scatter} camera={SCATTER_CAMERA} />}
+      {/* Mounted a little before it is needed, so the capture happens while
+          the planets are still lit. It draws nothing until `p` leaves zero. */}
+      {t > SCATTER_FROM - 0.06 && <ScatterField p={scatter} onCapture={onCapture} />}
       {particles > 0.01 && (
         <div
           aria-hidden
