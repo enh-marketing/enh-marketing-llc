@@ -26,6 +26,16 @@ import type { Beat } from "@/content/ai-hub";
  *  sections. The outgoing scene holds at its own final frame while it fades,
  *  so it never rewinds on the way out.
  *
+ *  NOTHING IS VISIBLE UNTIL THE STAGE IS PINNED. A chapter draws relative to
+ *  its own stage, and until the track reaches the top of the window that stage
+ *  is still sliding up the page, so anything in it is in the wrong place by
+ *  however far it has left to travel. On this page that was measurable and
+ *  visible: the opener hands over on the Sun, and with the stage still 174px
+ *  low the chapter drew its own Sun 212px below the light the opener was
+ *  holding, which is two suns on one screen. So the scene fades up over the
+ *  last part of the approach and is simply black before it, which is what the
+ *  opener fades into anyway.
+ *
  *  REDUCED MOTION pins the whole thing to the opening of chapter one and
  *  mounts nothing else. Each scene separately holds a still frame of its own,
  *  so what a reader gets is one picture and the words that go with it. */
@@ -41,6 +51,10 @@ export type Chapter = {
 
 /** Share of the track given to the cross-fade on each side of a join. */
 const FADE = 0.055;
+
+/** How much of a viewport the scene takes to fade up as the stage arrives.
+ *  Short, so the two suns are never far apart while both are on screen. */
+const REVEAL_OVER = 0.12;
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
@@ -59,6 +73,8 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
   const trackRef = useRef<HTMLElement>(null);
   const reduced = usePrefersReducedMotion();
   const [p, setP] = useState(0);
+  /* 0 until the stage is nearly pinned, 1 once it is. */
+  const [reveal, setReveal] = useState(0);
 
   const total = chapters.reduce((n, c) => n + c.viewports, 0);
   const bounds = boundsOf(chapters);
@@ -73,6 +89,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
       // Lenis already smooths the scroll position, so what it yields is smooth
       // and needs no easing of its own.
       setP(span <= 0 ? 0 : clamp(-r.top / span, 0, 1));
+      setReveal(clamp(1 - r.top / (window.innerHeight * REVEAL_OVER), 0, 1));
     };
 
     onScroll();
@@ -119,7 +136,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
               key={c.id}
               data-chapter={c.id}
               className="absolute inset-0"
-              style={{ opacity: levels[i], zIndex: i === lead ? 2 : 1 }}
+              style={{ opacity: levels[i] * (reduced ? 1 : reveal), zIndex: i === lead ? 2 : 1 }}
             >
               <c.Scene t={locals[i]} level={levels[i]} />
             </div>

@@ -2,6 +2,7 @@
 
 import { OrbitalHeroSection } from "@/components/hub/OrbitalHeroSection";
 import ParticleDrift from "@/components/hub/ParticleDrift";
+import { HANDOVER_FOCUS } from "@/components/hub/sun";
 
 /** Chapter two: the system.
  *
@@ -27,7 +28,27 @@ import ParticleDrift from "@/components/hub/ParticleDrift";
  *  `pointer-events: none` leaves the cursor to Orbital, with `followPointer`
  *  posting that same cursor into the frame so both layers answer it. `beams`
  *  is off: the effect draws letters and, separately, fast blue verticals, and
- *  only the letters are wanted. It is mounted only near its own stop. */
+ *  only the letters are wanted. It is mounted only near its own stop.
+ *
+ *  THE ARRIVAL. The chapter does not open on its first camera stop, it opens
+ *  pressed right up against the Sun, with the Sun exactly where the mountain
+ *  left it, and pulls back out of it over the first tenth of the chapter. That
+ *  is the other half of the hinge: SunBridge holds the light in that spot as
+ *  the photograph drops away, and this puts the drawn Sun in the same spot so
+ *  there is nothing to notice at the join. `focus` is Orbital's own prop for
+ *  where the Sun sits in the frame, so nothing here is faked with transforms.
+ *
+ *  `lead` has to go with it. Orbital does not draw the Sun at `focus`: it
+ *  draws it at `focus` and then pushes it off by `lead` of the short side,
+ *  along its course, so the Sun leads the frame it is flying through. That is
+ *  right everywhere except at the join, where the Sun has to be exactly where
+ *  the photograph left it, and its default 0.12 measured as a 49px error on a
+ *  410 wide viewport. It is zero at the join and eases back to the default as
+ *  the camera pulls out.
+ *
+ *  The entry is layered over the stop mapping rather than being a stop of its
+ *  own, so it does not renumber the stops or move the beats that were placed
+ *  against them. */
 
 type Stop = {
   tilt: number;
@@ -62,8 +83,16 @@ const STOPS: Stop[] = [
 
 const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
 
+/** How much of the chapter the pull-back takes, and how close it starts. A
+ *  smaller radius is a tighter view; the first stop sits at 2.3. */
+const ENTRY_SPAN = 0.12;
+const ENTRY_RADIUS = 0.8;
+/** Orbital's own default, which the arrival has to start from zero and reach. */
+const LEAD = 0.12;
+
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+const smooth = (v: number) => v * v * (3 - 2 * v);
 
 function cameraAt(t: number) {
   const pos = clamp(t, 0, 1) * (STOPS.length - 1);
@@ -105,6 +134,12 @@ function particleLevel(t: number) {
 
 export function System({ t }: { t: number }) {
   const cam = cameraAt(t);
+  /* 1 at the very start of the chapter, 0 once the pull-back is done. */
+  const entry = 1 - smooth(clamp(t / ENTRY_SPAN, 0, 1));
+  const viewRadius = mix(cam.viewRadius, ENTRY_RADIUS, entry);
+  const focusX = mix(cam.focusX, HANDOVER_FOCUS.x, entry);
+  const focusY = mix(cam.focusY, HANDOVER_FOCUS.y, entry);
+  const lead = mix(LEAD, 0, entry);
   /* The rings belong to the opening, where the orbits are still near-circular
      and nested. Past that they would be a thicket. */
   const showOrbits = cam.alignToCourse < 0.2;
@@ -115,13 +150,14 @@ export function System({ t }: { t: number }) {
       tilt={cam.tilt}
       spin={cam.spin}
       roll={cam.roll}
-      viewRadius={cam.viewRadius}
+      viewRadius={viewRadius}
       alignToCourse={cam.alignToCourse}
       eccentricity={cam.eccentricity}
       planeSpread={cam.planeSpread}
       driftSpeed={cam.driftSpeed}
       glow={cam.glow}
-      focus={[cam.focusX, cam.focusY]}
+      focus={[focusX, focusY]}
+      lead={lead}
       showOrbits={showOrbits}
       scrim="bottom"
       scrimStrength={0.8}
