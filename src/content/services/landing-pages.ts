@@ -266,3 +266,22 @@ export const growthCta = {
     "Build High-Converting Landing Pages That Attract Visitors, Generate Leads & Drive Business Growth",
   button: "Get a Free Landing Page Quote",
 };
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so "1.5S" is written here as the band already sets its units.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "300", unit: "+", label: "LANDING PAGES BUILT" },
+  { figure: "12", unit: "%", label: "AVERAGE CONVERSION RATE" },
+  { figure: "1.5", unit: "s", label: "AVERAGE LOAD TIME" },
+  { figure: "22", unit: "%", label: "LIFT FROM A/B TESTING" },
+];

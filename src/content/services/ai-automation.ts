@@ -149,19 +149,21 @@ export const diagnostic = {
   strokeTitle: "an Automation Diagnostic",
   lead: "The automation diagnostic is a paid review of your current process.",
   coversLead: "It covers:",
+  /** TEAM DIRECTION, 2026-09-08: all ten are bullets of the document's own
+   *  "It covers:" list and belong in it. An earlier version split them into
+   *  three groups here (five observations, a two-line verdict, a three-line
+   *  proposal) because the middle pair is the page's strongest material; that
+   *  split made the last five read as a separate section and is reverted. The
+   *  list is the document's, in the document's order, and the drawing beside it
+   *  now has a read for each of the ten rather than only the first five. */
   observe: [
     "The steps your team currently follows",
     "The people and systems involved",
     "The time spent on each stage",
     "Repeated work and manual data entry",
     "Rules, exceptions and approval requirements",
-  ],
-  /** The two the document puts next to each other, in its order. */
-  verdict: ["Processes that are suitable for automation", "Processes that should remain manual"] as [
-    string,
-    string,
-  ],
-  proposal: [
+    "Processes that are suitable for automation",
+    "Processes that should remain manual",
     "Recommended automation scope",
     "Estimated development timeline and cost",
     "Expected time or cost savings",

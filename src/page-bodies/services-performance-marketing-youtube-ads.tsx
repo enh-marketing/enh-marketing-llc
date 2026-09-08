@@ -19,6 +19,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/performance-marketing/youtube-ads";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -59,6 +60,11 @@ export function YouTubeAdsPage() {
           outro={[c.narrative.agency]}
           closing={c.narrative.closing}
         />
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* One account, two kinds of campaign, one shared layer underneath. The
             document's four consequences all follow from that single fact, so the

@@ -1,5 +1,4 @@
 import type { FormField } from "@/components/service/LeadForm";
-import { consultationServices } from "@/lib/content";
 
 /** The site's form field sets.
  *
@@ -16,6 +15,12 @@ import { consultationServices } from "@/lib/content";
  *  silently, because the documents are otherwise treated as the source of
  *  truth.
  *
+ *  TEAM DIRECTION, 2026-09-08: the Services field is a text box, not a
+ *  dropdown. It was a select drawn from `consultationServices`; a visitor can
+ *  now type whatever they came to ask about, including something not on that
+ *  list. The same change is made to the Let's Talk form, so the whole site
+ *  asks for services the same way.
+ *
  *  WHAT THE CHANGE DROPS. The per-page qualifying questions go with it: the
  *  monthly ad spend on Performance Marketing, whether Saudi is on the roadmap
  *  on Snapchat, which process feels most manual on AI Automation, and the
@@ -29,12 +34,12 @@ export const standardFormFields: FormField[] = [
   { id: "phone", label: "Phone", type: "tel", autoComplete: "tel" },
   { id: "company", label: "Company", autoComplete: "organization" },
   {
+    // TEAM DIRECTION, 2026-09-08: a text box rather than a dropdown, here and
+    // in the hero pop-up, which is the same form. No placeholder, so it reads
+    // like every other text field in the set rather than like a picker that
+    // lost its list.
     id: "services",
     label: "Services",
-    // A dropdown rather than a free-text box, drawn from the same list the
-    // homepage consultation form has always offered.
-    options: consultationServices,
-    placeholder: "Select a service",
     wide: true,
   },
   { id: "message", label: "Message", wide: true, textarea: true },
@@ -50,8 +55,6 @@ export const seoFormFields: FormField[] = [
   {
     id: "services",
     label: "Services you are interested in",
-    options: consultationServices,
-    placeholder: "Select a service",
     wide: true,
   },
   {

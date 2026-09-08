@@ -5,11 +5,10 @@ import { motion, useMotionValueEvent, useMotionValue, animate } from "motion/rea
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { Container } from "@/components/ui/Container";
 import { RouteLine } from "@/components/fx/Adornments";
-import { CaseMedia } from "@/components/case-studies/CaseMedia";
+import { CaseCard } from "@/components/case-studies/CaseCard";
 import { ArrowRight } from "@/components/ui/Button";
 import { routeExists } from "@/lib/sitemap";
-import { all, hasStory } from "@/content/case-studies";
-import { cn } from "@/lib/cn";
+import { all } from "@/content/case-studies";
 
 const CARD_GAP = 20;
 
@@ -33,7 +32,14 @@ const CARD_GAP = 20;
  *  EVERY CARD IS A LINK. Twenty-two case studies were being presented on
  *  thirty-six pages with nowhere to go; each one is now the entry to its own
  *  page. `hasStory` gates it, so a study with no page behind it stays an
- *  <article> with no hover state rather than promising one. */
+ *  <article> with no hover state rather than promising one.
+ *
+ *  THE CARD ITSELF LIVES IN `CaseCard` NOW. It was written out inline here,
+ *  and the archive on /case-studies had a second design of its own; team
+ *  direction on 2026-09-08 was that there is one case study card and it is
+ *  this one, so it moved to a component both pages call. Nothing about how it
+ *  looks changed: the markup moved as it stood, and the widths the carousel
+ *  needs are still set from here. */
 /** Reused on service pages, so the section index and DevTools label are
  *  parameterised. Defaults are the homepage's own values. */
 /** `ctaHref` is where the end card points.
@@ -100,9 +106,13 @@ export function Work({
             <p className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
               <span className="text-brand">({index})</span> The proof — {studies.length} client stories
             </p>
-            <h2 className="font-display display-xl font-extrabold uppercase text-snow">
+            {/* TEAM DIRECTION, 2026-09-08: h3, not h2, sitewide. The size is
+                unchanged -- display-xl still, exactly as before -- because the
+                instruction is about the document outline rather than about how
+                large the words are. */}
+            <h3 className="font-display display-xl font-extrabold uppercase text-snow">
               <Chars text="Summits reached." />
-            </h2>
+            </h3>
           </div>
           <Rise className="flex items-center gap-4">
             {/* The way out of the carousel. Guarded, because this section
@@ -148,77 +158,18 @@ export function Work({
             dragElastic={0.06}
             className="flex w-max cursor-grab items-stretch gap-5 active:cursor-grabbing"
           >
-            {studies.map((study) => {
-              const live = hasStory(study);
-              const Card = live ? "a" : "article";
-              return (
-                <Card
-                  key={study.slug}
-                  {...(live
-                    ? {
-                        href: `/case-studies/${study.slug}`,
-                        onClick: (e: React.MouseEvent) => {
-                          if (dragged.current) e.preventDefault();
-                        },
-                      }
-                    : {})}
-                  draggable={false}
-                  className={cn(
-                    "wk-card group relative flex w-[280px] shrink-0 flex-col overflow-hidden rounded-3xl border border-line bg-ink-2 transition-colors duration-500 sm:w-[300px]",
-                    live && "hover:border-brand/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-                  )}
-                >
-                  <div
-                    className="relative overflow-hidden"
-                    style={{ aspectRatio: `${study.thumb.w} / ${study.thumb.h}` }}
-                  >
-                    <CaseMedia
-                      figure={study.thumb}
-                      slot="compact"
-                      className={cn(
-                        "transition-transform duration-700 motion-reduce:transition-none",
-                        live && "group-hover:scale-105",
-                      )}
-                    />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink-2 to-transparent" />
-                    <span className="font-display absolute right-4 top-4 rounded-full bg-void/60 px-2.5 py-1 text-[10px] font-bold tabular-nums text-ash backdrop-blur-sm">
-                      {String(study.order + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col p-6 pt-4">
-                    <h3 className="font-display text-lg font-bold text-snow transition-colors duration-500 group-hover:text-brand motion-reduce:transition-none">
-                      {study.client}
-                    </h3>
-                    <p className="mt-2 line-clamp-3 min-h-[3.75rem] text-[13px] leading-snug text-fog">
-                      {study.title}
-                    </p>
-
-                    <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-line pt-5">
-                      {study.metrics.map((m) => (
-                        <div key={m.label}>
-                          <div className="font-display text-2xl font-extrabold leading-none tabular-nums text-brand">
-                            {m.value}
-                          </div>
-                          <div className="mt-1 line-clamp-3 text-[10.5px] leading-snug text-fog">
-                            {m.label}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {live && (
-                      <span className="mt-auto flex items-center gap-2.5 pt-5 text-[10px] font-semibold uppercase tracking-[0.1em] text-snow">
-                        Read the case study
-                        <span className="relative flex h-3 w-3 items-center justify-center overflow-hidden text-brand">
-                          <ArrowRight className="absolute h-2.5 w-2.5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3.5" />
-                          <ArrowRight className="absolute h-2.5 w-2.5 -translate-x-3.5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
-                        </span>
-                      </span>
-                    )}
-                  </div>
-                </Card>
-              );
-            })}
+            {studies.map((study) => (
+              <CaseCard
+                key={study.slug}
+                study={study}
+                position={study.order + 1}
+                slot="compact"
+                className="w-[280px] shrink-0 sm:w-[300px]"
+                onClick={(e) => {
+                  if (dragged.current) e.preventDefault();
+                }}
+              />
+            ))}
 
             {/* End card */}
             <a

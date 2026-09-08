@@ -23,6 +23,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/lead-generation/b2b-lead-generation";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -79,6 +80,11 @@ export function B2BLeadGenerationPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* What the service is, and the ten things a scope should state. The
             document writes that list as a specification -- "A clear B2B lead
@@ -206,7 +212,6 @@ export function B2BLeadGenerationPage() {
           stages={c.process.items.map((s) => ({ no: s.no, title: s.title, body: s.body }))}
         />
 
-
         {/* Twelve sectors, and the two the document actually works through.
             The caveat matters more than the list, so it is not buried under
             it. See SectorCases. */}
@@ -247,10 +252,10 @@ export function B2BLeadGenerationPage() {
             sentence prints twice. */}
         <GrowthCta
           id="cta"
-          label="Put Better Opportunities Into the Pipeline"
-          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
-          support={c.finalCta.body}
-          button={c.finalCta.primary}
+          label="Ready to Fill Your Pipeline With Qualified Leads"
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}

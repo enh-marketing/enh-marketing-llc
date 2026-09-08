@@ -51,17 +51,26 @@ export function Insights({
         </p>
 
         <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <h2 className="font-display display-xl font-extrabold uppercase text-snow">
+          {/* TEAM DIRECTION, 2026-09-08: two changes, both sitewide. h3 rather
+              than h2, the same heading-level change as Summits Reached in Work;
+              and the words are now "Our insights", replacing "Field notes from
+              the climb." which this section had carried since V3 was written.
+              The size is untouched -- display-xl still -- because the direction
+              was about the outline and the wording, not about scale. Note that
+              the eyebrow above already reads "Our insights", so the label and
+              the heading now say the same words; that is the wording the team
+              gave, kept as given. */}
+          <h3 className="font-display display-xl font-extrabold uppercase text-snow">
             <span className="block">
-              <Chars text="Field notes" />
+              <Chars text="Our" />
             </span>
             {/* Real space: the two spans otherwise concatenate in textContent
-                and the accessible name reads "Field notesfrom the climb." */}
+                and the accessible name reads "Ourinsights". */}
             {" "}
             <span className="block text-stroke">
-              <Chars text="from the climb." delay={0.15} />
+              <Chars text="insights" delay={0.15} />
             </span>
-          </h2>
+          </h3>
 
           {/* Only once the archive resolves. A link to a 404 is worse than no
               link, and "coming soon" is an announcement nobody asked for. */}

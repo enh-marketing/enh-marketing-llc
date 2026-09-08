@@ -21,6 +21,7 @@ import { CtaBand } from "@/components/service/CtaBand";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { AttributionRecord } from "@/components/service/AttributionRecord";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/performance-marketing/linkedin-ads";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -75,6 +76,11 @@ export function LinkedInAdsPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* The page's spine. The document sets four steps "in this order" and
             makes the third depend on the first two, so the section is drawn as

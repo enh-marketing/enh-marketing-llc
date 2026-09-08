@@ -24,6 +24,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/performance-marketing/meta-ads";
 
@@ -60,6 +61,11 @@ export function MetaAdsPage() {
           highlight={c.narrative.highlight}
           outro={[c.narrative.oneBudget]}
         />
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         <ComparisonTable
           id="comparison"

@@ -20,6 +20,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/seo/on-page-seo";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -73,6 +74,11 @@ export function OnPageSeoPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* Search visibility in three parts, argued by scale. Two of them are
             set small and grey because they are the two you cannot act on

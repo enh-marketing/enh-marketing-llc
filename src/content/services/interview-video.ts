@@ -241,6 +241,24 @@ export const faqs: Faq[] = [
  *  takes the heading and `body`, the closing CtaBand takes the heading and
  *  `note`. Only the heading appears in both, which is what a heading on two
  *  calls to action is for. */
+/** The mid-page CTA band.
+ *
+ *  TEAM COPY, 2026-09-08: supplied directly by the team, not taken from the
+ *  client document, so this page's CTA band and its source now differ on this
+ *  one point. Recorded here rather than silently, because the document is
+ *  otherwise the source of truth.
+ *
+ *  The heading is split across two lines only for typesetting: the second line
+ *  is the one set in brand. Heading and button are uppercased by CSS, so the
+ *  casing here does not reach the screen; the support line is not, and renders
+ *  exactly as written. */
+export const growthCta = {
+  heading: ["Ready to put your experts", "in front of the camera?"] as [string, string],
+  support:
+    "Capture Authentic, Broadcast Ready Interviews With Our Production Team",
+  button: "Connect With Interview Video Experts",
+};
+
 export const finalCta = {
   title: "Plan Your",
   strokeTitle: "Interview Video",
@@ -252,3 +270,22 @@ export const finalCta = {
 
 /** One standard set across the site; see content/forms.ts. */
 export { standardFormFields as formFields } from "@/content/forms";
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so "10 DAYS" is written here as the band already sets its units.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "100", unit: "+", label: "INTERVIEWS FILMED" },
+  { figure: "80", unit: "+", label: "EXECUTIVES FEATURED" },
+  { figure: "3M", unit: "+", label: "VIEWS DELIVERED" },
+  { figure: "10", unit: " Days", label: "EDIT TURNAROUND" },
+];

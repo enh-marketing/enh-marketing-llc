@@ -21,6 +21,7 @@ import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/video-marketing/event-video";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -77,6 +78,11 @@ export function EventVideoPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* Six occasions, each redrawing the same room. See VenueFloor for why
             this is a floor plan rather than a track. */}
@@ -183,10 +189,10 @@ export function EventVideoPage() {
             twice. */}
         <GrowthCta
           id="cta"
-          label="Tell Us What the Event Needs"
-          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
-          support={c.finalCta.body}
-          button={c.finalCta.primary}
+          label="Ready to Capture Your Next Big Event"
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}

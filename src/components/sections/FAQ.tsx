@@ -40,29 +40,39 @@ export function FAQ() {
             const isOpen = open === i;
             return (
               <div key={i} className="border-b border-line">
-                <button
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  aria-expanded={isOpen}
-                  aria-controls={`${panelBase}-${i}`}
-                  id={`${panelBase}-q-${i}`}
-                  className="flex w-full items-start gap-5 py-6 text-left"
-                >
-                  <span className="font-display mt-1 text-sm font-bold text-brand">
-                    0{i + 1}
-                  </span>
-                  <span className="font-display flex-1 text-lg font-bold leading-snug text-snow sm:text-xl">
-                    {f.q}
-                  </span>
-                  <span
-                    className={cn(
-                      "relative mt-1.5 h-4 w-4 shrink-0 transition-transform duration-300",
-                      isOpen && "rotate-45",
-                    )}
+              {/* TEAM DIRECTION, 2026-09-08: every FAQ question is an
+                  h3. The heading wraps the button rather than sitting
+                  inside it, which is the accordion pattern the ARIA
+                  practices describe: screen-reader users get the questions
+                  in the heading list AND keep the button semantics that
+                  open the answer. Tailwind's reset leaves h3 with no size,
+                  weight or margin of its own, so the span inside still
+                  decides how it looks and nothing moves. */}
+                <h3>
+                  <button
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    aria-controls={`${panelBase}-${i}`}
+                    id={`${panelBase}-q-${i}`}
+                    className="flex w-full items-start gap-5 py-6 text-left"
                   >
-                    <span className="absolute left-1/2 top-0 h-4 w-0.5 -translate-x-1/2 bg-snow" />
-                    <span className="absolute top-1/2 left-0 h-0.5 w-4 -translate-y-1/2 bg-snow" />
-                  </span>
-                </button>
+                    <span className="font-display mt-1 text-sm font-bold text-brand">
+                      0{i + 1}
+                    </span>
+                    <span className="font-display flex-1 text-lg font-bold leading-snug text-snow sm:text-xl">
+                      {f.q}
+                    </span>
+                    <span
+                      className={cn(
+                        "relative mt-1.5 h-4 w-4 shrink-0 transition-transform duration-300",
+                        isOpen && "rotate-45",
+                      )}
+                    >
+                      <span className="absolute left-1/2 top-0 h-4 w-0.5 -translate-x-1/2 bg-snow" />
+                      <span className="absolute top-1/2 left-0 h-0.5 w-4 -translate-y-1/2 bg-snow" />
+                    </span>
+                  </button>
+                </h3>
                 {/* Kept mounted while collapsed, so every answer is in the
                     served HTML rather than only the open one. Mirrors
                     service/FaqList.tsx exactly. */}

@@ -59,6 +59,11 @@ const collectionSchema = {
     })),
   },
 };
+
+// The newest study's thumbnail, which is also the first card on the page. It
+// used to come from `lead()`, the selector the removed lead-story section
+// shared, and that selector was this same `all()[0]`.
+const ogImage = c.all()[0]?.thumb.src;
 ---
 
 <Base
@@ -67,7 +72,7 @@ const collectionSchema = {
   canonical={HREF}
   ogTitle={c.meta.ogTitle}
   ogDescription={c.meta.ogDescription}
-  ogImage={c.lead()?.thumb.src}
+  ogImage={ogImage}
 >
   <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionSchema)} />
 

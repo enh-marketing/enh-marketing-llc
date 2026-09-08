@@ -19,6 +19,7 @@ import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/web-design-development/website-maintenance-support";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -88,6 +89,11 @@ export function WebsiteMaintenancePage() {
           team={c.opening.team}
           teamMark={c.opening.teamMark}
         />
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* Nine covered areas as one boundary rather than nine cards: a
             continuous line threading every station, each station drawn as the

@@ -23,6 +23,7 @@ import { StageStair } from "@/components/service/StageStair";
 import { SearchSurface } from "@/components/service/SearchSurface";
 import { SuitabilityBlock } from "@/components/service/SuitabilityBlock";
 import { ClaimWeights } from "@/components/service/ClaimWeights";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/social-media-marketing/tiktok-marketing";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -75,6 +76,11 @@ export function TikTokMarketingPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* Seven services, drawn as the loop they run in. The document says the
             work "creates a steady cycle of filming, publishing and learning",

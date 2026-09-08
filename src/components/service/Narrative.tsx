@@ -99,12 +99,36 @@ export function Narrative({
       if (useBlur) gsap.set(veil, { filter: "blur(2px)" });
       gsap.set(marks, { color: "var(--color-fog)" });
 
+      /* TEAM COMMENT, 2026-09-08: the decode finished far too late. It was
+         scrubbed from "top 82%" to "bottom 62%", which is the section's whole
+         height plus a bit -- 1143px on a 963px section -- and the question's
+         own word stagger stretched the timeline past the point where the
+         paragraph was still on screen. Measured: the sentence only reached full
+         contrast at the very end of the scrub, with its top 134px ABOVE the
+         viewport. A reader saw a half-resolved paragraph the entire time it was
+         in front of them.
+
+         Both ends are now measured from the section's top, so the window is a
+         fixed slice of viewport travel rather than something that grows with
+         the section. Every Narrative on the site therefore resolves at the same
+         point on screen, whatever its own height.
+
+         The window is deliberately short. One trigger drives the heading, the
+         question and the body, and those sit at different depths in the
+         section, so there is no setting that decodes all three exactly as each
+         one crosses the middle. It is tuned on the question, which is the
+         longest block and the one the comment was about: it now reaches full
+         contrast with its top around two thirds down the screen, and is
+         readable well before that. The body paragraph, further down the
+         section, is consequently resolved by the time it appears -- which is
+         the right way round for the one that has to be read rather than
+         watched. */
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: el, start: "top 82%", end: "bottom 62%", scrub: 0.7 },
+        scrollTrigger: { trigger: el, start: "top 88%", end: "top 35%", scrub: 0.6 },
       });
 
       tl.to(headWords, { yPercent: 0, duration: 0.22, stagger: 0.012, ease: "power2.out" }, 0)
-        .to(askWords, { opacity: 1, duration: 0.2, stagger: 0.02, ease: "none" }, 0.14);
+        .to(askWords, { opacity: 1, duration: 0.2, stagger: 0.009, ease: "none" }, 0.06);
 
       if (useBlur) {
         tl.to(veil, { filter: "blur(0px)", duration: 0.4, ease: "none" }, 0.3);

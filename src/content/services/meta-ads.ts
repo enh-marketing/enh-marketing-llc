@@ -339,3 +339,22 @@ export const growthCta = {
     "Reach Your Ideal Audience, Generate Quality Leads & Maximise Your ROI With High-Performance Meta Advertising",
   button: "Get a Free Meta Ads Audit",
 };
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so a unit is written here in the band's own casing.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "3.6", unit: "x", label: "ROAS ACHIEVED" },
+  { figure: "30", unit: "%", label: "LOWER COST PER ACQUISITION" },
+  { figure: "120M", unit: "+", label: "IMPRESSIONS DELIVERED" },
+  { figure: "15,000", unit: "+", label: "LEADS GENERATED" },
+];

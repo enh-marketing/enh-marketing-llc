@@ -22,6 +22,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/seo/ecommerce-seo";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -81,6 +82,11 @@ export function EcommerceSeoPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         {/* Eight areas of work, each pinned to the part of the store it acts
             on. The drawing is the store itself; see StoreArchitecture for why
@@ -181,10 +187,10 @@ export function EcommerceSeoPage() {
             sentence prints twice. */}
         <GrowthCta
           id="cta"
-          label="Give More Products a Clear Route Into Search"
-          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
-          support={c.finalCta.body}
-          button={c.finalCta.primary}
+          label="Ready to Turn Search Traffic Into Sales"
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}

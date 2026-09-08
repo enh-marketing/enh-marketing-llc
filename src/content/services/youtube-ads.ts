@@ -224,3 +224,22 @@ export const growthCta = {
     "Reach Your Ideal Audience, Drive More Video Engagement & Generate Quality Leads With High-Performance YouTube Ads",
   button: "Get Your YouTube Ads Plan",
 };
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so a unit is written here in the band's own casing.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "8M", unit: "+", label: "VIDEO VIEWS" },
+  { figure: "28", unit: "%", label: "VIEW THROUGH RATE" },
+  { figure: "25", unit: "%", label: "LOWER COST PER VIEW" },
+  { figure: "1.8", unit: "x", label: "BRAND SEARCH LIFT" },
+];

@@ -91,7 +91,7 @@ export function InsightsMasthead({
 
             {/* Real whitespace between the spans: they are block, so it never
                 renders, but without it textContent runs the two halves together
-                and the accessible name reads "Field notesfrom the climb." */}
+                and the accessible name reads "Ourinsights". */}
             <h1 className="font-display display-xl font-extrabold uppercase text-snow">
               <span className="block">
                 <Chars text={masthead.title} immediate />

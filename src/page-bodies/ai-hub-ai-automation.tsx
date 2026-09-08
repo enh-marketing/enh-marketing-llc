@@ -128,8 +128,6 @@ export function AiAutomationPage() {
               lead={c.diagnostic.lead}
               coversLead={c.diagnostic.coversLead}
               observe={c.diagnostic.observe}
-              verdict={c.diagnostic.verdict}
-              proposal={c.diagnostic.proposal}
               terms={c.diagnostic.terms}
             />
           </Container>

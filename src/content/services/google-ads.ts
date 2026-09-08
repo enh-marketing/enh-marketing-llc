@@ -31,16 +31,26 @@ export const meta = {
 
 export const hero = {
   lines: ["Google Ads", "Agency", "in Dubai"] as [string, string, string],
-  /** The document's opening sentence, and the page's whole problem. */
-  sub: "A Google Ads account can spend steadily for months and still be difficult to judge.",
-  primary: "Request a Quote",
-  secondary: "Get a Free Account Audit",
+  /** REVISED DOC, "Google Ads (1).docx", 2026-09-08: the banner now has a
+   *  sub-line of its own. It used to borrow the first sentence of the opening
+   *  paragraph, because the earlier draft gave the banner no sub at all; that
+   *  sentence has gone back to the opening section where it belongs. */
+  sub: "Reach people actively searching for your products or services with campaigns built around relevant traffic, qualified leads and measurable sales.",
+  primary: "Get a Free Google Ads Audit",
+  secondary: "Talk to a Google Ads Specialist",
 };
 
-/** The opening. The document gives this stretch no heading of its own, so the
- *  section carries none: the thesis is set as the statement and the two
- *  paragraphs that follow it are the document's own, in its order. */
+/** The opening.
+ *
+ *  REVISED DOC, "Google Ads (1).docx", 2026-09-08: this stretch now has a
+ *  heading of its own and a pair of calls to action after it. The earlier draft
+ *  had neither, which is why the section was built headless and why its first
+ *  sentence was being used as the banner's sub-line. Both are corrected. */
 export const opening = {
+  title: "Turn High Intent Searches",
+  strokeTitle: "Into Business",
+  /** The opening sentence, back from the banner where it was standing in. */
+  lead: "A Google Ads account can spend steadily for months and still be difficult to judge.",
   /** The rest of the document's first paragraph. */
   statement:
     "The reports show clicks and conversions, the numbers move a little each week, and nobody can say clearly which part of the budget is producing customers.",
@@ -64,6 +74,9 @@ export const opening = {
    *  them, because that is how the document writes them. */
   terms:
     "Your ad account stays in your name, and our management fee is shown separately from ad spend. Before work begins, we will also tell you whether the available budget gives the campaign a fair chance to perform.",
+  /** The two the revision puts after this section. */
+  primary: "Request a Quote",
+  secondary: "Get a Free Account Audit",
   termsMark: [
     "stays in your name",
     "shown separately from ad spend",
@@ -160,6 +173,11 @@ export const afterClick = {
     "the offer on the page simply does not match the one in the ad",
   ],
   /** The auction. Three inputs, one price, and the document names all three. */
+  /** The sentence the document's auction paragraph opens on. It was lost when
+   *  that paragraph was split into a lead, three items and a tail: the lead is
+   *  set as a small label and this does not belong inside a label, so it needs
+   *  a line of its own. It is why the auction is in this section at all. */
+  auctionCost: "There is also a cost effect.",
   auctionLead: "Google evaluates three things in the ad auction:",
   auction: [
     "how likely your ad is to be clicked",
@@ -514,12 +532,34 @@ export const faqs: Faq[] = [
   },
 ];
 
+/** The mid-page CTA band.
+ *
+ *  TEAM COPY, 2026-09-08: supplied directly by the team, not taken from the
+ *  client document, so this page's CTA band and its source now differ on this
+ *  one point. Recorded here rather than silently, because the document is
+ *  otherwise the source of truth.
+ *
+ *  The heading is split across two lines only for typesetting: the second line
+ *  is the one set in brand. Heading and button are uppercased by CSS, so the
+ *  casing here does not reach the screen; the support line is not, and renders
+ *  exactly as written. */
+export const growthCta = {
+  heading: ["Ready to turn clicks", "into customers?"] as [string, string],
+  support:
+    "Maximise ROI, Leads & Conversions With Our Google Ads Experts",
+  button: "Connect With Dubai's Google Ads Experts",
+};
+
 export const finalCta = {
   title: "Start With",
   strokeTitle: "an Account Audit",
-  /** Two routes in, and the document writes one for each. The first pairs with
-   *  the audit and carries the converging CTA band; the second pairs with the
-   *  quote and carries the form. Each sentence appears once on the page. */
+  /** Two routes in, and the document writes one for each. Both belong to this
+   *  section: the revision keeps them together under "Start With an Account
+   *  Audit" and no longer specifies button labels for it, so the submit and
+   *  WhatsApp labels below are retained from the earlier draft because a form
+   *  still needs one. `running` briefly moved up to the CTA band while that
+   *  band had no copy of its own; the team supplied copy for it on 2026-09-08,
+   *  so this sentence is back where the document puts it. */
   runningMark: "where budget is being lost",
   running:
     "Already running Google Ads? An account audit can show where budget is being lost and what should change first. You keep the findings even if you decide to stay with your current agency.",
@@ -532,3 +572,22 @@ export const finalCta = {
 
 /** One standard set across the site; see content/forms.ts. */
 export { standardFormFields as formFields } from "@/content/forms";
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so a unit is written here in the band's own casing.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "4.0", unit: "x", label: "ROAS ACHIEVED" },
+  { figure: "28", unit: "%", label: "LOWER COST PER LEAD" },
+  { figure: "35", unit: "+", label: "ACCOUNTS MANAGED" },
+  { figure: "450K", unit: "+", label: "AD SPEND MANAGED" },
+];

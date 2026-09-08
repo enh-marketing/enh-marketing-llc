@@ -397,6 +397,24 @@ export const faqs: Faq[] = [
   },
 ];
 
+/** The mid-page CTA band.
+ *
+ *  TEAM COPY, 2026-09-08: supplied directly by the team, not taken from the
+ *  client document, so this page's CTA band and its source now differ on this
+ *  one point. Recorded here rather than silently, because the document is
+ *  otherwise the source of truth.
+ *
+ *  The heading is split across two lines only for typesetting: the second line
+ *  is the one set in brand. Heading and button are uppercased by CSS, so the
+ *  casing here does not reach the screen; the support line is not, and renders
+ *  exactly as written. */
+export const growthCta = {
+  heading: ["Ready to fill your pipeline", "with qualified leads?"] as [string, string],
+  support:
+    "Attract, Qualify & Convert High Intent B2B Leads With Our Lead Generation Experts",
+  button: "Connect With B2B Lead Gen Experts",
+};
+
 export const finalCta = {
   title: "Put Better Opportunities",
   strokeTitle: "Into the Pipeline",
@@ -408,3 +426,22 @@ export const finalCta = {
 
 /** One standard set across the site; see content/forms.ts. */
 export { standardFormFields as formFields } from "@/content/forms";
+
+/** The four proof figures, in the band the Performance Marketing page carries.
+ *
+ *  TEAM-SUPPLIED, 2026-09-08, from "ENH updates.docx": the team asked for this
+ *  page to run the same section with these numbers. They are NOT in this
+ *  page's own source document, and nothing on the site can check them, so
+ *  they are recorded here as given and dated.
+ *
+ *  Figures and labels are the document's own strings. The one edit is unit
+ *  casing, which is typography rather than copy: the document is set in caps
+ *  throughout, so a unit is written here in the band's own casing.
+ *  The unit carries the brand accent, the value never does, which is why the
+ *  two are separate fields. */
+export const resultStats = [
+  { figure: "4,000", unit: "+", label: "QUALIFIED LEADS" },
+  { figure: "22", unit: "%", label: "MEETING BOOK RATE" },
+  { figure: "25", unit: "%", label: "LOWER COST PER SQL" },
+  { figure: "15", unit: "+", label: "INDUSTRIES SERVED" },
+];

@@ -74,6 +74,7 @@ export function ClickCircuit({
   statement,
   symptom,
   symptomStages,
+  auctionCost,
   auctionLead,
   auction,
   auctionTail,
@@ -91,6 +92,7 @@ export function ClickCircuit({
   symptom: string;
   /** Verbatim substrings of `symptom`, one per gate on the page. */
   symptomStages: string[];
+  auctionCost: string;
   auctionLead: string;
   auction: string[];
   auctionTail: string;
@@ -351,7 +353,8 @@ export function ClickCircuit({
                 <p className="text-base leading-relaxed text-fog sm:text-lg">{captioned()}</p>
 
                 <div className="mt-8 border-t border-line pt-7">
-                  <p className="font-display text-sm font-extrabold uppercase tracking-wide text-snow">
+                  <p className="leading-relaxed text-fog sm:text-lg">{auctionCost}</p>
+                  <p className="font-display mt-5 text-sm font-extrabold uppercase tracking-wide text-snow">
                     {auctionLead}
                   </p>
                   <ol className="mt-4">

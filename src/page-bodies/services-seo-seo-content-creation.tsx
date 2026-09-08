@@ -18,6 +18,7 @@ import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/seo/seo-content-creation";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -75,6 +76,11 @@ export function SeoContentCreationPage() {
           </Rise>
         </Narrative>
 
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
+
         {/* The five kinds of content, on the same layout the formats section
             uses: one named selector above, the drawing beside the panel, the
             pins on the drawing as indicators, and every body stacked below the
@@ -130,15 +136,14 @@ export function SeoContentCreationPage() {
           tailMark={c.promises.tailMark}
         />
 
-        {/* The same growth CTA every other service page carries. The document
-            supplies one CTA block, so this takes its heading, its ask and its
-            primary label; the form band at the foot takes the document's other
-            CTA line as its body, so the two are not word-for-word identical.
-            A distinct heading here would have to come from the client. */}
+        {/* The same growth CTA every other service page carries. It used to
+            borrow the document's single CTA block, which meant its heading was
+            the same one the form band at the foot carries; the team supplied a
+            distinct one on 2026-09-08, so the two no longer share a heading. */}
         <GrowthCta
-          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
-          support={c.finalCta.body}
-          button={c.finalCta.primary}
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.narrative.primary}

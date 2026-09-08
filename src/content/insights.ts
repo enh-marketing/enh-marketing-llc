@@ -178,15 +178,10 @@ export function topics(list: Note[] = all()): { label: string; count: number }[]
     .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 }
 
-/** Notes grouped by calendar year, newest year first — the register's spine. */
-export function byYear(list: Note[]): { year: string; notes: Note[] }[] {
-  const groups = new Map<string, Note[]>();
-  for (const n of [...list].sort((a, b) => b.date.localeCompare(a.date))) {
-    const year = n.date.slice(0, 4);
-    groups.set(year, [...(groups.get(year) ?? []), n]);
-  }
-  return [...groups].map(([year, notes]) => ({ year, notes }));
-}
+/* TEAM DIRECTION, 2026-09-08: `byYear` is gone. It grouped notes into calendar
+ * years, newest first, for the register's year rows; those rows were removed
+ * and every note is in one grid, so the grouping had no caller left. `all()`
+ * already returns the archive newest first, which is the order the grid needs. */
 
 /** "2 April 2026". Fixed to en-GB and UTC on purpose: Intl formats in the
  *  runtime's own locale and zone otherwise, so the same note rendered on the
@@ -375,9 +370,10 @@ export function matches(note: Note, query: string): boolean {
 // and the closing ask: the words that describe the archive rather than words
 // taken from inside it. Nothing here claims anything about a note.
 //
-// "Field notes from the climb" is not new. It is the heading the homepage's
-// Insights section has carried since V3 was written, and this page is that
-// section's destination, so the reader arrives at the phrase they clicked.
+// TEAM DIRECTION, 2026-09-08: the masthead reads "Our insights". It used to
+// read "Field notes from the climb", the phrase the homepage's Insights section
+// had carried since V3 was written; that section was renamed in the same pass,
+// so the reader still arrives at the words they clicked.
 
 export const meta = {
   title: "Insights | ENH Marketing, Dubai",
@@ -392,8 +388,8 @@ export const masthead = {
   /** Solid / brand, matching every section heading on the site. The hero
    *  three-line tri-tone belongs to the service pages; this page is an archive
    *  and its masthead sits one step below theirs. */
-  title: "Field notes",
-  strokeTitle: "from the climb.",
+  title: "Our",
+  strokeTitle: "insights",
   /** One factual sentence about the archive. It describes the shape of the
    *  collection and makes no claim about any note in it. */
   sub: "What we have learned building search, paid media and AI systems for brands across the UAE — written down as we go, newest first.",
@@ -406,8 +402,12 @@ export const masthead = {
 export const register = {
   index: "01",
   title: "The register",
-  strokeTitle: "by year.",
-  lede: "The whole archive, grouped by the year each note was written.",
+  /* TEAM DIRECTION, 2026-09-08: it read "by year." over the lede "The whole
+   * archive, grouped by the year each note was written." The year rows were
+   * removed in the same pass, so both sentences described a page that no
+   * longer existed. */
+  strokeTitle: "in full.",
+  lede: "The whole archive in one place, newest note first.",
   /** The topic rail's label. Named for what the chips actually are — the topic
    *  each note was filed under — rather than for a taxonomy we do not have. */
   topicLabel: "Filed under",

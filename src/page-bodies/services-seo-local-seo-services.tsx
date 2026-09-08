@@ -22,6 +22,7 @@ import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
+import { ResultStats } from "@/components/service/ResultStats";
 
 const HREF = "/services/seo/local-seo-services";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
@@ -78,6 +79,11 @@ export function LocalSeoServicesPage() {
             </a>
           </Rise>
         </Narrative>
+
+        {/* TEAM DIRECTION, 2026-09-08: the Performance Marketing results band, on
+            this page too, in the same position -- straight after the opening
+            story -- with this page's own four figures. */}
+        <ResultStats id="results" label="Results" stats={c.resultStats} />
 
         <PinnedExplorer
           id="services"
@@ -189,9 +195,9 @@ export function LocalSeoServicesPage() {
             the heading and the longer recommendation, so no sentence prints
             twice. */}
         <GrowthCta
-          heading={[c.finalCta.title, c.finalCta.strokeTitle]}
-          support={c.finalCta.body}
-          button={c.finalCta.primary}
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
           formTitle={FORM_TITLE}
           formFields={c.formFields}
           formSubmitLabel={c.finalCta.primary}

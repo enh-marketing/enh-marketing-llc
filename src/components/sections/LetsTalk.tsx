@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "motion/react";
-import { brand, consultationServices } from "@/lib/content";
+import { brand } from "@/lib/content";
 import { Chars, Rise } from "@/components/fx/Reveal";
 import { Container } from "@/components/ui/Container";
 import { SpinStar } from "@/components/fx/Adornments";
 import {
   Field,
-  SelectField,
   TextareaField,
   ConsentField,
   SubmitButton,
@@ -178,11 +177,12 @@ export function LetsTalk() {
                       <Field id="lt-email" label="Email" type="email" autoComplete="email" required />
                       <Field id="lt-phone" label="Phone" type="tel" autoComplete="tel" required />
                       <Field id="lt-company" label="Company" autoComplete="organization" />
-                      <SelectField
+                      {/* TEAM DIRECTION, 2026-09-08: a text box, not a
+                          dropdown. Matches the service pages, whose shared
+                          field set changed at the same time. */}
+                      <Field
                         id="lt-service"
                         label="Services"
-                        placeholder="Select a service"
-                        options={consultationServices}
                         required
                         className="sm:col-span-2"
                       />

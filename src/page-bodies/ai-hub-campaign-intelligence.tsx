@@ -177,7 +177,6 @@ export function CampaignIntelligencePage() {
             <DecisionField
               left={c.helps.left}
               right={c.helps.right}
-              closing={c.helps.closing}
               plan={c.helps.plan}
               beginsLabel={c.helps.beginsLabel}
               findings={c.helps.findings}

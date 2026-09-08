@@ -45,11 +45,21 @@ export type Stage = { no: string; title: string; body: string };
 
 const TAU = Math.PI * 2;
 
+/** Round before anything reaches JSX.
+ *
+ *  Node and the browser do not always print the same double the same way, so a
+ *  raw trig result rendered on the server as 50.880799123160756 can come back
+ *  from the client as 50.88079912316077. React sees two different attribute
+ *  values, reports a hydration mismatch and stops patching the tree -- which
+ *  costs the whole route its hydration, not just this drawing. Three decimals
+ *  is far more precision than a 320-unit viewBox can show. */
+const r3 = (n: number) => Math.round(n * 1000) / 1000;
+
 /** The site's own pages, on a ring around it. Six exist from the start; the
  *  last two are built at stage four, which is the stage that says so. */
 const PAGES = Array.from({ length: 8 }, (_, i) => {
   const a = (i / 8) * TAU - Math.PI / 2;
-  return { x: 160 + 78 * Math.cos(a), y: 160 + 78 * Math.sin(a), builtAt: i < 6 ? 0 : 3 };
+  return { x: r3(160 + 78 * Math.cos(a)), y: r3(160 + 78 * Math.sin(a)), builtAt: i < 6 ? 0 : 3 };
 });
 
 /** Which of them the audit finds a fault on, and which stage repairs it. */
@@ -58,13 +68,13 @@ const FAULTS = [1, 4, 6];
 /** What the research finds outside the site: demand that has no page yet. */
 const TARGETS = Array.from({ length: 6 }, (_, i) => {
   const a = ((i + 0.5) / 6) * TAU - Math.PI / 2;
-  return { x: 160 + 126 * Math.cos(a), y: 160 + 126 * Math.sin(a) };
+  return { x: r3(160 + 126 * Math.cos(a)), y: r3(160 + 126 * Math.sin(a)) };
 });
 
 /** And what points at the site from outside it. */
 const OFFSITE = Array.from({ length: 4 }, (_, i) => {
   const a = ((i + 0.5) / 4) * TAU - Math.PI / 2;
-  return { x: 160 + 148 * Math.cos(a), y: 160 + 148 * Math.sin(a) };
+  return { x: r3(160 + 148 * Math.cos(a)), y: r3(160 + 148 * Math.sin(a)) };
 });
 
 function SiteGraph({ stage }: { stage: number }) {
