@@ -91,11 +91,14 @@ export const GLOW = {
  *  appearing inside the light the first one was holding. It settles onto the
  *  first camera stop from there.
  *
- *  Only just above. Starting it a seventh of a viewport up left the star out of
- *  frame for the first 135px of the chapter, which is a stretch of scrolling
- *  with nothing to look at; from here it is over the edge and coming down
- *  almost at once. */
-export const ENTRY_FOCUS = { x: 0.484, y: -0.05 };
+ *  JUST INSIDE THE FRAME, NOT ABOVE IT. `focus` is the camera centre, so this
+ *  places the whole scene, not only the star: lifting it above the top edge
+ *  took the system up with it and hid the star until two or three turns of the
+ *  wheel had gone by. It sits a twentieth of a viewport down instead, which is
+ *  below the top edge by more than the star's own drawn radius, so the star is
+ *  whole and in view the moment the scene appears and still has the length of
+ *  the arrival to come down into place. */
+export const ENTRY_FOCUS = { x: 0.484, y: 0.05 };
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const between = (v: number, a: number, b: number) => clamp((v - a) / (b - a || 1), 0, 1);
