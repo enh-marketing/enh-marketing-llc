@@ -120,22 +120,23 @@ const STOPS: Stop[] = [
   // Campaign Intelligence. Same camera again. The planets go and the Sun
   // steps onto the chart.
   //
-  // THE DRIFT STAYS HIGH HERE, and dropping it was a mistake worth recording.
-  // Easing it off shortened the Sun's track to something that fit the frame,
-  // which is what the chart wanted, but the drift is also the only thing
-  // holding the planets' paths straight: lower it and the orbits come back and
-  // the frame fills with loops again, at precisely the moment the reader is
-  // looking at it. The chart solves its own length instead, by retracting along
-  // the line rather than asking the scene to be shorter.
+  // AND THE DRIFT COMES BACK DOWN, once the planets it was straightening have
+  // gone. Held at 7 it empties the sky: the whole star field streams along the
+  // course, and at that speed it leaves the frame faster than the component
+  // recycles it, so the stars pile into a strip down one edge and the rest is
+  // flat black. Measured over the top third of the frame it is the difference
+  // between a sky and a margin. Nothing is lost by easing it here, because the
+  // planets are already fading out across this same stretch and the chart no
+  // longer depends on the Sun's track at all.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: 0.6,
-    trailYears: 5, maxTurns: 6, fade: 0 },
+    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
+    trailYears: 2.6, maxTurns: 3, fade: 0 },
   // Data & Dashboards. Identical again. The chart runs across both of these
   // two stops rather than one, so the Sun has the room to draw a shape with
   // two falls in it and a category to read at each end of the climb.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: 0.6,
-    trailYears: 5, maxTurns: 6, fade: 0 },
+    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
+    trailYears: 2.6, maxTurns: 3, fade: 0 },
 ];
 
 /** Where the chart runs, in chapter progress. Five gaps between six stops, and
@@ -355,6 +356,23 @@ export function System({
          says it is, and the scatter would open out of the wrong point. It is
          also the second thing moving the camera in a stretch where the camera
          is supposed to be still. */
+      /* A DENSER SKY, SET ONCE AT MOUNT. The default 1500 reads as almost
+         nothing here: measured over the top third of the frame, where no
+         planet or chart reaches, it puts 232 lit samples on a canvas of half a
+         million pixels, a mean level of 0.03 out of 255. That was survivable
+         while the frame was full of orbits and it is not once the planets have
+         gone and the chart is the only thing left, which is exactly where it
+         was noticed.
+         It has to be a constant. The component seeds its stars in buildStars,
+         which is only ever called from its resize handler, and that returns
+         early when the box has not changed size, so a starCount raised later
+         does nothing at all. There is no brightness prop for them either, so
+         count is the only lever. */
+      /* Its own sky is left at its default. The page draws the field it
+         actually relies on in hub/Starfield, screened over the top rather than
+         placed behind, because this component takes its context with
+         `alpha: false` and its canvas is therefore opaque no matter what sits
+         behind it or what background its host is given. */
       interactive={false}
       /* Handed over the moment the chart appears. The chart draws the identical
          line on its first frame, so nothing moves at the swap; leaving both on

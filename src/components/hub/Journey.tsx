@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ComponentType } from "react";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { AccentedTitle } from "@/components/hub/AccentedTitle";
+import { Starfield } from "@/components/hub/Starfield";
 import type { Beat } from "@/content/ai-hub";
 
 /** The chapter machine.
@@ -184,6 +185,26 @@ export function Journey({
             </div>
           ) : null,
         )}
+
+        {/* ONE SKY, OVER THE CHAPTERS RATHER THAN BEHIND THEM, AND ADDED
+            RATHER THAN LAID ON TOP. Behind is where it belongs and behind is
+            where it cannot be seen: the orbital component takes its drawing
+            context with `alpha: false`, so its canvas is opaque whatever the
+            element behind it holds and whatever background its host div is
+            given. Screen blending gets the same result from the other side.
+            The stars only ever add light, so they show through the black and
+            disappear into anything already bright, which is why none of them
+            ever appears to sit in front of the Sun.
+
+            It is above the scenes and below the copy, so nothing it does can
+            touch legibility. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-[5]"
+          style={{ mixBlendMode: "screen" }}
+        >
+          <Starfield />
+        </div>
 
         {/* The story. Every beat of the leading chapter stays mounted and
             fades, so none of them remount as the reader moves. */}
