@@ -4,6 +4,8 @@ import { Journey, type Chapter } from "@/components/hub/Journey";
 import { Ascent } from "@/components/hub/Ascent";
 import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
+import { OpeningLine } from "@/components/hub/OpeningLine";
+import { ForegroundEcho } from "@/components/hub/ForegroundEcho";
 import { horizon, system } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
@@ -44,6 +46,14 @@ export function AiHubPage() {
     <main>
       <Ascent />
       <Journey chapters={CHAPTERS} beatWindow={{ hold: 0.035, ramp: 0.06 }} />
+      {/* THE OPENING LINE AND THE THING THAT PUTS IT BEHIND THE MAN, in that
+          order, because the second has to paint over the first. Both are fixed
+          to the window and belong to neither block: the line starts over the
+          photograph and leaves through the top of the system, and the echo is
+          a copy of the opener's near ground that gives it back the depth it
+          loses by not being inside the parallax stack. */}
+      <OpeningLine />
+      <ForegroundEcho />
     </main>
   );
 }

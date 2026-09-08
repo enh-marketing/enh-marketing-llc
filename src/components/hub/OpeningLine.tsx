@@ -5,66 +5,56 @@ import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { WordReveal, clamp, wordLit, wordStyle } from "@/components/hub/WordReveal";
 import { ascent, ASCENT_HANDOVER } from "@/content/ai-hub";
 
-/** The opening line. One element, inside the parallax stack, behind the man.
+/** The opening line. One element, from the mountain to the top of the system.
  *
- *  IT LIVES IN THE STACK, AND THAT IS THE WHOLE POINT. Two earlier versions did
- *  not and both were wrong in the same way. Fixed to the window it could travel
- *  anywhere, but it was painted after the photograph and so stood in front of
- *  the figure, which is not depth, it is a caption. Split into a hero line and
- *  a matching one in the system chapter, nothing travelled at all: a second
- *  line simply appeared in the middle of the frame. As a layer between the
- *  mountain and the foreground it is occluded by the near ground and the man
- *  exactly as the rest of the picture is, because the foreground layer is
- *  drawn after it, and it is one element for the whole of its journey.
+ *  IT IS OUT OF THE PARALLAX STACK AGAIN, AND THE FOREGROUND CAME WITH IT.
+ *  Inside the stack the man occluded the words properly, which was the point,
+ *  but the stack is one viewport tall and clips: the line could never reach the
+ *  second section, and by the time that section was on screen the only part of
+ *  the opener left in the window was the near ground, so the line was hidden
+ *  rather than travelling. The two halves of what this has to do were the same
+ *  choice made in opposite directions.
  *
- *  THE RATE IS DERIVED, NOT PICKED. ParallaxLayers scrubs `yPercent` linearly
- *  from a trigger that starts with the stage's top at the window's top and ends
- *  with its bottom there, so over a viewport-high stage the progress is exactly
- *  scrollY / vh, and a layer at rate T has moved down T per cent of a viewport
- *  by the end. With the line starting at REST_Y of the frame, its position on
- *  screen is
+ *  So the line is fixed to the window, which lets it go wherever the story
+ *  needs, and hub/ForegroundEcho draws a second copy of the opener's near
+ *  ground over the top of it. Depth is restored by putting the photograph back
+ *  in front rather than by putting the words behind it, and the copy is
+ *  measured off the real layer on GSAP's ticker rather than recomputed, so the
+ *  two cannot fall a frame apart. The cost is one extra full-screen paint while
+ *  the opener is on screen, and only while it is on screen.
  *
- *      y = REST_Y - p + p * T/100        (in viewports)
+ *  THE MOVE, in viewports of scroll:
  *
- *  Two things are wanted from T and there is exactly one that gives both. The
- *  line must leave through the top of the frame just as the second section
- *  takes over, y(1) = 0, which needs T = 100 * (1 - REST_Y). And it must never
- *  be cut off, which means staying inside the stage the whole way: its distance
- *  down the stage is REST_Y + T/100, and that must not pass 1. The first makes
- *  the second an equality, so the line finishes flush with the bottom edge of
- *  the stage at the same moment it reaches the top of the window. At
- *  REST_Y 0.46 that is T = 54.
+ *    0 to SETTLE     it travels. It holds near the middle of the window while
+ *                    the photograph climbs away behind it, so the near ground
+ *                    and the man pass across the words, and it is left standing
+ *                    in the space the journey has opened underneath.
+ *    TURN_FROM       the last word turns over: Us rolls up and out, AI rises
+ *                    into its place. It happens here, at rest and in open
+ *                    black, because this is the one stretch where the line is
+ *                    not being crossed by anything.
+ *    RISE_FROM/TO    it climbs and leaves through the top of the frame, the way
+ *                    the orbital scene's own light arrives from it.
  *
- *  WHAT THIS COSTS, and it is worth saying plainly rather than letting it be
- *  discovered: a line inside the stage cannot also fall to the middle of the
- *  second section and wait there. The stage is one viewport tall and clips, so
- *  anything that travels far enough to sit in the next section's centre has
- *  left the box that the man is drawn in, and nothing can occlude it any more.
- *  Being behind the figure and settling in the next section are the same
- *  choice made two ways. This build takes the first.
- *
- *  THE WORD STILL TURNS OVER, on the way up rather than at rest: Us rolls out
- *  and AI rises into its place while the line is still well inside the frame,
- *  so the change is read before the line goes. */
+ *  It has to be gone before 01. That beat sits at 0.2 of a ten-viewport chapter
+ *  and lights from 0.14, which is 1.4 viewports past the track's top and so 2.4
+ *  viewports of scroll. Clear of the frame by 2.15 leaves a gap. */
 
-/** Where the line sits in the frame before any scrolling, 0 to 1. */
-export const REST_Y = 0.46;
-/** The rate that follows from it. Both are exported so Ascent cannot drift. */
-export const LINE_RATE = Math.round(100 * (1 - REST_Y));
+/** Where the line rests before any scrolling, as a fraction of the window. */
+const REST_Y = 0.46;
+/** Where it comes to rest once the photograph has gone. */
+const SETTLE_Y = 0.5;
+/** Where it has climbed to by the time it is done, safely off the top. */
+const EXIT_Y = -0.3;
 
-/** When the last word turns over, in viewports of scroll.
- *
- *  IT HAS TO BE OVER BEFORE THE RIDGE TAKES THE LINE. This is the cost of
- *  sitting behind the foreground: the near ground climbs the window as the
- *  block leaves, and from about 0.45 it is across the lower of the two lines,
- *  which is where the last word is. Turning the word at 0.3 to 0.55, as the
- *  first attempt did, played the whole change underneath the ground where
- *  nothing could be read. Measured on screen the line is clear of the ridge
- *  through 0.36, so the turn runs from 0.14 and is finished by then. */
-const SWAP_FROM = 0.14;
-const SWAP_OVER = 0.22;
+const SETTLE = 1.05;
+const TURN_FROM = 1.2;
+const TURN_OVER = 0.28;
+const RISE_FROM = 1.62;
+const RISE_TO = 2.15;
 
 const smooth = (x: number) => x * x * (3 - 2 * x);
+const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 
 const opener = ascent[0];
 
@@ -112,10 +102,6 @@ export function OpeningLine() {
     };
   }, [reduced]);
 
-  /* THE ONLY THING SCROLL IS READ FOR IS THE WORD. Where the line is on screen
-     is GSAP's business, on the same timeline and the same ticker as the rest of
-     the picture, so there is nothing here that can drift against the mountain.
-     This listener decides one thing: whether the sentence says Us or AI. */
   useEffect(() => {
     if (reduced) return;
     const onScroll = () => setK(window.scrollY / Math.max(1, window.innerHeight));
@@ -128,17 +114,39 @@ export function OpeningLine() {
     };
   }, [reduced]);
 
-  const introP = reduced ? 1 : intro;
-  const swap = reduced ? 0 : smooth(clamp((k - SWAP_FROM) / SWAP_OVER));
+  /* REDUCED MOTION GETS THE LINE, NOT THE JOURNEY. Absolute inside the opener
+     rather than fixed, so it scrolls away with the photograph like ordinary
+     copy, at rest, on its first words, with nothing turning over. */
+  if (reduced) {
+    return (
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex h-screen flex-col items-center justify-center px-6 text-center">
+        <Eyebrow opacity={1} />
+        <Line p={1} swap={0} />
+      </div>
+    );
+  }
+
+  const settled = smooth(clamp(k / SETTLE));
+  const risen = smooth(clamp((k - RISE_FROM) / (RISE_TO - RISE_FROM)));
+  const y = mix(mix(REST_Y, SETTLE_Y, settled), EXIT_Y, risen);
+  const swap = smooth(clamp((k - TURN_FROM) / TURN_OVER));
+
+  /* Above the top of the window and climbing: there is nothing left to draw,
+     and the beats of the first category are about to want the frame. */
+  if (k > RISE_TO) return null;
 
   return (
-    <div className="absolute inset-x-0 px-6 text-center" style={{ top: `${REST_Y * 100}%`, transform: "translateY(-50%)" }}>
-      {/* The label goes as the line starts to climb: it belongs to the
+    <div
+      aria-hidden={k > RISE_FROM}
+      className="pointer-events-none fixed inset-x-0 z-30 flex flex-col items-center justify-center px-6 text-center"
+      style={{ top: `${y * 100}%`, transform: "translateY(-50%)" }}
+    >
+      {/* The label goes as the line starts to travel: it belongs to the
           photograph, not to the sentence. It travels with the line rather than
           sitting in its own layer because laid out separately the two collided,
           and the label printed through the middle of the heading. */}
-      <Eyebrow opacity={reduced ? 1 : 1 - clamp(k / 0.35)} />
-      <Line p={introP} swap={swap} />
+      <Eyebrow opacity={1 - clamp(k / 0.35)} />
+      <Line p={intro} swap={swap} />
     </div>
   );
 }
@@ -192,13 +200,22 @@ function Line({ p, swap }: { p: number; swap: number }) {
       {settled === "to" && <span style={base}>{TO}</span>}
       {settled === "crossing" && (
         <span className="relative inline-block" style={base}>
-          {/* The outgoing word, leaving upward and out of focus. It keeps its
-              place in the flow the whole way, so the line never changes width
-              at the exact moment the reader is looking at it. */}
+          {/* A SPACER SETS THE WIDTH AND NEITHER WORD DOES. Holding the outgoing
+              word in the flow and laying the incoming one over it kept the line
+              from reflowing, but it also made the box exactly as wide as
+              whichever word was leaving, and the other then sat centred inside
+              it with a gap beside it: mid-turn the line read "WITH  AI" with a
+              double space. An invisible copy of the longer of the two holds the
+              box instead, both words are laid in it, and the spacing is the
+              same at every point of the turn. */}
+          <span aria-hidden className="invisible">
+            {FROM.length >= TO.length ? FROM : TO}
+          </span>
+          {/* The outgoing word, leaving upward and out of focus. */}
           <span
             aria-hidden={saysTo}
+            className="absolute inset-0"
             style={{
-              display: "inline-block",
               opacity: 1 - out,
               transform: `translateY(${out * -42}%)`,
               filter: out > 0.001 ? `blur(${out * 6}px)` : undefined,
