@@ -16,11 +16,12 @@ import { SignalPath } from "@/components/service/SignalPath";
 import { Narrative } from "@/components/service/Narrative";
 import { VisibilityChapter } from "@/components/service/VisibilityChapter";
 import { VisibilityMark } from "@/components/service/VisibilityMark";
-import { SiteFork } from "@/components/service/SiteFork";
-import { ReturnLadder } from "@/components/service/ReturnLadder";
-import { SupportSet } from "@/components/service/SupportSet";
+import { SiteReading } from "@/components/service/SiteReading";
+import { WorkInstrument } from "@/components/service/WorkInstrument";
+import { WatchFloor } from "@/components/service/WatchFloor";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
+import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
 /* Drives <Breadcrumbs href={HREF} />. A subpage of the AI Hub, so the trail
@@ -124,8 +125,8 @@ export function AiSearchVisibilityPage() {
           </Container>
         </section>
 
-        {/* The fork the diagnostic ends on: improve the site, or scope a
-            rebuild. See SiteFork. */}
+        {/* The site read the way a search system reads it, and the one verdict
+            that reading ends on. See SiteReading. */}
         <section id="website" data-section="Website Changes and Development" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader
@@ -135,12 +136,21 @@ export function AiSearchVisibilityPage() {
               markNode={<VisibilityMark variant="fork" />}
               className="mb-12"
             />
-            <SiteFork lead={c.website.lead} body={c.website.body} link={c.website.link} branches={c.website.branches} diagnosticLabel={c.website.diagnosticLabel} />
+            <SiteReading
+              lead={c.website.lead}
+              body={c.website.body}
+              link={c.website.link}
+              changes={c.website.changes}
+              branches={c.website.branches}
+              diagnosticLabel={c.website.diagnosticLabel}
+            />
           </Container>
         </section>
 
-        {/* Five steps that return to the first. See ReturnLadder. */}
-        <section id="process" data-section="How the Work Moves" className="relative overflow-x-clip py-14 sm:py-16">
+        {/* One instrument in five states, the last of which returns to the
+            first. Pinned, so the reader changes the machine's state rather than
+            scrolling past five paragraphs. See WorkInstrument. */}
+        <section id="process" data-section="How the Work Moves" className="relative overflow-hidden py-16 sm:py-20">
           <Container className="relative">
             <SectionHeader
               index="03"
@@ -149,11 +159,17 @@ export function AiSearchVisibilityPage() {
               markNode={<VisibilityMark variant="loop" />}
               className="mb-14"
             />
-            <ReturnLadder items={c.process.items} returnLabel={c.process.returnLabel} />
+            <WorkInstrument
+              items={c.process.items}
+              returnLabel={c.process.returnLabel}
+              areas={c.process.areas}
+              owners={c.process.owners}
+            />
           </Container>
         </section>
 
-        {/* Nine duties, set as one block rather than nine rows. See SupportSet. */}
+        {/* Nine duties on a floor fed by the three things the lead says will
+            not hold still. See WatchFloor. */}
         {/* The closing chapter, on the deepest paper ground. The nine duties are
             what recurs after everything above is done, so the page settles
             rather than staying on the same white it opened on. */}
@@ -178,9 +194,26 @@ export function AiSearchVisibilityPage() {
               markNode={<VisibilityMark variant="months" />}
               className="mb-12"
             />
-            <SupportSet lead={c.support.lead} items={c.support.items} scope={c.support.scope} />
+            <WatchFloor
+              lead={c.support.lead}
+              sources={c.support.sources}
+              items={c.support.items}
+              scope={c.support.scope}
+            />
           </Container>
         </section>
+
+        {/* The band closes the argument rather than interrupting it: it comes
+            after the last of the page's own sections, so the reader is asked
+            once they have the whole picture. */}
+        <GrowthCta
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.hero.primary}
+        />
 
         {/* GATE. "AI Search Visibility Results" is an instruction in the source
             ("[Add real, permissioned examples ...]"), not content. Nothing is

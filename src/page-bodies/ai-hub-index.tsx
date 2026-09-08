@@ -1,29 +1,10 @@
 "use client";
 
-import { AutomationPipeline } from "@/components/hub/AutomationPipeline";
-import { CategoryParallax } from "@/components/hub/CategoryParallax";
-import { HubOpener } from "@/components/hub/HubOpener";
-import { SearchSurfaces } from "@/components/hub/SearchSurfaces";
-import { categories } from "@/content/ai-hub";
-
 /** The AI Hub landing page.
  *
- *  A parallax opener, then one full-height section per category.
- *
- *  01 and 02 are built, each drawn from that category's own document. 03 to 08
- *  are empty parallax blocks standing in until each gets its own design. They
- *  are deliberately identical to each other, which is what makes them read as
- *  scaffolding rather than as finished sections. */
+ *  Deliberately empty. Everything built here was scrapped on 2026-09-08 to
+ *  start again from nothing. What remains is the route, a blank canvas, and no
+ *  navbar or footer, which is where this page began. */
 export function AiHubPage() {
-  return (
-    <main>
-      <HubOpener />
-      <SearchSurfaces />
-      <AutomationPipeline />
-      {/* 03 to 08 are still the empty parallax blocks. */}
-      {categories.slice(2).map((c, i) => (
-        <CategoryParallax key={c.no} index={i + 2} />
-      ))}
-    </main>
-  );
+  return <main className="min-h-screen" />;
 }

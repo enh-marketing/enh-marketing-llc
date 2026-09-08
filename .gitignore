@@ -42,3 +42,6 @@ yarn-error.log*
 
 # local agent tooling, not part of the site
 .superpowers
+
+# migration source pages, fetched on demand and never committed
+scripts/migrate-*/raw/

@@ -47,7 +47,17 @@ function markThreshold(rule: string) {
   );
 }
 
-export function ExclusionBand({ items, rule }: { items: Disqualifier[]; rule: string }) {
+export function ExclusionBand({
+  items,
+  rule,
+}: {
+  items: Disqualifier[];
+  /** The threshold sentence, where the source has one. The Snapchat document
+   *  writes "if two or more of those apply"; the TikTok one lists its four and
+   *  moves straight to a call to action, so it passes none rather than having
+   *  a sentence written for it. */
+  rule?: string;
+}) {
   return (
     <div>
       <Rise>
@@ -95,11 +105,13 @@ export function ExclusionBand({ items, rule }: { items: Disqualifier[]; rule: st
       </Rise>
 
       {/* The rule. Always on, always brand, threshold marked in place. */}
-      <Rise delay={0.14} className="mt-10">
-        <p className="font-display text-[clamp(1.3rem,2.7vw,2.15rem)] font-extrabold uppercase leading-[1.06] text-brand">
-          {markThreshold(rule)}
-        </p>
-      </Rise>
+      {rule && (
+        <Rise delay={0.14} className="mt-10">
+          <p className="font-display text-[clamp(1.3rem,2.7vw,2.15rem)] font-extrabold uppercase leading-[1.06] text-brand">
+            {markThreshold(rule)}
+          </p>
+        </Rise>
+      )}
     </div>
   );
 }

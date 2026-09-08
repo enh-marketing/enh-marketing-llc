@@ -100,101 +100,111 @@ export function WorkshopStage({
         />
       </Container>
 
-      {staged ? (
-        <div ref={track} style={{ height: `${items.length * VH_PER + 100}vh` }} className="relative">
-          <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
-            {/* Which room, and how far along. */}
-            <Container className="w-full">
-              <div className="flex items-end gap-2">
-                {items.map((f, i) => (
-                  <button
-                    key={f.no}
-                    type="button"
-                    onClick={() => jump(i)}
-                    aria-current={i === active ? "true" : undefined}
-                    className="group min-w-0 flex-1 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                  >
-                    <p
-                      className={cn(
-                        "font-display truncate text-[0.6875rem] font-bold uppercase tracking-[0.08em] transition-colors duration-500 motion-reduce:transition-none",
-                        i === active ? "text-brand-text" : "text-ash group-hover:text-snow",
-                      )}
+      {/* The ref sits on this wrapper, not inside the staged branch. useScroll
+          points at it on every render, and below the breakpoint the branch that
+          used to carry it is never rendered at all -- which is what made motion
+          throw "Target ref is defined but not hydrated" for every tablet and
+          phone visitor. The height and the positioning context still belong to
+          the staged run only. */}
+      <div
+        ref={track}
+        style={staged ? { height: `${items.length * VH_PER + 100}vh` } : undefined}
+        className={staged ? "relative" : undefined}
+      >
+        {staged ? (
+            <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
+              {/* Which room, and how far along. */}
+              <Container className="w-full">
+                <div className="flex items-end gap-2">
+                  {items.map((f, i) => (
+                    <button
+                      key={f.no}
+                      type="button"
+                      onClick={() => jump(i)}
+                      aria-current={i === active ? "true" : undefined}
+                      className="group min-w-0 flex-1 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                     >
-                      <span className="tabular-nums">{f.no}</span>
-                      <span className="ml-2">{f.title}</span>
-                    </p>
-                    <span
-                      className={cn(
-                        "mt-2 block h-[3px] w-full transition-colors duration-500 motion-reduce:transition-none",
-                        i === active
-                          ? "bg-brand"
-                          : i < active
-                            ? "bg-brand/30"
-                            : "bg-line group-hover:bg-ash",
-                      )}
-                    />
-                  </button>
-                ))}
-              </div>
-            </Container>
+                      <p
+                        className={cn(
+                          "font-display truncate text-[0.6875rem] font-bold uppercase tracking-[0.08em] transition-colors duration-500 motion-reduce:transition-none",
+                          i === active ? "text-brand-text" : "text-ash group-hover:text-snow",
+                        )}
+                      >
+                        <span className="tabular-nums">{f.no}</span>
+                        <span className="ml-2">{f.title}</span>
+                      </p>
+                      <span
+                        className={cn(
+                          "mt-2 block h-[3px] w-full transition-colors duration-500 motion-reduce:transition-none",
+                          i === active
+                            ? "bg-brand"
+                            : i < active
+                              ? "bg-brand/30"
+                              : "bg-line group-hover:bg-ash",
+                        )}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </Container>
 
-            {/* The rooms, travelling sideways. */}
-            <motion.div className="mt-8 flex" style={{ x }}>
-              {items.map((f, i) => (
-                <div key={f.no} className="w-screen shrink-0 px-6 sm:px-10">
-                  <div className="mx-auto grid max-w-[1320px] items-center gap-x-14 lg:grid-cols-[minmax(0,1.32fr)_minmax(0,0.85fr)]">
-                    <Scene kind={f.scene} on={i === active} />
-                    <div>
-                      <p className="text-[0.9375rem] leading-relaxed text-fog">{f.body}</p>
-                      <p className="mt-4 border-l-2 border-brand/40 pl-4 text-[0.9375rem] leading-relaxed text-fog">
-                        {f.note}
-                      </p>
-                      <p className="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                        <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
-                          Read from
-                        </span>
-                        <span className="font-display text-[0.9375rem] font-bold uppercase leading-tight text-brand-text">
-                          {f.cite}
-                        </span>
-                      </p>
+              {/* The rooms, travelling sideways. */}
+              <motion.div className="mt-8 flex" style={{ x }}>
+                {items.map((f, i) => (
+                  <div key={f.no} className="w-screen shrink-0 px-6 sm:px-10">
+                    <div className="mx-auto grid max-w-[1320px] items-center gap-x-14 lg:grid-cols-[minmax(0,1.32fr)_minmax(0,0.85fr)]">
+                      <Scene kind={f.scene} on={i === active} />
+                      <div>
+                        <p className="text-[0.9375rem] leading-relaxed text-fog">{f.body}</p>
+                        <p className="mt-4 border-l-2 border-brand/40 pl-4 text-[0.9375rem] leading-relaxed text-fog">
+                          {f.note}
+                        </p>
+                        <p className="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                          <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
+                            Read from
+                          </span>
+                          <span className="font-display text-[0.9375rem] font-bold uppercase leading-tight text-brand-text">
+                            {f.cite}
+                          </span>
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ))}
+              </motion.div>
+            </div>
+        ) : (
+          <Container className="pb-14 sm:pb-16">
+            <ol className="space-y-16">
+              {items.map((f) => (
+                <li key={f.no}>
+                  <p className="font-display text-[0.625rem] font-bold tabular-nums text-brand-text">
+                    {f.no}
+                  </p>
+                  <h3 className="font-display mt-2 text-[clamp(1.25rem,4.5vw,1.8rem)] font-extrabold uppercase leading-[1.1] text-snow">
+                    {f.title}
+                  </h3>
+                  <div className="mt-6">
+                    <Scene kind={f.scene} on />
+                  </div>
+                  <p className="mt-6 text-[0.9375rem] leading-relaxed text-fog">{f.body}</p>
+                  <p className="mt-4 border-l-2 border-brand/40 pl-4 text-[0.9375rem] leading-relaxed text-fog">
+                    {f.note}
+                  </p>
+                  <p className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
+                      Read from
+                    </span>
+                    <span className="font-display text-[0.9375rem] font-bold uppercase leading-tight text-brand-text">
+                      {f.cite}
+                    </span>
+                  </p>
+                </li>
               ))}
-            </motion.div>
-          </div>
-        </div>
-      ) : (
-        <Container className="pb-14 sm:pb-16">
-          <ol className="space-y-16">
-            {items.map((f) => (
-              <li key={f.no}>
-                <p className="font-display text-[0.625rem] font-bold tabular-nums text-brand-text">
-                  {f.no}
-                </p>
-                <h3 className="font-display mt-2 text-[clamp(1.25rem,4.5vw,1.8rem)] font-extrabold uppercase leading-[1.1] text-snow">
-                  {f.title}
-                </h3>
-                <div className="mt-6">
-                  <Scene kind={f.scene} on />
-                </div>
-                <p className="mt-6 text-[0.9375rem] leading-relaxed text-fog">{f.body}</p>
-                <p className="mt-4 border-l-2 border-brand/40 pl-4 text-[0.9375rem] leading-relaxed text-fog">
-                  {f.note}
-                </p>
-                <p className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
-                    Read from
-                  </span>
-                  <span className="font-display text-[0.9375rem] font-bold uppercase leading-tight text-brand-text">
-                    {f.cite}
-                  </span>
-                </p>
-              </li>
-            ))}
-          </ol>
-        </Container>
-      )}
+            </ol>
+          </Container>
+        )}
+      </div>
     </section>
   );
 }

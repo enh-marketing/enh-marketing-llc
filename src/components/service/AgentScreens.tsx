@@ -100,46 +100,56 @@ export function AgentScreens({
         />
       </Container>
 
-      {staged ? (
-        /* ── held full height while the scroll moves through the six ─────── */
-        <div ref={track} style={{ height: `${items.length * VH_PER + 100}vh` }} className="relative">
-          <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-            <Container className="w-full">
-              <div className="grid items-center gap-x-14 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)]">
-                <Index items={items} active={active} label={label} onJump={jump} />
-                <div className="relative">
-                  <AgentScreen screen={screens[active]} step={active} />
+      {/* The ref sits on this wrapper, not inside the staged branch. useScroll
+          points at it on every render, and below the breakpoint the branch that
+          used to carry it is never rendered at all -- which is what made motion
+          throw "Target ref is defined but not hydrated" for every tablet and
+          phone visitor. The height and the positioning context still belong to
+          the staged run only. */}
+      <div
+        ref={track}
+        style={staged ? { height: `${items.length * VH_PER + 100}vh` } : undefined}
+        className={staged ? "relative" : undefined}
+      >
+        {staged ? (
+          /* ── held full height while the scroll moves through the six ─────── */
+            <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+              <Container className="w-full">
+                <div className="grid items-center gap-x-14 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)]">
+                  <Index items={items} active={active} label={label} onJump={jump} />
+                  <div className="relative">
+                    <AgentScreen screen={screens[active]} step={active} />
+                  </div>
                 </div>
-              </div>
-            </Container>
-          </div>
-        </div>
-      ) : (
-        /* ── the same six, stacked ───────────────────────────────────────── */
-        <Container className="pb-14 sm:pb-16">
-          <ol className="space-y-14">
-            {items.map((s, i) => (
-              <li key={s.no} className="border-t border-line pt-8">
-                <p className="font-display text-[0.625rem] font-bold tabular-nums text-brand-text">
-                  {s.no}
-                </p>
-                <h3 className="font-display mt-2 text-[clamp(1.25rem,4vw,1.75rem)] font-extrabold uppercase leading-[1.12] text-snow">
-                  {s.title}
-                </h3>
-                <p className="mt-4 max-w-[62ch] text-[0.9375rem] leading-relaxed text-fog">
-                  {s.body}
-                </p>
-                <p className="mt-3 max-w-[62ch] text-[0.9375rem] leading-relaxed text-fog">
-                  {s.note}
-                </p>
-                <div className="mt-7">
-                  <AgentScreen screen={screens[i]} step={i} still />
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Container>
-      )}
+              </Container>
+            </div>
+        ) : (
+          /* ── the same six, stacked ───────────────────────────────────────── */
+          <Container className="pb-14 sm:pb-16">
+            <ol className="space-y-14">
+              {items.map((s, i) => (
+                <li key={s.no} className="border-t border-line pt-8">
+                  <p className="font-display text-[0.625rem] font-bold tabular-nums text-brand-text">
+                    {s.no}
+                  </p>
+                  <h3 className="font-display mt-2 text-[clamp(1.25rem,4vw,1.75rem)] font-extrabold uppercase leading-[1.12] text-snow">
+                    {s.title}
+                  </h3>
+                  <p className="mt-4 max-w-[62ch] text-[0.9375rem] leading-relaxed text-fog">
+                    {s.body}
+                  </p>
+                  <p className="mt-3 max-w-[62ch] text-[0.9375rem] leading-relaxed text-fog">
+                    {s.note}
+                  </p>
+                  <div className="mt-7">
+                    <AgentScreen screen={screens[i]} step={i} still />
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </Container>
+        )}
+      </div>
     </section>
   );
 }

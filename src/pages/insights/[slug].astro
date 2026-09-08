@@ -1,0 +1,103 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/insights";
+import { brand } from "@/lib/content";
+import { InsightNotePage } from "@/page-bodies/insights-note";
+
+/* One note. The only dynamic route on the site.
+ *
+ * getStaticPaths WALKS `published()`, WHICH IS THE NOTES THAT HAVE A BODY. A
+ * note in the archive with no article behind it therefore builds no page, and
+ * nothing on the site links to one: the register sets its title as text, the
+ * masthead's route sends its pin to the register instead, and the Blog schema
+ * on the index omits it. So there is never a link to a 404, and adding a
+ * `body` in src/content/insights.ts is the whole of what publishes an article.
+ *
+ * ARTICLE SCHEMA. BlogPosting, with `image` only where a real image exists —
+ * the drawn NotePlate a note falls back to is a placeholder in our design
+ * system, not a picture of the subject, and declaring it as the article's image
+ * would put it in search results as one. `author` likewise appears only where
+ * the source names one; publisher carries the organisation either way, which
+ * is what the schema actually requires.
+ */
+
+export function getStaticPaths() {
+  return c.published().map((note) => ({ params: { slug: note.slug }, props: { note } }));
+}
+
+const { note } = Astro.props;
+
+const SITE = "https://enhmedia.com";
+const HREF = `/insights/${note.slug}`;
+const url = `${SITE}${HREF}`;
+
+/* The share image: the note's own, or nothing. No fallback to a site-wide
+   graphic, because none exists in this repository and inventing one is not
+   this route's job. */
+const shareImage = note.hero?.src ?? note.thumb?.src;
+
+const description =
+  note.excerpt ??
+  /* No excerpt in the source means no description is invented for it. The
+     archive's own description is the truthful fallback: it describes the
+     publication the page belongs to rather than making a claim about the
+     article's contents. */
+  c.meta.description;
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "@id": `${url}#article`,
+  headline: note.title,
+  url,
+  mainEntityOfPage: { "@type": "WebPage", "@id": url },
+  isPartOf: { "@type": "Blog", "@id": `${SITE}/insights#blog` },
+  datePublished: note.date,
+  ...(note.updated ? { dateModified: note.updated } : {}),
+  ...(note.excerpt ? { description: note.excerpt } : {}),
+  articleSection: note.category,
+  ...(note.tags?.length ? { keywords: note.tags.join(", ") } : {}),
+  inLanguage: "en-AE",
+  ...(shareImage ? { image: new URL(shareImage, SITE).href } : {}),
+  ...(note.author
+    ? { author: { "@type": "Person", name: note.author.name, ...(note.author.role ? { jobTitle: note.author.role } : {}) } }
+    : {}),
+  publisher: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: SITE,
+    telephone: brand.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: brand.address,
+      addressCountry: "AE",
+    },
+  },
+};
+---
+
+<Base
+  title={`${note.title} | ENH Marketing`}
+  description={description}
+  canonical={HREF}
+  ogTitle={note.title}
+  ogDescription={description}
+  ogImage={shareImage}
+  ogType="article"
+>
+  <Fragment slot="head">
+    {/* Article-specific tags. They live here rather than in Base because no
+        other page type on the site has a publication date, a section or tags,
+        and adding them to the shared layout would emit empty ones on 45
+        pages. og:url is the same: an article is shared by people, so the
+        canonical address has to travel with it. */}
+    <meta property="og:url" content={url} />
+    <meta property="article:published_time" content={note.date} />
+    {note.updated && <meta property="article:modified_time" content={note.updated} />}
+    <meta property="article:section" content={note.category} />
+    {note.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />
+  </Fragment>
+
+  <InsightNotePage note={note} url={url} client:load />
+</Base>

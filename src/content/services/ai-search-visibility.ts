@@ -250,7 +250,18 @@ export const website = {
   lead: "AI search visibility often requires changes to the website. Existing pages may need clearer information, stronger structure or corrected technical settings. New service, product, location or educational pages may also be required.",
   body: "ENH Marketing can implement these changes on a suitable existing website. If the current website cannot support the required work, a rebuild can be scoped through our AI Website Development service. The diagnostic will state whether the existing website can be improved or whether larger development work is needed.",
   link: { label: "AI Website Development service", href: "/ai-hub/intelligent-web" },
-  /** The two outcomes the last sentence names, as the drawing's two labels. */
+  /** The four kinds of change the lead paragraph names, split into its own
+   *  phrases so each can be pointed at a region of the site being read:
+   *  "Existing pages may need clearer information, stronger structure or
+   *  corrected technical settings. New service, product, location or
+   *  educational pages may also be required." Only the leading letter is
+   *  capitalised; no word is added, removed or reordered. */
+  changes: [
+    "Clearer information",
+    "Stronger structure",
+    "Corrected technical settings",
+    "New service, product, location or educational pages",
+  ],
   /** The drawing's heading; the sentence calls the check "the diagnostic". */
   diagnosticLabel: "The diagnostic",
   branches: ["Existing website can be improved", "Larger development work is needed"] as [string, string],
@@ -273,6 +284,16 @@ export const process = {
   ] as Step[],
   /** The return, in step five's own words. */
   returnLabel: "repeat the agreed searches",
+  /** The five things step two reviews, in step two's own order and its own
+   *  words: "We review the agreed platforms, website, content, technical
+   *  access and external information in greater detail." Split into its five
+   *  nouns for the instrument's five spokes; nothing added, nothing reordered. */
+  areas: ["Platforms", "Website", "Content", "Technical access", "External information"],
+  /** Who handles a priority. Step three: "who will handle it". Step four:
+   *  "Items that need support from your team are stated in advance." The two
+   *  parties are therefore us and your team, which is the same pair the site's
+   *  ProcessLanes uses everywhere else it draws this distinction. */
+  owners: ["ENH Marketing", "Your team"] as [string, string],
 };
 
 /** "Ongoing AI Visibility Support". Nine duties on a monthly rhythm: the lead
@@ -282,6 +303,9 @@ export const support = {
   title: "Ongoing AI",
   strokeTitle: "Visibility Support",
   lead: "AI search results, website content and external sources change regularly. Ongoing support can include:",
+  /** The three things the lead says change, split from its own first clause.
+   *  They are the drawing's three inlets: what the watch is watching for. */
+  sources: ["AI search results", "website content", "external sources"],
   items: [
     { text: "Testing the agreed questions each month", glyph: "answer" },
     { text: "Recording brand mentions and website citations", glyph: "ledger" },
@@ -294,6 +318,19 @@ export const support = {
     { text: "Recommending the next priorities", glyph: "recommend" },
   ] as { text: string; glyph: GlyphVariant }[],
   scope: "The monthly scope will state which platforms, questions, competitors, and website changes are included.",
+};
+
+/** The mid-page CTA band, added 2026-09-07 on the same departure already
+ *  agreed for every other AI Hub page: the band needs a heading, a support
+ *  line and a button, and this document supplies only the call to action.
+ *  The heading is the document's own primary CTA split for typesetting, the
+ *  button is that CTA verbatim, and the support line is the closing block's
+ *  own first sentence, borrowed rather than written. No new words. */
+export const growthCta = {
+  heading: ["Book an AI", "Visibility Diagnostic"] as [string, string],
+  support:
+    "Send us your website and the services or products you want to be found for.",
+  button: "Book an AI Visibility Diagnostic",
 };
 
 export const faqs: Faq[] = [

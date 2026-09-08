@@ -89,111 +89,121 @@ export function SiteScreens({
         />
       </Container>
 
-      {staged ? (
-        <div ref={track} style={{ height: `${items.length * VH_PER + 100}vh` }} className="relative">
-          <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-            <Container className="w-full">
-              {/* The rail runs down the side rather than across the top, so this
-                  section does not read as the same furniture as the other
-                  pinned runs on the site. */}
-              <div className="grid items-center gap-x-12 lg:grid-cols-[minmax(0,0.62fr)_minmax(0,1fr)]">
-                <div>
-                  <ol className="border-t border-line">
-                    {items.map((c, i) => (
-                      <li key={c.no} className="border-b border-line">
-                        <button
-                          type="button"
-                          onClick={() => jump(i)}
-                          aria-current={i === active ? "true" : undefined}
-                          className="group flex w-full items-center gap-4 py-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                        >
-                          <span
-                            className={cn(
-                              "font-display shrink-0 text-[0.625rem] font-bold tabular-nums transition-colors duration-500 motion-reduce:transition-none",
-                              i === active ? "text-brand-text" : "text-ash group-hover:text-brand-text",
-                            )}
+      {/* The ref sits on this wrapper, not inside the staged branch. useScroll
+          points at it on every render, and below the breakpoint the branch that
+          used to carry it is never rendered at all -- which is what made motion
+          throw "Target ref is defined but not hydrated" for every tablet and
+          phone visitor. The height and the positioning context still belong to
+          the staged run only. */}
+      <div
+        ref={track}
+        style={staged ? { height: `${items.length * VH_PER + 100}vh` } : undefined}
+        className={staged ? "relative" : undefined}
+      >
+        {staged ? (
+            <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+              <Container className="w-full">
+                {/* The rail runs down the side rather than across the top, so this
+                    section does not read as the same furniture as the other
+                    pinned runs on the site. */}
+                <div className="grid items-center gap-x-12 lg:grid-cols-[minmax(0,0.62fr)_minmax(0,1fr)]">
+                  <div>
+                    <ol className="border-t border-line">
+                      {items.map((c, i) => (
+                        <li key={c.no} className="border-b border-line">
+                          <button
+                            type="button"
+                            onClick={() => jump(i)}
+                            aria-current={i === active ? "true" : undefined}
+                            className="group flex w-full items-center gap-4 py-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                           >
-                            {c.no}
-                          </span>
-                          <span
-                            className={cn(
-                              "font-display text-[0.8125rem] font-bold uppercase leading-tight transition-colors duration-500 motion-reduce:transition-none",
-                              i === active ? "text-snow" : "text-ash group-hover:text-snow",
-                            )}
-                          >
-                            {c.title}
-                          </span>
-                          <span
-                            aria-hidden
-                            className={cn(
-                              "ml-auto h-0.5 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
-                              i === active ? "w-12 bg-brand" : "w-4 bg-line group-hover:w-8 group-hover:bg-ash",
-                            )}
-                          />
-                        </button>
-                      </li>
-                    ))}
-                  </ol>
+                            <span
+                              className={cn(
+                                "font-display shrink-0 text-[0.625rem] font-bold tabular-nums transition-colors duration-500 motion-reduce:transition-none",
+                                i === active ? "text-brand-text" : "text-ash group-hover:text-brand-text",
+                              )}
+                            >
+                              {c.no}
+                            </span>
+                            <span
+                              className={cn(
+                                "font-display text-[0.8125rem] font-bold uppercase leading-tight transition-colors duration-500 motion-reduce:transition-none",
+                                i === active ? "text-snow" : "text-ash group-hover:text-snow",
+                              )}
+                            >
+                              {c.title}
+                            </span>
+                            <span
+                              aria-hidden
+                              className={cn(
+                                "ml-auto h-0.5 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
+                                i === active ? "w-12 bg-brand" : "w-4 bg-line group-hover:w-8 group-hover:bg-ash",
+                              )}
+                            />
+                          </button>
+                        </li>
+                      ))}
+                    </ol>
 
-                  <motion.div
-                    key={items[active].no}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.45, ease: EASE }}
-                    className="mt-8"
-                  >
-                    <h3 className="font-display text-[clamp(1.2rem,2.3vw,1.75rem)] font-extrabold uppercase leading-[1.1] text-snow">
-                      {items[active].title}
-                    </h3>
-                    <p className="mt-4 max-w-[46ch] text-[0.9375rem] leading-relaxed text-fog">
-                      {items[active].body}
-                    </p>
-                    <p className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
-                        Read from
-                      </span>
-                      <span className="font-display text-[0.8125rem] font-bold uppercase leading-tight text-brand-text">
-                        {screens[active].cite}
-                      </span>
-                    </p>
-                  </motion.div>
-                </div>
+                    <motion.div
+                      key={items[active].no}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.45, ease: EASE }}
+                      className="mt-8"
+                    >
+                      <h3 className="font-display text-[clamp(1.2rem,2.3vw,1.75rem)] font-extrabold uppercase leading-[1.1] text-snow">
+                        {items[active].title}
+                      </h3>
+                      <p className="mt-4 max-w-[46ch] text-[0.9375rem] leading-relaxed text-fog">
+                        {items[active].body}
+                      </p>
+                      <p className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
+                          Read from
+                        </span>
+                        <span className="font-display text-[0.8125rem] font-bold uppercase leading-tight text-brand-text">
+                          {screens[active].cite}
+                        </span>
+                      </p>
+                    </motion.div>
+                  </div>
 
-                <SiteScreen screen={screens[active]} step={active} />
-              </div>
-            </Container>
-          </div>
-        </div>
-      ) : (
-        <Container className="pb-14 sm:pb-16">
-          <ol className="space-y-14">
-            {items.map((c, i) => (
-              <li key={c.no}>
-                <p className="font-display text-[0.625rem] font-bold tabular-nums text-brand-text">
-                  {c.no}
-                </p>
-                <h3 className="font-display mt-2 text-[clamp(1.2rem,4.4vw,1.7rem)] font-extrabold uppercase leading-[1.1] text-snow">
-                  {c.title}
-                </h3>
-                <div className="mt-6">
-                  <SiteScreen screen={screens[i]} step={i} still />
+                  <SiteScreen screen={screens[active]} step={active} />
                 </div>
-                <p className="mt-6 max-w-[62ch] text-[0.9375rem] leading-relaxed text-fog">
-                  {c.body}
-                </p>
-                <p className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
-                    Read from
-                  </span>
-                  <span className="font-display text-[0.8125rem] font-bold uppercase leading-tight text-brand-text">
-                    {screens[i].cite}
-                  </span>
-                </p>
-              </li>
-            ))}
-          </ol>
-        </Container>
-      )}
+              </Container>
+            </div>
+        ) : (
+          <Container className="pb-14 sm:pb-16">
+            <ol className="space-y-14">
+              {items.map((c, i) => (
+                <li key={c.no}>
+                  <p className="font-display text-[0.625rem] font-bold tabular-nums text-brand-text">
+                    {c.no}
+                  </p>
+                  <h3 className="font-display mt-2 text-[clamp(1.2rem,4.4vw,1.7rem)] font-extrabold uppercase leading-[1.1] text-snow">
+                    {c.title}
+                  </h3>
+                  <div className="mt-6">
+                    <SiteScreen screen={screens[i]} step={i} still />
+                  </div>
+                  <p className="mt-6 max-w-[62ch] text-[0.9375rem] leading-relaxed text-fog">
+                    {c.body}
+                  </p>
+                  <p className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <span className="font-display text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ash">
+                      Read from
+                    </span>
+                    <span className="font-display text-[0.8125rem] font-bold uppercase leading-tight text-brand-text">
+                      {screens[i].cite}
+                    </span>
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </Container>
+        )}
+      </div>
     </section>
   );
 }

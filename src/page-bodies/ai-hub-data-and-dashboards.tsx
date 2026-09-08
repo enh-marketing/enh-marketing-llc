@@ -13,12 +13,12 @@ import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { OneView } from "@/components/service/OneView";
 import { Narrative } from "@/components/service/Narrative";
-import { DashboardStrata } from "@/components/service/DashboardStrata";
-import { DashboardAnatomy } from "@/components/service/DashboardAnatomy";
+import { PinnedExplorer } from "@/components/service/PinnedExplorer";
+import { DashboardAssembly } from "@/components/service/DashboardAssembly";
 import { DashboardMark } from "@/components/service/DashboardMark";
-import { RoiLedger } from "@/components/service/RoiLedger";
+import { ReturnWindow } from "@/components/service/ReturnWindow";
 import { ScopeScale } from "@/components/service/ScopeScale";
-import { BuildSteps } from "@/components/service/BuildSteps";
+import { DataPipeline } from "@/components/service/DataPipeline";
 import { GrowthCta } from "@/components/service/GrowthCta";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
@@ -71,28 +71,49 @@ export function DataAndDashboardsPage() {
           </Rise>
         </Narrative>
 
-        {/* Five dashboards drawn as the views they are, and the preparation
-            under all of them as a band. See DashboardGallery. */}
-        <section id="services" data-section="Our Data and Dashboard Services" className="relative overflow-x-clip py-14 sm:py-16">
-          <Container className="relative">
-            <SectionHeader index="01" title={c.services.title} strokeTitle={c.services.strokeTitle} markNode={<DashboardMark variant="gallery" />} className="mb-12" />
-            <DashboardStrata items={c.services.items} roles={c.services.roles} beforeLabel={c.services.beforeLabel} />
-          </Container>
-        </section>
+        {/* Six services on the site's own explorer pattern: one named selector,
+            one drawing, one panel. The drawing is a single dashboard shell whose
+            modules are rebuilt per service, because five of the six are views of
+            one system; the sixth is not a view at all, so its mark sits under
+            the shell and selecting it lifts the shell off the plumbing. See
+            DashboardViews. */}
+        <PinnedExplorer
+          id="services"
+          label="Our Data and Dashboard Services"
+          index="01"
+          title={c.services.title}
+          strokeTitle={c.services.strokeTitle}
+          markNode={<DashboardMark variant="gallery" />}
+          items={c.services.items}
+          diagram={{ kind: "dashboards", roles: c.services.roles, beforeLabel: c.services.beforeLabel }}
+          diagramSide="right"
+        />
 
-        {/* Seven elements annotating one drawing of a dashboard. See DashboardAnatomy. */}
+        {/* Seven elements, drawn as the dashboard they add up to and built one
+            at a time as the reader arrives. Pointing at any one strips the rest
+            back to a hairline. See DashboardAssembly. */}
         <section id="elements" data-section="The Main Elements of a Reporting Dashboard" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="02" title={c.elements.title} strokeTitle={c.elements.strokeTitle} markNode={<DashboardMark variant="anatomy" />} className="mb-12" />
-            <DashboardAnatomy items={c.elements.items} />
+            <DashboardAssembly items={c.elements.items} />
           </Container>
         </section>
 
-        {/* Cost against value over one period. See RoiLedger. */}
+        {/* Two windows, out of register, closing onto one another: the
+            section's own first sentence is the condition, not the columns.
+            See ReturnWindow. */}
         <section id="roi" data-section="How We Track Marketing ROI" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader index="03" title={c.roi.title} strokeTitle={c.roi.strokeTitle} markNode={<DashboardMark variant="ledger" />} className="mb-12" />
-            <RoiLedger lead={c.roi.lead} body={c.roi.body} costs={c.roi.costs} values={c.roi.values} periodLabel={c.roi.periodLabel} models={c.roi.models} reportsLabel={c.roi.reportsLabel} />
+            <ReturnWindow
+              lead={c.roi.lead}
+              body={c.roi.body}
+              costs={c.roi.costs}
+              values={c.roi.values}
+              periodLabel={c.roi.periodLabel}
+              reportsLabel={c.roi.reportsLabel}
+              models={c.roi.models}
+            />
           </Container>
         </section>
 
@@ -112,12 +133,16 @@ export function DataAndDashboardsPage() {
           </Container>
         </section>
 
-        {/* Seven steps, and the dashboard they assemble. See BuildSteps. */}
-        <section id="process" data-section="How the Dashboard Project Works" className="relative overflow-x-clip py-14 sm:py-16">
-          <Container className="relative">
-            <SectionHeader index="05" title={c.process.title} strokeTitle={c.process.strokeTitle} markNode={<DashboardMark variant="stack" />} className="mb-12" />
-            <BuildSteps items={c.process.items} launchLabel={c.process.launchLabel} />
+        {/* One continuous line of plumbing, seven stations long, pinned while
+            it travels. The line is absent at the first station, holed at the
+            second, and dashed past the launch mark because the last step does
+            not finish. overflow-hidden and the track outside the Container, for
+            the same reasons ChannelScroller gives. See DataPipeline. */}
+        <section id="process" data-section="How the Dashboard Project Works" className="relative overflow-hidden py-16 sm:py-20">
+          <Container className="relative mb-14">
+            <SectionHeader index="05" title={c.process.title} strokeTitle={c.process.strokeTitle} markNode={<DashboardMark variant="stack" />} />
           </Container>
+          <DataPipeline items={c.process.items} launchLabel={c.process.launchLabel} />
         </section>
 
         {/* The document places its CTA here, after step 7. */}

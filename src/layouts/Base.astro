@@ -40,6 +40,18 @@ interface Props {
   canonical?: string;
   ogTitle?: string;
   ogDescription?: string;
+  /** Path or absolute URL of the share image. Resolved against `site`, the
+   *  same way `canonical` is, because og:image is one of the few tags that a
+   *  relative value is simply dropped for rather than resolved by the crawler.
+   *
+   *  Added for /insights/[slug]: an article is the one page type on this site
+   *  whose links are shared by people rather than crawled, and a link with no
+   *  image is a grey rectangle in every feed it lands in. Every existing page
+   *  passes nothing and its head output is unchanged to the byte. */
+  ogImage?: string;
+  /** "article" for a post, so the tag describes what was shared. Defaults to
+   *  the "website" every other page on the site emits. */
+  ogType?: string;
   /** The site shell: navbar and footer. Defaults on, which is every page but
       one. Off for a page that owns the whole viewport and draws its own way in
       and out. Everything else in this layout stays: the head tags, the fonts,
@@ -54,12 +66,15 @@ const {
   canonical,
   ogTitle,
   ogDescription,
+  ogImage,
+  ogType,
   chrome = true,
 } = Astro.props;
 
 const og = ogTitle ?? title;
 const ogDesc = ogDescription ?? description;
 const canonicalUrl = canonical ? new URL(canonical, Astro.site).href : undefined;
+const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 ---
 
 <html lang="en" class="h-full">
@@ -75,11 +90,16 @@ const canonicalUrl = canonical ? new URL(canonical, Astro.site).href : undefined
     <meta property="og:title" content={og} />
     <meta property="og:description" content={ogDesc} />
     <meta property="og:locale" content="en_AE" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType ?? "website"} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
 
-    <meta name="twitter:card" content="summary" />
+    {/* summary_large_image only where there is an image to fill it. Declaring
+        the large card with no og:image gets the card dropped altogether, which
+        is worse than the small one every other page correctly asks for. */}
+    <meta name="twitter:card" content={ogImageUrl ? "summary_large_image" : "summary"} />
     <meta name="twitter:title" content={og} />
     <meta name="twitter:description" content={ogDesc} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
     <link rel="icon" href="/favicon.ico" sizes="256x256" type="image/x-icon" />
 

@@ -56,7 +56,7 @@ export function SocialMediaMarketingPage() {
           highlight={c.narrative.highlight}
         />
 
-        {/* The nine children first on this page, before the reasons: the
+        {/* The six children first on this page, before the reasons: the
             social document leads with the platforms and treats the agency
             argument as support, which is the reverse of the SEO page. Run as
             the pinned horizontal track the paid pillar's channels use -- same
@@ -68,7 +68,7 @@ export function SocialMediaMarketingPage() {
           index="02"
           title={c.services.title}
           strokeTitle={c.services.strokeTitle}
-          mark={{ variant: "ecosystem", label: "Nine services, one publishing plan" }}
+          mark={{ variant: "ecosystem", label: "Six services, one publishing plan" }}
           channels={c.services.items.map((s) => ({
             name: s.title,
             href: s.href ?? "",

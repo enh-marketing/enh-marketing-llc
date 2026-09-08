@@ -1,0 +1,93 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/case-studies";
+import { brand } from "@/lib/content";
+import { CaseStudyPage } from "@/page-bodies/case-study";
+
+/* One case study.
+ *
+ * getStaticPaths WALKS `published()`, WHICH IS THE STUDIES THAT HAVE A STORY.
+ * A study in the archive with nothing behind it builds no page, and nothing on
+ * the site links to one: its plate sets the client as text and offers no
+ * action, the tally in the masthead skips it, and the ItemList on the index
+ * omits it. So there is never a link to a 404, and filling in a study's
+ * sections is the whole of what publishes it.
+ *
+ * Article, WITH `about` NAMING THE CLIENT. A case study is an article about
+ * another organisation's engagement, and `about` is the field that says so.
+ * There is NO datePublished: not one of the twenty-two live pages publishes a
+ * date, and inventing one to satisfy a schema validator would be putting a
+ * fabricated fact in front of a search engine. `image` is the study's own
+ * result card, which is a real picture of the work rather than a stand-in.
+ */
+
+export function getStaticPaths() {
+  return c.published().map((study) => ({ params: { slug: study.slug }, props: { study } }));
+}
+
+const { study } = Astro.props;
+
+const SITE = "https://enhmedia.com";
+const HREF = `/case-studies/${study.slug}`;
+const url = `${SITE}${HREF}`;
+
+const description = c.describe(study);
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": `${url}#article`,
+  headline: study.title,
+  url,
+  mainEntityOfPage: { "@type": "WebPage", "@id": url },
+  isPartOf: { "@type": "CollectionPage", "@id": `${SITE}/case-studies#collection` },
+  description,
+  articleSection: study.sector,
+  inLanguage: "en-AE",
+  image: new URL(study.thumb.src, SITE).href,
+  about: {
+    "@type": "Organization",
+    name: study.client,
+    ...(study.projectUrl ? { url: study.projectUrl } : {}),
+  },
+  keywords: study.services.map((s) => c.SERVICES[s.key].label).join(", "),
+  author: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: SITE,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: SITE,
+    telephone: brand.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: brand.address,
+      addressCountry: "AE",
+    },
+  },
+};
+---
+
+<Base
+  title={`${study.client}: ${study.title} | ENH Marketing`}
+  description={description}
+  canonical={HREF}
+  ogTitle={`${study.client}: ${study.title}`}
+  ogDescription={description}
+  ogImage={study.thumb.src}
+  ogType="article"
+>
+  <Fragment slot="head">
+    {/* A study is shared by people rather than only crawled, so the canonical
+        address travels with it. `article:section` carries the sector, which is
+        the one taxonomy this archive has. */}
+    <meta property="og:url" content={url} />
+    <meta property="article:section" content={study.sector} />
+    {study.services.map((s) => <meta property="article:tag" content={c.SERVICES[s.key].label} />)}
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(articleSchema)} />
+  </Fragment>
+
+  <CaseStudyPage study={study} client:load />
+</Base>

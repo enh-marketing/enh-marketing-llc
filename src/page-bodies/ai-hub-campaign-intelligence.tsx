@@ -13,11 +13,11 @@ import { Rise } from "@/components/fx/Reveal";
 import { ServiceHero } from "@/components/service/ServiceHero";
 import { BudgetSplit } from "@/components/service/BudgetSplit";
 import { Narrative } from "@/components/service/Narrative";
-import { CampaignTimeline } from "@/components/service/CampaignTimeline";
+import { PinnedExplorer } from "@/components/service/PinnedExplorer";
 import { CampaignMark } from "@/components/service/CampaignMark";
-import { DataConverge } from "@/components/service/DataConverge";
+import { ConfidenceBand } from "@/components/service/ConfidenceBand";
 import { LaunchTrack } from "@/components/service/LaunchTrack";
-import { PlanCheck } from "@/components/service/PlanCheck";
+import { DecisionField } from "@/components/service/DecisionField";
 import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { GrowthCta } from "@/components/service/GrowthCta";
@@ -79,23 +79,31 @@ export function CampaignIntelligencePage() {
           </Rise>
         </Narrative>
 
-        {/* Six covered items on the campaign they act in: a rail in three
-            phases, cards in the column of their phase, benchmarking as a band
-            across all three. See CampaignTimeline. */}
-        <section id="covers" data-section="What Campaign Intelligence Covers" className="relative overflow-x-clip py-14 sm:py-16">
-          <Container className="relative">
-            <SectionHeader
-              index="01"
-              title={c.covers.title}
-              strokeTitle={c.covers.strokeTitle}
-              markNode={<CampaignMark variant="phases" />}
-              className="mb-12"
-            />
-            <CampaignTimeline items={c.covers.items} />
-          </Container>
-        </section>
+        {/* Six covered items, on the site's own explorer pattern: one named
+            selector, one drawing, one panel. The marks stand on the campaign at
+            the point in it each item acts, so the phase flags recorded in the
+            content file are drawn rather than captioned, and the panel changes
+            entirely with the selection because these six are six unrelated
+            objects. See CampaignSystem. */}
+        <PinnedExplorer
+          id="covers"
+          label="What Campaign Intelligence Covers"
+          index="01"
+          title={c.covers.title}
+          strokeTitle={c.covers.strokeTitle}
+          markNode={<CampaignMark variant="phases" />}
+          items={c.covers.items}
+          diagram={{
+            kind: "campaignmap",
+            phases: c.covers.items.map((i) => i.phases),
+            labels: c.covers.phaseLabels,
+          }}
+          diagramSide="right"
+        />
 
-        {/* Twelve inputs, gathered into the diagnostic. See DataConverge. */}
+        {/* Twelve inputs and the one thing they change: how wide the range is.
+            The reader can switch any of them off, which is the section's two
+            closing sentences made operable. See ConfidenceBand. */}
         <section id="data" data-section="The Data We Need" className="relative overflow-x-clip py-14 sm:py-16">
           <Container className="relative">
             <SectionHeader
@@ -105,12 +113,12 @@ export function CampaignIntelligencePage() {
               markNode={<CampaignMark variant="range" />}
               className="mb-12"
             />
-            <DataConverge
+            <ConfidenceBand
               lead={c.dataNeeded.lead}
               coversLead={c.dataNeeded.coversLead}
               items={c.dataNeeded.items}
-              boxText={c.dataNeeded.closingTail}
               closing={c.dataNeeded.closing}
+              closingTail={c.dataNeeded.closingTail}
             />
           </Container>
         </section>
@@ -137,20 +145,10 @@ export function CampaignIntelligencePage() {
           />
         </section>
 
-        {/* The document places its mid-page CTA here, after step 6. */}
-        <GrowthCta
-          heading={c.growthCta.heading}
-          support={c.growthCta.support}
-          button={c.growthCta.button}
-          formTitle={FORM_TITLE}
-          formFields={c.formFields}
-          formSubmitLabel={c.hero.primary}
-        />
-
-        {/* The plan and the check, each with its drawing, either side of the
-            start line; then the promise over a range that widens. See PlanCheck.
-            Lifted to its own chapter treatment, as the managed section is on AI
-            Automation. */}
+        {/* One line of work that crosses a threshold and then forks into the
+            three things the document names. Lifted to its own chapter
+            treatment, as the managed section is on AI Automation. See
+            DecisionField. */}
         <section
           id="helps"
           data-section="How ENH Helps You Plan and Improve Campaigns"
@@ -176,9 +174,29 @@ export function CampaignIntelligencePage() {
               markNode={<CampaignMark variant="twosided" />}
               className="mb-14"
             />
-            <PlanCheck left={c.helps.left} right={c.helps.right} closing={c.helps.closing} />
+            <DecisionField
+              left={c.helps.left}
+              right={c.helps.right}
+              closing={c.helps.closing}
+              plan={c.helps.plan}
+              beginsLabel={c.helps.beginsLabel}
+              findings={c.helps.findings}
+            />
           </Container>
         </section>
+
+        {/* The band closes the argument rather than interrupting it. The
+            document places its CTA after step 6; it is moved below the closing
+            chapter so the reader is asked once they have the whole picture,
+            which is a placement decision rather than a change to the copy. */}
+        <GrowthCta
+          heading={c.growthCta.heading}
+          support={c.growthCta.support}
+          button={c.growthCta.button}
+          formTitle={FORM_TITLE}
+          formFields={c.formFields}
+          formSubmitLabel={c.hero.primary}
+        />
 
         <Work index="05" label="Summits Reached" ctaHref="#quote" />
 

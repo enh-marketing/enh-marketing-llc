@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { routeExists } from "@/lib/sitemap";
 import { Crosslink } from "@/components/ui/Crosslink";
 import gsap from "gsap";
@@ -59,6 +59,13 @@ export function ChannelScroller({
    *  of the organic note. */
   tail?: string;
 }) {
+  /* Card ids were built from the channel's href, and a run whose entries are
+     capabilities rather than pages passes "" for all of them: Web Design ended
+     up with four elements sharing id="ch-" and four aria-labelledby attributes
+     pointing at whichever one won. Keyed off a per-instance id and the card's
+     position instead, so it holds for unlinked cards and for two runs on one
+     page. */
+  const uid = useId();
   const root = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const progress = useRef<HTMLSpanElement>(null);
@@ -171,7 +178,7 @@ export function ChannelScroller({
           ref={track}
           className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 sm:px-10 lg:px-[calc((100vw-1320px)/2+2.5rem)]"
         >
-          {channels.map((channel) => {
+          {channels.map((channel, i) => {
             // The whole card is the link, so without aria-labelledby its
             // accessible name is the heading plus the entire body plus "Know
             // More". Pointing at the heading makes the name exactly the visible
@@ -205,7 +212,7 @@ export function ChannelScroller({
                   <ChannelIconBadge name={channel.name} glyph={channel.glyph} />
                 )}
                 <h3
-                  id={`ch-${channel.href}`}
+                  id={`${uid}-${i}`}
                   className={cn(
                     "font-display font-extrabold uppercase text-snow transition-colors duration-300 group-hover:text-brand",
                     channel.preview
@@ -235,15 +242,15 @@ export function ChannelScroller({
             );
             return live ? (
               <a
-                key={channel.href}
+                key={channel.name}
                 href={channel.href}
-                aria-labelledby={`ch-${channel.href}`}
+                aria-labelledby={`${uid}-${i}`}
                 className={shell}
               >
                 {inner}
               </a>
             ) : (
-              <div key={channel.href} className={shell}>
+              <div key={channel.name} className={shell}>
                 {inner}
               </div>
             );

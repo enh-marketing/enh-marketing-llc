@@ -19,9 +19,12 @@ export type NavNode = {
   children?: NavNode[];
 };
 
-// AI Hub and every child redirect to a separate ENH property, so none of them
-// are pages we build. Destinations are not confirmed yet, so they sit on "#".
-// TODO(client): swap in the real URLs, then flip these to absolute links.
+// Every AI Hub child is now a page on this site; only the hub's own landing
+// page is missing, so AI_HUB_HREF is the one placeholder left here. It stays
+// `external` so buildablePages() does not start demanding a page for "#", and
+// isPending() renders it as a heading rather than as a link.
+// TODO(client): confirm whether the AI Hub gets a landing page of its own or
+// keeps pointing at a separate property, then replace this.
 const AI_HUB_HREF = "#";
 
 /* ------------------------------------------------------------------ services */
@@ -37,11 +40,8 @@ const services: NavNode = {
         { label: "Local SEO Services", href: "/services/seo/local-seo-services" },
         { label: "Ecommerce SEO", href: "/services/seo/ecommerce-seo" },
         { label: "On-Page SEO", href: "/services/seo/on-page-seo" },
-        { label: "Link Building", href: "/services/seo/link-building" },
-        { label: "Keyword Research", href: "/services/seo/keyword-research" },
         { label: "SEO Audit", href: "/services/seo/seo-audit" },
         { label: "SEO Content Creation", href: "/services/seo/seo-content-creation" },
-        { label: "Blog Creation", href: "/services/seo/blog-creation" },
         { label: "AEO & GEO", href: "/services/seo/aeo-and-geo" },
       ],
     },
@@ -62,8 +62,6 @@ const services: NavNode = {
       href: "/services/social-media-marketing",
       children: [
         { label: "Social Media Content Creation", href: "/services/social-media-marketing/content-creation" },
-        { label: "Social Media Management", href: "/services/social-media-marketing/management" },
-        { label: "Social Media Campaigns", href: "/services/social-media-marketing/campaigns" },
         { label: "Influencer Marketing", href: "/services/social-media-marketing/influencer-marketing" },
         { label: "Facebook Marketing", href: "/services/social-media-marketing/facebook-marketing" },
         { label: "Instagram Marketing", href: "/services/social-media-marketing/instagram-marketing" },
@@ -71,8 +69,6 @@ const services: NavNode = {
         // Performance Marketing, which run the same channels as paid media.
         { label: "LinkedIn Marketing", href: "/services/social-media-marketing/linkedin-marketing" },
         { label: "TikTok Marketing", href: "/services/social-media-marketing/tiktok-marketing" },
-        // Same page, second placement. Canonical lives under Performance Marketing.
-        { label: "Meta Advertising", href: "/services/performance-marketing/meta-ads", crossLink: true },
       ],
     },
     {
@@ -89,10 +85,6 @@ const services: NavNode = {
       href: "/services/lead-generation",
       children: [
         { label: "B2B Lead Generation", href: "/services/lead-generation/b2b-lead-generation" },
-        { label: "B2C Lead Generation", href: "/services/lead-generation/b2c-lead-generation" },
-        { label: "Email Marketing", href: "/services/lead-generation/email-marketing" },
-        { label: "WhatsApp Marketing", href: "/services/lead-generation/whatsapp-marketing" },
-        { label: "Local Lead Generation / GMB", href: "/services/lead-generation/local-lead-generation-gmb" },
         { label: "Landing Page Development", href: "/services/lead-generation/landing-page-development" },
       ],
     },
@@ -105,7 +97,6 @@ const services: NavNode = {
         { label: "Explainer Video", href: "/services/video-marketing/explainer-video" },
         { label: "Testimonial Video", href: "/services/video-marketing/testimonial-video" },
         { label: "Interview Video", href: "/services/video-marketing/interview-video" },
-        { label: "Animation & Motion Graphics", href: "/services/video-marketing/animation-motion-graphics" },
       ],
     },
   ],
@@ -117,19 +108,11 @@ const industries: NavNode = {
   label: "Industries",
   href: "/industries",
   children: [
-    { label: "Real Estate & Property", href: "/industries/real-estate-property" },
-    { label: "Construction & Contracting", href: "/industries/construction-contracting" },
-    { label: "Industrial & Manufacturing", href: "/industries/industrial-manufacturing" },
-    { label: "IT & Technology", href: "/industries/it-technology" },
     { label: "Healthcare & Clinics", href: "/industries/healthcare-clinics" },
     { label: "Logistics & Shipping", href: "/industries/logistics-shipping" },
     { label: "Automotive", href: "/industries/automotive" },
     { label: "Hospitality & Hotels", href: "/industries/hospitality-hotels" },
     { label: "Ecommerce & Retail", href: "/industries/ecommerce-retail" },
-    { label: "Education & Training", href: "/industries/education-training" },
-    { label: "Facilities Management", href: "/industries/facilities-management" },
-    { label: "Oil, Gas & Energy", href: "/industries/oil-gas-energy" },
-    { label: "Beauty & Wellness", href: "/industries/beauty-wellness" },
   ],
 };
 
@@ -171,7 +154,10 @@ const portfolio: NavNode = { label: "Portfolio", href: "/portfolio" };
 const testimonials: NavNode = { label: "Testimonials", href: "/testimonials" };
 const insights: NavNode = { label: "Insights", href: "/insights" };
 const consultation: NavNode = { label: "Marketing Consultation", href: "/marketing-consultation" };
-const contact: NavNode = { label: "Contact Us", href: "/contact" };
+// Was "/contact", which no page ever served: the sitemap named it, every
+// menu presented it, and it 404'd from all 38 pages. The page that now serves
+// it is src/pages/contact-us.astro, so the node points there.
+const contact: NavNode = { label: "Contact Us", href: "/contact-us" };
 
 const legal: NavNode[] = [
   { label: "Privacy Policy", href: "/privacy-policy" },
@@ -244,6 +230,7 @@ export const footerNav: NavNode[] = [
  *  `npm run check:routes` fails the build if the two ever drift apart. */
 const BUILT = new Set([
   "/",
+  "/contact-us",
   "/services/lead-generation",
   "/services/seo",
   "/services/social-media-marketing",
@@ -266,15 +253,18 @@ const BUILT = new Set([
   "/services/video-marketing/interview-video",
   "/services/video-marketing/testimonial-video",
   "/services/performance-marketing",
+  "/services/performance-marketing/google-ads",
   "/services/performance-marketing/linkedin-ads",
   "/services/performance-marketing/meta-ads",
   "/services/performance-marketing/snapchat-ads",
+  "/services/performance-marketing/tiktok-ads",
   "/services/performance-marketing/youtube-ads",
   "/services/seo/aeo-and-geo",
   "/services/seo/ecommerce-seo",
   "/services/seo/local-seo-services",
   "/services/seo/on-page-seo",
   "/services/seo/seo-audit",
+  "/services/seo/seo-content-creation",
   "/services/social-media-marketing/content-creation",
   "/services/social-media-marketing/facebook-marketing",
   "/services/social-media-marketing/influencer-marketing",
@@ -282,6 +272,10 @@ const BUILT = new Set([
   "/services/social-media-marketing/linkedin-marketing",
   "/services/social-media-marketing/tiktok-marketing",
   "/services/web-design-development/ecommerce-website-development",
+  "/services/web-design-development/website-maintenance-support",
+  "/testimonials",
+  "/insights",
+  "/case-studies",
 ]);
 
 /** Whether an internal path is served by a page that exists.
@@ -301,8 +295,15 @@ export function routeExists(href: string): boolean {
  *  Off-site nodes are never pending. Their destination lives on another host,
  *  so BUILT has nothing to say about it. */
 export function isPending(node: NavNode): boolean {
+  // A placeholder destination is pending whether it points off-site or not.
+  // This used to return early for external nodes, which meant the one node
+  // still sitting on "#" -- AI Hub itself -- rendered in the navbar and the
+  // footer of all 38 pages as a live link to nowhere, opening a blank tab. The
+  // `external` field's own comment says to guard with isPending() first; that
+  // guard could not work while isPending() exempted externals.
+  if (node.href === "#") return true;
   if (node.external) return false;
-  return node.href === "#" || !BUILT.has(node.href);
+  return !BUILT.has(node.href);
 }
 
 /** Routes named in this file that no page satisfies yet. */

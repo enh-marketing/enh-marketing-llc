@@ -146,235 +146,22 @@ export const crafts: Craft[] = [
   },
 ];
 
-export type WorkItem = {
-  client: string;
-  title: string;
-  metrics: { value: string; label: string }[];
-};
-
-// All 22 live case studies.
-export const work: WorkItem[] = [
-  {
-    client: "Healthy Farm",
-    title: "Consistent sales growth driven by high-quality lead generation",
-    metrics: [
-      { value: "211%", label: "Social reach growth in 30 days" },
-      { value: "209%", label: "Increase in impressions" },
-      { value: "80%", label: "Instagram audience expansion" },
-      { value: "60+", label: "High-quality leads" },
-    ],
-  },
-  {
-    client: "Shass Gifts",
-    title: "Search & local-market dominance for a corporate gifting brand",
-    metrics: [
-      { value: "#1", label: "For 'corporate gifts USB sticks'" },
-      { value: "5,581", label: "GMB impressions at peak" },
-      { value: "175", label: "Monthly conversions at peak" },
-      { value: "4,331", label: "Backlinks · 402 domains" },
-    ],
-  },
-  {
-    client: "ACC Gulf",
-    title: "Search authority & local lead growth in industrial supply",
-    metrics: [
-      { value: "#1", label: "High-value keyword rankings" },
-      { value: "1,896", label: "Monthly users at peak" },
-      { value: "1.8K", label: "Backlinks · 167 domains" },
-      { value: "161", label: "Monthly GMB interactions" },
-    ],
-  },
-  {
-    client: "Helpsters",
-    title: "High-value cleaning contracts through targeted SEO",
-    metrics: [
-      { value: "#1", label: "Event cleaning keywords" },
-      { value: "183", label: "Monthly conversions" },
-      { value: "3,450+", label: "Monthly page views at peak" },
-      { value: "57", label: "Monthly GMB call clicks" },
-    ],
-  },
-  {
-    client: "Wafes",
-    title: "Digital visibility for a refrigeration manufacturer",
-    metrics: [
-      { value: "#1", label: "Core manufacturing keywords" },
-      { value: "20+", label: "Top-3 keyword positions" },
-      { value: "1,000+", label: "New users at peak" },
-      { value: "50", label: "Monthly WhatsApp enquiries" },
-    ],
-  },
-  {
-    client: "NeoData",
-    title: "Search visibility & leads for an enterprise IT distributor",
-    metrics: [
-      { value: "#1", label: "'DellEMC distributors Dubai'" },
-      { value: "2,086", label: "Monthly users at peak" },
-      { value: "1,076", label: "GMB impressions" },
-      { value: "60–70", label: "Monthly WhatsApp enquiries" },
-    ],
-  },
-  {
-    client: "Ariiz",
-    title: "High-intent search growth for an industrial sealing supplier",
-    metrics: [
-      { value: "#1", label: "Industrial sealing keywords" },
-      { value: "1,700+", label: "Monthly users at peak" },
-      { value: "550+", label: "Authority backlinks" },
-      { value: "75+", label: "WhatsApp enquiries / month" },
-    ],
-  },
-  {
-    client: "Onyx",
-    title: "Digital dominance: 1,350+ monthly users, 6,100+ GMB impressions",
-    metrics: [
-      { value: "1,350+", label: "Peak organic traffic 2025" },
-      { value: "70%", label: "Avg. engagement rate" },
-      { value: "6,100+", label: "GMB impressions 2025" },
-      { value: "45+", label: "Top-ranking keywords" },
-    ],
-  },
-  {
-    client: "DGR Aviation",
-    title: "High-intent visibility for aviation compliance training",
-    metrics: [
-      { value: "#1", label: "DGR Training Dubai" },
-      { value: "1,600+", label: "GMB impressions / month" },
-      { value: "170+", label: "Local actions in peak months" },
-      { value: "1,000+", label: "Monthly website users" },
-    ],
-  },
-  {
-    client: "Masterkraft",
-    title: "Digital growth with a 346% increase in website traffic",
-    metrics: [
-      { value: "346%", label: "Traffic increase in 12 mo" },
-      { value: "305%", label: "Organic traffic in 12 mo" },
-      { value: "331%", label: "UAE organic traffic in 6 mo" },
-      { value: "15+", label: "Top-10 keywords in 6 mo" },
-    ],
-  },
-  {
-    client: "Ultracare",
-    title: "A 371% boost in website interactions",
-    metrics: [
-      { value: "371%", label: "Engagement increase in 12 mo" },
-      { value: "126%", label: "More incoming inquiries" },
-      { value: "76%", label: "New users from organic" },
-      { value: "25%", label: "Traffic increase YoY" },
-    ],
-  },
-  {
-    client: "PKF UAE",
-    title: "Driving success for PKF with a 71% traffic surge",
-    metrics: [
-      { value: "71%", label: "Traffic increase YoY" },
-      { value: "90+", label: "Top-10 keywords in 12 mo" },
-      { value: "85%", label: "More local audience reach" },
-      { value: "53%", label: "More social media reach" },
-    ],
-  },
-  {
-    client: "Autobahn",
-    title: "Accelerating success with 155% growth in website traffic",
-    metrics: [
-      { value: "155%", label: "Traffic increase YoY" },
-      { value: "1,070", label: "Organic conversions in 6 mo" },
-      { value: "260", label: "Organic call inquiries in 6 mo" },
-      { value: "22%", label: "UAE organic improvement" },
-    ],
-  },
-  {
-    client: "AllDay Supermarket",
-    title: "Incredible 64× increase in social media impressions",
-    metrics: [
-      { value: "64×", label: "More impressions in 12 mo" },
-      { value: "18,914", label: "Total app installs" },
-      { value: "14×", label: "More impressions, next 12 mo" },
-      { value: "12 mo", label: "Sustained optimization" },
-    ],
-  },
-  {
-    client: "Datagram",
-    title: "Transforming high-end IT product e-commerce",
-    metrics: [
-      { value: "+426%", label: "Growth in total users" },
-      { value: "20+", label: "High-intent keywords top 3" },
-      { value: "+60%", label: "More GMB call clicks" },
-      { value: "+36%", label: "More phone enquiries" },
-    ],
-  },
-  {
-    client: "Supercad",
-    title: "Revamping IT solutions: 128% more organic traffic",
-    metrics: [
-      { value: "128%", label: "Organic traffic YoY" },
-      { value: "47%", label: "New users from organic" },
-      { value: "39%", label: "More UAE visitors" },
-      { value: "20", label: "Top-10 keywords in 4 mo" },
-    ],
-  },
-  {
-    client: "TopShelf",
-    title: "Boosting organic traffic by 245% in 12 months",
-    metrics: [
-      { value: "245%", label: "Organic traffic YoY" },
-      { value: "424%", label: "New users from organic" },
-      { value: "391%", label: "More engagements" },
-      { value: "194%", label: "More UAE visitors" },
-    ],
-  },
-  {
-    client: "Arbrit Safety",
-    title: "Health & safety, with a 242% increase in enquiries",
-    metrics: [
-      { value: "242%", label: "More incoming inquiries" },
-      { value: "144%", label: "New users from organic" },
-      { value: "49%", label: "Organic traffic YoY" },
-      { value: "45+", label: "Top-10 keywords" },
-    ],
-  },
-  {
-    client: "Saifee Computers",
-    title: "Accounting software sales — 85% more enquiries",
-    metrics: [
-      { value: "85%", label: "Increase in enquiries" },
-      { value: "47%", label: "More Google conversions" },
-      { value: "37%", label: "Organic traffic YoY" },
-      { value: "40+", label: "Top-10 keywords" },
-    ],
-  },
-  {
-    client: "Royal Caviar",
-    title: "Sales up 132% in the first six months",
-    metrics: [
-      { value: "132%", label: "Sales increase in 6 mo" },
-      { value: "155%", label: "More total online sales" },
-      { value: "97%", label: "New users from organic" },
-      { value: "30%", label: "More online orders" },
-    ],
-  },
-  {
-    client: "Lotus Dental Clinic",
-    title: "29% increase in local calls for a dental clinic",
-    metrics: [
-      { value: "51%", label: "More calls from local SEO" },
-      { value: "67%", label: "More direction requests" },
-      { value: "29%", label: "Increase in local calls" },
-      { value: "66%", label: "Dubai social execution" },
-    ],
-  },
-  {
-    client: "Venesta",
-    title: "New-market expansion for a washroom solutions provider",
-    metrics: [
-      { value: "235%", label: "More engagements" },
-      { value: "174%", label: "Organic traffic YoY" },
-      { value: "101%", label: "New users from organic" },
-      { value: "61%", label: "Increase in enquiries" },
-    ],
-  },
-];
+// THE CASE STUDIES MOVED, AND THE STOCK PHOTOGRAPHS WENT WITH THEM.
+//
+// `WorkItem`, `work` and `workImages` used to live here: twenty-two clients
+// with their figures, and a map of Unsplash URLs chosen to suggest each one's
+// industry. Both are gone.
+//
+// The studies are now migrated content, one file per client in
+// src/content/case-studies/, taken from the live enhmedia.com/case-studies
+// pages with their captions verbatim, their four figures unchanged, and their
+// own result-card artwork downloaded into public/case-studies/. Read them
+// through src/content/case-studies.ts; `all()` is what the homepage carousel,
+// the archive and every service page now render.
+//
+// The Unsplash map is not coming back. A stock photograph standing in for a
+// piece of client work, on a section selling that work, is the same mistake as
+// a stock photograph on an article hero, and the real artwork exists.
 
 export const whyENH = {
   heading: "Why ENH Marketing",
@@ -458,11 +245,11 @@ export const testimonials: Testimonial[] = [
   },
 ];
 
-export const insights = [
-  { category: "Milestone", title: "Celebrating 15 Years: Key Milestones That Shaped Our Agency", date: "April 2, 2026", image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=500&fit=crop&auto=format&q=80" },
-  { category: "SEO", title: "From Traffic to Pipeline: Building ROI-Driven SEO Systems in the UAE", date: "January 16, 2026", image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=500&fit=crop&auto=format&q=80" },
-  { category: "Strategy", title: "Why Most Digital Marketing in Dubai Fails to Deliver ROI", date: "December 30, 2025", image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=500&fit=crop&auto=format&q=80" },
-];
+// The three-item `insights` placeholder list that used to live here is gone.
+// The real archive is src/content/insights (72 posts migrated from
+// enhmedia.com/blog), and the homepage Insights section reads that. This list
+// held Unsplash URLs, so leaving it exported was an invitation to render stock
+// photography as an article image again.
 
 export const faqs = [
   {

@@ -26,7 +26,11 @@ import { AdsAccount } from "@/components/service/AdsAccount";
 import { CycleTrack } from "@/components/service/CycleTrack";
 import { OutputBoard } from "@/components/service/OutputBoard";
 import { HandoverMap } from "@/components/service/HandoverMap";
+import { SitePlan } from "@/components/service/SitePlan";
+import { IntentPath } from "@/components/service/IntentPath";
 import { CreativeOutputs } from "@/components/service/CreativeOutputs";
+import { CampaignSystem, type Phase } from "@/components/service/CampaignSystem";
+import { DashboardViews } from "@/components/service/DashboardViews";
 import type { ServiceAnchor } from "@/content/services/instagram-marketing";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -76,7 +80,24 @@ export type DiagramSpec =
    *  whether the work stops for a person. `loop` is per item, in item order,
    *  and each flag is cited in the content file against the sentence it was
    *  read from. */
-  | { kind: "handover"; loop: boolean[] };
+  | { kind: "handover"; loop: boolean[] }
+  /** The buyer's path, with the stretch each advertising channel works. The
+   *  criteria are pins along it; the two readings are carried as body and note
+   *  under the source's own column headers. */
+  | { kind: "intentpath" }
+  /** The five kinds of website content, drawn as the one site they make up.
+   *  Region labels come from the items' own titles, so the drawing is named by
+   *  the document rather than by a table of strings kept beside it. */
+  | { kind: "siteplan" }
+  /** Six things campaign intelligence covers, each drawn as itself, with the
+   *  marks standing on the campaign at the point in it they act. `phases` is
+   *  per item, in item order, and every flag is cited in the content file
+   *  against the sentence it was read from. */
+  | { kind: "campaignmap"; phases: Phase[][]; labels: [string, string, string] }
+  /** Six data and dashboard services, drawn inside one dashboard shell whose
+   *  modules are rebuilt per service — except the last, which is not a view at
+   *  all and lifts the shell to show the layer underneath it. */
+  | { kind: "dashboards"; roles: string[]; beforeLabel: string };
 
 /** Renders one pin. The diagram calls this where its own region sits, so pin
  *  placement is markup rather than a set of magic percentages maintained
@@ -260,6 +281,30 @@ export function PinnedExplorer({
         return <OutputBoard active={active} pin={pin} count={items.length} />;
       case "creative":
         return <CreativeOutputs active={active} pin={pin} count={items.length} />;
+      case "intentpath":
+        return <IntentPath active={active} pin={pin} count={items.length} />;
+      case "siteplan":
+        return <SitePlan active={active} pin={pin} labels={items.map((i) => i.title)} />;
+      case "campaignmap":
+        return (
+          <CampaignSystem
+            active={active}
+            pin={pin}
+            count={items.length}
+            phases={diagram.phases}
+            labels={diagram.labels}
+          />
+        );
+      case "dashboards":
+        return (
+          <DashboardViews
+            active={active}
+            pin={pin}
+            count={items.length}
+            roles={diagram.roles}
+            beforeLabel={diagram.beforeLabel}
+          />
+        );
       case "handover":
         return (
           <HandoverMap active={active} pin={pin} count={items.length} loop={diagram.loop} />

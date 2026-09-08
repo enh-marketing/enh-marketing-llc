@@ -207,11 +207,11 @@ export const fit = {
   // approximate page would be worse than leaving them as plain text.
   industries: [
     { label: "Ecommerce and retail", detail: "fashion, beauty, homeware, speciality goods", href: "/industries/ecommerce-retail" },
-    { label: "Real estate", detail: "brokerages, developers, off-plan sales, holiday homes", href: "/industries/real-estate-property" },
+    { label: "Real estate", detail: "brokerages, developers, off-plan sales, holiday homes" },
     { label: "Healthcare and aesthetics", detail: "clinics, dental, dermatology, cosmetic surgery", href: "/industries/healthcare-clinics" },
-    { label: "Education and training", detail: "schools, universities, professional certification", href: "/industries/education-training" },
+    { label: "Education and training", detail: "schools, universities, professional certification" },
     { label: "Professional services", detail: "legal, audit, corporate services, company formation" },
-    { label: "Technology", detail: "SaaS, fintech, IT services and managed service providers", href: "/industries/it-technology" },
+    { label: "Technology", detail: "SaaS, fintech, IT services and managed service providers" },
     { label: "Hospitality and leisure", detail: "hotels, restaurants, venues, attractions", href: "/industries/hospitality-hotels" },
     { label: "Home and trade services", detail: "fit-out, maintenance, moving, automotive" },
   ],
