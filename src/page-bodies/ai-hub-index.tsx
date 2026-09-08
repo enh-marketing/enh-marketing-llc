@@ -2,9 +2,10 @@
 
 import { Journey, type Chapter } from "@/components/hub/Journey";
 import { Ascent } from "@/components/hub/Ascent";
+import { Creative } from "@/components/hub/chapters/Creative";
 import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
-import { horizon, system } from "@/content/ai-hub";
+import { creative, horizon, system } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
  *
@@ -28,6 +29,12 @@ import { horizon, system } from "@/content/ai-hub";
  *  horizon. */
 const CHAPTERS: Chapter[] = [
   { id: "system", viewports: 4, Scene: System, beats: system },
+  /* Three, not four. The tile flight is authored against two viewports of
+     scroll, so four would halve its rate; two would hand a disproportionate
+     share of a short chapter to the joins, since FADE is a fraction of the
+     whole track rather than of a chapter. Three is the compromise, taken
+     deliberately rather than by copying its neighbours. */
+  { id: "creative", viewports: 3, Scene: Creative, beats: creative },
   { id: "horizon", viewports: 4, Scene: Horizon, beats: horizon },
 ];
 

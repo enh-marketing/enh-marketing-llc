@@ -203,6 +203,13 @@ export function Journey({
                 <div
                   key={`${c.id}-${bi}`}
                   aria-hidden={shown < 0.5}
+                  /* AND OUT OF THE TAB ORDER. `aria-hidden` takes the block out
+                     of the accessibility tree and `pointer-events: none` takes
+                     it away from the mouse, but neither, nor `opacity: 0`,
+                     removes an <a href> from keyboard focus: without this a
+                     reader tabbing through the page walks every category link
+                     on it, including the seven that are invisible. */
+                  inert={shown < 0.5}
                   className="absolute inset-x-0 bottom-0 px-6 pb-[13vh] transition-opacity duration-500 motion-reduce:transition-none sm:px-10 lg:px-20"
                   style={{ opacity: shown, pointerEvents: shown > 0.5 ? "auto" : "none" }}
                 >

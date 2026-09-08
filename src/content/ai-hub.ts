@@ -89,8 +89,28 @@ export const system: Beat[] = [
     quotes: "ai-automation",
     href: "/ai-hub/ai-automation",
   },
+];
+
+/* --------------------------------------------------------------- chapter 1b */
+
+/** The creative chapter. One category, over a field of tiles flown at the
+ *  camera.
+ *
+ *  IT MOVED OUT OF `system`, it was not copied. Journey renders the beats of
+ *  every chapter into one layer and lights whichever belongs to the leading
+ *  one, so leaving this in the system array as well would have shown the same
+ *  headline and the same paragraph twice within a few seconds of scrolling:
+ *  once over the system's last camera stop and again over its own chapter.
+ *
+ *  `at` IS BOUNDED BY THE COMPONENT, not chosen freely. The tiles are at full
+ *  strength for the first 0.7 of their flight and gone by the end of it, and
+ *  hub/chapters/Creative.tsx maps the whole chapter onto that flight. A beat
+ *  much past 0.6 would be read against an empty frame. 0.4 sits while the
+ *  tiles are still solid and leaves room for the line to be read before they
+ *  clear. */
+export const creative: Beat[] = [
   {
-    at: 1,
+    at: 0.4,
     eyebrow: "03",
     title: "AI Creative Production",
     body: "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
