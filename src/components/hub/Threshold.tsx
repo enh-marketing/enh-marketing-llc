@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import AirlockHero from "@/components/hub/AirlockHero";
 import { getLenis } from "@/components/fx/SmoothScroll";
-import { ServiceChip } from "@/components/hub/ServiceChip";
 import { threshold } from "@/content/ai-hub";
 
 /** The last thing on the page: the door, and then the ask.
@@ -22,30 +21,15 @@ import { threshold } from "@/content/ai-hub";
  *  author's GitHub repo. It is not ours and not on our origin, and it has to be
  *  replaced before this page ships, the same as the mountain photographs.
  *
- *  THE ASK IS A SEPARATE BLOCK rather than something laid inside the hero. The
- *  hero has no slot for one and no link prop, and cutting a hole in it to add
- *  one would be a fork. It also reads better: the door finishes, the page comes
- *  back, and the invitation is the first thing on the other side. */
+ *  AND NOTHING FOLLOWS IT. There was an ask underneath, and it was cut on
+ *  2026-09-09: the door opening onto the view is the end of the story, and a
+ *  block of copy after it is the page carrying on talking once it has finished.
+ *  The reader is not left without a way through, because every category on the
+ *  page carries its own link, but this page now closes on a picture rather than
+ *  on a button. If a closing call to action is ever wanted it has to come back
+ *  as a deliberate decision, not by default. */
 export function Threshold() {
-  return (
-    <>
-      <Door />
-
-      <section
-        data-section="AI Hub close"
-        className="relative flex min-h-[70svh] w-full flex-col items-center justify-center bg-black px-6 py-24 text-center"
-      >
-        <p className="font-grotesk mb-6 text-[0.8rem] font-bold uppercase tracking-[0.34em] text-white/55">
-          {threshold.eyebrow}
-        </p>
-        <h2 className="font-grotesk hub-heading max-w-[18ch] font-bold uppercase text-white">
-          {threshold.cta}
-        </h2>
-        <p className="mt-6 max-w-[34rem] text-[1rem] leading-[1.6] text-white/65">{threshold.body}</p>
-        <ServiceChip href="/contact-us" label={threshold.action} />
-      </section>
-    </>
-  );
+  return <Door />;
 }
 
 /** The airlock, mounted only once the reader has actually arrived at it.

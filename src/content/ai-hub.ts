@@ -163,7 +163,7 @@ export const horizon: Beat[] = [
 
 /* ---------------------------------------------------------------- chapter 3 */
 
-/** The close: the airlock door, and the ask on the other side of it.
+/** The close: the airlock door, and the two lines shown over it.
  *
  *  THIS IS THE ONE BLOCK ON THE PAGE I WROTE, and it should be read as a draft
  *  until Divij says otherwise. Every other string here is quoted from a sitemap
@@ -177,15 +177,15 @@ export const horizon: Beat[] = [
  *
  *  IT CLAIMS NOTHING IT CANNOT. The source documents forbid guaranteed
  *  placements, a general AI score, and any figure except "15 years". There is
- *  no number here at all, no promise about outcomes, and no client named. It is
- *  an invitation and a statement of how the work starts, which is the most a
- *  page with no approved copy is entitled to say. */
+ *  no number here at all, no promise about outcomes and no client named. Both
+ *  lines are the page's own sentence finishing, which is the most a page with
+ *  no approved copy is entitled to say. */
 export const threshold = {
-  title: "OPEN THE DOOR",
-  /** Shown over the last frames, once the door is open. */
-  tagline: "What is on the other side gets built, not imagined.",
-  eyebrow: "AI Hub",
-  cta: "Let's open a door worth walking through",
-  body: "Tell us what you are trying to move. We will tell you what it takes, what it does not, and where AI is genuinely the shorter route.",
-  action: "Start the conversation",
+  /** Over the opening frames, while the hatch is still shut. */
+  title: "THE DOOR IS OPEN",
+  /** Over the last frames, once it has swung clear and the view is there.
+   *  It closes the sentence the page opened on: the mountain says "Explore New
+   *  Heights With Us", the system finishes it "With AI", and this is where it
+   *  lands. */
+  tagline: "Explore new heights with ENH.",
 };

@@ -102,15 +102,31 @@ export function OpeningLine() {
     };
   }, [reduced]);
 
+  /* NOT window.scrollY, AND THAT IS NOT A STYLE CHOICE. The airlock at the foot
+     of the page takes the wheel by pinning the body to position:fixed with a
+     negative top, and while it holds the page window.scrollY reads 0. Measured
+     against scrollY this line therefore believed the reader was back at the
+     very top the moment the door engaged, and drew itself in full over the
+     airlock: "Explore New Heights With Us" printed across the hatch.
+
+     The opener's own box does not lie. Pinning the body shifts every child by
+     the same amount, so the opener's top stays at minus the real distance
+     travelled whether the page is pinned or not, and this reads the same number
+     in both states. It is one getBoundingClientRect per scroll event, on an
+     element that is already in the layout. */
   useEffect(() => {
     if (reduced) return;
-    const onScroll = () => setK(window.scrollY / Math.max(1, window.innerHeight));
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    const read = () => {
+      const opener = document.querySelector<HTMLElement>('[data-section="AI Hub opener"]');
+      const travelled = opener ? -opener.getBoundingClientRect().top : window.scrollY;
+      setK(travelled / Math.max(1, window.innerHeight));
+    };
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+    window.addEventListener("resize", read);
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("scroll", read);
+      window.removeEventListener("resize", read);
     };
   }, [reduced]);
 
