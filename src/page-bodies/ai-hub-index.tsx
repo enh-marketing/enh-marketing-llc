@@ -6,6 +6,7 @@ import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
 import { OpeningLine } from "@/components/hub/OpeningLine";
 import { ForegroundEcho } from "@/components/hub/ForegroundEcho";
+import { Threshold } from "@/components/hub/Threshold";
 import { horizon, system } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
@@ -46,6 +47,10 @@ export function AiHubPage() {
     <main>
       <Ascent />
       <Journey chapters={CHAPTERS} beatWindow={{ hold: 0.035, ramp: 0.06 }} />
+      {/* The door, and the ask. Last on the page because the airlock pins the
+          body and spends input on the film rather than on scroll, which is a
+          thing only the final block can do without fighting the machine. */}
+      <Threshold />
       {/* THE OPENING LINE AND THE THING THAT PUTS IT BEHIND THE MAN, in that
           order, because the second has to paint over the first. Both are fixed
           to the window and belong to neither block: the line starts over the

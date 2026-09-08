@@ -241,12 +241,26 @@ export function Journey({
                      reader tabbing through the page walks every category link
                      on it, including the seven that are invisible. */
                   inert={shown < 0.5}
-                  className="absolute inset-x-0 bottom-0 px-6 pb-[13vh] transition-opacity duration-500 motion-reduce:transition-none sm:px-10 lg:px-20"
+                  /* TWO LAYOUTS, ONE BLOCK, AND NEITHER OF THEM FLOATS.
+                     The copy used to sit wherever the bottom of the frame left
+                     room, which on a phone put it under whatever the scene
+                     happened to be doing there. It now has a reserved half of
+                     the screen in both directions.
+
+                     Phone: the bottom two fifths, centred in it. The scene is
+                     lifted into the top three fifths to match, in
+                     chapters/System, so the two never share space.
+
+                     Desktop: the left half, centred down the side, ranged left.
+                     The system already sits right of centre at every camera
+                     stop (focusX 0.62 to 0.72), so the picture is on one side
+                     and the words are on the other without the scene moving. */
+                  className="absolute inset-x-0 bottom-0 flex h-[40%] flex-col items-center justify-center px-6 text-center transition-opacity duration-500 motion-reduce:transition-none lg:inset-y-0 lg:h-full lg:w-1/2 lg:items-start lg:justify-center lg:pl-16 lg:pr-8 lg:text-left xl:pl-24"
                   style={{ opacity: shown, pointerEvents: shown > 0.5 ? "auto" : "none" }}
                 >
-                  <div className="max-w-[44rem]">
+                  <div className="w-full max-w-[34rem] lg:max-w-[44rem]">
                     {b.eyebrow && (
-                      <p className="font-grotesk mb-4 flex items-center gap-4 text-[0.8rem] font-bold uppercase tracking-[0.18em] text-white/55">
+                      <p className="font-grotesk mb-4 flex items-center justify-center gap-4 text-[0.8rem] font-bold uppercase tracking-[0.18em] text-white/55 lg:justify-start">
                         <span className="tabular-nums">{b.eyebrow}</span>
                         <span aria-hidden className="block h-px w-10 bg-white/30" />
                       </p>
@@ -267,7 +281,9 @@ export function Journey({
                       />
                     </h2>
                     {b.body && (
-                      <p className="mt-5 max-w-[34rem] text-[1.02rem] leading-[1.6] text-white/65">{b.body}</p>
+                      <p className="mx-auto mt-5 max-w-[34rem] text-[0.98rem] leading-[1.6] text-white/65 lg:mx-0 lg:text-[1.02rem]">
+                        {b.body}
+                      </p>
                     )}
                     {b.href && <ServiceChip href={b.href} />}
                   </div>

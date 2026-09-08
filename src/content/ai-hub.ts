@@ -160,3 +160,32 @@ export const horizon: Beat[] = [
     href: "/ai-hub/ai-workshops-and-training",
   },
 ];
+
+/* ---------------------------------------------------------------- chapter 3 */
+
+/** The close: the airlock door, and the ask on the other side of it.
+ *
+ *  THIS IS THE ONE BLOCK ON THE PAGE I WROTE, and it should be read as a draft
+ *  until Divij says otherwise. Every other string here is quoted from a sitemap
+ *  label or a service page's own meta.description, and the page was given no
+ *  prose of its own precisely so it could not overclaim. He asked for this one
+ *  directly on 2026-09-09 ("spaceship door open section will be the last CTA
+ *  section with msg like lets open doors for unimaginable or something better
+ *  writing pls"), so it exists, but it is mine and not a client document's, and
+ *  nothing here is enforced by check:copy because there is nothing to check it
+ *  against.
+ *
+ *  IT CLAIMS NOTHING IT CANNOT. The source documents forbid guaranteed
+ *  placements, a general AI score, and any figure except "15 years". There is
+ *  no number here at all, no promise about outcomes, and no client named. It is
+ *  an invitation and a statement of how the work starts, which is the most a
+ *  page with no approved copy is entitled to say. */
+export const threshold = {
+  title: "OPEN THE DOOR",
+  /** Shown over the last frames, once the door is open. */
+  tagline: "What is on the other side gets built, not imagined.",
+  eyebrow: "AI Hub",
+  cta: "Let's open a door worth walking through",
+  body: "Tell us what you are trying to move. We will tell you what it takes, what it does not, and where AI is genuinely the shorter route.",
+  action: "Start the conversation",
+};

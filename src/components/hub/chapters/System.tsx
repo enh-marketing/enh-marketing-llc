@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useEnhanced } from "@/lib/useEnhanced";
 import {
   OrbitalHeroSection,
   SOLAR_SYSTEM,
@@ -248,6 +249,10 @@ const PLANETS: Planet[] = SOLAR_SYSTEM.map((p) => ({
   a: ORBIT_SCALE * Math.pow(p.a, ORBIT_FALLOFF),
 }));
 
+/** How far up the scene slides on a narrow screen, in viewport heights. The
+ *  copy owns the bottom 40% there, so the system is moved clear of it. */
+const LIFT_VH = 13;
+
 export function System({
   t,
   reveal,
@@ -257,6 +262,9 @@ export function System({
   reveal: number;
   stageOffset: number;
 }) {
+  /* Not a width read on every frame: useEnhanced holds one matchMedia listener
+     and re-renders only when the breakpoint itself changes. */
+  const compact = !useEnhanced("(min-width: 1024px)");
   const cam = cameraAt(t);
 
   /* THE PLANETS FADE BY BEING SHRUNK AND DIMMED IN PLACE, on one array that is
@@ -329,6 +337,20 @@ export function System({
      `glow` does not scale. TrackChart draws the Sun from there on. */
   const dim = 1 - smooth(clamp(chart / RUN_IN, 0, 1));
 
+  /* THE SCENE MOVES UP ON A PHONE, so the copy can have the bottom two fifths
+     to itself instead of being laid over whatever the system is doing there.
+     It is a transform on the host rather than a change to `focus`, and that is
+     deliberate: focus is read by the chart camera, by the Sun's closed form and
+     by the opener's handover, and shifting it would put all three out. Moving
+     the whole box moves the picture and everything drawn in it together, and
+     nothing inside has to know.
+
+     IT RAMPS IN AFTER THE ARRIVAL, never during it. The opener hands the page
+     over on the Sun's exact position, so for the first sixth of the chapter the
+     scene has to be where the photograph left it, to the pixel. The lift starts
+     once that is done and is complete a tenth of the chapter later. */
+  const lift = compact ? -LIFT_VH * smooth(clamp((t - 0.18) / 0.09, 0, 1)) : 0;
+
   const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
   const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
   const lead = mix(LEAD, 0, entry);
@@ -340,6 +362,7 @@ export function System({
   return (
     <OrbitalHeroSection
       data-orbital-host=""
+      style={lift ? { transform: `translateY(${lift}vh)` } : undefined}
       tilt={cam.tilt}
       spin={cam.spin}
       roll={cam.roll}
