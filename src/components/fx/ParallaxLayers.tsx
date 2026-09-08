@@ -50,9 +50,13 @@ gsap.registerPlugin(ScrollTrigger);
  *  Lenis, so this adds no scroll machinery of its own. */
 
 export type ParallaxLayer = {
-  /** Where this layer ends up, as a percentage of its own height, by the time
-   *  the block has finished passing. Larger travels further, so a larger value
-   *  reads as nearer the viewer. */
+  /** How far this layer travels down, as a percentage of the STAGE's height,
+   *  by the time the block has finished passing. Layers with different values
+   *  separate as it scrolls, and that separation is the whole effect.
+   *
+   *  It is measured against the stage rather than against the layer's own
+   *  height so that the component can size the layer to cover its own travel;
+   *  see the note on overscan below. */
   y: number;
   className?: string;
   children: ReactNode;
@@ -62,15 +66,43 @@ export function ParallaxLayers({
   layers,
   className,
   stageClassName,
+  progress,
 }: {
   layers: ParallaxLayer[];
   /** The track. Its height is what the parallax is scrubbed against. */
   className?: string;
   /** The stage the layers are stacked in. */
   stageClassName?: string;
+  /** 0 to 1, supplied by whatever owns the scroll. Give this when the block
+   *  sits in a sticky stage, where measuring itself yields nothing. Leave it
+   *  out and the block scrubs against its own passage as before. */
+  progress?: number;
 }) {
   const scope = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const timeline = useRef<gsap.core.Timeline | null>(null);
+
+  const controlled = typeof progress === "number";
+
+  /* OVERSCAN, or the mountain slides off and leaves a hole. Every layer
+     travels down, and in a pinned stage nothing else moves to cover the gap it
+     opens above itself, so each layer is grown by the furthest distance any of
+     them travels and hung that far above the stage. A layer then ends flush
+     with the top at the end of its run and overhangs the bottom at the start,
+     and no edge is ever in frame.
+
+     The extra 1 is margin. Sized to the travel exactly, a layer is tangent to
+     the stage at each end of its run, which measured as a worst gap of 0px and
+     is one rounding error away from a hairline of background on some viewport
+     heights. */
+  const over = Math.max(0, ...layers.map((l) => Math.abs(l.y))) + 1;
+
+  /* Callers pass `layers` as an array literal, so it is a new value on every
+     render and a dependency on it would revert and rebuild the timeline on
+     every scroll frame. Only the rates and their order change the animation,
+     so the effect depends on those alone, as a string, and reads them back
+     rather than closing over the array. */
+  const rates = layers.map((l) => l.y).join(",");
 
   useEffect(() => {
     const el = stage.current;
@@ -81,20 +113,36 @@ export function ParallaxLayers({
     const mm = gsap.matchMedia(scope);
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: el, start: "0% 0%", end: "100% 0%", scrub: 0 },
-      });
-      layers.forEach((layer, i) => {
+      const tl = gsap.timeline(
+        controlled
+          ? { paused: true }
+          : { scrollTrigger: { trigger: el, start: "0% 0%", end: "100% 0%", scrub: 0 } },
+      );
+      (rates ? rates.split(",").map(Number) : []).forEach((y, i) => {
         tl.to(
           el.querySelectorAll(`[data-parallax-layer="${i}"]`),
-          { yPercent: layer.y, ease: "none" },
+          // `y` is a share of the stage; yPercent is a share of the layer, and
+          // the layer is taller than the stage by exactly `over`.
+          { yPercent: (y * 100) / (100 + over), ease: "none" },
           i === 0 ? undefined : "<",
         );
       });
+      timeline.current = tl;
+      return () => {
+        timeline.current = null;
+      };
     });
 
     return () => mm.revert();
-  }, [layers]);
+  }, [rates, controlled, over]);
+
+  /* Seeking a paused timeline rather than animating to the value, so the
+     picture is a function of scroll position and reverses for free. Null under
+     reduced motion, where the timeline is never built. */
+  useEffect(() => {
+    if (!controlled) return;
+    timeline.current?.progress(Math.max(0, Math.min(1, progress)));
+  }, [controlled, progress]);
 
   return (
     <div ref={scope} className={cn("relative", className)}>
@@ -103,7 +151,8 @@ export function ParallaxLayers({
           <div
             key={i}
             data-parallax-layer={i}
-            className={cn("absolute inset-0", layer.className)}
+            className={cn("absolute inset-x-0", layer.className)}
+            style={{ top: `${-over}%`, height: `${100 + over}%` }}
           >
             {layer.children}
           </div>
