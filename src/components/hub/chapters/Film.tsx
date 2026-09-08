@@ -27,6 +27,25 @@ import gsap from "gsap";
  *  what makes 300 frames enough: they are all spent in the transitions rather
  *  than being wasted under stationary text.
  *
+ *  IT IS LAGGY, AND THE ENCODE IS WHY. Judged on the page and confirmed as a
+ *  fault, not a preference: the scrub stutters and sticks. Nothing above is the
+ *  cause. The film is an ordinary H.264 encode with keyframes seconds apart, so
+ *  every seek to an arbitrary time makes the decoder walk forward from the last
+ *  keyframe before it can show anything, and the mapping asks for a new time on
+ *  every frame of scrolling. The seek is the cost, not the drawing.
+ *
+ *  WHAT WOULD FIX IT, when this is picked up again, cheapest first:
+ *    1. Re-encode with every frame a keyframe (x264 `-g 1`, or `-x264-params
+ *       keyint=1`). Seeks become instant. The file grows several times over,
+ *       which is the trade and the reason this is not free.
+ *    2. Failing that, decode once to an image sequence and swap `src` on an
+ *       <img>, or draw to a canvas from a preloaded set. No seeking at all.
+ *       Perfectly smooth, and the memory and download cost move to the frames.
+ *    3. WebCodecs for a real frame-accurate decode, which is the correct answer
+ *       and the most work.
+ *  None of these is worth doing against a 480p placeholder. They belong with
+ *  the real film.
+ *
  *  IT CARRIES ITS OWN SCRIM. The drawn page never needed one: its scene is
  *  near-black everywhere, so white copy sits on it unaided. A film does not
  *  behave, and half of this one is a lit snowfield or the face of the Earth,
