@@ -81,3 +81,27 @@ export function chartTravelled(chart: number): number {
   const c = clamp(chart, 0, 1);
   return c <= RUN_IN ? 0 : (c - RUN_IN) / (1 - RUN_IN);
 }
+
+/** The chart as far as `u`, as its own vertices plus the exact point at `u`.
+ *
+ *  NOT RESAMPLED. Walking the path at even spacing and stroking that put every
+ *  corner between two samples, so each turn was drawn slightly rounded and the
+ *  wide strokes threw a fold past the thin one. The corners are the whole point
+ *  of a chart line, so they are drawn as themselves. */
+export function chartPolylineTo(u: number): Array<[number, number]> {
+  const want = clamp(u, 0, 1) * TOTAL;
+  const out: Array<[number, number]> = [CHART_PATH[0]];
+  for (let i = 1; i < SPANS.length; i++) {
+    if (SPANS[i] <= want) {
+      out.push(CHART_PATH[i]);
+      continue;
+    }
+    const seg = SPANS[i] - SPANS[i - 1] || 1;
+    const k = clamp((want - SPANS[i - 1]) / seg, 0, 1);
+    const [ax, ay] = CHART_PATH[i - 1];
+    const [bx, by] = CHART_PATH[i];
+    if (k > 0) out.push([ax + (bx - ax) * k, ay + (by - ay) * k]);
+    break;
+  }
+  return out;
+}

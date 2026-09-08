@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { chartPointAt, chartTravelled, chartFocus } from "@/components/hub/chartPath";
+import { chartPolylineTo, chartTravelled, chartFocus } from "@/components/hub/chartPath";
 
 /** The Sun travelling a chart, with nothing else moving.
  *
@@ -129,24 +129,27 @@ export function TrackChart({ p, camera }: { p: number; camera: TrackCamera }) {
       const sun = { x: spot[0] * w, y: spot[1] * h };
       const done = chartTravelled(k);
 
-      ctx.lineJoin = "miter";
-      ctx.miterLimit = 8;
       ctx.lineCap = "round";
 
       /* Behind it, the line it has drawn. Nothing ahead of it. */
       if (done > 0) {
-        const pts: Array<[number, number]> = [];
-        const steps = 48;
-        for (let i = 0; i <= steps; i++) {
-          const [x, y] = chartPointAt((done * i) / steps);
-          pts.push([x * w, y * h]);
-        }
+        /* The path's own vertices, not samples of it. */
+        const pts = chartPolylineTo(done).map(([x, y]) => [x * w, y * h] as [number, number]);
         const grad = ctx.createLinearGradient(sun.x, sun.y, pts[0][0], pts[0][1]);
         grad.addColorStop(0, "rgba(255,246,214,1)");
         grad.addColorStop(0.5, "rgba(255,206,110,0.55)");
         grad.addColorStop(1, "rgba(255,180,80,0.04)");
         ctx.strokeStyle = grad;
-        const run = (width: number, alpha: number) => {
+
+        /* THE WIDE STROKES TURN ROUND CORNERS, THE THIN ONE TURNS SHARP. A
+           mitred join on a 9px stroke at a turn this tight throws a spike well
+           past the line it is supposed to be haloing, and that spike is the
+           fold that appeared at every corner. The halo is what carries the
+           width, so it is the one that gives up the point; the 1.6px line that
+           actually reads as the chart keeps its mitre. */
+        const run = (width: number, alpha: number, join: CanvasLineJoin) => {
+          ctx.lineJoin = join;
+          ctx.miterLimit = join === "miter" ? 4 : 10;
           ctx.globalAlpha = alpha;
           ctx.lineWidth = width;
           ctx.beginPath();
@@ -154,9 +157,9 @@ export function TrackChart({ p, camera }: { p: number; camera: TrackCamera }) {
           for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
           ctx.stroke();
         };
-        run(9, 0.14);
-        run(3.4, 0.32);
-        run(1.6, 1);
+        run(9, 0.14, "round");
+        run(3.4, 0.32, "round");
+        run(1.6, 1, "miter");
       }
 
       /* And the Sun itself, drawn to match the one it replaced. */
