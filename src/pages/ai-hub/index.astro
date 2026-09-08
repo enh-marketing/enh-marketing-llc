@@ -3,9 +3,13 @@ import { Font } from "astro:assets";
 import Base from "@/layouts/Base.astro";
 import { AiHubPage } from "@/page-bodies/ai-hub-index";
 
-/* No navbar and no footer: this page is being composed from nothing, and the
-   shell would decide the top and bottom of it before the design does.
-   `chrome={false}` is a prop on the layout, so the other 38 pages are untouched.
+/* THE SHELL IS BACK ON, as of 2026-09-09. This page was built with
+   `chrome={false}` so the story could decide its own top and bottom before the
+   navigation did, which was right while it was being composed and is no longer:
+   it is a page of the site and the reader needs the site's own way in and out
+   of it. The navbar is fixed at z-[70], above the opening line's overlay at
+   z-30 and the foreground copy at z-40, so it sits over the story rather than
+   inside it and nothing on the page had to move.
 
    PLACEHOLDER META. The title and description below are holding the shape of
    the tags, not stating the page's copy. Neither is written yet and neither is
@@ -18,7 +22,6 @@ const HREF = "/ai-hub";
   title="AI Hub | ENH Marketing"
   description="ENH Marketing's AI Hub."
   canonical={HREF}
-  chrome={false}
 >
   {/* Space Grotesk is this page's typeface and no other page's. Declaring it
       here rather than in Base.astro is what keeps the preload off the other
