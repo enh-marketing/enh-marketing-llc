@@ -46,6 +46,8 @@ type BakeKnobs = {
   density: number;
   strokeWidth: number;
   mode: NeuformMode;
+  /** Added here, not upstream. See the `beams` prop. */
+  beams: boolean;
 };
 
 type EffectDefinition = {
@@ -84,6 +86,13 @@ export type ParticleDriftProps = {
    * and its particles would sit inert.
    */
   followPointer?: boolean;
+  /**
+   * Added here, not upstream. The effect draws two things: the drifting ASCII
+   * nodes with their proximity lines, and a separate set of fast blue vertical
+   * beams shooting upward. This turns the beams off and leaves the letters.
+   * Defaults to true, which is the component as published.
+   */
+  beams?: boolean;
   className?: string;
   style?: CSSProperties;
 };
@@ -313,12 +322,17 @@ const PARTICLE_DRIFT_DEFINITION: EffectDefinition = {
   supportsMode: true,
   background: (mode) => (mode === "light" ? LIGHT_PAPER : "#030509"),
   targets: [{ selector: "#particle-canvas", role: "background" }],
-  patch(source, { size, length, density, mode }) {
+  patch(source, { size, length, density, mode, beams }) {
     const link = Math.round(120 * length);
     const proximityAlpha = mode === "light" ? 0.22 : 0.15;
     let next = source
       .replace("Array.from({ length: 90 })", `Array.from({ length: ${scaleCount(90, density, 12)} })`)
-      .replace("Array.from({ length: 25 })", `Array.from({ length: ${scaleCount(25, density, 4)} })`)
+      // Zero-length array rather than deleting the loop: the forEach then has
+      // nothing to walk, and the original drawing code is left exactly as it is.
+      .replace(
+        "Array.from({ length: 25 })",
+        `Array.from({ length: ${beams ? scaleCount(25, density, 4) : 0} })`,
+      )
       .replace("length: Math.random() * 100 + 50,", `length: (Math.random() * 100 + 50) * ${length},`)
       .replace(
         "n.y += n.vy; // Slow drift",
@@ -369,6 +383,7 @@ function buildFocusedDocument(
         density: knobs.density,
         strokeWidth: knobs.strokeWidth,
         mode,
+        beams: knobs.beams,
       })
     : definition.source;
   const focusStyle = `<style data-threeui-focus>
@@ -450,6 +465,7 @@ export default function ParticleDrift({
   brightness = PARTICLE_DRIFT_DEFAULTS.brightness,
   transparent = false,
   followPointer = false,
+  beams = true,
   className,
   style,
 }: ParticleDriftProps) {
@@ -486,8 +502,9 @@ export default function ParticleDrift({
         strokeWidth: safeStrokeWidth,
         opacity: PARTICLE_DRIFT_DEFAULTS.opacity,
         transparent,
+        beams,
       }),
-    [resolvedMode, safeDensity, safeGap, safeLength, safeSize, safeStrokeWidth, transparent],
+    [beams, resolvedMode, safeDensity, safeGap, safeLength, safeSize, safeStrokeWidth, transparent],
   );
 
   useEffect(() => {

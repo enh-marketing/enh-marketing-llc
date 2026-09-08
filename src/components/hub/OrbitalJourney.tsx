@@ -197,7 +197,7 @@ export function OrbitalJourney() {
                 className="pointer-events-none absolute inset-0"
                 style={{ opacity: particles, mixBlendMode: "screen" }}
               >
-                <ParticleDrift transparent followPointer density={0.9} speed={0.8} className="h-full w-full" />
+                <ParticleDrift transparent followPointer beams={false} density={0.9} speed={0.8} className="h-full w-full" />
               </div>
             )}
 
