@@ -17,7 +17,7 @@
  *
  *  The label is not `uppercase` in CSS: the words are capitalised in the markup
  *  so they survive into the accessible name as written. */
-export function ServiceChip({ href, label = "Explore the service" }: { href: string; label?: string }) {
+export function ServiceChip({ href, label = "Explore" }: { href: string; label?: string }) {
   return (
     <a
       href={href}

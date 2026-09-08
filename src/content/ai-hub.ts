@@ -163,7 +163,7 @@ export const horizon: Beat[] = [
 
 /* ---------------------------------------------------------------- chapter 3 */
 
-/** The close: the airlock door, and the two lines shown over it.
+/** The close: the invitation after the black hole.
  *
  *  THIS IS THE ONE BLOCK ON THE PAGE I WROTE, and it should be read as a draft
  *  until Divij says otherwise. Every other string here is quoted from a sitemap
@@ -181,11 +181,8 @@ export const horizon: Beat[] = [
  *  lines are the page's own sentence finishing, which is the most a page with
  *  no approved copy is entitled to say. */
 export const threshold = {
-  /** Over the opening frames, while the hatch is still shut. */
-  title: "THE DOOR IS OPEN",
-  /** Over the last frames, once it has swung clear and the view is there.
-   *  It closes the sentence the page opened on: the mountain says "Explore New
-   *  Heights With Us", the system finishes it "With AI", and this is where it
-   *  lands. */
-  tagline: "Explore new heights with ENH.",
+  heading: "You have seen the whole journey",
+  body: "The work behind it is ordinary: a diagnostic first, then the parts worth automating, built and measured. Tell us what you are trying to move.",
+  action: "Start the conversation",
+  back: "Back to the site",
 };
