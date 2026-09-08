@@ -62,6 +62,21 @@ interface Props {
    *  real page wants; an experiment kept off the search engines passes
    *  "noindex, nofollow". */
   robots?: string;
+  /** Pins the page to the dark theme and takes the theme control away with it.
+   *
+   *  FOR A PAGE THAT PAINTS ITS OWN SURFACES rather than using the theme
+   *  tokens. The AI Hub is a night mountain that becomes deep space: every
+   *  colour in it is written black in the markup, because `snow` and `void` are
+   *  near-black in dark and near-white in light and a story cannot follow them.
+   *  The shell can, and did, so in light mode the navbar and footer came up
+   *  pale at the top and bottom of a black page.
+   *
+   *  The class is written onto <html> here rather than added by a script, so it
+   *  is in the first byte of the document and there is nothing to flash. The
+   *  reader's stored preference is untouched: this is what one page looks like,
+   *  not a change to what they chose for the site. The toggle goes with it,
+   *  because a control that cannot change anything is worse than no control. */
+  forceDark?: boolean;
 }
 
 const {
@@ -74,6 +89,7 @@ const {
   ogType,
   chrome = true,
   robots = "index, follow",
+  forceDark = false,
 } = Astro.props;
 
 const og = ogTitle ?? title;
@@ -82,7 +98,7 @@ const canonicalUrl = canonical ? new URL(canonical, Astro.site).href : undefined
 const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 ---
 
-<html lang="en" class="h-full">
+<html lang="en" class={forceDark ? "h-full dark" : "h-full"}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -147,7 +163,7 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
     <SmoothScroll client:load />
 
     <div class="grain">
-      {chrome && <Navbar client:load pathname={Astro.url.pathname} />}
+      {chrome && <Navbar client:load pathname={Astro.url.pathname} showThemeToggle={!forceDark} />}
       <slot />
       {/* Footer carries no state or effects, so it is rendered to plain HTML
           with no client directive and ships no JavaScript at all. */}

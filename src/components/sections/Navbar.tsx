@@ -148,7 +148,15 @@ function SubMenu({ node, onNavigate }: { node: NavNode; onNavigate: () => void }
  *  hook only ever returned a value in the browser, so the active nav item and
  *  the CTA target were absent from the server-rendered HTML and appeared on
  *  hydration. As a prop they are correct in the first paint. */
-export function Navbar({ pathname }: { pathname: string }) {
+export function Navbar({
+  pathname,
+  /** Off on a page that pins its own theme, where the control cannot change
+   *  anything. See `forceDark` in layouts/Base.astro. */
+  showThemeToggle = true,
+}: {
+  pathname: string;
+  showThemeToggle?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -231,7 +239,7 @@ export function Navbar({ pathname }: { pathname: string }) {
           </a>
 
           <div className="flex items-center gap-3 sm:gap-4">
-            <ThemeToggle />
+            {showThemeToggle && <ThemeToggle />}
             <a
               href={ctaTarget(pathname)}
               className="hidden rounded-full border border-line px-5 py-2.5 text-sm font-medium text-snow transition-colors duration-300 hover:border-brand hover:bg-brand hover:text-white sm:block"
