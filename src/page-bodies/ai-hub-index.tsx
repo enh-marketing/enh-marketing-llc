@@ -1,10 +1,14 @@
 "use client";
 
+import AirlockHero from "@/components/hub/AirlockHero";
+
 /** The AI Hub landing page.
  *
- *  Deliberately empty. Everything built here was scrapped on 2026-09-08 to
- *  start again from nothing. What remains is the route, a blank canvas, and no
- *  navbar or footer, which is where this page began. */
+ *  The hero, and nothing under it yet. */
 export function AiHubPage() {
-  return <main className="min-h-screen" />;
+  return (
+    <main>
+      <AirlockHero />
+    </main>
+  );
 }
