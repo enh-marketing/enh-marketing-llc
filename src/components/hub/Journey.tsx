@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ComponentType } from "react";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
+import { AccentedTitle } from "@/components/hub/AccentedTitle";
 import type { Beat } from "@/content/ai-hub";
 
 /** The chapter machine.
@@ -199,7 +200,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                     )}
                     {/* The site's own heading, at the section scale. */}
                     <h2 className="font-display display-lg font-extrabold uppercase text-white">
-                      {b.title}
+                      <AccentedTitle text={b.title} />
                     </h2>
                     {b.body && (
                       <p className="mt-4 max-w-lg text-[0.95rem] leading-relaxed text-white/60">{b.body}</p>

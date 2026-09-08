@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { ParallaxLayers } from "@/components/fx/ParallaxLayers";
 import { BACK, FRONT, LAYER_IMG, MID } from "@/components/hub/parallaxAssets";
+import { AccentedTitle } from "@/components/hub/AccentedTitle";
 import { SunBridge } from "@/components/hub/SunBridge";
 import { BACK_RATE } from "@/components/hub/sun";
 import { ascent } from "@/content/ai-hub";
@@ -68,7 +69,7 @@ export function Ascent() {
                     case, at the hero size. display-2xl clamps against svh as
                     well as vw, which is what keeps it inside a short window. */}
                 <h1 className="font-display display-2xl max-w-[16ch] font-extrabold uppercase text-white">
-                  {opener.title}
+                  <AccentedTitle text={opener.title} />
                 </h1>
               </div>
             ),
