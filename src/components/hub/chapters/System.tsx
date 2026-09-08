@@ -7,6 +7,7 @@ import {
   type Planet,
 } from "@/components/hub/OrbitalHeroSection";
 import ParticleDrift from "@/components/hub/ParticleDrift";
+import { ScatterField, type ScatterCamera } from "@/components/hub/ScatterField";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
 /** Chapter two: the system.
@@ -77,16 +78,21 @@ type Stop = {
   particles?: boolean;
 };
 
+/** Orbital's own default, which the arrival has to start from zero and reach,
+ *  and which the scatter has to know to find the Sun. */
+const LEAD = 0.12;
+
 /** The camera at each stop, in the order the chapter passes through them.
  *
- *  WHAT MAKES THE PLANETS CROSS THE WHOLE FRAME is not the camera, it is the
- *  wake: `driftSpeed` times `trailYears`, capped per planet by `maxTurns`. The
- *  component offsets each trail backwards along the Sun's course by
- *  `driftSpeed * age` in world units, so the streak's on-screen length grows
- *  with both. At the values the first three stops use it spans about 0.9 of a
- *  half-short-side, which is comfortably inside the frame; at the scatter stop
- *  it reaches nearly four, which runs off both edges. All three are read fresh
- *  into the draw each frame, so this costs nothing. */
+ *  THE LAST STOP IS THE THIRD ONE AGAIN. Every camera field in it is copied
+ *  from the stop before, and so is every trail field, so that across the last
+ *  third of the chapter the camera does not move at all: not the angle, not the
+ *  zoom, not where the Sun sits, not the length of the line it is drawing. The
+ *  only thing that changes is `fade`, which takes the component's own planets
+ *  away. Everything the reader sees moving in that stretch is the scatter drawn
+ *  over the top. Moving the camera at the same time was tried and was wrong: it
+ *  reads as the view swinging, which competes with the one thing that is
+ *  supposed to be happening. */
 const STOPS: Stop[] = [
   // Straight down on the disc. Rings, near-circular, barely drifting.
   { tilt: 14, spin: 140, roll: -6, viewRadius: 2.3, alignToCourse: 0, eccentricity: 0,
@@ -96,24 +102,32 @@ const STOPS: Stop[] = [
   { tilt: 52, spin: 196, roll: 2, viewRadius: 2.8, alignToCourse: 0.3, eccentricity: 0.12,
     planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46,
     trailYears: 2.6, maxTurns: 3, fade: 1, particles: true },
-  // AI & Automation. Orbital's own default: the helix, planes on one axis.
+  // AI & Automation. The helix, all planes swung onto one axis. The camera
+  // settles here and does not move again.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.68, focusY: 0.44,
+    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
-  // AI Creative Production. The scatter: in close, planes fanned, orbits pulled
-  // long, and the wake driven hard enough to throw colour clean off both edges.
-  { tilt: 62, spin: 300, roll: 8, viewRadius: 2.4, alignToCourse: 0.35, eccentricity: 0.6,
-    planeSpread: 1, driftSpeed: 5, glow: 1, focusX: 0.5, focusY: 0.5,
-    trailYears: 5, maxTurns: 6, fade: 1 },
-  // Still crossing, and beginning to go.
-  { tilt: 70, spin: 330, roll: 4, viewRadius: 2.6, alignToCourse: 0.2, eccentricity: 0.6,
-    planeSpread: 1, driftSpeed: 5.5, glow: 1, focusX: 0.5, focusY: 0.5,
-    trailYears: 5, maxTurns: 6, fade: 0.3 },
-  // Nothing left but the Sun and the line it is drawing.
-  { tilt: 78, spin: 352, roll: 0, viewRadius: 3, alignToCourse: 0.2, eccentricity: 0.6,
-    planeSpread: 1, driftSpeed: 4, glow: 1, focusX: 0.5, focusY: 0.55,
-    trailYears: 4, maxTurns: 6, fade: 0 },
+  // AI Creative Production. Identical camera. The planets go.
+  { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
+    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
+    trailYears: 2.6, maxTurns: 3, fade: 0 },
 ];
+
+/** Where the scatter runs, in chapter progress: the last leg, between the two
+ *  stops that share a camera. */
+const SCATTER_FROM = 2 / 3;
+
+/** The frozen camera the scatter is drawn against, so both agree on where the
+ *  Sun is. Read from the stop rather than retyped. */
+const SCATTER_CAMERA: ScatterCamera = {
+  spin: STOPS[3].spin,
+  tilt: STOPS[3].tilt,
+  roll: STOPS[3].roll,
+  focusX: STOPS[3].focusX,
+  focusY: STOPS[3].focusY,
+  lead: LEAD,
+  apex: [272, 53],
+};
 
 const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
 
@@ -123,8 +137,6 @@ const ENTRY_SPAN = 0.16;
 /** How much of the arrival happens before the stage pins. */
 const ARRIVE_BEFORE_PIN = 0.5;
 const ENTRY_RADIUS = 0.8;
-/** Orbital's own default, which the arrival has to start from zero and reach. */
-const LEAD = 0.12;
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -268,6 +280,7 @@ export function System({
      and nested. Past that they would be a thicket. */
   const showOrbits = cam.alignToCourse < 0.2;
   const particles = particleLevel(t);
+  const scatter = clamp((t - SCATTER_FROM) / (1 - SCATTER_FROM), 0, 1);
 
   return (
     <OrbitalHeroSection
@@ -286,9 +299,17 @@ export function System({
       focus={[focusX, focusY]}
       lead={lead}
       showOrbits={showOrbits}
+      /* Off, and it has to be. The component eases the camera up to 7 degrees
+         of yaw and 5 of pitch toward the pointer, in state nothing outside can
+         read. With it on, the Sun is not where the arithmetic in ScatterField
+         says it is, and the scatter would open out of the wrong point. It is
+         also the second thing moving the camera in a stretch where the camera
+         is supposed to be still. */
+      interactive={false}
       scrim="bottom"
       scrimStrength={0.8}
     >
+      {scatter > 0 && <ScatterField p={scatter} camera={SCATTER_CAMERA} />}
       {particles > 0.01 && (
         <div
           aria-hidden
