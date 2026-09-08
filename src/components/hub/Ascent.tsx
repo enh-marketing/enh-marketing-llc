@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { ParallaxLayers } from "@/components/fx/ParallaxLayers";
 import { BACK, FRONT, LAYER_IMG, MID } from "@/components/hub/parallaxAssets";
+import { OpeningLine, LINE_RATE } from "@/components/hub/OpeningLine";
 import { SunBridge } from "@/components/hub/SunBridge";
 import { BACK_RATE } from "@/components/hub/sun";
 
@@ -52,6 +53,14 @@ export function Ascent() {
           // photograph puts in front of it.
           { y: BACK_RATE, children: <SunBridge frame={frame} /> },
           { y: 55, children: <img src={MID} alt="" aria-hidden loading="eager" className={LAYER_IMG} /> },
+          /* THE LINE, AND IT HAS TO BE HERE, between the middle distance and
+             the near ground. Layers are painted in array order, so everything
+             after this one is drawn over it: the foreground rises past the
+             words and the man stands in front of them, which is the depth the
+             effect exists for. Laid over the top instead it reads as a caption
+             stuck to the glass. Its rate is derived from where it rests, in
+             hub/OpeningLine, so the two cannot drift apart. */
+          { y: LINE_RATE, children: <OpeningLine /> },
           { y: 10, children: <img src={FRONT} alt="" aria-hidden loading="eager" className={LAYER_IMG} /> },
         ]}
       />
