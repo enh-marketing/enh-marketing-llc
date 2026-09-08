@@ -77,6 +77,13 @@ export type ParticleDriftProps = {
    * #030509 behind them and hides whatever is underneath.
    */
   transparent?: boolean;
+  /**
+   * Added here, not upstream. Forwards the parent page's pointer into the
+   * frame. Needed whenever the frame is laid over something else with
+   * pointer-events:none, because it then receives no mouse events of its own
+   * and its particles would sit inert.
+   */
+  followPointer?: boolean;
   className?: string;
   style?: CSSProperties;
 };
@@ -203,6 +210,17 @@ const PARTICLE_DRIFT_SOURCE = `<!doctype html>
                 const rect = canvas.getBoundingClientRect();
                 mouse.x = e.clientX - rect.left;
                 mouse.y = e.clientY - rect.top;
+            });
+
+            // ADDED, not upstream. The frame is laid over another scene with
+            // pointer-events:none so the pointer still reaches what is beneath
+            // it, which means these events never arrive on their own. The
+            // parent forwards them instead. Same closure, so the mouse
+            // object is in scope; nothing else about the effect changes.
+            window.addEventListener('message', function (ev) {
+                if (!ev.data || ev.data.type !== 'threeui-pointer') return;
+                mouse.x = ev.data.x;
+                mouse.y = ev.data.y;
             });
 
             function initParticles() {
@@ -431,6 +449,7 @@ export default function ParticleDrift({
   saturation = PARTICLE_DRIFT_DEFAULTS.saturation,
   brightness = PARTICLE_DRIFT_DEFAULTS.brightness,
   transparent = false,
+  followPointer = false,
   className,
   style,
 }: ParticleDriftProps) {
@@ -501,6 +520,23 @@ export default function ParticleDrift({
     safeStrokeWidth,
     source,
   ]);
+
+  useEffect(() => {
+    if (!followPointer) return;
+    const frame = iframeRef.current;
+    if (!frame) return;
+    const onMove = (e: PointerEvent) => {
+      const r = frame.getBoundingClientRect();
+      // After isolation the canvas is fixed to the frame's full size, so the
+      // frame's own box is the canvas's box.
+      frame.contentWindow?.postMessage(
+        { type: "threeui-pointer", x: e.clientX - r.left, y: e.clientY - r.top },
+        "*",
+      );
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [followPointer]);
 
   const filter =
     safeHue === 0 && safeSaturation === 1 && safeBrightness === 1
