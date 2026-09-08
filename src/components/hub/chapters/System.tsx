@@ -7,7 +7,8 @@ import {
   type Planet,
 } from "@/components/hub/OrbitalHeroSection";
 import ParticleDrift from "@/components/hub/ParticleDrift";
-import { TrackChart, type TrackCamera } from "@/components/hub/TrackChart";
+import { chartFocus, RUN_IN } from "@/components/hub/chartPath";
+import { TrackChart } from "@/components/hub/TrackChart";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
 /** Chapter two: the system.
@@ -136,20 +137,6 @@ const STOPS: Stop[] = [
  *  have straightened. Four gaps between five stops, so the last is the fourth
  *  quarter. */
 const CHART_FROM = 0.75;
-
-/** The camera the chart is drawn against, read from the stop rather than
- *  retyped. It is the same as stops 2 and 3, which is what lets the chart know
- *  where the Sun and the tail of its track are without measuring anything. */
-const CHART_CAMERA: TrackCamera = {
-  spin: STOPS[4].spin,
-  tilt: STOPS[4].tilt,
-  roll: STOPS[4].roll,
-  focusX: STOPS[4].focusX,
-  focusY: STOPS[4].focusY,
-  viewRadius: STOPS[4].viewRadius,
-  lead: LEAD,
-  apex: [272, 53],
-};
 
 const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
 
@@ -304,14 +291,26 @@ export function System({
      the stage is still climbing, whatever it has left to climb is subtracted.
      Anchored to the stage instead, the star rides up with the arriving section
      and then reverses, which is what read as appearing from nowhere. */
-  const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
-  const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
-  const lead = mix(LEAD, 0, entry);
+  const chart = clamp((t - CHART_FROM) / (1 - CHART_FROM), 0, 1);
+
+  /* THE SUN WALKS THE CHART. `focus` is the prop that places it, so driving
+     that along the path moves the real Sun onto the line: the shape ahead of it
+     is where it is going and the shape behind is where it has been. `lead`
+     pushes the Sun off `focus` by a share of the short side, which is right
+     everywhere else and wrong here, because on the chart the Sun has to sit on
+     the line and not beside it; it is eased to zero across the run-in. */
+  const onChart = chart > 0 ? chartFocus(chart) : null;
+  const chartLead = onChart ? 1 - smooth(clamp(chart / RUN_IN, 0, 1)) : 1;
+
+  const focusX = onChart ? onChart[0] : mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
+  const focusY = onChart
+    ? onChart[1]
+    : mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
+  const lead = mix(LEAD, 0, entry) * chartLead;
   /* The rings belong to the opening, where the orbits are still near-circular
      and nested. Past that they would be a thicket. */
   const showOrbits = cam.alignToCourse < 0.2;
   const particles = particleLevel(t);
-  const chart = clamp((t - CHART_FROM) / (1 - CHART_FROM), 0, 1);
 
 
   return (
@@ -346,14 +345,7 @@ export function System({
       scrim="bottom"
       scrimStrength={0.8}
     >
-      {chart > 0 && (
-        <TrackChart
-          p={chart}
-          camera={CHART_CAMERA}
-          driftSpeed={cam.driftSpeed}
-          trailYears={cam.trailYears}
-        />
-      )}
+      {chart > 0 && <TrackChart p={chart} />}
       {particles > 0.01 && (
         <div
           aria-hidden
