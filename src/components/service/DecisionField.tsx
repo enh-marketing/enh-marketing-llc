@@ -163,14 +163,12 @@ function FindingDrawing({ i, on }: { i: number; on: boolean }) {
 export function DecisionField({
   left,
   right,
-  closing,
   plan,
   beginsLabel,
   findings,
 }: {
   left: string;
   right: string;
-  closing: string;
   /** The three things the plan is, in the first paragraph's own words. */
   plan: string[];
   /** The clause the second paragraph opens on. */
@@ -379,24 +377,6 @@ export function DecisionField({
         </ul>
       </div>
 
-      {/* And the sentence that costs something, over the range it describes. */}
-      <div className="relative mt-16 sm:mt-20">
-        <svg
-          viewBox="0 0 1200 200"
-          aria-hidden
-          preserveAspectRatio="none"
-          className="pointer-events-none absolute inset-0 h-full w-full"
-        >
-          <path d="M0 100 L1200 4 L1200 196 Z" fill="color-mix(in srgb, var(--color-brand) 7%, transparent)" />
-          <path d="M0 100 L1200 4" {...S} strokeWidth={1.2} strokeDasharray="7 6" className="text-brand" opacity={0.6} />
-          <path d="M0 100 L1200 196" {...S} strokeWidth={1.2} strokeDasharray="7 6" className="text-brand" opacity={0.6} />
-        </svg>
-        <Rise>
-          <p className="font-display relative mx-auto max-w-[30ch] py-10 text-center text-[clamp(1.3rem,3vw,2.3rem)] font-extrabold uppercase leading-[1.1] text-snow">
-            {closing}
-          </p>
-        </Rise>
-      </div>
     </div>
   );
 }

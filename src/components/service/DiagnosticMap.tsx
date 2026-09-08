@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { cn } from "@/lib/cn";
 
-/** The five checks, as five reads on one process.
+/** The ten checks, as ten reads on one process.
  *
  *  WHY THIS. They were five bordered rows, which is the arrangement that makes
  *  them look like a feature list. They are not a list. Read them together and
@@ -15,6 +15,18 @@ import { cn } from "@/lib/cn";
  *    "The time spent on each stage"                 -> how long each one takes
  *    "Repeated work and manual data entry"          -> where it loops back
  *    "Rules, exceptions and approval requirements"  -> where it stops for a person
+ *    "Processes that are suitable for automation"    -> the stages that can go
+ *    "Processes should remain manual"                -> the one that cannot
+ *    "Recommended automation scope"                  -> the bracket around them
+ *    "Estimated development timeline and cost"       -> the build, on its own band
+ *    "Expected time or cost savings"                 -> the same run, shorter
+ *
+ *  TEAM DIRECTION, 2026-09-08: all ten are bullets of the document's own "It
+ *  covers:" list. The last five used to be pulled out of it into two separate
+ *  blocks below, which made them read as another section; they are back in the
+ *  list and the drawing now has a read for each of the ten. The second five
+ *  annotate the same process the first five observe, which is the point: the
+ *  diagnostic looks at one process and then marks it up.
  *
  *  The document calls the deliverable "process mapping", so the section draws
  *  the process once and makes each check a lens onto it. Taking a lens dims
@@ -35,19 +47,53 @@ import { cn } from "@/lib/cn";
 
 /** Which part of the drawing each check is looking at. Derived from the check's
  *  own wording, in the document's order. */
-type Lens = "stages" | "handoffs" | "duration" | "loop" | "approval";
-const LENSES: Lens[] = ["stages", "handoffs", "duration", "loop", "approval"];
+type Lens =
+  | "stages"
+  | "handoffs"
+  | "duration"
+  | "loop"
+  | "approval"
+  | "automatable"
+  | "manual"
+  | "scope"
+  | "build"
+  | "savings";
+const LENSES: Lens[] = [
+  "stages",
+  "handoffs",
+  "duration",
+  "loop",
+  "approval",
+  "automatable",
+  "manual",
+  "scope",
+  "build",
+  "savings",
+];
+
+/** Which stages the schematic marks as automatable, and which one it leaves.
+ *  Fixed so the drawing is deterministic, and chosen to agree with the read
+ *  above it: the stage that stops for a person is the one that stays manual.
+ *  It is a shape, not a finding about anybody's actual process. */
+const AUTOMATABLE = [0, 1, 2, 3];
+const MANUAL = 4;
 
 /** How long each read holds before the next. Long enough to finish the line
  *  beside it, which is what sets the pace rather than the drawing. */
-const DWELL = 2800;
+const DWELL = 2400;
 
-/** Stage centres along the spine, and the bands the reads occupy. */
-const X = [30, 88, 146, 204, 262];
-const Y_SPINE = 118;
-const Y_PERSON = 34;
-const Y_LOOP_TOP = 74;
-const Y_MEASURE = 162;
+/** The process runs down the page, not across it, because it is read beside a
+ *  column of ten. Landscape left 408px of dead space above and below it once
+ *  the list grew from five reads to ten. */
+const SPINE_X = 268;
+const MEASURE_X = 58;
+const SAVE_X = 96;
+const RIGHT_X = 430;
+/** Stage centres down the spine. */
+const Y = [96, 216, 336, 456, 576];
+const Y_TOP = Y[0] - 30;
+const Y_END = Y[4] + 30;
+const Y_BUILD = 676;
 
 export function DiagnosticMap({
   coversLead,
@@ -63,6 +109,7 @@ export function DiagnosticMap({
   const [held, setHeld] = useState(false);
   const [paused, setPaused] = useState(false);
   const reduced = usePrefersReducedMotion();
+  const uid = useId();
 
   /* ------------------------------------------------------------- autoplay --
    *
@@ -104,15 +151,20 @@ export function DiagnosticMap({
       onFocusCapture={() => setHeld(true)}
       onBlurCapture={() => setHeld(false)}
     >
-      <p className="font-display mb-6 text-[0.7rem] font-semibold uppercase text-brand-text">
+      <p
+        id={`${uid}-covers`}
+        className="font-display mb-6 text-[0.7rem] font-semibold uppercase text-brand-text"
+      >
         {coversLead}
       </p>
 
-      <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-stretch">
-        {/* The five reads. Real buttons: the drawing illustrates the text, so
+      <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start">
+        {/* The ten reads. Real buttons: the drawing illustrates the text, so
             the text is the control. */}
         <div>
-          <div role="group" aria-label="Five reads on one process" className="border-t border-line">
+          {/* Named by the client's own lead-in rather than by a count: the
+              label was "Five reads on one process" and there are now ten. */}
+          <div role="group" aria-labelledby={`${uid}-covers`} className="border-t border-line">
             {observe.map((item, i) => {
               const isOn = lens === i;
               return (
@@ -191,36 +243,74 @@ export function DiagnosticMap({
         </div>
 
         {/* One process, drawn once, in bands. */}
-        <div className="flex h-full items-center justify-center rounded-[1.25rem] border border-line bg-ink-2 p-6 sm:p-8">
+        {/* Held in view while the ten reads scroll past it.
+            The list is ten rows and runs well over a thousand pixels; matching
+            that height with one drawing left 408px of dead air above and below
+            when the drawing was landscape, and made the row 1370px tall when it
+            was portrait and sized off its own width. Neither is a drawing
+            problem. So the drawing stops trying to be as tall as the list: it
+            takes a viewport-height box, sticks, and stays centred on whichever
+            read is being pointed at. */}
+        <div className="flex items-center justify-center rounded-[1.25rem] border border-line bg-ink-2 p-6 sm:p-8 lg:sticky lg:top-24 lg:h-[calc(100vh-9rem)] lg:max-h-[42rem]">
           <svg
-            viewBox="0 0 292 196"
-            className="block w-full"
+            viewBox="0 0 500 724"
+            preserveAspectRatio="xMidYMid meet"
+            className="block h-full w-full"
             role="img"
-            aria-label="A schematic of one business process: five stages on a spine, the handoffs between them, a loop returning to an earlier stage, a person at the point of approval, and a measure across the whole run. It carries no names or figures."
+            aria-label="A schematic of one business process running down the page: five stages on a spine, the handoffs between them, a loop returning to an earlier stage, a person at the point of approval, and a measure of the whole run beside it. It is then marked up: the stages that can be automated, the one that stays with the person, a bracket around the recommended scope, a separate band for the build, and the same run drawn shorter. It carries no names, durations or figures."
           >
-            {/* Approval: where the process stops for a person. Same motif as
-                the hero and the services diagram, so the page argues one thing
-                in one language. */}
+            {/* Duration: the whole run, measured down the side. No figure in
+                it, because the document supplies none. */}
             <g
-              style={{ opacity: dim("approval") }}
+              style={{ opacity: dim("duration") }}
+              className="transition-opacity duration-500 motion-reduce:transition-none"
+            >
+              <path
+                d={`M ${MEASURE_X + 8} ${Y_TOP} h -8 V ${Y_END} h 8`}
+                fill="none"
+                stroke="var(--color-brand)"
+                strokeWidth="1.2"
+                vectorEffect="non-scaling-stroke"
+              />
+              {Y.map((y) => (
+                <line
+                  key={`d-${y}`}
+                  x1={MEASURE_X}
+                  y1={y}
+                  x2={SPINE_X - 26}
+                  y2={y}
+                  stroke="var(--color-line)"
+                  strokeWidth="1"
+                  strokeDasharray="2 3"
+                  vectorEffect="non-scaling-stroke"
+                />
+              ))}
+            </g>
+
+            {/* Expected savings: the same run, shorter. The gap is the claim,
+                and it is a shape rather than a percentage. */}
+            <g
+              style={{ opacity: dim("savings") }}
               className="transition-opacity duration-500 motion-reduce:transition-none"
             >
               <line
-                x1={X[4]}
-                y1={Y_SPINE - 13}
-                x2={X[4]}
-                y2={Y_PERSON + 16}
-                stroke="var(--color-brand)"
+                x1={SAVE_X}
+                y1={Y_TOP}
+                x2={SAVE_X}
+                y2={Y_END}
+                stroke="var(--color-line)"
                 strokeWidth="1.2"
                 strokeDasharray="3 3"
                 vectorEffect="non-scaling-stroke"
               />
-              <circle cx={X[4]} cy={Y_PERSON} r="5" fill="var(--color-brand)" />
-              <path
-                d={`M ${X[4] - 9} ${Y_PERSON + 14} a 9 9 0 0 1 18 0`}
-                fill="none"
+              <line
+                x1={SAVE_X}
+                y1={Y_TOP}
+                x2={SAVE_X}
+                y2={Y[1]}
                 stroke="var(--color-brand)"
-                strokeWidth="1.6"
+                strokeWidth="3"
+                strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
               />
             </g>
@@ -231,7 +321,7 @@ export function DiagnosticMap({
               className="transition-opacity duration-500 motion-reduce:transition-none"
             >
               <path
-                d={`M ${X[2]} ${Y_SPINE - 13} C ${X[2]} ${Y_LOOP_TOP}, ${X[1]} ${Y_LOOP_TOP}, ${X[1]} ${Y_SPINE - 13}`}
+                d={`M ${SPINE_X - 26} ${Y[2]} C ${SPINE_X - 120} ${Y[2]}, ${SPINE_X - 120} ${Y[1]}, ${SPINE_X - 26} ${Y[1]}`}
                 fill="none"
                 stroke="var(--color-brand)"
                 strokeWidth="1.4"
@@ -239,7 +329,7 @@ export function DiagnosticMap({
                 vectorEffect="non-scaling-stroke"
               />
               <path
-                d={`M ${X[1] - 4} ${Y_SPINE - 18} L ${X[1]} ${Y_SPINE - 12} L ${X[1] + 4} ${Y_SPINE - 18}`}
+                d={`M ${SPINE_X - 32} ${Y[1] - 5} L ${SPINE_X - 25} ${Y[1]} L ${SPINE_X - 32} ${Y[1] + 5}`}
                 fill="none"
                 stroke="var(--color-brand)"
                 strokeWidth="1.4"
@@ -252,22 +342,22 @@ export function DiagnosticMap({
               style={{ opacity: dim("handoffs") }}
               className="transition-opacity duration-500 motion-reduce:transition-none"
             >
-              {X.slice(0, 4).map((x, i) => (
-                <g key={x}>
+              {Y.slice(0, 4).map((y, i) => (
+                <g key={`h-${y}`}>
                   <line
-                    x1={x + 12}
-                    y1={Y_SPINE}
-                    x2={X[i + 1] - 12}
-                    y2={Y_SPINE}
+                    x1={SPINE_X}
+                    y1={y + 26}
+                    x2={SPINE_X}
+                    y2={Y[i + 1] - 26}
                     stroke="var(--color-fog)"
                     strokeWidth="1.2"
                     vectorEffect="non-scaling-stroke"
                   />
                   <rect
-                    x={(x + X[i + 1]) / 2 - 4.5}
-                    y={Y_SPINE - 4.5}
-                    width="9"
-                    height="9"
+                    x={SPINE_X - 5}
+                    y={(y + Y[i + 1]) / 2 - 5}
+                    width="10"
+                    height="10"
                     rx="2"
                     fill={lit("handoffs") ? "var(--color-brand)" : "var(--color-ink-2)"}
                     stroke={lit("handoffs") ? "var(--color-brand)" : "var(--color-fog)"}
@@ -279,19 +369,68 @@ export function DiagnosticMap({
               ))}
             </g>
 
+            {/* Recommended scope: a bracket around what is proposed, and
+                nothing beyond it. */}
+            <g
+              style={{ opacity: dim("scope") }}
+              className="transition-opacity duration-500 motion-reduce:transition-none"
+            >
+              <path
+                d={`M ${RIGHT_X - 8} ${Y_TOP} h 8 V ${Y[3] + 26} h -8`}
+                fill="none"
+                stroke="var(--color-brand)"
+                strokeWidth="1.4"
+                vectorEffect="non-scaling-stroke"
+              />
+              <line
+                x1={RIGHT_X - 6}
+                y1={Y[4]}
+                x2={RIGHT_X + 6}
+                y2={Y[4]}
+                stroke="var(--color-line)"
+                strokeWidth="1.4"
+                vectorEffect="non-scaling-stroke"
+              />
+            </g>
+
+            {/* Approval: where the process stops for a person. */}
+            <g
+              style={{ opacity: dim("approval") }}
+              className="transition-opacity duration-500 motion-reduce:transition-none"
+            >
+              <line
+                x1={SPINE_X + 26}
+                y1={Y[4]}
+                x2={RIGHT_X - 16}
+                y2={Y[4]}
+                stroke="var(--color-brand)"
+                strokeWidth="1.2"
+                strokeDasharray="3 3"
+                vectorEffect="non-scaling-stroke"
+              />
+              <circle cx={RIGHT_X} cy={Y[4] - 7} r="5" fill="var(--color-brand)" />
+              <path
+                d={`M ${RIGHT_X - 9} ${Y[4] + 8} a 9 9 0 0 1 18 0`}
+                fill="none"
+                stroke="var(--color-brand)"
+                strokeWidth="1.6"
+                vectorEffect="non-scaling-stroke"
+              />
+            </g>
+
             {/* The stages themselves. */}
             <g
               style={{ opacity: dim("stages") }}
               className="transition-opacity duration-500 motion-reduce:transition-none"
             >
-              {X.map((x) => (
+              {Y.map((y) => (
                 <rect
-                  key={x}
-                  x={x - 12}
-                  y={Y_SPINE - 12}
-                  width="24"
-                  height="24"
-                  rx="5"
+                  key={`s-${y}`}
+                  x={SPINE_X - 26}
+                  y={y - 26}
+                  width="52"
+                  height="52"
+                  rx="11"
                   fill={lit("stages") ? "var(--color-brand)" : "var(--color-ink-3)"}
                   stroke={lit("stages") ? "var(--color-brand)" : "var(--color-line)"}
                   strokeWidth="1.4"
@@ -301,44 +440,76 @@ export function DiagnosticMap({
               ))}
             </g>
 
-            {/* Duration: measured across the run, with no figure in it, because
-                the document supplies none and the number is the reader's own. */}
+            {/* Suitable for automation: the stages that can go. */}
             <g
-              style={{ opacity: dim("duration") }}
+              style={{ opacity: dim("automatable") }}
               className="transition-opacity duration-500 motion-reduce:transition-none"
             >
-              <path
-                d={`M ${X[0]} ${Y_MEASURE} v 8 H ${X[4]} v -8`}
+              {AUTOMATABLE.map((i) => (
+                <rect
+                  key={`a-${i}`}
+                  x={SPINE_X - 32}
+                  y={Y[i] - 32}
+                  width="64"
+                  height="64"
+                  rx="14"
+                  fill="none"
+                  stroke="var(--color-brand)"
+                  strokeWidth="1.4"
+                  vectorEffect="non-scaling-stroke"
+                />
+              ))}
+            </g>
+
+            {/* Should remain manual: the one the person keeps. Hatched rather
+                than crossed out, because the document is not refusing it. */}
+            <g
+              style={{ opacity: dim("manual") }}
+              className="transition-opacity duration-500 motion-reduce:transition-none"
+            >
+              <rect
+                x={SPINE_X - 32}
+                y={Y[MANUAL] - 32}
+                width="64"
+                height="64"
+                rx="14"
                 fill="none"
-                stroke="var(--color-brand)"
-                strokeWidth="1.2"
+                stroke="var(--color-fog)"
+                strokeWidth="1.4"
+                strokeDasharray="3 3"
                 vectorEffect="non-scaling-stroke"
               />
-              {X.map((x) => (
-                <line
-                  key={x}
-                  x1={x}
-                  y1={Y_SPINE + 14}
-                  x2={x}
-                  y2={Y_MEASURE + 8}
-                  stroke="var(--color-line)"
-                  strokeWidth="1"
-                  strokeDasharray="2 3"
-                  vectorEffect="non-scaling-stroke"
-                />
-              ))}
-              {X.slice(0, 4).map((x, i) => (
-                <line
-                  key={`t-${x}`}
-                  x1={(x + X[i + 1]) / 2}
-                  y1={Y_MEASURE + 4}
-                  x2={(x + X[i + 1]) / 2}
-                  y2={Y_MEASURE + 12}
-                  stroke="var(--color-brand)"
-                  strokeWidth="1.2"
-                  vectorEffect="non-scaling-stroke"
-                />
-              ))}
+              <circle cx={RIGHT_X} cy={Y[MANUAL] - 7} r="4" fill="var(--color-fog)" />
+            </g>
+
+            {/* The build: its own band at the foot, because development is not
+                part of the process being measured. Dashed, because it is an
+                estimate, and it carries no length to read a figure off. */}
+            <g
+              style={{ opacity: dim("build") }}
+              className="transition-opacity duration-500 motion-reduce:transition-none"
+            >
+              <line
+                x1={MEASURE_X}
+                y1={Y_BUILD}
+                x2={RIGHT_X}
+                y2={Y_BUILD}
+                stroke="var(--color-brand)"
+                strokeWidth="3"
+                strokeDasharray="7 5"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+              />
+              <circle cx={MEASURE_X} cy={Y_BUILD} r="3.5" fill="var(--color-brand)" />
+              <circle
+                cx={RIGHT_X}
+                cy={Y_BUILD}
+                r="3.5"
+                fill="var(--color-ink-2)"
+                stroke="var(--color-brand)"
+                strokeWidth="1.4"
+                vectorEffect="non-scaling-stroke"
+              />
             </g>
           </svg>
         </div>

@@ -247,16 +247,21 @@ export const growthCta = {
 };
 
 /** "How ENH Helps". Two paragraphs either side of a rule: the plan, then the
- *  check. Departure 3: the second paragraph's last sentence is lifted out as
- *  the closing statement. */
+ *  check.
+ *
+ *  TEAM DIRECTION, 2026-09-08: the closing statement was removed from the
+ *  page. It read "If the available data does not support a reliable benchmark,
+ *  we state that clearly and begin with a wider forecast range." and was set
+ *  over a widening cone at the foot of the section. It is a sentence from the
+ *  client document, so it is recorded here rather than deleted without trace;
+ *  put the `closing` field and DecisionField's closing block back if the team
+ *  changes its mind. */
 export const helps = {
   title: "How ENH Helps You Plan",
   strokeTitle: "and Improve Campaigns",
   left: "ENH helps you set a realistic budget, forecast the expected outcome and decide how the spend should be divided across suitable channels. We review your campaign history, tracking and sales data, then compare the plan with relevant category benchmarks where enough comparable information is available.",
   right:
     "Once the campaign begins, we compare actual performance with the forecast and identify rising costs, tracking problems or weak results early.",
-  closing:
-    "If the available data does not support a reliable benchmark, we state that clearly and begin with a wider forecast range.",
   /** The three things the plan is, split from the first paragraph's own verbs:
    *  "set a realistic budget, forecast the expected outcome and decide how the
    *  spend should be divided across suitable channels". */
