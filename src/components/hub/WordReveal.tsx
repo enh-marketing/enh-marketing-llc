@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment } from "react";
 
 /** A line that lights word by word.
  *
@@ -28,11 +28,30 @@ import { useEffect, useRef, useState } from "react";
  *  animation is the only thing removed. */
 
 /** Where in `p` the last word begins. Everything before it is spread evenly. */
-const LAST_START = 0.62;
+export const LAST_START = 0.62;
 /** How much of `p` a single word takes to go from dark to lit. */
-const WORD_RUN = 0.3;
+export const WORD_RUN = 0.3;
 
-const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+export const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+
+/** How lit word `i` of `n` is at progress `p`. Exported because the opener's
+ *  line is rendered in two pieces, the part that never changes and the last
+ *  word that swaps, and the swapping one has to arrive on exactly the beat it
+ *  would have if the line were one string. */
+export function wordLit(p: number, i: number, n: number) {
+  return clamp((p - (i / Math.max(1, n - 1)) * LAST_START) / WORD_RUN);
+}
+
+/** The look of a word at a given lit value, shared by both renderers. */
+export function wordStyle(lit: number): React.CSSProperties {
+  return {
+    display: "inline-block",
+    opacity: 0.06 + 0.94 * lit,
+    transform: `translateY(${(1 - lit) * 8}px)`,
+    filter: lit > 0.995 ? undefined : `blur(${(1 - lit) * 5}px)`,
+    willChange: lit > 0.001 && lit < 0.999 ? "opacity, transform, filter" : undefined,
+  };
+}
 
 export function WordReveal({
   text,
@@ -47,100 +66,26 @@ export function WordReveal({
   accentFrom?: number;
 }) {
   const words = text.split(" ").filter(Boolean);
-  const last = Math.max(1, words.length - 1);
 
   return (
     <span className={className}>
-      {words.map((w, i) => {
-        const start = (i / last) * LAST_START;
-        const lit = clamp((p - start) / WORD_RUN);
-        return (
+      {words.map((w, i) => (
+        /* THE SPACE IS A SIBLING, NOT PART OF THE WORD. Each word is an
+           inline-block so the transform has a box to move, and a browser trims
+           trailing whitespace inside an inline-block: written inside the span
+           the gaps simply vanished and the line rendered "EXPLORENEW". As a
+           text node between the spans it survives, and it keeps the heading's
+           accessible name reading as a sentence rather than one long word. */
+        <Fragment key={`${w}-${i}`}>
           <span
-            key={`${w}-${i}`}
-            /* inline-block so the transform has something to move, and the
-               trailing space is written out rather than left to the gap between
-               inline elements, which collapses. Without it the accessible name
-               of the heading runs the words together. */
-            style={{
-              display: "inline-block",
-              opacity: 0.06 + 0.94 * lit,
-              transform: `translateY(${(1 - lit) * 8}px)`,
-              filter: lit > 0.995 ? undefined : `blur(${(1 - lit) * 5}px)`,
-              willChange: lit > 0.001 && lit < 0.999 ? "opacity, transform, filter" : undefined,
-            }}
+            style={wordStyle(wordLit(p, i, words.length))}
             className={i >= accentFrom && accentFrom >= 0 ? "text-stroke" : undefined}
           >
             {w}
-            {i < words.length - 1 ? " " : ""}
           </span>
-        );
-      })}
+          {i < words.length - 1 ? " " : ""}
+        </Fragment>
+      ))}
     </span>
   );
-}
-
-/** The same thing, lighting itself once when it first appears.
- *
- *  For the opener, which is on screen at load and has no scroll of its own to
- *  be driven by. A tween rather than a CSS transition per word because the
- *  stagger already lives in WordReveal and duplicating it in delays would put
- *  the same decision in two places.
- *
- *  It waits for the fonts. Space Grotesk arrives after first paint, and a line
- *  that lights word by word in the fallback face and then reflows into the real
- *  one is worse than one that starts a moment later. */
-export function WordRevealOnMount({
-  text,
-  className,
-  accentFrom = -1,
-  duration = 1500,
-  delay = 180,
-}: {
-  text: string;
-  className?: string;
-  accentFrom?: number;
-  duration?: number;
-  delay?: number;
-}) {
-  const [p, setP] = useState(0);
-  const raf = useRef(0);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setP(1);
-      return;
-    }
-
-    let start = 0;
-    let cancelled = false;
-
-    const step = (t: number) => {
-      if (!start) start = t;
-      const e = t - start - delay;
-      if (e >= 0) {
-        const x = clamp(e / duration);
-        // easeOutCubic: quick to legible, unhurried into place.
-        setP(1 - Math.pow(1 - x, 3));
-        if (x >= 1) return;
-      }
-      raf.current = requestAnimationFrame(step);
-    };
-
-    const go = () => {
-      if (cancelled) return;
-      raf.current = requestAnimationFrame(step);
-    };
-
-    // document.fonts is absent on no browser we support, but it is optional in
-    // the type and a rejected ready must not leave the line dark forever.
-    if (document.fonts?.ready) document.fonts.ready.then(go, go);
-    else go();
-
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf.current);
-    };
-  }, [duration, delay, text]);
-
-  return <WordReveal text={text} p={p} className={className} accentFrom={accentFrom} />;
 }

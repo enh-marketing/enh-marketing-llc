@@ -43,15 +43,6 @@ export type Beat = {
   href?: string;
   /** Small label above the title. */
   eyebrow?: string;
-  /** Where the beat sits in the frame. Categories read from the bottom left,
-   *  which is where the scene leaves room for them. "center" is for the one
-   *  line that is not a category: the opener's sentence, finishing itself in
-   *  the middle of the frame where the photograph was holding it. */
-  place?: "bottom" | "center";
-  /** Whether the last word takes the site's brand red. Categories do; the
-   *  opener's line does not, because it starts on a photograph where the red
-   *  landed on lit sky and read as a fault. */
-  accent?: boolean;
   /** Slug of the service this beat quotes. Its title must match that page's
    *  sitemap label and its body that page's meta.description, word for word.
    *  Enforced by scripts/check-hub-copy.mjs. */
@@ -102,18 +93,6 @@ export const ASCENT_HANDOVER = "Explore New Heights With AI";
  *  every path straightens into a line, and 0.8 and 1 the two stops the Sun
  *  spends climbing the chart. */
 export const system: Beat[] = [
-  /* THE OTHER HALF OF THE OPENER'S SENTENCE, and the first thing the chapter
-     says. It arrives centred, where the photograph was holding the same line,
-     and it is the same words with the last one changed: the reader watches the
-     sentence cross from the mountain into the system and become what the page
-     is actually about. It is out again well before 01, so no category ever
-     shares the frame with it. */
-  {
-    at: 0,
-    place: "center",
-    accent: false,
-    title: ASCENT_HANDOVER,
-  },
   {
     at: 0.2,
     eyebrow: "01",

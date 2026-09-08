@@ -4,6 +4,7 @@ import { Journey, type Chapter } from "@/components/hub/Journey";
 import { Ascent } from "@/components/hub/Ascent";
 import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
+import { TravellingTitle } from "@/components/hub/TravellingTitle";
 import { horizon, system } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
@@ -44,6 +45,13 @@ export function AiHubPage() {
     <main>
       <Ascent />
       <Journey chapters={CHAPTERS} beatWindow={{ hold: 0.035, ramp: 0.06 }} />
+      {/* OUTSIDE BOTH, ON PURPOSE. The opening line belongs to neither block:
+          it starts over the photograph and comes to rest in the system, so it
+          cannot live in the opener's parallax stage, which clips it and ends
+          with the block, nor in the journey's sticky stage, which does not
+          exist yet when the line is first read. It is fixed to the window and
+          placed by scroll, and it is mounted last so it sits over both. */}
+      <TravellingTitle />
     </main>
   );
 }

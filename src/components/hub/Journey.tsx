@@ -220,18 +220,16 @@ export function Journey({
                       1,
                     )
                   : 0;
-              /* AND GATED ON THE STAGE BEING PINNED, exactly as the scenes are.
-                 A beat is placed against its stage, and until the track reaches
-                 the top of the window that stage is still climbing, so a beat
-                 lit early is drawn wherever the stage happens to have got to.
-                 It never showed while every beat sat at 0.2 or later, because
-                 the stage is long pinned by then. The opener's handover sits at
-                 0, and without this it appeared centred in a stage that was
-                 still half a screen low: the line surfaced near the bottom of
-                 the window, in the black under the mountain, while the opener
-                 was still holding the same words up on the photograph. */
+              /* AND GATED ON THE STAGE BEING PINNED, exactly as the scenes
+                 are. A beat is placed against its stage, and until the track
+                 reaches the top of the window that stage is still climbing, so
+                 a beat lit early is drawn wherever the stage happens to have
+                 got to. Every beat here sits at 0.2 or later, by which point
+                 the stage is long pinned, so this changes nothing today; it is
+                 kept because the rule is the scenes' rule and a beat placed
+                 nearer the top of a chapter would otherwise surface halfway up
+                 the window with no warning. */
               const shown = reduced ? (ci === 0 && bi === 0 ? 1 : 0) : near * reveal;
-              const centred = b.place === "center";
               return (
                 <div
                   key={`${c.id}-${bi}`}
@@ -243,20 +241,10 @@ export function Journey({
                      reader tabbing through the page walks every category link
                      on it, including the seven that are invisible. */
                   inert={shown < 0.5}
-                  className={
-                    centred
-                      ? "absolute inset-0 flex flex-col items-center justify-center px-6 text-center transition-opacity duration-500 motion-reduce:transition-none"
-                      : "absolute inset-x-0 bottom-0 px-6 pb-[13vh] transition-opacity duration-500 motion-reduce:transition-none sm:px-10 lg:px-20"
-                  }
+                  className="absolute inset-x-0 bottom-0 px-6 pb-[13vh] transition-opacity duration-500 motion-reduce:transition-none sm:px-10 lg:px-20"
                   style={{ opacity: shown, pointerEvents: shown > 0.5 ? "auto" : "none" }}
                 >
-                  {/* `ch` HAS TO SIT ON THE HEADING, not on this wrapper. It
-                      resolves against the element's own font size, and on the
-                      wrapper that is the inherited 16px, so a 15ch cap came out
-                      at about 120px and broke the handover to one word a line.
-                      On the h1 the same 15ch is measured in Space Grotesk at
-                      display size, which is what the opener does. */}
-                  <div className={centred ? "w-full max-w-[46rem]" : "max-w-[44rem]"}>
+                  <div className="max-w-[44rem]">
                     {b.eyebrow && (
                       <p className="font-grotesk mb-4 flex items-center gap-4 text-[0.8rem] font-bold uppercase tracking-[0.18em] text-white/55">
                         <span className="tabular-nums">{b.eyebrow}</span>
@@ -271,19 +259,11 @@ export function Journey({
                         the opener: over a scene this dark the red reads, and it
                         is what marks the category name apart from the sentence
                         under it. */}
-                    <h2
-                      className={`font-grotesk font-bold uppercase text-white ${
-                        centred ? "hub-display mx-auto max-w-[15ch]" : "hub-heading"
-                      }`}
-                    >
+                    <h2 className="font-grotesk hub-heading font-bold uppercase text-white">
                       <WordReveal
                         text={b.title}
                         p={shown}
-                        accentFrom={
-                          b.accent === false
-                            ? -1
-                            : Math.max(0, b.title.trimEnd().split(" ").length - 1)
-                        }
+                        accentFrom={Math.max(0, b.title.trimEnd().split(" ").length - 1)}
                       />
                     </h2>
                     {b.body && (
