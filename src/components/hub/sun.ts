@@ -78,8 +78,10 @@ export const GLOW = {
   wake: 0.18,
   /** Full strength. */
   full: 0.5,
-  /** And out, before the journey's stage arrives. */
-  out: 0.86,
+  /** And out, before the journey's stage begins to show. Early enough to leave
+   *  the next scene a long fade rather than a short one; the two windows are
+   *  disjoint, which is the invariant that matters. */
+  out: 0.76,
   /** How much bigger it gets across its life. */
   growth: 2.8,
   /** Its diameter at rest, as a fraction of the smaller viewport side. */
@@ -91,14 +93,28 @@ export const GLOW = {
  *  appearing inside the light the first one was holding. It settles onto the
  *  first camera stop from there.
  *
- *  JUST INSIDE THE FRAME, NOT ABOVE IT. `focus` is the camera centre, so this
- *  places the whole scene, not only the star: lifting it above the top edge
- *  took the system up with it and hid the star until two or three turns of the
- *  wheel had gone by. It sits a twentieth of a viewport down instead, which is
- *  below the top edge by more than the star's own drawn radius, so the star is
- *  whole and in view the moment the scene appears and still has the length of
- *  the arrival to come down into place. */
-export const ENTRY_FOCUS = { x: 0.484, y: 0.05 };
+ *  WHERE THE STAR IS ON THE WINDOW when the second scene begins, as fractions
+ *  of the viewport. Zero is the top edge, so the star is cut in half by it and
+ *  descends into the frame from there.
+ *
+ *  IT IS A SCREEN POSITION, NOT A CAMERA POSITION, and that is the whole
+ *  lesson. `focus` is measured against the stage, and the stage is still
+ *  climbing the page while the scene fades up, so a fixed `focus` carries the
+ *  star up the window with the arriving section and then reverses when the
+ *  stage pins. That reversal is what read as appearing from nowhere. Three
+ *  fixed values were tried, a twentieth of a viewport above the stage's middle,
+ *  the same below, and a fifth above; the first hid the star for two or three
+ *  turns of the wheel, the second had it whole and motionless the instant the
+ *  scene appeared, and the third still dipped 19px back above the edge, because
+ *  an eased arrival cannot out-run a stage rising at the speed of the scroll.
+ *  A search over the easing's share and the starting offset found no pair that
+ *  descends throughout.
+ *
+ *  So the chapter is told where the star should be on the window and works out
+ *  the camera from there, subtracting however far the stage still has to
+ *  travel. The descent is then monotone by construction rather than by
+ *  tuning. */
+export const ENTRY_ON_SCREEN = { x: 0.484, y: 0 };
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const between = (v: number, a: number, b: number) => clamp((v - a) / (b - a || 1), 0, 1);

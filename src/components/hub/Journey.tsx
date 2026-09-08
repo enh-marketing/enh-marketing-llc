@@ -44,8 +44,12 @@ export type Chapter = {
   id: string;
   /** How many viewports of scroll this chapter owns. */
   viewports: number;
-  /** The scene. `t` is 0 to 1 within this chapter; `level` is its fade. */
-  Scene: ComponentType<{ t: number; level: number }>;
+  /** The scene. `t` is 0 to 1 within this chapter, `level` is its fade, and
+   *  `reveal` is how far the stage has come to being pinned, and `stageOffset`
+   *  is how far it still has to climb, in viewports. A scene needs both if
+   *  anything it draws has to be placed against the window rather than against
+   *  the stage while the stage is still moving underneath it. */
+  Scene: ComponentType<{ t: number; level: number; reveal: number; stageOffset: number }>;
   beats: Beat[];
 };
 
@@ -53,8 +57,12 @@ export type Chapter = {
 const FADE = 0.055;
 
 /** How much of a viewport the scene takes to fade up as the stage arrives.
- *  Short, so the two suns are never far apart while both are on screen. */
-const REVEAL_OVER = 0.12;
+ *
+ *  Long enough that the scene gathers rather than switching on: at an eighth of
+ *  a viewport it was abrupt. It cannot run so long that it overlaps the
+ *  opener's own light, so the opener puts that out at 0.76 and this begins at
+ *  0.8, and the two are never lit together. */
+const REVEAL_OVER = 0.2;
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
@@ -75,6 +83,8 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
   const [p, setP] = useState(0);
   /* 0 until the stage is nearly pinned, 1 once it is. */
   const [reveal, setReveal] = useState(0);
+  /** How far the stage still has to climb, in viewports. 0 once pinned. */
+  const [stageOffset, setStageOffset] = useState(1);
 
   const total = chapters.reduce((n, c) => n + c.viewports, 0);
   const bounds = boundsOf(chapters);
@@ -90,6 +100,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
       // and needs no easing of its own.
       setP(span <= 0 ? 0 : clamp(-r.top / span, 0, 1));
       setReveal(clamp(1 - r.top / (window.innerHeight * REVEAL_OVER), 0, 1));
+      setStageOffset(Math.max(0, r.top) / window.innerHeight);
     };
 
     onScroll();
@@ -138,7 +149,12 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
               className="absolute inset-0"
               style={{ opacity: levels[i] * (reduced ? 1 : reveal), zIndex: i === lead ? 2 : 1 }}
             >
-              <c.Scene t={locals[i]} level={levels[i]} />
+              <c.Scene
+                t={locals[i]}
+                level={levels[i]}
+                reveal={reduced ? 1 : reveal}
+                stageOffset={reduced ? 0 : stageOffset}
+              />
             </div>
           ) : null,
         )}

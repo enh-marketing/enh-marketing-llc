@@ -2,7 +2,7 @@
 
 import { OrbitalHeroSection } from "@/components/hub/OrbitalHeroSection";
 import ParticleDrift from "@/components/hub/ParticleDrift";
-import { ENTRY_FOCUS } from "@/components/hub/sun";
+import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
 /** Chapter two: the system.
  *
@@ -88,6 +88,8 @@ const PARTICLE_AT = STOPS.findIndex((s) => s.particles);
 /** How much of the chapter the pull-back takes, and how close it starts. A
  *  smaller radius is a tighter view; the first stop sits at 2.3. */
 const ENTRY_SPAN = 0.16;
+/** How much of the arrival happens before the stage pins. */
+const ARRIVE_BEFORE_PIN = 0.5;
 const ENTRY_RADIUS = 0.8;
 /** Orbital's own default, which the arrival has to start from zero and reach. */
 const LEAD = 0.12;
@@ -134,13 +136,37 @@ function particleLevel(t: number) {
   return clamp(1 - (d - PARTICLE_HOLD) / PARTICLE_RAMP, 0, 1);
 }
 
-export function System({ t }: { t: number }) {
+export function System({
+  t,
+  reveal,
+  stageOffset,
+}: {
+  t: number;
+  reveal: number;
+  stageOffset: number;
+}) {
   const cam = cameraAt(t);
-  /* 1 at the very start of the chapter, 0 once the pull-back is done. */
-  const entry = 1 - smooth(clamp(t / ENTRY_SPAN, 0, 1));
+
+  /* THE ARRIVAL RUNS ACROSS THE JOIN. Half of it happens while the stage is
+     still climbing into place, measured by `reveal`, and half after it has
+     pinned, measured by the chapter's own progress. Driven from `t` alone,
+     nothing moved until the stage had already arrived. One number that does
+     not stop at the seam is what makes the descent continuous.
+
+     1 at the very start of the arrival, 0 once the pull-back is done. */
+  const arrive =
+    reveal < 1
+      ? ARRIVE_BEFORE_PIN * reveal
+      : ARRIVE_BEFORE_PIN + (1 - ARRIVE_BEFORE_PIN) * clamp(t / ENTRY_SPAN, 0, 1);
+  const entry = 1 - smooth(arrive);
   const viewRadius = mix(cam.viewRadius, ENTRY_RADIUS, entry);
-  const focusX = mix(cam.focusX, ENTRY_FOCUS.x, entry);
-  const focusY = mix(cam.focusY, ENTRY_FOCUS.y, entry);
+  /* The star is placed on the window and the camera worked out from it, rather
+     than the other way round: `focus` is measured against the stage, so while
+     the stage is still climbing, whatever it has left to climb is subtracted.
+     Anchored to the stage instead, the star rides up with the arriving section
+     and then reverses, which is what read as appearing from nowhere. */
+  const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
+  const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
   const lead = mix(LEAD, 0, entry);
   /* The rings belong to the opening, where the orbits are still near-circular
      and nested. Past that they would be a thicket. */
