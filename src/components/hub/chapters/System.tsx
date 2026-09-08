@@ -120,15 +120,16 @@ const STOPS: Stop[] = [
   // off, so the one line left retracts to a length that fits the frame, and
   // the chart takes it over and bends it.
   //
-  // 1.8, and the number is measured rather than chosen. The line's length on
-  // screen is the drift times the trail through the perspective divide, and it
-  // scales with the short side of the viewport while the frame does not, so a
-  // value that looks right on a phone runs off the bottom of a desktop. Solved
-  // across 1440x900, 410x968 and 390x844: at 2.2 and above the tail leaves the
-  // frame on desktop, at 1.8 it is inside on all three, at 724, 330 and 314px.
+  // THE DRIFT STAYS HIGH HERE, and dropping it was a mistake worth recording.
+  // Easing it off shortened the Sun's track to something that fit the frame,
+  // which is what the chart wanted, but the drift is also the only thing
+  // holding the planets' paths straight: lower it and the orbits come back and
+  // the frame fills with loops again, at precisely the moment the reader is
+  // looking at it. The chart solves its own length instead, by retracting along
+  // the line rather than asking the scene to be shorter.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 1.8, glow: 1, focusX: 0.62, focusY: 0.6,
-    trailYears: 4, maxTurns: 6, fade: 0 },
+    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: 0.6,
+    trailYears: 5, maxTurns: 6, fade: 0 },
 ];
 
 /** Where the chart runs, in chapter progress: the last leg, after the paths

@@ -47,7 +47,14 @@ export type TrackCamera = {
 };
 
 const RAD = Math.PI / 180;
-const SAMPLES = 160;
+/** The planets' lines, drawn beside the Sun's: their colours, how far across
+ *  the line each sits, and how far along it each stops short. They turn on the
+ *  same corners, because on this page they were travelling with the Sun. */
+const COMPANIONS: Array<{ colour: string; offset: number; from: number }> = [
+  { colour: "#5fd8ff", offset: 0.17, from: 0.08 },
+  { colour: "#ff9838", offset: -0.14, from: 0.2 },
+  { colour: "#b48cff", offset: 0.3, from: 0.34 },
+];
 
 /** Head and tail of the Sun's track, in CSS pixels, from the props alone. */
 export function trackEnds(
@@ -97,10 +104,41 @@ export function trackEnds(
   };
 }
 
-/** Two falls and two rises along the line, zero at both ends so the drawn line
- *  still meets the Sun and the tail exactly where the straight one did. */
-function profile(u: number): number {
-  return Math.sin(u * Math.PI * 4) * 0.85 + Math.sin(u * Math.PI * 12) * 0.09;
+/** The chart, as corners.
+ *
+ *  A SHAPE WITH ANGLES, NOT A WAVE. The first version used a sine and read as a
+ *  smooth S-bend, which is a curve and not a chart. A price line turns: it
+ *  falls hard, snaps back, falls again, and runs up into the last point. Every
+ *  vertex below is a corner, drawn as straight segments with a mitred join, and
+ *  the last one lands on the Sun.
+ *
+ *  `u` runs 0 at the tail to 1 at the Sun; `v` is the offset across the line,
+ *  negative below it. It ends at 0 because the line has to finish exactly on
+ *  the Sun, which is the same point the component's straight track ended on. */
+const VERTICES: Array<[number, number]> = [
+  [0.0, -0.06],
+  [0.16, -0.92],
+  [0.34, -0.34],
+  [0.53, -1.0],
+  [0.72, -0.42],
+  [0.86, -0.62],
+  [1.0, 0.0],
+];
+
+/** How far along the line the tail can sit before it leaves the frame. The
+ *  component's own tail is far outside it at the drift this chapter uses, which
+ *  is right for a streak and wrong for a chart: a chart has to be seen whole.
+ *  So the chart retracts to the last point on the same line that is still
+ *  comfortably inside the viewport. */
+function fittedLength(w: number, h: number, hx: number, hy: number, ux: number, uy: number) {
+  const padX = w * 0.05;
+  const padY = h * 0.06;
+  let limit = Math.hypot(w, h);
+  if (ux < -1e-6) limit = Math.min(limit, (hx - padX) / -ux);
+  if (ux > 1e-6) limit = Math.min(limit, (w - padX - hx) / ux);
+  if (uy < -1e-6) limit = Math.min(limit, (hy - padY) / -uy);
+  if (uy > 1e-6) limit = Math.min(limit, (h - padY - hy) / uy);
+  return Math.max(120, limit);
 }
 
 export function TrackChart({
@@ -160,21 +198,31 @@ export function TrackChart({
       ctx.clearRect(0, 0, w, h);
       if (k <= 0) return;
 
-      const { head, tail } = trackEnds(w, h, camera, drift.current, trail.current);
+      const { head, tail: far } = trackEnds(w, h, camera, drift.current, trail.current);
+      const ease = k * k * (3 - 2 * k);
+
+      /* The line retracts from where the component's track ended to a length
+         that fits the frame, while the corners come up. At k = 0 it is that
+         track exactly, so the handover shows nothing. */
+      const fx = far.x - head.x;
+      const fy = far.y - head.y;
+      const farLen = Math.hypot(fx, fy) || 1;
+      const ux = fx / farLen;
+      const uy = fy / farLen;
+      const length = farLen + (fittedLength(w, h, head.x, head.y, ux, uy) - farLen) * ease;
+
+      const tail = { x: head.x + ux * length, y: head.y + uy * length };
       const dx = head.x - tail.x;
       const dy = head.y - tail.y;
-      const length = Math.hypot(dx, dy) || 1;
-      // Perpendicular to the line, so the chart lifts and falls across it.
+      // Perpendicular to the line, so the chart cuts up and down across it.
       const nx = -dy / length;
       const ny = dx / length;
-      const amplitude = length * 0.14 * (k * k * (3 - 2 * k));
+      const amplitude = length * 0.2 * ease;
 
-      const pts: Array<[number, number]> = [];
-      for (let i = 0; i <= SAMPLES; i++) {
-        const u = i / SAMPLES;
-        const off = profile(u) * amplitude;
-        pts.push([tail.x + dx * u + nx * off, tail.y + dy * u + ny * off]);
-      }
+      const pts: Array<[number, number]> = VERTICES.map(([u, v]) => [
+        tail.x + dx * u + nx * v * amplitude,
+        tail.y + dy * u + ny * v * amplitude,
+      ]);
 
       /* The component's own three strokes, at its widths and alphas, under its
          gradient. At k just above zero this is its line, exactly. */
@@ -184,25 +232,47 @@ export function TrackChart({
       grad.addColorStop(1, "rgba(255,180,80,0)");
       ctx.strokeStyle = grad;
       ctx.lineCap = "round";
-      ctx.lineJoin = "round";
+      ctx.lineJoin = "miter";
+      ctx.miterLimit = 8;
 
-      const path = () => {
+      const path = (list: Array<[number, number]>) => {
         ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+        ctx.moveTo(list[0][0], list[0][1]);
+        for (let i = 1; i < list.length; i++) ctx.lineTo(list[i][0], list[i][1]);
       };
 
+      /* The planets first, underneath: the same corners, shifted across the
+         line and started later, so they read as having come along with it. */
+      for (const c of COMPANIONS) {
+        const shift = c.offset * amplitude;
+        const line = VERTICES.filter(([u]) => u >= c.from).map(([u, v]) => [
+          tail.x + dx * u + nx * (v * amplitude + shift),
+          tail.y + dy * u + ny * (v * amplitude + shift),
+        ]) as Array<[number, number]>;
+        if (line.length < 2) continue;
+        ctx.strokeStyle = c.colour;
+        ctx.globalAlpha = 0.16 * ease;
+        ctx.lineWidth = 3;
+        path(line);
+        ctx.stroke();
+        ctx.globalAlpha = 0.5 * ease;
+        ctx.lineWidth = 1.1;
+        path(line);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = grad;
       ctx.lineWidth = 11;
       ctx.globalAlpha = 0.16;
-      path();
+      path(pts);
       ctx.stroke();
       ctx.lineWidth = 4;
       ctx.globalAlpha = 0.3;
-      path();
+      path(pts);
       ctx.stroke();
       ctx.lineWidth = 1.8;
       ctx.globalAlpha = 1;
-      path();
+      path(pts);
       ctx.stroke();
       ctx.globalAlpha = 1;
     };
