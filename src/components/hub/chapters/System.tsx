@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { useEnhanced } from "@/lib/useEnhanced";
 import {
   OrbitalHeroSection,
   SOLAR_SYSTEM,
@@ -268,9 +267,31 @@ const PLANETS: Planet[] = SOLAR_SYSTEM.map((p) => ({
   a: ORBIT_SCALE * Math.pow(p.a, ORBIT_FALLOFF),
 }));
 
-/** How far up the scene slides on a narrow screen, in viewport heights. The
- *  copy owns the bottom 40% there, so the system is moved clear of it. */
-const LIFT_VH = 13;
+/** THE SCENE USED TO SLIDE UP 13vh ON A NARROW SCREEN, and it does not any more.
+ *
+ *  It was there to keep the system clear of the copy, which owns the bottom two
+ *  fifths below 1024px. What it actually did was move this chapter and nothing
+ *  else. The waveform's star and the chart's star are placed at HANDOVER_Y of
+ *  the stage, unlifted, so on every narrow viewport this chapter's Sun sat a
+ *  full LIFT_VH above them. Measured on the build: 116 to 122px apart at
+ *  410x900, 85px at 1000x645, always exactly the lift.
+ *
+ *  That was invisible for as long as the joins were cuts, because the arriving
+ *  chapter did its whole fade underneath an opaque outgoing one and the two
+ *  stars were never on screen together. The moment the cross-fade became real
+ *  it read as two suns, each trailing its own line, drifting apart. Reported
+ *  from a phone the same day.
+ *
+ *  Lifting the other two to match only moves the seam: the chart would then
+ *  hand over correctly and finish its last rise at 0.12 of the frame minus the
+ *  lift, which is off the top. The whole page is built on one star that never
+ *  moves, and a transform on one chapter of three cannot be part of that. So it
+ *  is gone, and this chapter now rests where the other two expect it.
+ *
+ *  WHAT PAYS FOR IT is that HANDOVER_Y is 0.6 now and was 0.2 when the lift was
+ *  written. The Sun rests at the copy block's own top edge rather than in the
+ *  middle of it, and the headline is centred lower still, so the thing the lift
+ *  was protecting against is largely gone on its own. */
 
 export function System({
   t,
@@ -281,9 +302,9 @@ export function System({
   reveal: number;
   stageOffset: number;
 }) {
-  /* Not a width read on every frame: useEnhanced holds one matchMedia listener
-     and re-renders only when the breakpoint itself changes. */
-  const compact = !useEnhanced("(min-width: 1024px)");
+  /* NOTHING HERE READS THE BREAKPOINT ANY MORE. It did, for the lift, and the
+     lift is what put this chapter's Sun somewhere the next two chapters did not
+     expect it. The scene is now the same on every width. */
   const cam = cameraAt(t);
 
   /* THE PLANETS FADE BY BEING SHRUNK AND DIMMED IN PLACE, on one array that is
@@ -356,7 +377,6 @@ export function System({
      over on the Sun's exact position, so for the first sixth of the chapter the
      scene has to be where the photograph left it, to the pixel. The lift starts
      once that is done and is complete a tenth of the chapter later. */
-  const lift = compact ? -LIFT_VH * smooth(clamp((t - 0.18) / 0.09, 0, 1)) : 0;
 
   const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
   const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
@@ -369,7 +389,6 @@ export function System({
   return (
     <OrbitalHeroSection
       data-orbital-host=""
-      style={lift ? { transform: `translateY(${lift}vh)` } : undefined}
       tilt={cam.tilt}
       spin={cam.spin}
       roll={cam.roll}
