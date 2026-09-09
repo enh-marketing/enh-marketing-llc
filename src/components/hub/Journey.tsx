@@ -96,18 +96,34 @@ const GHOST_RAMP = 0.9;
 
 /** Where the run is centred and how far apart its stations sit, per layout.
  *
- *  WIDE. The copy owns the left half at full height, so the run is centred and
- *  a neighbour at 42vh sits near the top and bottom edges: present, clearly
- *  secondary, not competing for the middle.
+ *  THE RUN CHANGES AXIS BETWEEN THEM, and that is the whole difference.
  *
- *  NARROW. The copy owned the bottom two fifths, centred at 80% of the screen,
- *  and a run centred there has nowhere to put the station coming next. It is
- *  centred at 62% instead, which keeps the picture the upper half of the frame
- *  and gives the run both its neighbours: 38% above and 86% below. */
+ *  WIDE. The copy owns the left half at full height and the picture owns the
+ *  right, so the run travels DOWN the page: centred, with a neighbour 40vh
+ *  above and below, near the top and bottom edges. Present, clearly secondary,
+ *  not competing for the middle.
+ *
+ *  NARROW. There is no left half to own. A vertical run had to spread its
+ *  stations over the whole height, which put copy across the picture from 32%
+ *  to 92% and left the scene nowhere to be. So it travels ACROSS instead, as a
+ *  carousel: every station is a card of the same width, they sit side by side,
+ *  and the run slides right to left through the bottom two fifths. The picture
+ *  keeps the top three fifths to itself and the copy never crosses it.
+ *
+ *  90vw of pitch against an 84vw card leaves 3vw of the next one showing at each
+ *  edge, which is what tells a reader there is another one rather than making
+ *  them find out by scrolling.
+ *
+ *  THE CARD HAS TO FIT THE TWO FIFTHS IT IS GIVEN, which is 360px on a 900 tall
+ *  phone, and the first attempt did not: at 78vw the tagline wrapped to two
+ *  lines and the body ran to five, and the whole thing came to about 420px and
+ *  pushed its own chip off the bottom of the screen. Six more vw of width takes
+ *  a line off each and the padding takes off the rest. */
 const WIDE_CENTRE = 50;
 const WIDE_PITCH = 40;
-const NARROW_CENTRE = 62;
-const NARROW_PITCH = 30;
+const NARROW_CENTRE = 78;
+const NARROW_PITCH_X = 90;
+const NARROW_CARD_VW = 84;
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
@@ -360,7 +376,25 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
         >
           <Starfield />
         </div>
-        {/* THE COPY IS ONE COLUMN, AND IT SCROLLS.
+
+        {/* THE PICTURE KEEPS THE TOP THREE FIFTHS ON A PHONE, and this is how
+            rather than by moving anything. Every scene is drawn full frame, and
+            it has to be: the star that carries the second half of the page is
+            placed at a fraction of its own host, so shrinking or shifting a
+            scene on one layout and not the others is what put two suns on
+            screen a hundred and twenty pixels apart the last time it was tried.
+            Nothing moves here. The scene simply stops being visible where the
+            copy starts, on a gradient long enough that there is no edge to see.
+
+            Over the sky rather than under it, because the sky is screened on
+            top of the scenes and would otherwise go on printing stars through
+            the carousel. Under the copy, which is z-10. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[6] h-[52%] bg-gradient-to-t from-black via-black/88 to-transparent lg:hidden"
+        />
+
+        {/* THE COPY IS ONE RUN, AND IT SCROLLS.
             Every beat on the page sits in a single vertical run at a fixed
             pitch, and the run slides as the reader scrolls: the line just read
             is above, the line coming is below, and the one being read is on the
@@ -399,12 +433,15 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                 key={s.key}
                 aria-hidden={!active}
                 inert={!active}
-                className="absolute inset-x-0 px-6 text-center lg:w-1/2 lg:pl-16 lg:pr-8 lg:text-left xl:pl-24"
+                className="absolute inset-x-0 text-center lg:w-1/2 lg:px-6 lg:pl-16 lg:pr-8 lg:text-left xl:pl-24"
                 style={{
                   top: `${wide ? WIDE_CENTRE : NARROW_CENTRE}%`,
-                  /* One transform, one paint. The offset is the run's position
+                  /* One transform, one paint. Down the page on a wide screen,
+                     across it on a narrow one; the offset is the run's position
                      and nothing else moves. */
-                  transform: `translate3d(0, calc(-50% + ${(d * (wide ? WIDE_PITCH : NARROW_PITCH)).toFixed(2)}vh), 0)`,
+                  transform: wide
+                    ? `translate3d(0, calc(-50% + ${(d * WIDE_PITCH).toFixed(2)}vh), 0)`
+                    : `translate3d(${(d * NARROW_PITCH_X).toFixed(2)}vw, -50%, 0)`,
                   opacity: shown,
                   /* OFF THE COMPOSITOR WHEN IT IS NOT THERE. Each of these
                      carries a backdrop filter, and a backdrop filter at opacity
@@ -436,8 +473,18 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                     this project has rejected twice by name. It is also the most
                     expensive thing on the page, and there is no sense paying
                     for it three times to frost two lines of dim type. */}
-                {active ? (
-                  <div className="mx-auto w-full max-w-[34rem] rounded-[28px] bg-white/[0.05] px-6 py-7 ring-1 ring-inset ring-white/10 backdrop-blur-[6px] lg:mx-0 lg:max-w-[40rem] lg:px-9 lg:py-9">
+                {active || !wide ? (
+                  <div
+                    /* THE BLUR IS THE ACTIVE CARD'S ALONE even in the carousel,
+                       where all three are cards. A neighbour is at 0.16 and
+                       nobody can tell whether what is behind it is frosted, so
+                       paying for two more backdrop filters on a phone buys
+                       nothing at all. */
+                    className={`mx-auto rounded-[26px] bg-white/[0.05] px-5 py-6 ring-1 ring-inset ring-white/10 lg:mx-0 lg:w-full lg:max-w-[40rem] lg:rounded-[28px] lg:px-9 lg:py-9 ${
+                      active ? "backdrop-blur-[6px]" : ""
+                    }`}
+                    style={wide ? undefined : { width: `${NARROW_CARD_VW}vw` }}
+                  >
                     <Kicker beat={b} />
                     <h2 className="font-grotesk hub-heading font-bold uppercase text-white">
                       {/* Fully lit by 0.75 rather than only at the centre.
@@ -451,7 +498,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                       />
                     </h2>
                     {b.body && (
-                      <p className="mx-auto mt-4 max-w-[34rem] text-[0.95rem] leading-[1.65] text-white/70 lg:mx-0 lg:text-[1rem]">
+                      <p className="mx-auto mt-3 max-w-[34rem] text-[0.88rem] leading-[1.55] text-white/70 lg:mx-0 lg:mt-4 lg:text-[1rem] lg:leading-[1.65]">
                         {b.body}
                       </p>
                     )}
@@ -517,7 +564,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
 function Kicker({ beat }: { beat: Beat }) {
   if (!beat.eyebrow && !beat.tagline) return null;
   return (
-    <p className="font-grotesk mb-4 flex items-center justify-center gap-3 text-[0.78rem] font-bold uppercase tracking-[0.16em] lg:justify-start">
+    <p className="font-grotesk mb-3 flex items-center justify-center gap-3 whitespace-nowrap text-[0.7rem] font-bold uppercase tracking-[0.12em] lg:mb-4 lg:text-[0.78rem] lg:tracking-[0.16em] lg:justify-start">
       {beat.eyebrow && <span className="tabular-nums text-white/45">{beat.eyebrow}</span>}
       {beat.eyebrow && beat.tagline && (
         <span aria-hidden className="block h-px w-6 bg-white/25" />
