@@ -87,6 +87,31 @@ export const ascent: Beat[] = [
 /** What the opener's line becomes once it has crossed into the system. */
 export const ASCENT_HANDOVER = "Explore New Heights With AI";
 
+/** The standfirst under the opening line. THE FIRST COPY ON THIS PAGE THAT WAS
+ *  WRITTEN RATHER THAN QUOTED, and it is marked as such deliberately.
+ *
+ *  WHY IT EXISTS. A reader arriving from search saw a photograph of a mountain
+ *  and the words "Explore New Heights With Us", and had to scroll eight
+ *  viewports before the page told them what it was about. The categories that
+ *  follow are all quoted and none of them can do this job, because each states
+ *  one service rather than the offer.
+ *
+ *  WHAT IT IS ALLOWED TO SAY. Divij authorised written copy for this page on
+ *  2026-09-09, having been shown that PRODUCT.md's rule is verbatim-from-
+ *  document and that no document exists for the pillar. So this is held to the
+ *  documents' own discipline rather than released from it: no metric, no
+ *  percentage, no currency, no guarantee. "Fifteen years" is the single figure
+ *  the source material permits anywhere on the site, and PRODUCT.md states it.
+ *
+ *  AND THE SECOND SENTENCE IS THE POINT OF THE FIRST. The service documents are
+ *  unusual in saying what each service cannot do, plainly, in their own FAQs:
+ *  "Can you guarantee a citation or mention? No." A page selling honesty about
+ *  AI that opened by promising outcomes would be arguing against itself. This
+ *  says the offer and the limit in one breath, which is the register the whole
+ *  site is written in. */
+export const ASCENT_STANDFIRST =
+  "AI services for UAE businesses, run by a Dubai agency of fifteen years. What each one does, and where each one stops.";
+
 /* ---------------------------------------------------------------- chapter 1 */
 
 /** The system. One category at each of the camera's stops.

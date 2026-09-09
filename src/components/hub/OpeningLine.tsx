@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { WordReveal, clamp, wordLit, wordStyle } from "@/components/hub/WordReveal";
-import { ascent, ASCENT_HANDOVER } from "@/content/ai-hub";
+import { ascent, ASCENT_HANDOVER, ASCENT_STANDFIRST } from "@/content/ai-hub";
 
 /** The opening line. One element, from the mountain to the top of the system.
  *
@@ -138,6 +138,7 @@ export function OpeningLine() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex h-screen flex-col items-center justify-center px-6 text-center">
         <Eyebrow opacity={1} />
         <Line p={1} swap={0} />
+        <Standfirst opacity={1} />
       </div>
     );
   }
@@ -152,18 +153,62 @@ export function OpeningLine() {
   if (k > RISE_TO) return null;
 
   return (
-    <div
-      aria-hidden={k > RISE_FROM}
-      className="pointer-events-none fixed inset-x-0 z-30 flex flex-col items-center justify-center px-6 text-center"
-      style={{ top: `${y * 100}%`, transform: "translateY(-50%)" }}
+    <>
+      <div
+        aria-hidden={k > RISE_FROM}
+        className="pointer-events-none fixed inset-x-0 z-30 flex flex-col items-center justify-center px-6 text-center"
+        style={{ top: `${y * 100}%`, transform: "translateY(-50%)" }}
+      >
+        {/* The label goes as the line starts to travel: it belongs to the
+            photograph, not to the sentence. It travels with the line rather than
+            sitting in its own layer because laid out separately the two
+            collided, and the label printed through the middle of the heading. */}
+        <Eyebrow opacity={1 - clamp(k / 0.35)} />
+        <Line p={intro} swap={swap} />
+      </div>
+
+      {/* THE STANDFIRST IS ITS OWN LAYER, and that is not tidiness. The block
+          above is positioned by its centre, `translateY(-50%)` on a `top` that
+          moves, and this file already records what happened the last time its
+          height changed: the heading kicked 0.024 of the frame between one
+          scroll position and the next. A paragraph inside it would have shifted
+          the line permanently upward for the same reason. Outside it, the two
+          cannot move each other.
+
+          IT BELONGS TO THE PHOTOGRAPH, NOT THE SENTENCE, so it goes out on the
+          eyebrow's ramp rather than travelling with the line. The line rides the
+          Sun into the next scene and turns its last word over on the way, which
+          is a sentence completing itself; a paragraph dragged along behind that
+          would be reading matter in motion, which nobody reads.
+
+          Below the line at every point of the climb: the line rests centred at
+          0.46 of the window and settles to 0.50, and this sits at 0.66. */}
+      <Standfirst opacity={1 - clamp(k / 0.35)} />
+    </>
+  );
+}
+
+/** The sentence that says what the page is.
+ *
+ *  See ASCENT_STANDFIRST in content/ai-hub for what it says and why it is the
+ *  one piece of written copy on a page of quoted copy. */
+function Standfirst({ opacity }: { opacity: number }) {
+  return (
+    <p
+      aria-hidden={opacity <= 0.01}
+      /* ABOVE THE FOREGROUND, WHICH THE HEADING IS NOT. The echo paints the
+         photograph's near ground back over this layer at z-40 so the line
+         passes behind the figure, which is the whole effect and was asked for.
+         A paragraph cut in half by a man's shoulder is not an effect, it is
+         four words the reader cannot have: measured at 410x900 the figure sat
+         across the middle of all three lines. So this sits over him, at z-50,
+         under the navbar at z-70. Depth is worth having on a sentence you read
+         in one glance and not on one you read in three. */
+      className="font-grotesk pointer-events-none fixed inset-x-0 z-50 mx-auto max-w-[42ch] px-6 text-center text-[0.95rem] leading-[1.6] text-white/80 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)]"
+      style={{ top: "66%", transform: "translateY(-50%)", opacity }}
     >
-      {/* The label goes as the line starts to travel: it belongs to the
-          photograph, not to the sentence. It travels with the line rather than
-          sitting in its own layer because laid out separately the two collided,
-          and the label printed through the middle of the heading. */}
-      <Eyebrow opacity={1 - clamp(k / 0.35)} />
-      <Line p={intro} swap={swap} />
-    </div>
+      {ASCENT_STANDFIRST}
+    </p>
   );
 }
 
