@@ -7,7 +7,7 @@ import {
   SOLAR_SYSTEM,
   type Planet,
 } from "@/components/hub/OrbitalHeroSection";
-import { HANDOVER_Y } from "@/components/hub/chartPath";
+import { HANDOVER_X, HANDOVER_Y } from "@/components/hub/chartPath";
 import { type TrackCamera } from "@/components/hub/TrackChart";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
@@ -71,6 +71,8 @@ type Stop = {
   glow: number;
   focusX: number;
   focusY: number;
+  /** How far past `focus` the Sun is pushed along its course. See LEAD. */
+  lead: number;
   /** How long a wake each planet drags, and how many orbits it may cover. */
   trailYears: number;
   maxTurns: number;
@@ -81,13 +83,15 @@ type Stop = {
 /** Orbital's own default, which the arrival has to start from zero and reach,
  *  and which the scatter has to know to find the Sun.
  *
- *  IT IS CONSTANT ACROSS THE WHOLE CHAPTER AGAIN, past the arrival. It was
- *  briefly eased back out at the end so the Sun would finish exactly on the
- *  chart's first vertex. That is no longer something the Sun has to do: the
- *  waveform sits between the two and is drawn full width, so the only thing
- *  the system has to hand over is the HEIGHT. Easing it out moved the star
- *  114px during the straightening, and a move at that moment is the one thing
- *  the note on STOPS says not to add. */
+ *  IT IS OFF ONCE THE CAMERA PARKS. `lead` pushes the Sun ahead of `focus` so
+ *  it leads the frame it is flying through, which is worth having while the
+ *  camera is travelling and is meaningless once it has stopped. It is also
+ *  measured against the SHORT side of the frame while `focus` is measured
+ *  against the width, so with it on, the star's resting place depended on the
+ *  aspect ratio: 0.571 of the width at 1600x950 and 0.62 at 410x900. The star
+ *  now has to be at one number that the waveform and the chart can both be
+ *  built on, so the last two stops carry no lead and it sits exactly on
+ *  HANDOVER_X everywhere. */
 const LEAD = 0.12;
 
 /** The camera at each stop, in the order the chapter passes through them.
@@ -115,15 +119,15 @@ const LEAD = 0.12;
 const STOPS: Stop[] = [
   // Straight down on the disc. Rings, near-circular, barely drifting.
   { tilt: 14, spin: 140, roll: -6, viewRadius: 2.3, alignToCourse: 0, eccentricity: 0,
-    planeSpread: 0.1, driftSpeed: 0.35, glow: 1, focusX: 0.5, focusY: 0.5,
+    planeSpread: 0.1, driftSpeed: 0.35, glow: 1, focusX: 0.5, focusY: 0.5, lead: LEAD,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
   // 01 AI Search Visibility. Camera tips over and the network drifts across it.
   { tilt: 52, spin: 196, roll: 2, viewRadius: 2.8, alignToCourse: 0.3, eccentricity: 0.12,
-    planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46,
+    planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46, lead: LEAD,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
   // 02 AI & Automation. The helix.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: HANDOVER_Y,
+    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: HANDOVER_X, focusY: HANDOVER_Y, lead: 0,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
   // 03 AI Creative Production, and the hand-over to the voice.
   //
@@ -146,7 +150,7 @@ const STOPS: Stop[] = [
   // straightening, here the rotation IS the straightening, and it lands with
   // the trails flat rather than mid-swing.
   { tilt: 45, spin: 252, roll: 51.4728, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: HANDOVER_Y,
+    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: HANDOVER_X, focusY: HANDOVER_Y, lead: 0,
     trailYears: 5, maxTurns: 6, fade: 1 },
 ];
 /** The camera the chart is handed.
@@ -166,7 +170,7 @@ export const CHART_CAMERA: TrackCamera = {
   roll: STOPS[STOPS.length - 1].roll,
   focusX: STOPS[STOPS.length - 1].focusX,
   focusY: STOPS[STOPS.length - 1].focusY,
-  lead: LEAD,
+  lead: STOPS[STOPS.length - 1].lead,
   apex: [272, 53],
 };
 
@@ -201,6 +205,7 @@ function cameraAt(t: number) {
     glow: mix(a.glow, b.glow, e),
     focusX: mix(a.focusX, b.focusX, e),
     focusY: mix(a.focusY, b.focusY, e),
+    lead: mix(a.lead, b.lead, e),
     trailYears: mix(a.trailYears, b.trailYears, e),
     maxTurns: mix(a.maxTurns, b.maxTurns, e),
     fade: mix(a.fade, b.fade, e),
@@ -355,7 +360,7 @@ export function System({
 
   const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
   const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
-  const lead = mix(LEAD, 0, entry);
+  const lead = mix(cam.lead, 0, entry);
   /* The rings belong to the opening, where the orbits are still near-circular
      and nested. Past that they would be a thicket. */
   const showOrbits = cam.alignToCourse < 0.2;

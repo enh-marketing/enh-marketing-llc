@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { chartPolylineTo, chartTravelled, chartFocus } from "@/components/hub/chartPath";
+import { drawStar } from "@/components/hub/star";
 
 /** The Sun travelling a chart, with nothing else moving.
  *
@@ -152,21 +153,10 @@ export function TrackChart({ p, camera }: { p: number; camera: TrackCamera }) {
         run(1.6, 1, "miter");
       }
 
-      /* And the Sun itself, drawn to match the one it replaced. */
-      const R = Math.max(5, Math.min(w, h) * 0.013);
-      ctx.globalAlpha = 1;
-      const halo = ctx.createRadialGradient(sun.x, sun.y, 0, sun.x, sun.y, R * 9);
-      halo.addColorStop(0, "rgba(255,242,204,0.5)");
-      halo.addColorStop(0.35, "rgba(255,206,110,0.16)");
-      halo.addColorStop(1, "rgba(255,180,80,0)");
-      ctx.fillStyle = halo;
-      ctx.beginPath();
-      ctx.arc(sun.x, sun.y, R * 9, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "rgba(255,255,255,0.97)";
-      ctx.beginPath();
-      ctx.arc(sun.x, sun.y, R, 0, Math.PI * 2);
-      ctx.fill();
+      /* And the star itself. Shared with the uplink, which keeps one lit at
+         this exact spot while the waveform plays, so the two cross-fade as the
+         same object rather than as one going out and another coming on. */
+      drawStar(ctx, sun.x, sun.y, w, h);
     };
 
     const tick = () => {

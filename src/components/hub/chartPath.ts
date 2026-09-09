@@ -51,26 +51,41 @@
  *  before it can rise. */
 export const HANDOVER_Y = 0.6;
 
-/** THE SHAPE, AND IT IS NOW THE SHAPE THAT WAS ASKED FOR. It used to open high
- *  and spend its first move gliding DOWN to make room, because it started at
- *  0.2 and there was nowhere above that to go. Opening at 0.6 deletes that
- *  move: the line runs flat, then rises, dips, rises, dips, and rises to finish
- *  high, and nothing else happens.
+/** WHERE THE STAR RESTS, as a fraction of the frame width. Dead centre, which
+ *  is where the system now parks it, where the waveform's own centre is, and
+ *  where the chart's flat run ends. The star is lit at this one point for three
+ *  chapters running and never moves until the chart takes it away up the line.
+ *
+ *  IT HAS TO BE THE SAME ON EVERY SCREEN, which is why `lead` is zero at the
+ *  camera stops that matter: `lead` is a fraction of the SHORT side while
+ *  `focus` is a fraction of the width, so with it on, the star's position
+ *  depended on the aspect ratio and no single number here could match it. */
+export const HANDOVER_X = 0.5;
+
+/** THE SHAPE. It runs flat, then rises, dips, rises, dips, and rises to finish
+ *  high, and nothing else happens. There is no settle any more: that move only
+ *  existed because the line used to open at 0.2, where there was nowhere above
+ *  it to go.
  *
  *  IT STARTS OFF THE LEFT EDGE, at x 0, and the flat run is already drawn when
  *  the chapter opens. The waveform collapses onto its axis and leaves a flat
- *  line lying across the whole frame; if the chart then began as a dot at 0.12
- *  that line would vanish and a new one would start growing. Beginning at the
- *  edge, with the flat leg pre-drawn, means the line the reader is watching is
- *  never taken away: it simply starts to bend. See chartU below. */
+ *  line lying across the whole frame; if the chart then began as a dot that
+ *  line would vanish and a new one would start growing. Beginning at the edge,
+ *  with the flat leg pre-drawn, means the line the reader is watching is never
+ *  taken away: it simply starts to bend. See chartU below.
+ *
+ *  AND THE BEND BEGINS UNDER THE STAR, at HANDOVER_X, because that is where the
+ *  star has been standing since the system chapter. So the shape has the right
+ *  half of the frame to happen in, which is why the vertices are packed tighter
+ *  than a chart drawn across a whole frame would be. */
 export const CHART_PATH: Array<[number, number]> = [
-  [0, HANDOVER_Y],     // off the left edge, where the voice left the line
-  [0.28, HANDOVER_Y],  // still flat: the line is travelling, not yet charting
-  [0.4, 0.44],         // rise
-  [0.5, 0.55],         // dip
-  [0.62, 0.36],        // rise
-  [0.72, 0.47],        // dip
-  [0.9, 0.14],         // and the last rise, finishing high
+  [0, HANDOVER_Y],           // off the left edge, where the voice left the line
+  [HANDOVER_X, HANDOVER_Y],  // still flat, and where the star has been waiting
+  [0.59, 0.46],              // rise
+  [0.67, 0.56],              // dip
+  [0.77, 0.34],              // rise
+  [0.85, 0.46],              // dip
+  [0.97, 0.12],              // and the last rise, finishing high
 ];
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
@@ -110,9 +125,26 @@ export function chartPointAt(u: number): [number, number] {
  *  re-drawing a straight line the reader can already see. */
 const FLAT_U = SPANS[1] / TOTAL;
 
-/** The leg's progress mapped onto the path, with the flat run pre-drawn. */
+/** How long the star stands still at the start of the leg, as a fraction of it.
+ *
+ *  IT COVERS THE CROSS-FADE, AND THAT IS THE WHOLE REASON FOR IT. The voice and
+ *  the chart overlap: measured on the build, the voice is still at 0.70 opacity
+ *  1.25 viewports into the chart leg and only reaches zero at 0.008 a viewport
+ *  after that. Both chapters draw a star. Without a hold the chart's had
+ *  already set off up the line while the voice's was still lit at the handover
+ *  point, so there were two stars on screen 70px apart, which is precisely the
+ *  seam this is all meant not to have. Held, they are the same star in the same
+ *  place, and only one of them is left when it starts to move.
+ *
+ *  Nothing is standing still while it holds: the waveform is collapsing onto
+ *  the line underneath it for the whole of this stretch. */
+const HOLD = 0.22;
+
+/** The leg's progress mapped onto the path, held at the handover point across
+ *  the cross-fade and then spending what is left on the shape. */
 function chartU(chart: number): number {
-  return FLAT_U + (1 - FLAT_U) * clamp(chart, 0, 1);
+  const moved = clamp((clamp(chart, 0, 1) - HOLD) / (1 - HOLD), 0, 1);
+  return FLAT_U + (1 - FLAT_U) * moved;
 }
 
 /** Where the Sun is at a given point in the chart leg. It starts at the end of

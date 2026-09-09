@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SiriWave } from "@/components/hub/SiriWave";
 import { useEnhanced } from "@/lib/useEnhanced";
-import { HANDOVER_Y } from "@/components/hub/chartPath";
+import { HANDOVER_X, HANDOVER_Y } from "@/components/hub/chartPath";
+import { drawStar } from "@/components/hub/star";
 
 /** Chapter three: the voice. The trails become a waveform.
  *
@@ -16,11 +17,17 @@ import { HANDOVER_Y } from "@/components/hub/chartPath";
  *  which is the only way a transition of this size stays cheap and cannot
  *  glitch.
  *
- *  THE AXIS IS THE ONE NUMBER THAT MATTERS. The waveform's axis, the Sun the
- *  system chapter leaves behind, and the flat line the chart opens on are all
- *  HANDOVER_Y, imported rather than repeated. The Sun's course is horizontal by
- *  then, so `lead` pushes it sideways only and its height is exactly focusY;
- *  that is what makes one constant enough for all three.
+ *  AND THE STAR NEVER GOES OUT. The system parks it at HANDOVER_X, HANDOVER_Y,
+ *  this chapter keeps one lit at the same spot, and the chart starts its own
+ *  from there. Three chapters cross-fade over one star that does not move, so
+ *  the chart is not a new object arriving, it is the thing the reader has been
+ *  watching all along setting off up a line. Both ends draw it with the same
+ *  function, in hub/star, for exactly that reason.
+ *
+ *  BOTH HANDOVER NUMBERS ARE IMPORTED, not repeated. `lead` is zero at the
+ *  camera stops either side of this, so the star sits exactly on focus rather
+ *  than a short-side fraction away from it, which is what lets one pair of
+ *  numbers describe its place on every screen.
  *
  *  IT LEAVES BY BEING FLATTENED, NOT BY FADING. Amplitude lives in the shader's
  *  constants and cannot be ramped from outside, but scaling the canvas
@@ -45,16 +52,28 @@ const smooth = (x: number) => x * x * (3 - 2 * x);
 const ARRIVE = 0.22;
 const FLATTEN_FROM = 0.82;
 
+/** How far the star's halo is pushed out while the wave is at full amplitude,
+ *  as a multiple of its resting size.
+ *
+ *  THE CEILING IS THE FRAME, NOT TASTE. The halo rests at nine radii of the
+ *  short side, which is 0.117 of the height on any screen wider than it is
+ *  tall, and the star sits at HANDOVER_Y with 0.4 of the height below it. So it
+ *  can grow to 0.4 / 0.117 = 3.42 before it runs out of frame, and that ratio
+ *  is the same at every size because both terms scale with the height. At 3.5
+ *  it was over: measured at 1600x950 the halo still had alpha 0.059 when it
+ *  reached the bottom edge, which is a warm band cut off in a straight line
+ *  across the frame. 2.4 gives a maximum of 3.4 and it fades to nothing with
+ *  two pixels to spare.
+ *
+ *  It is still far more than it needs to be seen. What the halo has to clear is
+ *  the wave's own vertical reach, about 230px at 1600x950, and at 3.4 it runs
+ *  to 377px, so it shows above and below the wave with room over. */
+const BLOOM = 2.4;
+
 export function Uplink({ t }: { t: number }) {
   const [size, setSize] = useState(0);
   const compact = !useEnhanced("(min-width: 1024px)");
-
-  useEffect(() => {
-    const read = () => setSize(Math.max(window.innerWidth, window.innerHeight));
-    read();
-    window.addEventListener("resize", read);
-    return () => window.removeEventListener("resize", read);
-  }, []);
+  const star = useRef<HTMLCanvasElement>(null);
 
   const arriving = smooth(clamp(t / ARRIVE));
   const flat = smooth(clamp((t - FLATTEN_FROM) / (1 - FLATTEN_FROM)));
@@ -63,6 +82,56 @@ export function Uplink({ t }: { t: number }) {
      the moment it appears, so the arrival is the trails handing over rather
      than the wave travelling: it opens flat, on the same axis, and swells. */
   const scaleY = arriving * (1 - flat);
+
+  /* THE STAR STAYS LIT THROUGH THE VOICE, and that is the only reason this
+     chapter owns a canvas of its own. The system parks it at HANDOVER_X,
+     HANDOVER_Y and the chart starts it from there, so if it went out in
+     between, the chart would arrive as a new object appearing out of nothing.
+     Lit here, all three chapters cross-fade over one star that never moves.
+
+     ITS HALO BREATHES WITH THE WAVE, because a white star on the wave's own
+     centre cannot be seen: that centre is the brightest white in the frame.
+     Measured at 410x900 the core vanished into it completely. So while the wave
+     is loud the halo is pushed out past the white, where there is black to read
+     against, and the star is present as the glow the wave sits inside. As the
+     wave collapses the halo comes back to exactly the star the chart draws,
+     which is what the two chapters then cross-fade over. `scaleY` already is
+     the wave's amplitude, so the two cannot fall out of step.
+
+     QUANTISED TO TWENTIETHS so this is a few dozen canvas fills across the
+     whole chapter rather than one on every frame of the scroll. */
+  const bloom = 1 + BLOOM * (Math.round(scaleY * 20) / 20);
+
+  const paint = useCallback(() => {
+    const el = star.current;
+    if (!el) return;
+    const w = el.clientWidth;
+    const h = el.clientHeight;
+    if (!w || !h) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    el.width = Math.round(w * dpr);
+    el.height = Math.round(h * dpr);
+    const ctx = el.getContext("2d");
+    if (!ctx) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    drawStar(ctx, HANDOVER_X * w, HANDOVER_Y * h, w, h, bloom);
+  }, [bloom]);
+
+  useEffect(() => {
+    paint();
+    window.addEventListener("resize", paint);
+    return () => window.removeEventListener("resize", paint);
+  }, [paint]);
+
+  /* The wave's own size, read from the viewport and never from scroll: it sits
+     in SiriWave's effect dependencies and a change recompiles both shaders. */
+  useEffect(() => {
+    const read = () => setSize(Math.max(window.innerWidth, window.innerHeight));
+    read();
+    window.addEventListener("resize", read);
+    return () => window.removeEventListener("resize", read);
+  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-black">
@@ -129,6 +198,16 @@ export function Uplink({ t }: { t: number }) {
           />
         )}
       </div>
+      {/* Over the waveform, not under it. The shader writes alpha 1, so its
+          canvas is opaque and anything behind it is simply not there. Screened
+          on top, the star adds its light to the wave the way a light source
+          in the same frame would, instead of punching a hole in it. */}
+      <canvas
+        ref={star}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        style={{ mixBlendMode: "screen" }}
+      />
     </div>
   );
 }
