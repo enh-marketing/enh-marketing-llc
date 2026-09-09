@@ -381,10 +381,6 @@ export function System({
   const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
   const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
   const lead = mix(cam.lead, 0, entry);
-  /* The rings belong to the opening, where the orbits are still near-circular
-     and nested. Past that they would be a thicket. */
-  const showOrbits = cam.alignToCourse < 0.2;
-
 
   return (
     <OrbitalHeroSection
@@ -403,7 +399,23 @@ export function System({
       glow={cam.glow}
       focus={[focusX, focusY]}
       lead={lead}
-      showOrbits={showOrbits}
+      /* THE RINGS ARE OFF, AND THEY USED TO BE ON FOR THE FIRST FIFTH OF THE
+         CHAPTER. `showOrbits` drew every planet's complete orbit as a closed
+         ellipse on top of the wake that planet was already trailing, so at the
+         opening each of the eight was on screen twice: once as a full ring and
+         once as a drifting arc slightly offset from it. Read as duplicated
+         trails, and reported as exactly that.
+         WORSE, THEY LEFT IN A SINGLE FRAME. The switch was `alignToCourse < 0.2`
+         on a value that interpolates continuously from 0 to 0.3 across the
+         opening, so it crossed mid-scroll and the rings were simply gone on the
+         next frame. Measured at 410x900: 50,081 lit pixels one sample and
+         34,064 the next, 36px of scroll apart. A third of the picture vanishing
+         at once, a few hundred pixels before the first headline lands.
+         There is no way to fade them out instead. The component takes
+         `showOrbits` as a boolean and strokes the rings at fixed alpha; the only
+         other lever is `glow`, which the planets and the Sun share. So they go.
+         The wakes already say what the rings said, and they say it without
+         drawing every planet twice. */
       /* Off, and it has to be. The component eases the camera up to 7 degrees
          of yaw and 5 of pitch toward the pointer, in state nothing outside can
          read. With it on, the Sun is not where the arithmetic in ScatterField
