@@ -119,6 +119,30 @@ const GHOST_RAMP = 0.9;
  *  lines and the body ran to five, and the whole thing came to about 420px and
  *  pushed its own chip off the bottom of the screen. Six more vw of width takes
  *  a line off each and the padding takes off the rest. */
+/** THE BOX EVERY SCENE IS DRAWN INTO ON A PHONE, as percentages from the top
+ *  and the bottom of the stage.
+ *
+ *  A SHORTER BOX, NOT A MOVED SCENE. Hiding the lower half behind a gradient
+ *  made the picture stop at 60% but did not move it: every scene is still
+ *  composed about the middle of its own host, so the half you could see was the
+ *  top half of a composition centred lower down. The picture has to be centred
+ *  in the space it has.
+ *
+ *  AND EVERY CHAPTER SHARES IT, which is the part that matters. Each scene
+ *  places what it draws as a fraction of its own host, so a scene given a
+ *  different box from its neighbours lands somewhere its neighbours do not
+ *  expect. That is not a hypothetical: a 13vh lift on the system chapter alone
+ *  put two suns on screen 120px apart, and it was invisible for weeks because
+ *  the joins were cuts. One container holds all four, so they cannot disagree.
+ *
+ *  7 AND 36 ARE SET BY THE TWO THINGS THAT HAVE TO CLEAR. The chart finishes
+ *  its last rise at 0.12 of its own box, and at 0.12 of a box starting at the
+ *  top of the screen that is 67px, under an 84px header. Starting the box at 7%
+ *  puts that finish at 124px. The bottom is the copy's: the carousel's cards
+ *  begin at 61% of the frame. */
+const SCENE_TOP_PCT = 7;
+const SCENE_BOTTOM_PCT = 36;
+
 const WIDE_CENTRE = 50;
 const WIDE_PITCH = 40;
 const NARROW_CENTRE = 78;
@@ -230,6 +254,10 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
     return n - 1;
   })();
 
+  /* The scene box's height as a share of the window, which is what turns a
+     window-relative measurement into a host-relative one. */
+  const sceneUnit = wide ? 1 : (100 - SCENE_TOP_PCT - SCENE_BOTTOM_PCT) / 100;
+
   /* Local progress within each chapter, held at its ends so an outgoing scene
      does not rewind while it fades. */
   const locals = bounds.map(({ start, end }) => clamp((at - start) / (end - start || 1), 0, 1));
@@ -339,23 +367,44 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
       className="relative w-full bg-black"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {chapters.map((c, i) =>
-          levels[i] > 0 ? (
-            <div
-              key={c.id}
-              data-chapter={c.id}
-              className="absolute inset-0"
-              style={{ opacity: levels[i] * (reduced ? 1 : reveal), zIndex: i === top ? 2 : 1 }}
-            >
-              <c.Scene
-                t={locals[i]}
-                level={levels[i]}
-                reveal={reduced ? 1 : reveal}
-                stageOffset={reduced ? 0 : stageOffset}
-              />
-            </div>
-          ) : null,
-        )}
+        <div
+          className="absolute inset-x-0"
+          style={{
+            top: wide ? 0 : `${SCENE_TOP_PCT}%`,
+            bottom: wide ? 0 : `${SCENE_BOTTOM_PCT}%`,
+            /* The box has a hard bottom edge and a canvas does not fade itself,
+               so the last part of it is masked away. Cheaper than a gradient
+               laid over the top, and it fades the scene rather than painting
+               black over whatever is behind it. */
+            maskImage: wide ? undefined : "linear-gradient(to bottom, #000 74%, transparent 100%)",
+            WebkitMaskImage: wide
+              ? undefined
+              : "linear-gradient(to bottom, #000 74%, transparent 100%)",
+          }}
+        >
+          {chapters.map((c, i) =>
+            levels[i] > 0 ? (
+              <div
+                key={c.id}
+                data-chapter={c.id}
+                className="absolute inset-0"
+                style={{ opacity: levels[i] * (reduced ? 1 : reveal), zIndex: i === top ? 2 : 1 }}
+              >
+                <c.Scene
+                  t={locals[i]}
+                  level={levels[i]}
+                  reveal={reduced ? 1 : reveal}
+                  /* IN UNITS OF THE SCENE'S OWN BOX, not of the window. A scene
+                     subtracts this from a `focus` that is a fraction of its
+                     host, and on a phone the host is no longer the height of
+                     the window, so the same number would shift it by the wrong
+                     amount while the stage is still climbing. */
+                  stageOffset={reduced ? 0 : stageOffset / sceneUnit}
+                />
+              </div>
+            ) : null,
+          )}
+        </div>
 
         {/* ONE SKY, OVER THE CHAPTERS RATHER THAN BEHIND THEM, AND ADDED
             RATHER THAN LAID ON TOP. Behind is where it belongs and behind is
@@ -377,21 +426,16 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
           <Starfield />
         </div>
 
-        {/* THE PICTURE KEEPS THE TOP THREE FIFTHS ON A PHONE, and this is how
-            rather than by moving anything. Every scene is drawn full frame, and
-            it has to be: the star that carries the second half of the page is
-            placed at a fraction of its own host, so shrinking or shifting a
-            scene on one layout and not the others is what put two suns on
-            screen a hundred and twenty pixels apart the last time it was tried.
-            Nothing moves here. The scene simply stops being visible where the
-            copy starts, on a gradient long enough that there is no edge to see.
-
-            Over the sky rather than under it, because the sky is screened on
-            top of the scenes and would otherwise go on printing stars through
-            the carousel. Under the copy, which is z-10. */}
+        {/* A LITTLE GROUND UNDER THE CAROUSEL, and much less than there was.
+            This used to be the whole mechanism for keeping the picture in the
+            top three fifths and it was doing the wrong job: it hid the bottom
+            of a scene that was still composed about the middle. The scene box
+            above does that properly now, so all this has left to do is settle
+            the sky behind the cards. The sky is screened on top of the scenes,
+            so this has to be over it, and under the copy at z-10. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[6] h-[52%] bg-gradient-to-t from-black via-black/88 to-transparent lg:hidden"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[6] h-[42%] bg-gradient-to-t from-black/85 to-transparent lg:hidden"
         />
 
         {/* THE COPY IS ONE RUN, AND IT SCROLLS.
