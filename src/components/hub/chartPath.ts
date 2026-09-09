@@ -28,14 +28,36 @@
  *
  *  After the settle it reads rise, dip, rise, dip, rise, and finishes high. */
 
-/** The height the voice hands the chart over at, as a fraction of the frame.
- *  The uplink chapter puts the waveform's axis here and the last camera stop of
- *  the system chapter puts the Sun here, so all three agree by construction
- *  rather than by three separate numbers being kept in step. */
-export const HANDOVER_Y = 0.2;
+/** WHERE THE THREE CHAPTERS MEET, as fractions of the frame. The last camera
+ *  stop of the system chapter puts the Sun here, the uplink chapter puts the
+ *  waveform's axis here, and the chart opens here, so all three agree by
+ *  construction rather than by separate numbers being kept in step.
+ *
+ *  THE HEIGHT IS SET BY THE WAVEFORM, WHICH IS THE TALLEST THING THAT HAS TO
+ *  FIT. Its crest is A2 of half the canvas, before WAVE_SCALE 0.6, and the
+ *  canvas is the window's longer side, so at 1600x950 the wave reaches about
+ *  230px above and below its axis at the top of its own slow swell and about
+ *  192px on an ordinary frame. At the 0.2 this used to be, the axis had 190px
+ *  of room over a header that is 84px tall, so the wave's crest ran behind the
+ *  header and off the top of the frame on every peak, and the star at the same
+ *  height put the brightest pixel on the page 7px from the top edge.
+ *
+ *  0.32 is the compromise: 304px of headroom clears the header on an ordinary
+ *  frame with 28px to spare, and only the tallest swell grazes it. Lower and
+ *  the wave is cropped; much higher and the thing stops reading as travelling
+ *  along the top of the frame, which is what it is meant to be doing. This is
+ *  the one number to move if the framing wants adjusting; everything else
+ *  follows it.
+ *
+ *  THE ACROSS IS SET BY THE CHART, which has to travel, so it starts near the
+ *  left and finishes at 0.9. That is why the Sun ends its chapter over on the
+ *  left with its trails running off that edge: it is standing where the line
+ *  begins. */
+export const HANDOVER_Y = 0.32;
+export const HANDOVER_X = 0.12;
 
 export const CHART_PATH: Array<[number, number]> = [
-  [0.12, HANDOVER_Y],  // where the voice left it
+  [HANDOVER_X, HANDOVER_Y],  // where the voice left it
   [0.26, HANDOVER_Y],  // still flat: the line is travelling, not yet charting
   [0.36, 0.62],        // the settle, making room for the shape
   [0.46, 0.42],        // rise

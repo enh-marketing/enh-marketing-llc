@@ -66,16 +66,48 @@ export function Uplink({ t }: { t: number }) {
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-black">
-      {/* The square is centred on the handover height rather than on the
+      {/* A ZERO-HEIGHT BAND ACROSS THE STAGE, WHOSE BOX *IS* THE AXIS.
+          The square is centred on the handover height rather than on the
           frame. Its wave fades out towards its own left and right edges
           through a gaussian falloff, so sizing it to the window's longer side
-          puts that fade off-screen and it reads as full width. */}
+          puts that fade off-screen and it reads as full width.
+
+          DO NOT CENTRE THIS WITH `left-1/2 -translate-x-1/2`, WHICH IS WHAT IT
+          USED TO DO AND WHY IT WAS HALF OFF THE SCREEN. Tailwind v4 changed
+          what those utilities emit. In v3 `-translate-x-1/2` fed a variable
+          into a composed `transform`, so an inline `transform` replaced it. In
+          v4 it writes the separate CSS `translate` property:
+
+            .-translate-x-1\/2 { --tw-translate-x: calc(50% * -1);
+                                 translate: var(--tw-translate-x) var(--tw-translate-y) }
+
+          `translate` and `transform` are different properties and both apply,
+          in that order, so the class and the inline transform did not override
+          one another, they composed: the box was shifted a full 100% of its own
+          width instead of 50%. Measured at 1600x950 the 1600px square landed at
+          x -800 instead of x 0, putting the wave's centre at screen x 0, so only
+          its right half was on screen and it read as a bright smear against the
+          left edge. The same trap is live elsewhere in this repo wherever a
+          translate/scale/rotate utility shares an element with a transform
+          written from JS or inline.
+
+          So there is no translate here at all. `left: 0` with `right: 0` and
+          `width: auto` makes the band exactly as wide as the stage, with no
+          percentage offset and no shrink-to-fit to reason about. `height: 0`
+          collapses its box onto the handover line, so `top` alone places it and
+          there is nothing to compensate for. `justify-center` does the
+          horizontal centring, and centres the overflow symmetrically, which is
+          what puts the gaussian fade off both edges. `items-center` hangs the
+          square on the line, so the line is the wave's axis by construction and
+          the only transform left is the collapse itself. */}
       <div
-        className="absolute left-1/2 flex -translate-x-1/2 items-center justify-center"
+        className="absolute flex items-center justify-center"
         style={{
+          left: 0,
+          right: 0,
+          height: 0,
           top: `${HANDOVER_Y * 100}%`,
-          transform: `translate(-50%, -50%) scaleY(${scaleY})`,
-          left: "50%",
+          transform: `scaleY(${scaleY})`,
           willChange: "transform",
         }}
       >
@@ -88,7 +120,12 @@ export function Uplink({ t }: { t: number }) {
                stretched by CSS, so it quarters the fragment work without
                changing what is drawn. */
             renderScale={compact ? 0.5 : 0.75}
-            className="rounded-none bg-transparent"
+            /* shrink-0 because it is a flex item and `size` is the window's
+               LONGER side, so on a phone the square is wider than the stage.
+               A flex item shrinks by default, which would squash the canvas's
+               CSS width below `size` while its drawing buffer stayed square
+               and stretch the shader sideways. */
+            className="shrink-0 rounded-none bg-transparent"
           />
         )}
       </div>
