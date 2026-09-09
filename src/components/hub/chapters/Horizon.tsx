@@ -1,6 +1,7 @@
 "use client";
 
 import { BlackHoleHeroSection } from "@/components/hub/BlackHoleHeroSection";
+import { chartPointAt } from "@/components/hub/chartPath";
 
 /** The last chapter: the horizon.
  *
@@ -50,6 +51,7 @@ const STOPS: Stop[] = [
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+const smooth = (v: number) => v * v * (3 - 2 * v);
 
 function cameraAt(t: number) {
   const pos = clamp(t, 0, 1) * (STOPS.length - 1);
@@ -69,11 +71,38 @@ function cameraAt(t: number) {
   };
 }
 
+/** How much of this chapter the arrival takes, and how big the light is when it
+ *  starts.
+ *
+ *  THE SEQUENCE IS THE ONE THAT WAS ASKED FOR: fly into the sun until it fills
+ *  the frame, cross the dark, and find the hole at the end of it. The chapter
+ *  before this one finishes with the star at the top of its last rise, and that
+ *  used to be the whole of the handover: a thin bright line, then a black hole
+ *  dissolving over it. Two pictures with nothing between them.
+ *  So this chapter now opens INSIDE the star. The light is centred on the exact
+ *  point the chart leaves it, at a size that covers any frame, and it falls
+ *  away over the first fifth of the chapter. What is behind it is the black
+ *  hole at distance 72, which is far enough to be a small ring in a lot of
+ *  dark, and the camera spends the rest of the chapter coming in. Flood, void,
+ *  hole, in that order, and none of it is a cut.
+ *
+ *  IT RECEDES RATHER THAN FADES, which is the difference between flying past a
+ *  star and someone turning a light off. It shrinks towards the point it is
+ *  centred on while it dims, so the frame reads as depth opening up rather than
+ *  as an overlay being taken away. */
+const ARRIVE = 0.2;
+const FLOOD_VMAX = 220;
+
 export function Horizon({ t }: { t: number }) {
   const cam = cameraAt(t);
 
+  /* 1 inside the star, 0 once the dark has opened out. */
+  const flood = 1 - smooth(clamp(t / ARRIVE, 0, 1));
+  const [fx, fy] = chartPointAt(1);
+
   return (
-    <BlackHoleHeroSection
+    <div className="absolute inset-0 overflow-hidden">
+      <BlackHoleHeroSection
       distance={cam.distance}
       elevation={cam.elevation}
       azimuth={cam.azimuth}
@@ -88,9 +117,33 @@ export function Horizon({ t }: { t: number }) {
       resolution={0.6}
       steps={260}
       maxDpr={1.5}
-      scrim="bottom"
-      scrimStrength={0.85}
-      className="h-full w-full"
-    />
+        scrim="bottom"
+        scrimStrength={0.85}
+        className="h-full w-full"
+      />
+
+      {/* THE STAR, ARRIVED INSIDE. Centred on chartPointAt(1), which is the
+          chart's own last vertex and therefore the exact pixel its star
+          finishes on, imported rather than retyped so the two cannot drift.
+          A gradient rather than a canvas: one element, no loop, and it is only
+          alive for a fifth of the chapter. */}
+      {flood > 0.001 && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute"
+          style={{
+            left: `${fx * 100}%`,
+            top: `${fy * 100}%`,
+            width: `${FLOOD_VMAX}vmax`,
+            height: `${FLOOD_VMAX}vmax`,
+            transform: `translate(-50%, -50%) scale(${(0.06 + 0.94 * flood).toFixed(3)})`,
+            opacity: flood,
+            background:
+              "radial-gradient(circle, rgba(255,252,242,1) 0%, rgba(255,244,214,0.98) 9%, rgba(255,214,140,0.72) 20%, rgba(255,178,86,0.28) 36%, rgba(255,150,60,0) 62%)",
+            willChange: "transform, opacity",
+          }}
+        />
+      )}
+    </div>
   );
 }

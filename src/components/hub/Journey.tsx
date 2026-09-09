@@ -241,10 +241,13 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
     if (at <= stations[0].at) {
       return (at - stations[0].at) / (stations[1].at - stations[0].at || 1);
     }
-    if (at >= stations[n - 1].at) {
-      const gap = stations[n - 1].at - stations[n - 2].at || 1;
-      return n - 1 + (at - stations[n - 1].at) / gap;
-    }
+    /* THE LAST STATION HOLDS AND DOES NOT TRAVEL ON. It used to keep counting
+       past the end on the nearest gap, which is right at the front of the run,
+       where the first card has to arrive from somewhere. At the back it is
+       wrong: there is nothing after the last category, so counting past it slid
+       the card up and out and left the reader watching a black hole with no
+       words against it for the rest of the page. It stays where it stopped. */
+    if (at >= stations[n - 1].at) return n - 1;
     for (let i = 1; i < n; i++) {
       if (at <= stations[i].at) {
         const gap = stations[i].at - stations[i - 1].at || 1;
