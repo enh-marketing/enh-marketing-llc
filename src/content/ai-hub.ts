@@ -55,6 +55,26 @@ export type Beat = {
   eyebrow?: string;
   /** THE ONE LINE PER SECTION THAT IS WRITTEN RATHER THAN QUOTED.
    *
+   *  EVERY ONE OF THESE IS SOURCED FROM ITS OWN SERVICE PAGE, even though it is
+   *  written rather than quoted, because a line that cannot be traced back to
+   *  an approved document has no business on a page that sells honesty about
+   *  AI. 04 is that page's own section heading, "Agents That Know Where to
+   *  Stop". 05 is the phrase its own file already uses for its phases. 07 comes
+   *  from the service that lists what a site can show live: pricing, stock,
+   *  availability, bookings.
+   *
+   *  THE FIRST SET WAS WEAKER AND THE FAULTS WERE THE SAME ONE. "Found in the
+   *  answer", "What stops being manual", "Budget against a forecast" and "One
+   *  screen, every channel" each restated a phrase printed in the body directly
+   *  beneath them, so a reader met the same idea twice and gained nothing.
+   *  "Someone always answers" was worse than weak: "someone" reads as a person
+   *  on a chatbot category, which is exactly what is not answering, and
+   *  "always" is an uptime absolute on a page that bans guarantees. Its own
+   *  service page is scrupulous that complaints, exceptions and anything
+   *  needing judgement are handed to a human.
+   *
+   *  A TAGLINE HAS TO SAY WHAT THE BODY DOES NOT. That is the whole test.
+   *
    *  A category's title is its navigation label and its body is the first
    *  sentence of its client document, so between them there is no room to say
    *  what the service is FOR. "AI Search Visibility" names a thing; it does not
@@ -140,7 +160,7 @@ export const system: Beat[] = [
   {
     at: 0.25,
     eyebrow: "01",
-    tagline: "Found in the answer",
+    tagline: "What AI reads first",
     title: "AI Search Visibility",
     body: "ENH Marketing helps UAE brands improve how they appear in AI-generated search results.",
     quotes: "ai-search-visibility",
@@ -149,7 +169,7 @@ export const system: Beat[] = [
   {
     at: 0.55,
     eyebrow: "02",
-    tagline: "What stops being manual",
+    tagline: "Fewer things typed twice",
     title: "AI & Automation",
     body: "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
     quotes: "ai-automation",
@@ -184,7 +204,7 @@ export const uplink: Beat[] = [
   {
     at: 0.5,
     eyebrow: "04",
-    tagline: "Someone always answers",
+    tagline: "Knows where to stop",
     title: "Conversational AI",
     body: "ENH Marketing builds AI chatbots, voice agents and customer service systems for UAE businesses. Every project starts with a paid diagnostic.",
     quotes: "conversational-ai",
@@ -200,7 +220,7 @@ export const chart: Beat[] = [
   {
     at: 0.35,
     eyebrow: "05",
-    tagline: "Budget against a forecast",
+    tagline: "Before the money moves",
     title: "Campaign Intelligence",
     body: "ENH Marketing helps UAE businesses plan campaign budgets using historical performance, relevant benchmarks and forecast ranges.",
     quotes: "campaign-intelligence",
@@ -209,7 +229,7 @@ export const chart: Beat[] = [
   {
     at: 0.8,
     eyebrow: "06",
-    tagline: "One screen, every channel",
+    tagline: "One view, one definition",
     title: "Data & Dashboards",
     body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
     quotes: "data-and-dashboards",
@@ -247,7 +267,7 @@ export const horizon: Beat[] = [
   {
     at: 0.5,
     eyebrow: "07",
-    tagline: "Pages that adapt",
+    tagline: "Live from your systems",
     title: "Intelligent Web",
     body: "ENH Marketing designs and develops intelligent websites for UAE businesses that personalise content, display live information and use a clear structure.",
     quotes: "intelligent-web",
