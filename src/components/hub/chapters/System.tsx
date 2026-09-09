@@ -7,8 +7,8 @@ import {
   SOLAR_SYSTEM,
   type Planet,
 } from "@/components/hub/OrbitalHeroSection";
-import { RUN_IN } from "@/components/hub/chartPath";
-import { TrackChart, type TrackCamera } from "@/components/hub/TrackChart";
+import { HANDOVER_Y } from "@/components/hub/chartPath";
+import { type TrackCamera } from "@/components/hub/TrackChart";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
 /** Chapter two: the system.
@@ -102,56 +102,50 @@ const STOPS: Stop[] = [
   { tilt: 14, spin: 140, roll: -6, viewRadius: 2.3, alignToCourse: 0, eccentricity: 0,
     planeSpread: 0.1, driftSpeed: 0.35, glow: 1, focusX: 0.5, focusY: 0.5,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
-  // AI Search Visibility. Camera tips over and the network drifts across it.
+  // 01 AI Search Visibility. Camera tips over and the network drifts across it.
   { tilt: 52, spin: 196, roll: 2, viewRadius: 2.8, alignToCourse: 0.3, eccentricity: 0.12,
     planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
-  // AI & Automation. The helix. The camera settles here.
+  // 02 AI & Automation. The helix.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
     planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
-  // AI Creative Production. Same camera. The drift takes over and every path
-  // straightens into a long line beside the Sun's.
-  { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: 0.6,
-    trailYears: 5, maxTurns: 6, fade: 1 },
-  // Campaign Intelligence. Same camera again. The planets go and the Sun
-  // steps onto the chart.
+  // 03 AI Creative Production, and the hand-over to the voice.
   //
-  // AND THE DRIFT COMES BACK DOWN, once the planets it was straightening have
-  // gone. Held at 7 it empties the sky: the whole star field streams along the
-  // course, and at that speed it leaves the frame faster than the component
-  // recycles it, so the stars pile into a strip down one edge and the rest is
-  // flat black. Measured over the top third of the frame it is the difference
-  // between a sky and a margin. Nothing is lost by easing it here, because the
-  // planets are already fading out across this same stretch and the chart no
-  // longer depends on the Sun's track at all.
-  { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
-    trailYears: 2.6, maxTurns: 3, fade: 0 },
-  // Data & Dashboards. Identical again. The chart runs across both of these
-  // two stops rather than one, so the Sun has the room to draw a shape with
-  // two falls in it and a category to read at each end of the climb.
-  { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6,
-    trailYears: 2.6, maxTurns: 3, fade: 0 },
+  // THE ROLL IS SOLVED, NOT CHOSEN. Every trail runs along the Sun's own
+  // course, and the on-screen angle of that course is a pure rotation by
+  // `roll`: writing a = D.right and b = D.up at roll 0, the projected
+  // direction is (a cos C + b sin C, -a sin C + b cos C), which is (a, b)
+  // turned by -C. So the roll that lays the course flat on the screen is
+  // atan2(b, a), and for this apex and camera that is 51.4728 degrees.
+  // Checked numerically: the vertical component of the course comes out at
+  // 5.6e-17 and the on-screen angle at 0.000000000 degrees.
+  //
+  // That is what lets the next chapter work. The trails arrive horizontal,
+  // parallel and coloured, and the waveform that replaces them is four
+  // horizontal coloured lines, so the two cross-fade as the same picture
+  // rather than as one thing leaving and another arriving.
+  //
+  // The camera does move here, which the note above says it should not. It
+  // moved for a reason both times: there it was drift competing with the
+  // straightening, here the rotation IS the straightening, and it lands with
+  // the trails flat rather than mid-swing.
+  { tilt: 45, spin: 252, roll: 51.4728, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
+    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.12, focusY: HANDOVER_Y,
+    trailYears: 5, maxTurns: 6, fade: 1 },
 ];
-
-/** Where the chart runs, in chapter progress. Five gaps between six stops, and
- *  the chart owns the last two of them: it carries two categories, so it needs
- *  twice the room a single stop would give it. */
-const CHART_FROM = 0.6;
-
-/** The frozen camera the chart is drawn against, read from the stop rather
- *  than retyped. TrackChart needs it to know where the component had put its
- *  Sun, which is both where the drawn one starts and where the core it leaves
- *  behind has to be covered. */
-const CHART_CAMERA: TrackCamera = {
-  spin: STOPS[5].spin,
-  tilt: STOPS[5].tilt,
-  roll: STOPS[5].roll,
-  focusX: STOPS[5].focusX,
-  focusY: STOPS[5].focusY,
+/** The camera the chart and the waveform are composed against.
+ *
+ *  EXPORTED, because the leg the chart owns is a chapter of its own now and it
+ *  has to draw against the same projection this chapter finished on, or the
+ *  line would start somewhere other than where the Sun was left. Read from the
+ *  last stop rather than retyped, so the two cannot drift apart. */
+export const CHART_CAMERA: TrackCamera = {
+  spin: STOPS[STOPS.length - 1].spin,
+  tilt: STOPS[STOPS.length - 1].tilt,
+  roll: STOPS[STOPS.length - 1].roll,
+  focusX: STOPS[STOPS.length - 1].focusX,
+  focusY: STOPS[STOPS.length - 1].focusY,
   lead: LEAD,
   apex: [272, 53],
 };
@@ -325,18 +319,6 @@ export function System({
      the stage is still climbing, whatever it has left to climb is subtracted.
      Anchored to the stage instead, the star rides up with the arriving section
      and then reverses, which is what read as appearing from nowhere. */
-  const chart = clamp((t - CHART_FROM) / (1 - CHART_FROM), 0, 1);
-
-  /* NOTHING MOVES BUT THE SUN, WHICH IS WHY THE COMPONENT IS DIMMED RATHER
-     THAN DRIVEN. Walking the component's `focus` along the chart does move its
-     real Sun, and takes the whole scene with it, star field included, because
-     `focus` is the camera centre. There is no prop that moves the Sun on its
-     own. So the camera is left exactly where it was and `glow` is taken to
-     zero across the run-in instead, which removes the planets, the wakes and
-     the Sun's halo but not the stars, since the star field is the one thing
-     `glow` does not scale. TrackChart draws the Sun from there on. */
-  const dim = 1 - smooth(clamp(chart / RUN_IN, 0, 1));
-
   /* THE SCENE MOVES UP ON A PHONE, so the copy can have the bottom two fifths
      to itself instead of being laid over whatever the system is doing there.
      It is a transform on the host rather than a change to `focus`, and that is
@@ -374,7 +356,7 @@ export function System({
       trailYears={cam.trailYears}
       maxTurns={cam.maxTurns}
       driftSpeed={cam.driftSpeed}
-      glow={cam.glow * dim}
+      glow={cam.glow}
       focus={[focusX, focusY]}
       lead={lead}
       showOrbits={showOrbits}
@@ -402,14 +384,13 @@ export function System({
          `alpha: false` and its canvas is therefore opaque no matter what sits
          behind it or what background its host is given. */
       interactive={false}
-      /* Handed over the moment the chart appears. The chart draws the identical
-         line on its first frame, so nothing moves at the swap; leaving both on
-         would put a straight line through a bending one. */
-      showSunTrack={chart <= 0}
+      /* ON THROUGHOUT NOW. The chart used to begin inside this chapter and the
+         track had to be handed over mid-leg; the chart is its own chapter, so
+         the Sun keeps its track for the whole of this one and the waveform
+         takes over at the join. */
+      showSunTrack
       scrim="bottom"
       scrimStrength={0.8}
-    >
-      {chart > 0 && <TrackChart p={chart} camera={CHART_CAMERA} />}
-    </OrbitalHeroSection>
+    />
   );
 }

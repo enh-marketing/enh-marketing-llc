@@ -81,20 +81,15 @@ export const ASCENT_HANDOVER = "Explore New Heights With AI";
 
 /** The system. One category at each of the camera's stops.
  *
- *  THE ORDER IS THE SITE'S ORDER, taken straight from the AI Hub group in
- *  sitemap.ts rather than rearranged into a theme. Any other order would be a
- *  claim about which of these matters most, and that is not a claim to make
- *  here. The remaining five categories follow in the same order in the chapters
- *  still to be built.
+ *  THE ORDER IS THE SITE'S, for as far as it goes. Where the page departs from
+ *  it, at the uplink, the reason is written where that happens rather than
+ *  here.
  *
- *  `at` values line up with the camera's six stops, a fifth of the chapter
- *  apart: 0.2 is the stop the particle field belongs to, 0.4 the helix where
- *  the camera settles and stops moving, 0.6 where the drift takes over and
- *  every path straightens into a line, and 0.8 and 1 the two stops the Sun
- *  spends climbing the chart. */
+ *  `at` values line up with the camera's stops: the network, the helix, and the
+ *  straightening where every trail lies flat and hands over to the voice. */
 export const system: Beat[] = [
   {
-    at: 0.2,
+    at: 0.25,
     eyebrow: "01",
     title: "AI Search Visibility",
     body: "ENH Marketing helps UAE brands improve how they appear in AI-generated search results.",
@@ -102,7 +97,7 @@ export const system: Beat[] = [
     href: "/ai-hub/ai-search-visibility",
   },
   {
-    at: 0.4,
+    at: 0.55,
     eyebrow: "02",
     title: "AI & Automation",
     body: "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
@@ -110,51 +105,33 @@ export const system: Beat[] = [
     href: "/ai-hub/ai-automation",
   },
   {
-    at: 0.6,
+    at: 0.85,
     eyebrow: "03",
     title: "AI Creative Production",
     body: "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
     quotes: "ai-creative-production",
     href: "/ai-hub/ai-creative-production",
   },
-  {
-    at: 0.8,
-    eyebrow: "04",
-    title: "Campaign Intelligence",
-    body: "ENH Marketing helps UAE businesses plan campaign budgets using historical performance, relevant benchmarks and forecast ranges.",
-    quotes: "campaign-intelligence",
-    href: "/ai-hub/campaign-intelligence",
-  },
-  {
-    at: 1,
-    eyebrow: "05",
-    title: "Data & Dashboards",
-    body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
-    quotes: "data-and-dashboards",
-    href: "/ai-hub/data-and-dashboards",
-  },
 ];
 
 /* ---------------------------------------------------------------- chapter 2 */
 
-/** The uplink. One category, at the light the Sun turns into.
+/** The uplink. The trails become a voice.
  *
- *  IT SITS AFTER DATA & DASHBOARDS rather than at its place in the site's own
- *  order, and that is a deliberate break from the rule the system chapter
- *  follows. The order elsewhere is the sitemap's, because any other order would
- *  be a claim about which service matters most. Here the sequence is set by the
- *  picture: the Sun finishes climbing the chart, and the thing it becomes is a
- *  voice. Conversational AI is the only category whose own description mentions
- *  voice agents, so it is the one that can follow that move honestly.
+ *  IT SITS BETWEEN CREATIVE PRODUCTION AND THE CHART, which is not the site's
+ *  own order and is a deliberate break from the rule the rest of the page
+ *  follows. The sequence here is set by the picture: the planets' coloured
+ *  trails straighten and lie flat, and horizontal coloured lines are what a
+ *  waveform is made of, so the voice is what those trails can become without
+ *  anything having to morph. Conversational AI is also the only category whose
+ *  own description names voice agents, so the picture and the copy agree.
  *
- *  The eyebrow numbers therefore count the journey rather than the sitemap, and
- *  they always did: Campaign Intelligence is 05 on the site and 04 here. That
- *  is now consistent from 01 to 07 rather than consistent-ish, which is the
- *  only version of it a reader can check. */
+ *  The eyebrows count the journey rather than the sitemap, 01 to 07, and always
+ *  did; this is the first version where that is consistent all the way down. */
 export const uplink: Beat[] = [
   {
     at: 0.5,
-    eyebrow: "06",
+    eyebrow: "04",
     title: "Conversational AI",
     body: "ENH Marketing builds AI chatbots, voice agents and customer service systems for UAE businesses. Every project starts with a paid diagnostic.",
     quotes: "conversational-ai",
@@ -162,6 +139,29 @@ export const uplink: Beat[] = [
   },
 ];
 
+/* ---------------------------------------------------------------- chapter 3 */
+
+/** The chart. Two categories share it, so it runs long: the Sun has to have
+ *  somewhere to be while each of them is read. */
+export const chart: Beat[] = [
+  {
+    at: 0.35,
+    eyebrow: "05",
+    title: "Campaign Intelligence",
+    body: "ENH Marketing helps UAE businesses plan campaign budgets using historical performance, relevant benchmarks and forecast ranges.",
+    quotes: "campaign-intelligence",
+    href: "/ai-hub/campaign-intelligence",
+  },
+  {
+    at: 0.8,
+    eyebrow: "06",
+    title: "Data & Dashboards",
+    body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
+    quotes: "data-and-dashboards",
+    href: "/ai-hub/data-and-dashboards",
+  },
+];
+/* ---------------------------------------------------------------- chapter 4 */
 
 /** The horizon. The last two categories, at the thing you can only see by
  *  what it does to the light around it.

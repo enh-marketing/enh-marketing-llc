@@ -5,9 +5,10 @@ import { Ascent } from "@/components/hub/Ascent";
 import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
 import { Uplink } from "@/components/hub/chapters/Uplink";
+import { Chart } from "@/components/hub/chapters/Chart";
 import { OpeningLine } from "@/components/hub/OpeningLine";
 import { ForegroundEcho } from "@/components/hub/ForegroundEcho";
-import { horizon, system, uplink } from "@/content/ai-hub";
+import { chart, horizon, system, uplink } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
  *
@@ -22,26 +23,29 @@ import { horizon, system, uplink } from "@/content/ai-hub";
  *  chapter two once its video is scrubbed from chapter progress instead of
  *  from its own lock, which deletes most of it rather than adding anything.
  *
- *  THE BEAT WINDOW IS NARROWER THAN THE DEFAULT because the system chapter's
- *  five lines sit a fifth of the chapter apart, so the rule that stops two
- *  headlines being legible at once needs the window inside 0.1. Full within
- *  0.035 and out by 0.095 clears it.
+ *  THE BEAT WINDOW IS NARROWER THAN THE DEFAULT so that no two headlines are
+ *  ever legible at once. It was set when the system chapter carried five lines
+ *  a fifth of a chapter apart, which needed the window inside 0.1; the reorder
+ *  moved lines out to other chapters and the closest pair now sits 0.3 apart,
+ *  so this is tighter than it has to be rather than wrong. Full within 0.035
+ *  and out by 0.095.
  *
- *  THE STORY RUNS system, uplink, horizon. One category is still unplaced,
- *  Intelligent Web, and it is left out rather than pushed into a scene built
- *  for something else. */
+ *  THE STORY RUNS system, uplink, chart, horizon. One category is still
+ *  unplaced, Intelligent Web, and it is left out rather than pushed into a
+ *  scene built for something else. */
 const CHAPTERS: Chapter[] = [
-  /* Six, not four. The chapter gained two stops at the end, where the planets
-     are thrown across the frame and then taken away, and those need scroll of
-     their own or the scatter is over before it registers. */
-  { id: "system", viewports: 10, Scene: System, beats: system },
-  /* THE UPLINK. The Sun's light becomes a voice. SiriWave is dependency free
-     raw WebGL, the same shape as the black hole it hands over to, so the page
-     gains a scene without gaining a library. */
+  /* The planets, and their colours, all the way to Creative Production. The
+     chapter ends with every trail straightened and laid flat on the screen by
+     a solved roll, which is what the voice can take over from. */
+  { id: "system", viewports: 8, Scene: System, beats: system },
+  /* The voice. Horizontal coloured lines become horizontal coloured lines, so
+     the join is a trade rather than a morph. */
   { id: "uplink", viewports: 4, Scene: Uplink, beats: uplink },
+  /* The chart, opening on the flat line the waveform collapses into. Two
+     categories share it, so it runs long. */
+  { id: "chart", viewports: 6, Scene: Chart, beats: chart },
   { id: "horizon", viewports: 4, Scene: Horizon, beats: horizon },
 ];
-
 export function AiHubPage() {
   return (
     <main>

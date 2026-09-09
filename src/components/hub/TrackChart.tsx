@@ -108,24 +108,14 @@ export function TrackChart({ p, camera }: { p: number; camera: TrackCamera }) {
       ctx.clearRect(0, 0, w, h);
       if (k <= 0) return;
 
-      /* Cover the component's residual Sun core, which its own dimming leaves
-         behind. Sized from its formula, radius max(5, min(w,h) * 0.013), with a
-         soft edge so nothing shows against the stars. */
-      const stale = sunScreenPosition(w, h, camera);
-      const coreR = Math.max(5, Math.min(w, h) * 0.013) * 1.9 + 4;
-      const mask = ctx.createRadialGradient(stale.x, stale.y, 0, stale.x, stale.y, coreR);
-      mask.addColorStop(0, "rgba(0,0,0,1)");
-      mask.addColorStop(0.72, "rgba(0,0,0,1)");
-      mask.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = mask;
-      ctx.beginPath();
-      ctx.arc(stale.x, stale.y, coreR, 0, Math.PI * 2);
-      ctx.fill();
+      /* THE MASK IS GONE WITH THE RUN-IN. It used to cover the residual core
+         the orbital component's dimming left behind, because the chart was
+         drawn over that component inside its chapter. The chart is its own
+         chapter now, with nothing underneath it but the star field, so there is
+         nothing to hide.
 
-      /* The Sun: from where the component had it, onto the chart, then along
-         it. `chartFocus` returns the whole journey in frame fractions. */
-      const entry = { x: stale.x / w, y: stale.y / h };
-      const spot = chartFocus(k, [entry.x, entry.y]);
+         The Sun simply walks the path, which begins where the voice left it. */
+      const spot = chartFocus(k);
       const sun = { x: spot[0] * w, y: spot[1] * h };
       const done = chartTravelled(k);
 
