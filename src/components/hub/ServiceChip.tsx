@@ -16,18 +16,43 @@
  *  brightens the border rather than the fill so the chip never becomes a slab.
  *
  *  The label is not `uppercase` in CSS: the words are capitalised in the markup
- *  so they survive into the accessible name as written. */
+ *  so they survive into the accessible name as written.
+ *
+ *  THE HOVER LIFT WAS NOT ANIMATING AT ALL, and the transition list said it was.
+ *  It named `transform`, but Tailwind v4 writes `-translate-y-0.5` to the
+ *  separate `translate` property. Straight from the built stylesheet:
+ *
+ *    .transition-[background-color,border-color,transform]
+ *      { transition-property: background-color,border-color,transform }
+ *    .motion-safe:hover:-translate-y-0.5:hover
+ *      { --tw-translate-y: calc(var(--spacing) * -.5);
+ *        translate: var(--tw-translate-x) var(--tw-translate-y) }
+ *
+ *  `translate` is not in that list, so the chip snapped up two pixels instantly
+ *  while its background and border washed in over 300ms, and the rocket beside
+ *  it glided over those same 300ms because `transition-transform` DOES expand
+ *  to `transform,translate,scale,rotate` in v4. Three speeds out of one pointer
+ *  movement. It is the same trap that put the waveform half off the screen.
+ *
+ *  The plain `transition` utility is used instead of a hand-written list
+ *  precisely so this cannot come back: it already covers translate, scale and
+ *  rotate, so adding any of those later needs no matching edit here.
+ *
+ *  AND IT IS FASTER THAN THE PAGE. Hover feedback wants to be under 100ms
+ *  whatever the rest of the design is doing; 300ms on a pointer-over reads as
+ *  the interface thinking about it. The rocket is a beat behind at 150ms, which
+ *  is the follow-through: the chip moves, the thing inside it catches up. */
 export function ServiceChip({ href, label = "Explore" }: { href: string; label?: string }) {
   return (
     <a
       href={href}
-      className="group font-grotesk mt-7 inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/[0.06] py-3 pl-6 pr-5 text-[0.9rem] font-bold tracking-[0.01em] text-white backdrop-blur-sm transition-[background-color,border-color,transform] duration-300 hover:border-white/60 hover:bg-white/[0.12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:hover:-translate-y-0.5 motion-reduce:transition-none"
+      className="group font-grotesk mt-7 inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/[0.06] py-3 pl-6 pr-5 text-[0.9rem] font-bold tracking-[0.01em] text-white backdrop-blur-sm transition duration-100 hover:border-white/60 hover:bg-white/[0.12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 active:border-white/70 active:bg-white/[0.09] motion-reduce:transition-none"
     >
       {label}
       <svg
         aria-hidden
         viewBox="0 0 24 24"
-        className="h-5 w-5 transition-transform duration-300 motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5 motion-reduce:transition-none"
+        className="h-5 w-5 transition-transform duration-150 motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5 motion-reduce:transition-none"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.6"

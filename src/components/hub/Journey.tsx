@@ -443,7 +443,12 @@ export function Journey({
           {chapters.map((c, i) => (
             <li
               key={c.id}
-              className="w-px transition-all duration-500 motion-reduce:transition-none"
+              /* Colour only, and quickly. It was `transition-all duration-500`:
+                 half a second is a card entering, not a hairline marker
+                 acknowledging which chapter you are in, and `all` put the
+                 element's own height in the transition too, so a resize
+                 animated the rail's length for no reason. */
+              className="w-px transition-colors duration-200 motion-reduce:transition-none"
               style={{
                 height: `${c.viewports * 10}px`,
                 background: i === lead ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.2)",
