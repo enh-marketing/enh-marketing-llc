@@ -39,9 +39,9 @@ import type { Beat } from "@/content/ai-hub";
  *  last part of the approach and is simply black before it, which is what the
  *  opener fades into anyway.
  *
- *  REDUCED MOTION pins the whole thing to the opening of chapter one and
- *  mounts nothing else. Each scene separately holds a still frame of its own,
- *  so what a reader gets is one picture and the words that go with it. */
+ *  REDUCED MOTION DOES NOT RUN THIS MACHINE AT ALL. It used to pin it to the
+ *  opening of chapter one, which showed one category and left the other six at
+ *  opacity 0 and inert. There is a separate document branch below instead. */
 
 export type Chapter = {
   id: string;
@@ -394,8 +394,22 @@ export function Journey({
                        still catching up. So a line could be solid on screen and
                        already inert, or invisible and still clickable. Painted
                        opacity and the gates are now the same number in the same
-                       frame. */
+                       frame.
+                       WHAT THE TRANSITION WAS ALSO DOING, though, was keeping
+                       this block on its own compositor layer: an opacity
+                       transition is an animation, and a running animation gets
+                       promoted. An inline opacity rewritten from JS is not, so
+                       taking the class out took the layer with it, and every
+                       scroll frame then repainted a subtree containing the
+                       chip's `backdrop-blur-sm`, which has to resample the
+                       moving scene behind it. `will-change` asks for the layer
+                       back explicitly, which is what was wanted all along.
+                       ONLY WHILE THE LINE IS UP. Seven permanent layers to
+                       serve the one or two that are ever visible is the other
+                       way to make this slow; this flips twice per beat, not
+                       once per frame. */
                     opacity: shown,
+                    willChange: shown > 0 ? "opacity, transform" : undefined,
                     transform: travel ? `translate3d(0, ${travel}vh, 0)` : undefined,
                     pointerEvents: shown > 0.5 ? "auto" : "none",
                   }}
