@@ -53,6 +53,19 @@ export type Beat = {
   href?: string;
   /** Small label above the title. */
   eyebrow?: string;
+  /** THE ONE LINE PER SECTION THAT IS WRITTEN RATHER THAN QUOTED.
+   *
+   *  A category's title is its navigation label and its body is the first
+   *  sentence of its client document, so between them there is no room to say
+   *  what the service is FOR. "AI Search Visibility" names a thing; it does not
+   *  tell a marketing lead skimming at speed why they should care. That is the
+   *  job of a standfirst and there was none.
+   *
+   *  Each is three or four words, in the reader's terms rather than the
+   *  service's, and each is true to that service's own description with nothing
+   *  added: no outcome, no figure, no promise. They sit beside the number,
+   *  which is where the eye already is. */
+  tagline?: string;
   /** Slug of the service this beat quotes. Its title must match that page's
    *  sitemap label and its body that page's meta.description, word for word.
    *  Enforced by scripts/check-hub-copy.mjs. */
@@ -127,6 +140,7 @@ export const system: Beat[] = [
   {
     at: 0.25,
     eyebrow: "01",
+    tagline: "Found in the answer",
     title: "AI Search Visibility",
     body: "ENH Marketing helps UAE brands improve how they appear in AI-generated search results.",
     quotes: "ai-search-visibility",
@@ -135,6 +149,7 @@ export const system: Beat[] = [
   {
     at: 0.55,
     eyebrow: "02",
+    tagline: "What stops being manual",
     title: "AI & Automation",
     body: "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
     quotes: "ai-automation",
@@ -143,6 +158,7 @@ export const system: Beat[] = [
   {
     at: 0.85,
     eyebrow: "03",
+    tagline: "Variants without a reshoot",
     title: "AI Creative Production",
     body: "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
     quotes: "ai-creative-production",
@@ -168,6 +184,7 @@ export const uplink: Beat[] = [
   {
     at: 0.5,
     eyebrow: "04",
+    tagline: "Someone always answers",
     title: "Conversational AI",
     body: "ENH Marketing builds AI chatbots, voice agents and customer service systems for UAE businesses. Every project starts with a paid diagnostic.",
     quotes: "conversational-ai",
@@ -183,6 +200,7 @@ export const chart: Beat[] = [
   {
     at: 0.35,
     eyebrow: "05",
+    tagline: "Budget against a forecast",
     title: "Campaign Intelligence",
     body: "ENH Marketing helps UAE businesses plan campaign budgets using historical performance, relevant benchmarks and forecast ranges.",
     quotes: "campaign-intelligence",
@@ -191,6 +209,7 @@ export const chart: Beat[] = [
   {
     at: 0.8,
     eyebrow: "06",
+    tagline: "One screen, every channel",
     title: "Data & Dashboards",
     body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
     quotes: "data-and-dashboards",
@@ -228,6 +247,7 @@ export const horizon: Beat[] = [
   {
     at: 0.5,
     eyebrow: "07",
+    tagline: "Pages that adapt",
     title: "Intelligent Web",
     body: "ENH Marketing designs and develops intelligent websites for UAE businesses that personalise content, display live information and use a clear structure.",
     quotes: "intelligent-web",
