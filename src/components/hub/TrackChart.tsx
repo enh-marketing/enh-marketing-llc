@@ -107,7 +107,22 @@ export function TrackChart({ p, camera }: { p: number; camera: TrackCamera }) {
       if (!ctx) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      if (k <= 0) return;
+
+      /* AND IT DRAWS AT ZERO. There used to be an `if (k <= 0) return` here, on
+         the reasonable-sounding grounds that a leg that has not started has
+         nothing to show. It is wrong, and it was invisible until the joins
+         became real dissolves.
+         This chapter's own div is opaque black. Through the whole of its
+         fade-in its progress is pinned at 0, because `locals` clamps. So the
+         black arrived over the voice, covering the waveform AND the star, while
+         the canvas underneath it drew nothing at all. The star did not fade with
+         the wave, it was painted over by an empty chapter. Reported exactly that
+         way: a flat wave and no sun.
+         There is a frame to draw at zero, and it is the right one: `chartU`
+         holds the star at the handover point across the first 0.22 of the leg
+         and the flat run is already laid out behind it, so k = 0 is precisely
+         the frame the voice is showing. Drawing it means the two cross-fade over
+         the same picture instead of one of them going dark. */
 
       /* THE MASK IS GONE WITH THE RUN-IN. It used to cover the residual core
          the orbital component's dimming left behind, because the chart was

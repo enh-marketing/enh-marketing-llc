@@ -11,12 +11,18 @@ import { CHART_CAMERA } from "@/components/hub/chapters/System";
  *  while that scene is dimmed out from under it, so the residual-Sun mask and
  *  the whole run-in are gone.
  *
- *  IT OPENS FLAT, AT THE HEIGHT THE VOICE ENDED ON. The first two vertices of
- *  CHART_PATH sit at HANDOVER_Y, so the line the waveform collapses into is the
- *  line this chapter starts drawing. Then it settles down to a baseline to make
- *  room, and only then rises, dips, rises, dips and rises to finish high. The
- *  descent is geometry in the path rather than a camera move over the top of
- *  it, which keeps the whole leg to one moving part.
+ *  IT OPENS ON THE VOICE'S OWN FRAME. The first two vertices of CHART_PATH sit
+ *  at HANDOVER_Y and the flat run between them is already drawn when the leg
+ *  begins, so what this chapter shows at progress zero is exactly what the
+ *  uplink is showing: the same star in the same place with the same line behind
+ *  it, from the same two functions. Then it rises, dips, rises, dips and rises
+ *  to finish high. There is no settle any more; that move only existed when the
+ *  line opened at 0.2 and had nowhere above it to go.
+ *
+ *  THE DIV IS OPAQUE, which is why the canvas under it has to draw at progress
+ *  zero rather than treating a leg that has not started as nothing to show.
+ *  Through the whole of this chapter's fade-in its progress is pinned at 0, and
+ *  a blank canvas behind opaque black is a hole in the middle of a dissolve.
  *
  *  TWO CATEGORIES SHARE IT, so it needs twice the room one would take: the Sun
  *  has to have somewhere to be while each of them is read. */
