@@ -145,6 +145,16 @@ const aiHub: NavNode = {
   ],
 };
 
+/** The eight AI Hub services, in the order the navigation lists them.
+ *
+ *  EXPORTED SO THE PILLAR PAGE'S STRUCTURED DATA CANNOT DRIFT FROM THE MENU.
+ *  /ai-hub emits an ItemList naming all eight, and an answer engine reading it
+ *  is being told what this agency sells. If that list were retyped there it
+ *  would be one edit away from disagreeing with the navigation, the breadcrumbs
+ *  and the eight pages themselves. It is this array or nothing. */
+export const aiHubServices: NavNode[] = aiHub.children ?? [];
+
+
 /* ------------------------------------------------------------------ top-level */
 
 const home: NavNode = { label: "Home", href: "/" };

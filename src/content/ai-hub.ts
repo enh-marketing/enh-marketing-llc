@@ -1,9 +1,19 @@
 // AI Hub — landing page content.
 //
-// NOTHING ON THIS PAGE IS WRITTEN HERE. There is no client document for the
-// landing page, so on 2026-09-08 the decision was made to give it no prose of
-// its own rather than invent connective copy. Every string below is quoted from
-// somewhere already approved, and marked with the slug it came from:
+// NOTHING IN THIS FILE IS WRITTEN HERE, and that is still true. There is no
+// client document for the landing page, so on 2026-09-08 the decision was made
+// to give it no prose of its own rather than invent connective copy. Every
+// string below is quoted from somewhere already approved, and marked with the
+// slug it came from:
+//
+// WHAT CHANGED ON 2026-09-09 is that Divij authorised copy to be written for
+// the pillar page, having been shown that no document exists for it. He also
+// asked that these seven stay quoted, so they have, and check:copy still
+// enforces them. The written copy is the connective layer and it lives in
+// src/pages/ai-hub/index.astro, not here: the head tags and the structured
+// data. See the note there and the exception recorded in docs/PRODUCT.md.
+// If prose is ever wanted between the categories it belongs beside this
+// comment, marked as written rather than quoted, so the two never blur.
 //
 //   Category titles   the labels in src/lib/sitemap.ts, which are what the
 //                     navigation and the sitemap already call these pages.

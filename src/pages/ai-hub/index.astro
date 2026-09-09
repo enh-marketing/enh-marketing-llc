@@ -2,6 +2,16 @@
 import { Font } from "astro:assets";
 import Base from "@/layouts/Base.astro";
 import { AiHubPage } from "@/page-bodies/ai-hub-index";
+import { brand } from "@/lib/content";
+import { aiHubServices } from "@/lib/sitemap";
+import * as search from "@/content/services/ai-search-visibility";
+import * as automation from "@/content/services/ai-automation";
+import * as creative from "@/content/services/ai-creative-production";
+import * as conversational from "@/content/services/conversational-ai";
+import * as campaign from "@/content/services/campaign-intelligence";
+import * as web from "@/content/services/intelligent-web";
+import * as dashboards from "@/content/services/data-and-dashboards";
+import * as workshops from "@/content/services/ai-workshops-and-training";
 
 /* THE SHELL IS BACK ON, as of 2026-09-09. This page was built with
    `chrome={false}` so the story could decide its own top and bottom before the
@@ -11,19 +21,121 @@ import { AiHubPage } from "@/page-bodies/ai-hub-index";
    z-30 and the foreground copy at z-40, so it sits over the story rather than
    inside it and nothing on the page had to move.
 
-   PLACEHOLDER META. The title and description below are holding the shape of
-   the tags, not stating the page's copy. Neither is written yet and neither is
-   invented here. */
+   THE HEAD TAGS ARE WRITTEN NOW, AND THEY ARE THE ONE PLACE ON THIS PAGE WHERE
+   THAT IS TRUE. They were `"AI Hub | ENH Marketing"` and `"ENH Marketing's AI
+   Hub."`, marked in this comment as placeholders holding the shape of the tags.
+   Divij authorised copy for this page on 2026-09-09, having been shown that
+   PRODUCT.md's rule is verbatim-from-document and that no document exists for
+   the pillar page. The seven category blocks stay quoted, on his instruction,
+   and `check:copy` still enforces them. Only what is written here is new.
 
+   IT IS WRITTEN TO THE DOCUMENTS' OWN DISCIPLINE, which is the point of being
+   allowed to write at all: no metric, no percentage, no currency and no
+   guarantee, because the source documents carry none and this pillar sells
+   honesty about what AI can and cannot do. "Eight" is the only number, and it
+   counts this site's own pages rather than claiming anything. */
+
+const SITE = "https://enhmedia.com";
 const HREF = "/ai-hub";
+
+const TITLE = "AI Services in Dubai and the UAE | ENH Marketing";
+
+/* Named rather than adjectival, because this is a pillar page and what a reader
+   or an answer engine needs from it is the list. Seven of the eight fit inside
+   the 160 characters a description gets; the ItemList below carries all eight
+   with their own approved descriptions, which is where a machine reads them. */
+const DESCRIPTION =
+  "Eight AI services for UAE businesses: search visibility, automation, creative production, conversational AI, campaign intelligence, websites and reporting.";
+
+/* Each service's own `meta.description`, which is the first sentence of its
+   client document, keyed by the href the navigation already uses. Imported
+   rather than retyped: these run at build time and never reach the browser, so
+   the accuracy is free. */
+const DESCRIPTIONS: Record<string, string> = {
+  "/ai-hub/ai-search-visibility": search.meta.description,
+  "/ai-hub/ai-automation": automation.meta.description,
+  "/ai-hub/ai-creative-production": creative.meta.description,
+  "/ai-hub/conversational-ai": conversational.meta.description,
+  "/ai-hub/campaign-intelligence": campaign.meta.description,
+  "/ai-hub/intelligent-web": web.meta.description,
+  "/ai-hub/data-and-dashboards": dashboards.meta.description,
+  "/ai-hub/ai-workshops-and-training": workshops.meta.description,
+};
+
+const provider = {
+  "@type": "Organization",
+  "@id": `${SITE}#organization`,
+  name: brand.legal,
+  url: SITE,
+  telephone: brand.phone,
+  email: brand.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: brand.address,
+    addressLocality: brand.city,
+    addressCountry: "AE",
+  },
+};
+
+const areaServed = { "@type": "Country", name: "United Arab Emirates" };
+
+/* THE PAGE HAD NO STRUCTURED DATA AT ALL, which for the pillar that names every
+   AI service this agency sells is the largest gap on it. A reader gets the
+   answer by scrolling twenty-two viewports of a story; a crawler or an answer
+   engine got nothing. The list below is the page's own contents stated once, in
+   the order the page tells them, with each service's approved description
+   attached. Nothing here is a claim: it is what we offer and where to read
+   about it. */
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${SITE}${HREF}#page`,
+      url: `${SITE}${HREF}`,
+      name: TITLE,
+      description: DESCRIPTION,
+      inLanguage: "en",
+      about: { "@id": `${SITE}#organization` },
+      mainEntity: { "@id": `${SITE}${HREF}#services` },
+    },
+    provider,
+    {
+      "@type": "ItemList",
+      "@id": `${SITE}${HREF}#services`,
+      name: "ENH Marketing AI services",
+      itemListOrder: "https://schema.org/ItemListOrderAscending",
+      numberOfItems: aiHubServices.length,
+      itemListElement: aiHubServices.map((s, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "Service",
+          name: s.label,
+          description: DESCRIPTIONS[s.href],
+          url: `${SITE}${s.href}`,
+          areaServed,
+          provider: { "@id": `${SITE}#organization` },
+        },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${SITE}${HREF}#breadcrumbs`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE },
+        { "@type": "ListItem", position: 2, name: "AI Hub", item: `${SITE}${HREF}` },
+      ],
+    },
+  ],
+};
 ---
 
-<Base
-  title="AI Hub | ENH Marketing"
-  description="ENH Marketing's AI Hub."
-  canonical={HREF}
-  forceDark
->
+<Base title={TITLE} description={DESCRIPTION} canonical={HREF} forceDark>
+  {/* Emitted as static HTML in the head rather than through the island, as on
+      every other route on this site. */}
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+
   {/* Space Grotesk is this page's typeface and no other page's. Declaring it
       here rather than in Base.astro is what keeps the preload off the other
       141 pages. */}
