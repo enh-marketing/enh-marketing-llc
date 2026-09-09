@@ -7,7 +7,7 @@ import {
   SOLAR_SYSTEM,
   type Planet,
 } from "@/components/hub/OrbitalHeroSection";
-import { HANDOVER_X, HANDOVER_Y } from "@/components/hub/chartPath";
+import { HANDOVER_Y } from "@/components/hub/chartPath";
 import { type TrackCamera } from "@/components/hub/TrackChart";
 import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
 
@@ -49,11 +49,11 @@ import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
  *  `lead` has to go with it. Orbital does not draw the Sun at `focus`: it
  *  draws it at `focus` and then pushes it off by `lead` of the short side,
  *  along its course, so the Sun leads the frame it is flying through. That is
- *  right everywhere except at a join, where the Sun has to be exactly where the
- *  next thing expects it, and its default 0.12 measured as a 49px error on a
- *  410 wide viewport. It is zero at this one and eases back to the default as
- *  the camera pulls out, and it is zero again at the closing one; the note on
- *  LEAD below covers that half.
+ *  right everywhere except at the opening join, where the Sun has to be exactly
+ *  where the photograph left it, and its default 0.12 measured as a 49px error
+ *  on a 410 wide viewport. It is zero there and eases back to the default as
+ *  the camera pulls out. The closing join does not need the same treatment; the
+ *  note on LEAD below says why.
  *
  *  The entry is layered over the stop mapping rather than being a stop of its
  *  own, so it does not renumber the stops or move the beats that were placed
@@ -71,9 +71,6 @@ type Stop = {
   glow: number;
   focusX: number;
   focusY: number;
-  /** How far past `focus` the Sun is pushed along its course, as a fraction of
-   *  the SHORT side of the frame. Zero at both joins; see the note on LEAD. */
-  lead: number;
   /** How long a wake each planet drags, and how many orbits it may cover. */
   trailYears: number;
   maxTurns: number;
@@ -84,30 +81,28 @@ type Stop = {
 /** Orbital's own default, which the arrival has to start from zero and reach,
  *  and which the scatter has to know to find the Sun.
  *
- *  IT HAS TO REACH ZERO AGAIN BEFORE THE CHAPTER ENDS, and it used not to.
- *  Orbital draws the Sun at `focus` and then pushes it off by `lead` of the
- *  short side along its course, which is right while the star is flying
- *  through a frame and wrong at a join, where it has to be exactly where the
- *  next thing expects it. The opening join already zeroed it. The closing one
- *  did not, so the Sun finished the chapter 0.12 of the short side off its
- *  focus: 114px left of it at 1600x950, which put the star at 0.05 of the
- *  width with its glow running off the left edge (measured: the canvas was
- *  still at 247 of 255 in column zero), while the chart opens at 0.12.
- *
- *  It is a per-stop field rather than a second ramp so that it eases out on
- *  exactly the same smoothstep as the roll that straightens the trails. The
- *  camera is already moving over that stretch and this rides it, instead of
- *  adding a separate move at the join, which is the thing the note on STOPS
- *  says not to do. */
+ *  IT IS CONSTANT ACROSS THE WHOLE CHAPTER AGAIN, past the arrival. It was
+ *  briefly eased back out at the end so the Sun would finish exactly on the
+ *  chart's first vertex. That is no longer something the Sun has to do: the
+ *  waveform sits between the two and is drawn full width, so the only thing
+ *  the system has to hand over is the HEIGHT. Easing it out moved the star
+ *  114px during the straightening, and a move at that moment is the one thing
+ *  the note on STOPS says not to add. */
 const LEAD = 0.12;
 
 /** The camera at each stop, in the order the chapter passes through them.
  *
- *  THE CAMERA SETTLES AT STOP 2 AND NEVER MOVES AGAIN. Every camera field in
- *  stops 3 and 4 is copied from stop 2: not the angle, not the zoom, not where
- *  the Sun sits. Only the wake and the planets change after that. Moving the
- *  camera at the same time reads as the view swinging, which competes with the
- *  one thing that is meant to be happening.
+ *  THE CAMERA STOPS TRAVELLING AT STOP 2, and now actually does. Every field in
+ *  the last stop is copied from the one before it apart from the roll and the
+ *  wake: same tilt, same spin, same zoom, and above all the same `focus`, so the
+ *  scene does not go anywhere. Only the angle changes, and what the angle does
+ *  is straighten the trails.
+
+ *  IT USED TO SLIDE, AND THAT IS WHAT THE PAGE WAS REPORTING. The last stop
+ *  pulled `focus` over to 0.12 of the width so the Sun would land on the chart's
+ *  first vertex, so across AI Creative Production the whole system drifted left,
+ *  ran under the copy, and finished jammed against the edge with most of the
+ *  frame empty. Nothing needed it to: see the note on CHART_CAMERA.
  *
  *  HOW A PATH BECOMES A STRAIGHT LINE. The component offsets every trail
  *  backwards along the Sun's own course by `driftSpeed` times its age, so a
@@ -120,15 +115,15 @@ const LEAD = 0.12;
 const STOPS: Stop[] = [
   // Straight down on the disc. Rings, near-circular, barely drifting.
   { tilt: 14, spin: 140, roll: -6, viewRadius: 2.3, alignToCourse: 0, eccentricity: 0,
-    planeSpread: 0.1, driftSpeed: 0.35, glow: 1, focusX: 0.5, focusY: 0.5, lead: LEAD,
+    planeSpread: 0.1, driftSpeed: 0.35, glow: 1, focusX: 0.5, focusY: 0.5,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
   // 01 AI Search Visibility. Camera tips over and the network drifts across it.
   { tilt: 52, spin: 196, roll: 2, viewRadius: 2.8, alignToCourse: 0.3, eccentricity: 0.12,
-    planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46, lead: LEAD,
+    planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
   // 02 AI & Automation. The helix.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: 0.6, lead: LEAD,
+    planeSpread: 1, driftSpeed: 1.5, glow: 1, focusX: 0.62, focusY: HANDOVER_Y,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
   // 03 AI Creative Production, and the hand-over to the voice.
   //
@@ -151,7 +146,7 @@ const STOPS: Stop[] = [
   // straightening, here the rotation IS the straightening, and it lands with
   // the trails flat rather than mid-swing.
   { tilt: 45, spin: 252, roll: 51.4728, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
-    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: HANDOVER_X, focusY: HANDOVER_Y, lead: 0,
+    planeSpread: 1, driftSpeed: 7, glow: 1, focusX: 0.62, focusY: HANDOVER_Y,
     trailYears: 5, maxTurns: 6, fade: 1 },
 ];
 /** The camera the chart is handed.
@@ -159,9 +154,9 @@ const STOPS: Stop[] = [
  *  IT IS NOT WHAT MAKES THE JOIN LINE UP, and an earlier note here said it was.
  *  TrackChart destructures `camera` and then never reads it again except in one
  *  effect's dependency array: it draws CHART_PATH straight in the stage's own
- *  normalised coordinates. So what actually has to agree is the Sun's finished
- *  screen position and CHART_PATH[0], and they agree because `lead` is 0 at the
- *  last stop and both are then the same pair of numbers, focusX and HANDOVER_Y.
+ *  normalised coordinates. Nor does anything have to line up across: the
+ *  waveform is opaque and full width, so this chapter's Sun is off screen by
+ *  the time the chart's own Sun appears. The only thing shared is HANDOVER_Y.
  *
  *  Still read from the last stop rather than retyped, so if it is ever wired up
  *  it cannot already have drifted. */
@@ -171,7 +166,7 @@ export const CHART_CAMERA: TrackCamera = {
   roll: STOPS[STOPS.length - 1].roll,
   focusX: STOPS[STOPS.length - 1].focusX,
   focusY: STOPS[STOPS.length - 1].focusY,
-  lead: STOPS[STOPS.length - 1].lead,
+  lead: LEAD,
   apex: [272, 53],
 };
 
@@ -206,7 +201,6 @@ function cameraAt(t: number) {
     glow: mix(a.glow, b.glow, e),
     focusX: mix(a.focusX, b.focusX, e),
     focusY: mix(a.focusY, b.focusY, e),
-    lead: mix(a.lead, b.lead, e),
     trailYears: mix(a.trailYears, b.trailYears, e),
     maxTurns: mix(a.maxTurns, b.maxTurns, e),
     fade: mix(a.fade, b.fade, e),
@@ -361,7 +355,7 @@ export function System({
 
   const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
   const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
-  const lead = mix(cam.lead, 0, entry);
+  const lead = mix(LEAD, 0, entry);
   /* The rings belong to the opening, where the orbits are still near-circular
      and nested. Past that they would be a thicket. */
   const showOrbits = cam.alignToCourse < 0.2;

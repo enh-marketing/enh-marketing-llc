@@ -28,42 +28,48 @@
  *
  *  After the settle it reads rise, dip, rise, dip, rise, and finishes high. */
 
-/** WHERE THE THREE CHAPTERS MEET, as fractions of the frame. The last camera
- *  stop of the system chapter puts the Sun here, the uplink chapter puts the
- *  waveform's axis here, and the chart opens here, so all three agree by
- *  construction rather than by separate numbers being kept in step.
+/** THE ONE THING THE THREE CHAPTERS SHARE, as a fraction of the frame height.
  *
- *  THE HEIGHT IS SET BY THE WAVEFORM, WHICH IS THE TALLEST THING THAT HAS TO
- *  FIT. Its crest is A2 of half the canvas, before WAVE_SCALE 0.6, and the
- *  canvas is the window's longer side, so at 1600x950 the wave reaches about
- *  230px above and below its axis at the top of its own slow swell and about
- *  192px on an ordinary frame. At the 0.2 this used to be, the axis had 190px
- *  of room over a header that is 84px tall, so the wave's crest ran behind the
- *  header and off the top of the frame on every peak, and the star at the same
- *  height put the brightest pixel on the page 7px from the top edge.
+ *  ONLY THE HEIGHT, AND THAT IS THE POINT. An earlier version also pinned the
+ *  across, dragging the system's last camera stop over to 0.12 so the Sun would
+ *  finish exactly on the chart's first vertex. That is what made the scene slide
+ *  off to the left and end up behind the copy. It was never necessary: the
+ *  waveform sits between the two, it is drawn full width, and it is opaque, so
+ *  the Sun is not on screen at the moment the chart's own Sun appears. Nothing
+ *  has to line up across. The height does, because the trails, the waveform's
+ *  axis and the chart's opening are all the same horizontal line to the reader.
  *
- *  0.32 is the compromise: 304px of headroom clears the header on an ordinary
- *  frame with 28px to spare, and only the tallest swell grazes it. Lower and
- *  the wave is cropped; much higher and the thing stops reading as travelling
- *  along the top of the frame, which is what it is meant to be doing. This is
- *  the one number to move if the framing wants adjusting; everything else
- *  follows it.
+ *  0.6 IS WHERE THE SYSTEM ALREADY WAS, at the AI & Automation stop, and the
+ *  last stop now stays there instead of travelling. So this number is not a
+ *  compromise between three chapters, it is the one the picture already had,
+ *  and the other two were moved onto it.
  *
- *  THE ACROSS IS SET BY THE CHART, which has to travel, so it starts near the
- *  left and finishes at 0.9. That is why the Sun ends its chapter over on the
- *  left with its trails running off that edge: it is standing where the line
- *  begins. */
-export const HANDOVER_Y = 0.32;
-export const HANDOVER_X = 0.12;
+ *  It also suits the waveform, which is the tallest thing that has to fit: its
+ *  crest reaches about 230px either side of its axis at 1600x950, so an axis at
+ *  570px clears the 84px header by a long way and its lower peaks stay inside
+ *  the frame. And it suits the chart, which no longer has to settle downwards
+ *  before it can rise. */
+export const HANDOVER_Y = 0.6;
 
+/** THE SHAPE, AND IT IS NOW THE SHAPE THAT WAS ASKED FOR. It used to open high
+ *  and spend its first move gliding DOWN to make room, because it started at
+ *  0.2 and there was nowhere above that to go. Opening at 0.6 deletes that
+ *  move: the line runs flat, then rises, dips, rises, dips, and rises to finish
+ *  high, and nothing else happens.
+ *
+ *  IT STARTS OFF THE LEFT EDGE, at x 0, and the flat run is already drawn when
+ *  the chapter opens. The waveform collapses onto its axis and leaves a flat
+ *  line lying across the whole frame; if the chart then began as a dot at 0.12
+ *  that line would vanish and a new one would start growing. Beginning at the
+ *  edge, with the flat leg pre-drawn, means the line the reader is watching is
+ *  never taken away: it simply starts to bend. See chartU below. */
 export const CHART_PATH: Array<[number, number]> = [
-  [HANDOVER_X, HANDOVER_Y],  // where the voice left it
-  [0.26, HANDOVER_Y],  // still flat: the line is travelling, not yet charting
-  [0.36, 0.62],        // the settle, making room for the shape
-  [0.46, 0.42],        // rise
-  [0.55, 0.56],        // dip
-  [0.66, 0.34],        // rise
-  [0.74, 0.48],        // dip
+  [0, HANDOVER_Y],     // off the left edge, where the voice left the line
+  [0.28, HANDOVER_Y],  // still flat: the line is travelling, not yet charting
+  [0.4, 0.44],         // rise
+  [0.5, 0.55],         // dip
+  [0.62, 0.36],        // rise
+  [0.72, 0.47],        // dip
   [0.9, 0.14],         // and the last rise, finishing high
 ];
 
@@ -98,22 +104,27 @@ export function chartPointAt(u: number): [number, number] {
   return CHART_PATH[0];
 }
 
-/** Where the Sun is at a given point in the chart leg.
- *
- *  THERE IS NO RUN-IN ANY MORE, and its removal is the tidiest thing about the
- *  reorder. It existed because the chart used to begin at the lower left while
- *  the Sun was mid-frame, so a stretch of the leg was spent travelling to the
- *  start before the shape could begin. The chart now opens at the Sun's own
- *  position, so the leg is the shape and nothing else. */
-export function chartFocus(chart: number): [number, number] {
-  return chartPointAt(clamp(chart, 0, 1));
+/** How much of the path is already there before the leg begins: the flat run,
+ *  which is the line the waveform leaves lying across the frame. The leg's own
+ *  progress is spent on what is left, so scrolling draws the shape rather than
+ *  re-drawing a straight line the reader can already see. */
+const FLAT_U = SPANS[1] / TOTAL;
+
+/** The leg's progress mapped onto the path, with the flat run pre-drawn. */
+function chartU(chart: number): number {
+  return FLAT_U + (1 - FLAT_U) * clamp(chart, 0, 1);
 }
 
-/** How far along the drawn line the Sun has got. With the run-in gone this is
- *  simply the leg's own progress, kept as a function so the two call sites do
- *  not have to know that. */
+/** Where the Sun is at a given point in the chart leg. It starts at the end of
+ *  the flat run rather than at the left edge, so it is standing on the line the
+ *  voice left rather than dragging it into being. */
+export function chartFocus(chart: number): [number, number] {
+  return chartPointAt(chartU(chart));
+}
+
+/** How far along the drawn line the Sun has got. */
 export function chartTravelled(chart: number): number {
-  return clamp(chart, 0, 1);
+  return chartU(chart);
 }
 
 /** The chart as far as `u`, as its own vertices plus the exact point at `u`.
