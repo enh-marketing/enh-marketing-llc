@@ -115,6 +115,13 @@ const LEAD = 0.12;
  *  line running parallel to the Sun's, which is the shape the chart is made of.
  *  Both it and `trailYears` are outside the component's rebuild key, so this
  *  costs nothing per frame. */
+/*  EVERY focusX HERE IS A FRACTION OF THE BOX, AND THE BOX IS NOT THE FRAME.
+ *  Above 1024px the machine holds all four chapters 0.15 of the width to the
+ *  right, so the picture is not centred while the copy owns the left half. Add
+ *  0.15 to read any of these against the window: the disc opens at 0.65, 01
+ *  sits at 0.57 plus its own lead and lands at 0.795, which is where it was
+ *  before the box moved and where it was asked to stay, and the last two rest
+ *  at 0.65. Below 1024px the box is the frame and these are read as written. */
 const STOPS: Stop[] = [
   // Straight down on the disc. Rings, near-circular, barely drifting.
   { tilt: 14, spin: 140, roll: -6, viewRadius: 2.3, alignToCourse: 0, eccentricity: 0,
@@ -122,7 +129,7 @@ const STOPS: Stop[] = [
     trailYears: 2.6, maxTurns: 3, fade: 1 },
   // 01 AI Search Visibility. Camera tips over and the network drifts across it.
   { tilt: 52, spin: 196, roll: 2, viewRadius: 2.8, alignToCourse: 0.3, eccentricity: 0.12,
-    planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.72, focusY: 0.46, lead: LEAD,
+    planeSpread: 0.45, driftSpeed: 0.9, glow: 0.85, focusX: 0.57, focusY: 0.46, lead: LEAD,
     trailYears: 2.6, maxTurns: 3, fade: 1 },
   // 02 AI & Automation. The helix.
   { tilt: 45, spin: 252, roll: 13.5, viewRadius: 3.4, alignToCourse: 1, eccentricity: 0.25,
@@ -297,10 +304,12 @@ export function System({
   t,
   reveal,
   stageOffset,
+  biasX,
 }: {
   t: number;
   reveal: number;
   stageOffset: number;
+  biasX: number;
 }) {
   /* NOTHING HERE READS THE BREAKPOINT ANY MORE. It did, for the lift, and the
      lift is what put this chapter's Sun somewhere the next two chapters did not
@@ -378,7 +387,7 @@ export function System({
      scene has to be where the photograph left it, to the pixel. The lift starts
      once that is done and is complete a tenth of the chapter later. */
 
-  const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x, entry);
+  const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x - biasX, entry);
   const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
   const lead = mix(cam.lead, 0, entry);
 

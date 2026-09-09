@@ -35,14 +35,22 @@ import { chart, horizon, system, uplink } from "@/content/ai-hub";
  *  page in the same call, so the hub runs 01 to 07 and Workshops is reachable
  *  from the navigation rather than from here. One category has always been
  *  unplaced; it is a different one now. */
+/** HOW FAR RIGHT OF THE FRAME THE PICTURE SITS, above 1024px.
+ *
+ *  0.15 of the width, which is 216px at 1440. It puts the system's resting
+ *  focus and the waveform's centre at 0.65 of the frame; the copy's cards
+ *  finish at 0.478, so what was 32px of clearance is 248px. The chart gives it
+ *  back, because its line needs the whole width. See BIAS in Journey. */
+const BIAS = 0.15;
+
 const CHAPTERS: Chapter[] = [
   /* The planets, and their colours, all the way to Creative Production. The
      chapter ends with every trail straightened and laid flat on the screen by
      a solved roll, which is what the voice can take over from. */
-  { id: "system", viewports: 8, Scene: System, beats: system },
+  { id: "system", viewports: 8, Scene: System, beats: system, bias: BIAS },
   /* The voice. Horizontal coloured lines become horizontal coloured lines, so
      the join is a trade rather than a morph. */
-  { id: "uplink", viewports: 4, Scene: Uplink, beats: uplink },
+  { id: "uplink", viewports: 4, Scene: Uplink, beats: uplink, bias: BIAS },
   /* The chart, opening on the flat line the waveform collapses into. Two
      categories share it, so it runs long. */
   { id: "chart", viewports: 6, Scene: Chart, beats: chart },

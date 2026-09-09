@@ -52,8 +52,17 @@ export type Chapter = {
    *  is how far it still has to climb, in viewports. A scene needs both if
    *  anything it draws has to be placed against the window rather than against
    *  the stage while the stage is still moving underneath it. */
-  Scene: ComponentType<{ t: number; level: number; reveal: number; stageOffset: number }>;
+  Scene: ComponentType<{
+    t: number;
+    level: number;
+    reveal: number;
+    stageOffset: number;
+    biasX: number;
+  }>;
   beats: Beat[];
+  /** How far right of the frame this chapter composes, as a fraction of the
+   *  frame's width. Wide screens only; see BIAS below. */
+  bias?: number;
 };
 
 /** Share of the track given to the cross-fade on each side of a join. */
@@ -156,6 +165,7 @@ const NARROW_PITCH_X = 90;
 const NARROW_CARD_VW = 84;
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+const smooth = (v: number) => v * v * (3 - 2 * v);
 
 /** Where each chapter starts and ends along the track, 0 to 1. */
 function boundsOf(chapters: Chapter[]) {
@@ -270,6 +280,39 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
   /* Local progress within each chapter, held at its ends so an outgoing scene
      does not rewind while it fades. */
   const locals = bounds.map(({ start, end }) => clamp((at - start) / (end - start || 1), 0, 1));
+
+  /* HOW FAR RIGHT THE PICTURE SITS, ON WIDE SCREENS ONLY.
+   *
+   *  The copy is a half-width column down the left below 1024px wide, and the
+   *  system's resting focus, the waveform's centre and the star the two hand
+   *  over on were all at 0.5 of the frame, which is 32px from the cards' right
+   *  edge at 1440. Reported from the design: the orbit and the wave should not
+   *  be centred while the text is not.
+   *
+   *  IT IS ONE OFFSET ON THE BOX ALL FOUR CHAPTERS SHARE, and that is the whole
+   *  reason it is here rather than in the scenes. The star is the fixed point
+   *  of the second half: the system leaves it, the voice holds it, the chart
+   *  walks it away, and the three cross-fade over it. Three scenes each given
+   *  their own offset is the two-suns bug in the horizontal, which this page
+   *  has already had once. One box moves them together, so at any instant they
+   *  are in the same place by construction.
+   *
+   *  THE CHART TAKES IT BACK OFF, because a line that runs to 0.97 of its box
+   *  has nowhere to go: held right it would finish past the edge. So the
+   *  offset blends to zero across the join, over the same window the scenes
+   *  cross-fade over, and it is finished a fifth of the chapter in, before the
+   *  star leaves the flat. What the reader sees is the frame opening out as the
+   *  voice becomes the line. */
+  const biasX = (() => {
+    if (!wide || reduced) return 0;
+    let v = chapters[0].bias ?? 0;
+    for (let i = 1; i < chapters.length; i++) {
+      const edge = bounds[i].start;
+      const w = smooth(clamp((at - (edge - FADE)) / (2 * FADE), 0, 1));
+      v += ((chapters[i].bias ?? 0) - v) * w;
+    }
+    return v;
+  })();
 
   /* The chapter whose line is up: the most present one, and the later of the
      two while a join is in progress. */
@@ -393,6 +436,11 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
           style={{
             top: wide ? 0 : `${SCENE_TOP_PCT}%`,
             bottom: wide ? 0 : `${SCENE_BOTTOM_PCT}%`,
+            /* A percentage of the box, which is `inset-x-0` and so is the width
+               of the frame. Nothing inside is resized, so no canvas is
+               reallocated as it moves. */
+            transform: biasX ? `translate3d(${biasX * 100}%, 0, 0)` : undefined,
+            willChange: biasX ? "transform" : undefined,
             /* The box has a hard bottom edge and a canvas does not fade itself,
                so the last part of it is masked away. Cheaper than a gradient
                laid over the top, and it fades the scene rather than painting
@@ -421,6 +469,12 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                      the window, so the same number would shift it by the wrong
                      amount while the stage is still climbing. */
                   stageOffset={reduced ? 0 : stageOffset / sceneUnit}
+                  /* THE HORIZONTAL TWIN OF `stageOffset`: how far the box it is
+                     drawing into has been moved off the window. A scene only
+                     needs it for a point that belongs to the window rather
+                     than to the box, and there is exactly one on this page,
+                     the sun the photograph hands over on. */
+                  biasX={biasX}
                 />
               </div>
             ) : null,
