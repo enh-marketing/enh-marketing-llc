@@ -62,6 +62,33 @@ const smooth = (x: number) => x * x * (3 - 2 * x);
 const ARRIVE = 0.22;
 const FLATTEN_FROM = 0.82;
 
+/** HOW LATE THE LINE ARRIVES, as a share of the chapter's fade-in.
+ *
+ *  THE TRAILS ARE STILL TURNING WHEN THIS CHAPTER STARTS FADING UP. The system
+ *  straightens its Sun's course from a rolled 13.5 degrees to the solved
+ *  51.4728 across the last third of its chapter, and the cross-fade begins a
+ *  whole FADE before the boundary, at local 0.849. At that moment the course is
+ *  16.3 degrees off flat, which is 234px of divergence across 800px of frame.
+ *  So this chapter's dead-horizontal track and the system's still-diagonal one
+ *  were both on screen, converging on the same star at different angles, for
+ *  the whole dissolve. Reported as a double trail, and it is exactly that.
+ *
+ *  ONLY THE LINE WAITS. A star is a dot: it looks the same whatever is behind
+ *  it, it is in exactly the same place in both chapters, and holding it back
+ *  would dim it in the middle of the dissolve, because the system's own star is
+ *  fading out behind the incoming black at the same time. A line has an angle,
+ *  and that is the whole of the problem. So the star comes in with the chapter
+ *  and the line waits until the fade is 0.8 done, which is local 0.970, where
+ *  the mismatch is 0.9 degrees, or 12px across the same 800px.
+ *
+ *  Nothing is lost by waiting: the system draws its own track the entire time
+ *  and it is the correct one, because it is the one turning.
+ *
+ *  ON THE WAY OUT IT DOES NOT APPLY. Leaving, this chapter's `t` is pinned at 1
+ *  and the chart is arriving on an identical frame, so the star stays lit at
+ *  full and the two cross-fade over each other as they should. */
+const TRACK_FROM = 0.8;
+
 /** How far the star's halo is pushed out while the wave is at full amplitude,
  *  as a multiple of its resting size.
  *
@@ -80,7 +107,7 @@ const FLATTEN_FROM = 0.82;
  *  to 377px, so it shows above and below the wave with room over. */
 const BLOOM = 2.4;
 
-export function Uplink({ t }: { t: number }) {
+export function Uplink({ t, level }: { t: number; level: number }) {
   const [size, setSize] = useState(0);
   const compact = !useEnhanced("(min-width: 1024px)");
   const star = useRef<HTMLCanvasElement>(null);
@@ -122,6 +149,13 @@ export function Uplink({ t }: { t: number }) {
      whole chapter rather than one on every frame of the scroll. */
   const bloom = 1 + BLOOM * (Math.round(scaleY * 20) / 20);
 
+  /* Fading IN, as opposed to fading out: the chapter is not fully present and
+     its own progress has not started. `locals` clamps to 0 on the way in and to
+     1 on the way out, so this tells the two ends of the chapter apart exactly.
+     (`arriving` above is the wave's own swell and is a different thing.) */
+  const fadingIn = level < 1 && t <= 0;
+  const trackAlpha = fadingIn ? smooth(clamp((level - TRACK_FROM) / (1 - TRACK_FROM))) : 1;
+
   const paint = useCallback(() => {
     const el = star.current;
     if (!el) return;
@@ -140,9 +174,9 @@ export function Uplink({ t }: { t: number }) {
     const pts = chartPolylineTo(chartTravelled(0)).map(
       ([x, y]) => [x * w, y * h] as [number, number],
     );
-    drawTrack(ctx, pts, head, bloom);
+    drawTrack(ctx, pts, head, bloom, trackAlpha);
     drawStar(ctx, head[0], head[1], w, h, bloom);
-  }, [bloom]);
+  }, [bloom, trackAlpha]);
 
   useEffect(() => {
     paint();

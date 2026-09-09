@@ -86,13 +86,22 @@ export function drawStar(
  *  `bloom` widens the two soft strokes and leaves the sharp one alone, for the
  *  same reason the star has one: over the waveform's own white there is nothing
  *  a hairline can do, but a warm band wide enough to reach past it reads. At
- *  bloom 1 this is exactly the line the chart draws. */
+ *  bloom 1 this is exactly the line the chart draws.
+ *
+ *  `alpha` fades the whole line without touching the star, and the two need to
+ *  be separable because they arrive at different times. A star is a dot and
+ *  looks the same whatever the scene behind it is doing; a line has an angle,
+ *  and the uplink's is dead horizontal while the system it fades over is still
+ *  turning its own trails flat. So the voice brings its star in immediately and
+ *  holds its line back. */
 export function drawTrack(
   ctx: CanvasRenderingContext2D,
   pts: Array<[number, number]>,
   head: [number, number],
   bloom = 1,
+  alpha = 1,
 ): void {
+  if (alpha <= 0) return;
   if (pts.length < 2) return;
   const grad = ctx.createLinearGradient(head[0], head[1], pts[0][0], pts[0][1]);
   grad.addColorStop(0, "rgba(255,246,214,1)");
@@ -111,7 +120,7 @@ export function drawTrack(
     for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
     ctx.stroke();
   };
-  run(9 * bloom, 0.14, "round");
-  run(3.4 * bloom, 0.32, "round");
-  run(1.6, 1, "miter");
+  run(9 * bloom, 0.14 * alpha, "round");
+  run(3.4 * bloom, 0.32 * alpha, "round");
+  run(1.6, alpha, "miter");
 }
