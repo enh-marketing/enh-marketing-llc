@@ -86,6 +86,22 @@ export type Beat = {
    *  added: no outcome, no figure, no promise. They sit beside the number,
    *  which is where the eye already is. */
   tagline?: string;
+  /** THE SERVICE'S OWN SUB-SERVICES, quoted from that page exactly as it lists
+   *  them, in its own order. Not written here and not summarised here.
+   *
+   *  WHY THEY BELONG ON THE PILLAR. A category's body is one sentence, which is
+   *  enough to say what a service is and nowhere near enough to say what buying
+   *  it gets you. "ENH Marketing builds AI agents, automated workflows and
+   *  custom tools" is true of a hundred agencies; "Document Processing,
+   *  Enquiry and Request Handling, Reporting and Data Reconciliation" is what
+   *  this one actually does on a Tuesday. A pillar page that names only its
+   *  categories makes a reader click seven times to find that out.
+   *
+   *  GATED LIKE EVERYTHING ELSE QUOTED HERE. check:copy now reads each string
+   *  back against the `title` fields of that service's own file, so a client
+   *  edit to a service page cannot leave the pillar quietly claiming something
+   *  the service no longer offers. */
+  subServices?: string[];
   /** Slug of the service this beat quotes. Its title must match that page's
    *  sitemap label and its body that page's meta.description, word for word.
    *  Enforced by scripts/check-hub-copy.mjs. */
@@ -163,6 +179,15 @@ export const system: Beat[] = [
     tagline: "What AI reads first",
     title: "AI Search Visibility",
     body: "ENH Marketing helps UAE brands improve how they appear in AI-generated search results.",
+    subServices: [
+      "AI Visibility Baseline",
+      "Technical Access",
+      "Clear, Answer-Led Content",
+      "Business and Entity Consistency",
+      "Structured Data",
+      "External References and Brand Mentions",
+      "Visibility Monitoring and Reporting",
+    ],
     quotes: "ai-search-visibility",
     href: "/ai-hub/ai-search-visibility",
   },
@@ -172,6 +197,15 @@ export const system: Beat[] = [
     tagline: "Fewer things typed twice",
     title: "AI & Automation",
     body: "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
+    subServices: [
+      "AI Agents",
+      "Workflow Automation",
+      "Document Processing",
+      "Enquiry and Request Handling",
+      "Monitoring and Automated Actions",
+      "Reporting and Data Reconciliation",
+      "Custom AI Tools",
+    ],
     quotes: "ai-automation",
     href: "/ai-hub/ai-automation",
   },
@@ -181,6 +215,12 @@ export const system: Beat[] = [
     tagline: "Variants without a reshoot",
     title: "AI Creative Production",
     body: "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
+    subServices: [
+      "AI Video Ads",
+      "AI UGC-Style Ads",
+      "AI Brand and Product Imagery",
+      "Creative Variants at Scale",
+    ],
     quotes: "ai-creative-production",
     href: "/ai-hub/ai-creative-production",
   },
@@ -207,6 +247,14 @@ export const uplink: Beat[] = [
     tagline: "Knows where to stop",
     title: "Conversational AI",
     body: "ENH Marketing builds AI chatbots, voice agents and customer service systems for UAE businesses. Every project starts with a paid diagnostic.",
+    subServices: [
+      "AI Chatbot Development",
+      "AI Voice Agents",
+      "AI Customer Service Agents",
+      "Knowledge Base for AI Agents",
+      "Appointment Booking Agents",
+      "Messaging App Automation",
+    ],
     quotes: "conversational-ai",
     href: "/ai-hub/conversational-ai",
   },
@@ -223,6 +271,14 @@ export const chart: Beat[] = [
     tagline: "Before the money moves",
     title: "Campaign Intelligence",
     body: "ENH Marketing helps UAE businesses plan campaign budgets using historical performance, relevant benchmarks and forecast ranges.",
+    subServices: [
+      "Pre-Campaign Forecasting",
+      "Media Mix Planning",
+      "Category Benchmarking",
+      "Scenario Planning",
+      "Early Performance Alerts",
+      "Forecast Versus Actual Reporting",
+    ],
     quotes: "campaign-intelligence",
     href: "/ai-hub/campaign-intelligence",
   },
@@ -232,6 +288,14 @@ export const chart: Beat[] = [
     tagline: "One view, one definition",
     title: "Data & Dashboards",
     body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
+    subServices: [
+      "Marketing Performance Dashboards",
+      "Sales and Lead Dashboards",
+      "Ecommerce and Revenue Dashboards",
+      "Marketing Attribution Reporting",
+      "Management Dashboards",
+      "Data Integration and Preparation",
+    ],
     quotes: "data-and-dashboards",
     href: "/ai-hub/data-and-dashboards",
   },
@@ -270,6 +334,14 @@ export const horizon: Beat[] = [
     tagline: "Live from your systems",
     title: "Intelligent Web",
     body: "ENH Marketing designs and develops intelligent websites for UAE businesses that personalise content, display live information and use a clear structure.",
+    subServices: [
+      "New Website Design and Development",
+      "Existing Website Improvements",
+      "Website Personalisation",
+      "Live Data and System Integrations",
+      "AI-Readable Website Structure",
+      "Website Migration",
+    ],
     quotes: "intelligent-web",
     href: "/ai-hub/intelligent-web",
   },

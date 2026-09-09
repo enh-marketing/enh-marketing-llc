@@ -46,7 +46,7 @@ export function ServiceChip({ href, label = "Explore" }: { href: string; label?:
   return (
     <a
       href={href}
-      className="group font-grotesk mt-7 inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/[0.06] py-3 pl-6 pr-5 text-[0.9rem] font-bold tracking-[0.01em] text-white backdrop-blur-sm transition duration-100 hover:border-[rgba(255,206,110,0.65)] hover:bg-white/[0.12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 active:border-white/70 active:bg-white/[0.09] motion-reduce:transition-none"
+      className="group font-grotesk mt-5 inline-flex lg:mt-7 items-center gap-3 rounded-full border border-white/25 bg-white/[0.06] py-3 pl-6 pr-5 text-[0.9rem] font-bold tracking-[0.01em] text-white backdrop-blur-sm transition duration-100 hover:border-[rgba(255,206,110,0.65)] hover:bg-white/[0.12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 active:border-white/70 active:bg-white/[0.09] motion-reduce:transition-none"
     >
       {label}
       <svg

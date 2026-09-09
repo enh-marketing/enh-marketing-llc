@@ -145,7 +145,13 @@ const SCENE_BOTTOM_PCT = 36;
 
 const WIDE_CENTRE = 50;
 const WIDE_PITCH = 40;
-const NARROW_CENTRE = 78;
+/* 72, NOT 78, SINCE THE CARDS GREW. Naming what each category contains added
+   four to seven pills to every card, and the tallest went from 312px to 484 on
+   a 900 tall phone, which put six of the seven over the bottom edge. Raising
+   the centre puts the tallest card at 448 to 848 instead. Its top sits where
+   the scene above it is already masked to nothing, so what it overlaps is not
+   picture, it is the fade. */
+const NARROW_CENTRE = 72;
 const NARROW_PITCH_X = 90;
 const NARROW_CARD_VW = 84;
 
@@ -354,6 +360,18 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                   {b.body}
                 </p>
               )}
+              {b.subServices && b.subServices.length > 0 && (
+                <ul className="mt-4 flex flex-wrap gap-x-1.5 gap-y-1.5">
+                  {b.subServices.map((name) => (
+                    <li
+                      key={name}
+                      className="rounded-full bg-white/[0.06] px-2.5 py-[3px] text-[0.72rem] leading-[1.5] text-white/60"
+                    >
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              )}
               {b.href && <ServiceChip href={b.href} />}
             </div>
           )),
@@ -545,9 +563,37 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                       />
                     </h2>
                     {b.body && (
-                      <p className="mx-auto mt-3 max-w-[34rem] text-[0.88rem] leading-[1.55] text-white/70 lg:mx-0 lg:mt-4 lg:text-[1rem] lg:leading-[1.65]">
+                      <p className="mx-auto mt-3 max-w-[34rem] text-[0.83rem] leading-[1.5] text-white/70 lg:mx-0 lg:mt-4 lg:text-[1rem] lg:leading-[1.65]">
                         {b.body}
                       </p>
+                    )}
+                    {b.subServices && b.subServices.length > 0 && (
+                      /* WHAT THE CATEGORY ACTUALLY CONTAINS, in that service's
+                         own words. The body says what a service is in one
+                         sentence, which is enough to identify it and nowhere
+                         near enough to say what buying it gets you: "builds AI
+                         agents, automated workflows and custom tools" is true
+                         of a hundred agencies, and "Document Processing,
+                         Enquiry and Request Handling, Reporting and Data
+                         Reconciliation" is what this one does on a Tuesday.
+
+                         PILLS WITH NO BORDER, WHICH IS THE WHOLE OF THE
+                         RESTRAINT. Seven bordered boxes inside a bordered card
+                         is the arrangement this project has rejected by name,
+                         twice, and it would put two rings around the same
+                         words. A wash at 0.06 separates them from the body
+                         without drawing a box, and they wrap as type rather
+                         than laying out as a grid. */
+                      <ul className="mt-3 flex flex-wrap justify-center gap-x-1 gap-y-1 lg:mt-4 lg:gap-x-1.5 lg:gap-y-1.5 lg:justify-start">
+                        {b.subServices.map((name) => (
+                          <li
+                            key={name}
+                            className="rounded-full bg-white/[0.06] px-2 py-[2px] text-[0.64rem] leading-[1.45] tracking-[0.01em] text-white/60 lg:px-2.5 lg:py-[3px] lg:text-[0.72rem]"
+                          >
+                            {name}
+                          </li>
+                        ))}
+                      </ul>
                     )}
                     {b.href && <ServiceChip href={b.href} />}
                   </div>

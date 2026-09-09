@@ -85,6 +85,36 @@ for (const [block, slug, file] of beats) {
   if (href !== `/ai-hub/${slug}`) {
     problems.push(`${slug}: href is ${href ?? "missing"}, which does not lead to the page it quotes.`);
   }
+
+  /* AND THE SUB-SERVICES, which are the newest thing quoted here and the most
+     likely to drift. The pillar names what each category actually contains, in
+     that service's own words, and a service page renaming or dropping one of
+     its offerings would otherwise leave the hub advertising something that no
+     longer exists.
+     A CONTAINMENT CHECK RATHER THAN A LIST COMPARISON. The eight service files
+     do not agree on where their offerings live: five call the export `services`
+     and the rest call it `produce`, `covers` or `formats`, and the item types
+     differ too. What they do share is that every offering is a `title:` field.
+     So each string is required to appear as one, which is what makes the claim
+     true, without this script having to know eight different shapes. It does
+     not check the reverse, that the hub lists all of them: showing a subset is
+     an editorial choice and showing something that is not offered is a lie. */
+  const listed = block.match(/subServices:\s*\[([\s\S]*?)\]/)?.[1];
+  if (listed !== undefined) {
+    const mine = [...listed.matchAll(/"((?:[^"\\]|\\.)*)"/g)].map((m) => m[1]);
+    if (mine.length === 0) problems.push(`${slug}: subServices is present but empty.`);
+    for (const name of mine) {
+      const asTitle = new RegExp(`title:\\s*"${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`);
+      if (!asTitle.test(service)) {
+        problems.push(
+          `${slug}: the hub lists a sub-service ${path} does not offer.\n` +
+            `    hub: ${name}\n` +
+            `    It is not a \`title\` in that file. Either the service page renamed it, or the\n` +
+            `    hub has it wrong. The hub does not get to name work the service does not.`,
+        );
+      }
+    }
+  }
 }
 
 if (problems.length) {
