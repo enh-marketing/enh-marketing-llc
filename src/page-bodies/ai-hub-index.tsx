@@ -6,9 +6,10 @@ import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
 import { Uplink } from "@/components/hub/chapters/Uplink";
 import { Chart } from "@/components/hub/chapters/Chart";
+import { Structure } from "@/components/hub/chapters/Structure";
 import { OpeningLine } from "@/components/hub/OpeningLine";
 import { ForegroundEcho } from "@/components/hub/ForegroundEcho";
-import { chart, horizon, system, uplink } from "@/content/ai-hub";
+import { chart, horizon, structure, system, uplink } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
  *
@@ -30,9 +31,10 @@ import { chart, horizon, system, uplink } from "@/content/ai-hub";
  *  so this is tighter than it has to be rather than wrong. Full within 0.035
  *  and out by 0.095.
  *
- *  THE STORY RUNS system, uplink, chart, horizon. One category is still
- *  unplaced, Intelligent Web, and it is left out rather than pushed into a
- *  scene built for something else. */
+ *  THE STORY RUNS system, uplink, chart, structure, horizon, and all eight
+ *  categories are on it. Intelligent Web was the one that was not, until
+ *  2026-09-09; it has a chapter of its own rather than a corner of another's,
+ *  because every section on this page has to earn its own arrangement. */
 const CHAPTERS: Chapter[] = [
   /* The planets, and their colours, all the way to Creative Production. The
      chapter ends with every trail straightened and laid flat on the screen by
@@ -44,6 +46,9 @@ const CHAPTERS: Chapter[] = [
   /* The chart, opening on the flat line the waveform collapses into. Two
      categories share it, so it runs long. */
   { id: "chart", viewports: 6, Scene: Chart, beats: chart },
+  /* The structure, growing from the point the chart's line finished on. Four
+     viewports, the same as the voice: one category, one thing happening. */
+  { id: "structure", viewports: 4, Scene: Structure, beats: structure },
   { id: "horizon", viewports: 4, Scene: Horizon, beats: horizon },
 ];
 export function AiHubPage() {

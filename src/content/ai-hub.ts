@@ -173,6 +173,37 @@ export const chart: Beat[] = [
 ];
 /* ---------------------------------------------------------------- chapter 4 */
 
+/** The structure. Intelligent Web, and the second place this page departs from
+ *  the site's own order.
+ *
+ *  THE SITE LISTS IT SIXTH, between Campaign Intelligence and Data &
+ *  Dashboards, and it is seventh here. The reason is the chart: that chapter
+ *  draws one unbroken line and Campaign and Data are read against two points on
+ *  it, so putting a different scene between them would cut the line in half and
+ *  cost that chapter the only thing it is. Moving Intelligent Web one place
+ *  later keeps the line whole and costs nothing, because nothing about these
+ *  two services depends on their order.
+ *
+ *  IT CANNOT GO LAST. The black hole closes the story, on Divij's brief from
+ *  the outset, so the eighth number belongs to the category the black hole was
+ *  built for and this one takes the seventh.
+ *
+ *  It was left out of the page entirely until 2026-09-09, when he asked for it,
+ *  and it was left out rather than squeezed into a scene built for something
+ *  else. It has its own now. */
+export const structure: Beat[] = [
+  {
+    at: 0.5,
+    eyebrow: "07",
+    title: "Intelligent Web",
+    body: "ENH Marketing designs and develops intelligent websites for UAE businesses that personalise content, display live information and use a clear structure.",
+    quotes: "intelligent-web",
+    href: "/ai-hub/intelligent-web",
+  },
+];
+
+/* ---------------------------------------------------------------- chapter 5 */
+
 /** The horizon. The last two categories, at the thing you can only see by
  *  what it does to the light around it.
  *
@@ -181,14 +212,13 @@ export const chart: Beat[] = [
  *  ending wants one. If a closing line is ever wanted it has to come from a
  *  document.
  *
- *  ONE CATEGORY IS STILL UNPLACED: Intelligent Web. It has no scene of its own
- *  yet and is deliberately not squeezed into one that was built for something
- *  else, so the page runs 01 to 07 and the eighth is missing rather than
- *  misrepresented. */
+ *  EVERY CATEGORY IS ON THE PAGE NOW. Intelligent Web was the one that was not,
+ *  and it has its own chapter above rather than a corner of somebody else's, so
+ *  this runs 01 to 08 with nothing missing and nothing misrepresented. */
 export const horizon: Beat[] = [
   {
     at: 0.5,
-    eyebrow: "07",
+    eyebrow: "08",
     title: "AI Workshops & Training",
     body: "ENH Marketing runs practical corporate AI training in Dubai and across the UAE. Each session is built around the team’s actual workflows, tools and responsibilities.",
     quotes: "ai-workshops-and-training",
