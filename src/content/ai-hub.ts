@@ -173,25 +173,32 @@ export const chart: Beat[] = [
 ];
 /* ---------------------------------------------------------------- chapter 4 */
 
-/** The structure. Intelligent Web, and the second place this page departs from
- *  the site's own order.
+/** The horizon. Intelligent Web, at the thing you can only see by what it does
+ *  to the light around it.
  *
- *  THE SITE LISTS IT SIXTH, between Campaign Intelligence and Data &
- *  Dashboards, and it is seventh here. The reason is the chart: that chapter
- *  draws one unbroken line and Campaign and Data are read against two points on
- *  it, so putting a different scene between them would cut the line in half and
- *  cost that chapter the only thing it is. Moving Intelligent Web one place
- *  later keeps the line whole and costs nothing, because nothing about these
- *  two services depends on their order.
+ *  THE BLACK HOLE IS THIS CATEGORY'S SCENE NOW, on Divij's call of 2026-09-09.
+ *  It closed the story under AI Workshops & Training before, and before that a
+ *  branching structure was built for Intelligent Web and rejected on sight. The
+ *  black hole is the stronger picture and this is the copy it now carries.
  *
- *  IT CANNOT GO LAST. The black hole closes the story, on Divij's brief from
- *  the outset, so the eighth number belongs to the category the black hole was
- *  built for and this one takes the seventh.
+ *  IT IS SEVENTH, NOT SIXTH, which is where the site's own navigation lists it.
+ *  That is the chart's doing: it draws one unbroken line and Campaign
+ *  Intelligence and Data & Dashboards are read against two points on it, so a
+ *  different scene between them would cut the line in half and cost that
+ *  chapter the only thing it is. This is the page's second deliberate departure
+ *  from site order, after the uplink.
  *
- *  It was left out of the page entirely until 2026-09-09, when he asked for it,
- *  and it was left out rather than squeezed into a scene built for something
- *  else. It has its own now. */
-export const structure: Beat[] = [
+ *  AI WORKSHOPS & TRAINING IS OFF THE PAGE, same call. So one category is
+ *  unplaced again, as one always has been: the hub runs 01 to 07 and Workshops
+ *  is reachable from the navigation and from its own page but has no section
+ *  here. It is left out rather than folded into a scene built for something
+ *  else, which is the same rule that kept Intelligent Web off until today.
+ *
+ *  IT ENDS ON A CATEGORY, NOT ON A CLOSING LINE. A page whose categories are
+ *  all quoted does not get to write itself an ending, however much an ending
+ *  wants one. If a closing line is ever wanted it has to come from a document
+ *  or from Divij. */
+export const horizon: Beat[] = [
   {
     at: 0.5,
     eyebrow: "07",
@@ -199,29 +206,5 @@ export const structure: Beat[] = [
     body: "ENH Marketing designs and develops intelligent websites for UAE businesses that personalise content, display live information and use a clear structure.",
     quotes: "intelligent-web",
     href: "/ai-hub/intelligent-web",
-  },
-];
-
-/* ---------------------------------------------------------------- chapter 5 */
-
-/** The horizon. The last two categories, at the thing you can only see by
- *  what it does to the light around it.
- *
- *  IT ENDS ON A CATEGORY, NOT ON A CLOSING LINE. A page that has no prose of
- *  its own does not get to write one for its ending either, however much an
- *  ending wants one. If a closing line is ever wanted it has to come from a
- *  document.
- *
- *  EVERY CATEGORY IS ON THE PAGE NOW. Intelligent Web was the one that was not,
- *  and it has its own chapter above rather than a corner of somebody else's, so
- *  this runs 01 to 08 with nothing missing and nothing misrepresented. */
-export const horizon: Beat[] = [
-  {
-    at: 0.5,
-    eyebrow: "08",
-    title: "AI Workshops & Training",
-    body: "ENH Marketing runs practical corporate AI training in Dubai and across the UAE. Each session is built around the team’s actual workflows, tools and responsibilities.",
-    quotes: "ai-workshops-and-training",
-    href: "/ai-hub/ai-workshops-and-training",
   },
 ];
