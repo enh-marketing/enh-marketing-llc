@@ -3,8 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SiriWave } from "@/components/hub/SiriWave";
 import { useEnhanced } from "@/lib/useEnhanced";
-import { HANDOVER_X, HANDOVER_Y } from "@/components/hub/chartPath";
-import { drawStar } from "@/components/hub/star";
+import {
+  chartFocus,
+  chartPolylineTo,
+  chartTravelled,
+  HANDOVER_Y,
+} from "@/components/hub/chartPath";
+import { drawStar, drawTrack } from "@/components/hub/star";
 
 /** Chapter three: the voice. The trails become a waveform.
  *
@@ -17,17 +22,22 @@ import { drawStar } from "@/components/hub/star";
  *  which is the only way a transition of this size stays cheap and cannot
  *  glitch.
  *
- *  AND THE STAR NEVER GOES OUT. The system parks it at HANDOVER_X, HANDOVER_Y,
- *  this chapter keeps one lit at the same spot, and the chart starts its own
- *  from there. Three chapters cross-fade over one star that does not move, so
- *  the chart is not a new object arriving, it is the thing the reader has been
- *  watching all along setting off up a line. Both ends draw it with the same
- *  function, in hub/star, for exactly that reason.
+ *  AND THE STAR NEVER GOES OUT, NOR DOES ITS LINE. The system parks both at the
+ *  handover point, this chapter keeps them there, and the chart carries them on.
+ *  Three chapters cross-fade over something that does not move, so the chart is
+ *  not a new object arriving, it is the thing the reader has been watching all
+ *  along setting off up a line.
  *
- *  BOTH HANDOVER NUMBERS ARE IMPORTED, not repeated. `lead` is zero at the
- *  camera stops either side of this, so the star sits exactly on focus rather
- *  than a short-side fraction away from it, which is what lets one pair of
- *  numbers describe its place on every screen.
+ *  NOTHING IS COPIED TO ACHIEVE THAT. This chapter does not know where the
+ *  handover point is or what shape the line has: it calls the chart's own
+ *  chartFocus and chartPolylineTo at leg progress zero and draws the result
+ *  with the chart's own drawTrack and drawStar. So it is not a matching frame,
+ *  it is the same frame, and the two cannot be edited apart.
+ *
+ *  `lead` is zero at the camera stops either side of this, which is what lets
+ *  the system land on that point exactly: `lead` is a fraction of the short
+ *  side while `focus` is a fraction of the width, so with it on, where the star
+ *  came to rest depended on the aspect ratio.
  *
  *  IT LEAVES BY BEING FLATTENED, NOT BY FADING. Amplitude lives in the shader's
  *  constants and cannot be ramped from outside, but scaling the canvas
@@ -89,14 +99,24 @@ export function Uplink({ t }: { t: number }) {
      between, the chart would arrive as a new object appearing out of nothing.
      Lit here, all three chapters cross-fade over one star that never moves.
 
-     ITS HALO BREATHES WITH THE WAVE, because a white star on the wave's own
-     centre cannot be seen: that centre is the brightest white in the frame.
-     Measured at 410x900 the core vanished into it completely. So while the wave
-     is loud the halo is pushed out past the white, where there is black to read
-     against, and the star is present as the glow the wave sits inside. As the
-     wave collapses the halo comes back to exactly the star the chart draws,
-     which is what the two chapters then cross-fade over. `scaleY` already is
-     the wave's amplitude, so the two cannot fall out of step.
+     AND IT COMES WITH ITS LINE. The system leaves the star trailing its own
+     course behind it and the chart shows the same thing, so a voice section
+     with a bare star floating in it was the one frame in the sequence where
+     the line went missing. What is drawn here is not a copy of the chart's
+     opening: it is the chart's opening, the same two functions fed the same
+     path at leg progress zero, so the line the reader follows through the
+     voice is the line the chart carries on from. Nothing here knows what shape
+     that is, which is the point.
+
+     THEY BOTH BREATHE WITH THE WAVE, because white on the wave's own centre
+     cannot be seen: that centre is the brightest white in the frame. Measured
+     at 410x900 the star's core vanished into it completely. So while the wave
+     is loud the halo and the line's two soft strokes are pushed out past the
+     white, where there is black to read against, and the star and its track
+     are present as the glow the wave sits inside. As the wave collapses they
+     come back to exactly what the chart draws, which is what the two chapters
+     then cross-fade over. `scaleY` already is the wave's amplitude, so they
+     cannot fall out of step.
 
      QUANTISED TO TWENTIETHS so this is a few dozen canvas fills across the
      whole chapter rather than one on every frame of the scroll. */
@@ -115,7 +135,13 @@ export function Uplink({ t }: { t: number }) {
     if (!ctx) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
-    drawStar(ctx, HANDOVER_X * w, HANDOVER_Y * h, w, h, bloom);
+    const spot = chartFocus(0);
+    const head: [number, number] = [spot[0] * w, spot[1] * h];
+    const pts = chartPolylineTo(chartTravelled(0)).map(
+      ([x, y]) => [x * w, y * h] as [number, number],
+    );
+    drawTrack(ctx, pts, head, bloom);
+    drawStar(ctx, head[0], head[1], w, h, bloom);
   }, [bloom]);
 
   useEffect(() => {

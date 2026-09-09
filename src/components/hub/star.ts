@@ -1,4 +1,4 @@
-/** The star, drawn the same way wherever it appears.
+/** The star and the line behind it, drawn the same way wherever they appear.
  *
  *  IT IS THE FIXED POINT OF THE WHOLE SECOND HALF. The system leaves it at
  *  HANDOVER_X, HANDOVER_Y; the voice keeps it there while the waveform plays
@@ -60,4 +60,58 @@ export function drawStar(
   ctx.beginPath();
   ctx.arc(x, y, r, 0, Math.PI * 2);
   ctx.fill();
+}
+
+/** Paint the line the star has come along, from `pts[0]` to `head`.
+ *
+ *  THIS WAS TRACKCHART'S, AND NOW THE VOICE DRAWS IT TOO. The system chapter
+ *  ends with the star trailing its course behind it and the chart shows the
+ *  same thing, so a voice section with a bare star in the middle of it was the
+ *  one frame in the sequence where the line was missing. The uplink now draws
+ *  the chart's own opening frame, through this function and with the chart's
+ *  own path, so what the reader watches through the voice is exactly what the
+ *  chart carries on from.
+ *
+ *  `pts` are pixels and already include `head` as their last point; it is
+ *  passed separately only because the gradient runs from it, and a caller
+ *  drawing a partial path knows where its head is more cheaply than this can
+ *  work it out.
+ *
+ *  THE WIDE STROKES TURN ROUND CORNERS, THE THIN ONE TURNS SHARP. A mitred join
+ *  on a 9px stroke at a turn this tight throws a spike well past the line it is
+ *  supposed to be haloing, and that spike is the fold that appeared at every
+ *  corner. The halo is what carries the width, so it is the one that gives up
+ *  the point; the 1.6px line that actually reads as the chart keeps its mitre.
+ *
+ *  `bloom` widens the two soft strokes and leaves the sharp one alone, for the
+ *  same reason the star has one: over the waveform's own white there is nothing
+ *  a hairline can do, but a warm band wide enough to reach past it reads. At
+ *  bloom 1 this is exactly the line the chart draws. */
+export function drawTrack(
+  ctx: CanvasRenderingContext2D,
+  pts: Array<[number, number]>,
+  head: [number, number],
+  bloom = 1,
+): void {
+  if (pts.length < 2) return;
+  const grad = ctx.createLinearGradient(head[0], head[1], pts[0][0], pts[0][1]);
+  grad.addColorStop(0, "rgba(255,246,214,1)");
+  grad.addColorStop(0.5, "rgba(255,206,110,0.55)");
+  grad.addColorStop(1, "rgba(255,180,80,0.04)");
+  ctx.strokeStyle = grad;
+  ctx.lineCap = "round";
+
+  const run = (width: number, alpha: number, join: CanvasLineJoin) => {
+    ctx.lineJoin = join;
+    ctx.miterLimit = join === "miter" ? 4 : 10;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = width;
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.stroke();
+  };
+  run(9 * bloom, 0.14, "round");
+  run(3.4 * bloom, 0.32, "round");
+  run(1.6, 1, "miter");
 }
