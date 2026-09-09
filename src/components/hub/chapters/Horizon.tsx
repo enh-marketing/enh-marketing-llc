@@ -80,11 +80,16 @@ function cameraAt(t: number) {
  *  used to be the whole of the handover: a thin bright line, then a black hole
  *  dissolving over it. Two pictures with nothing between them.
  *  So this chapter now opens INSIDE the star. The light is centred on the exact
- *  point the chart leaves it, at a size that covers any frame, and it falls
- *  away over the first fifth of the chapter. What is behind it is the black
- *  hole at distance 72, which is far enough to be a small ring in a lot of
- *  dark, and the camera spends the rest of the chapter coming in. Flood, void,
- *  hole, in that order, and none of it is a cut.
+ *  point the chart leaves it and falls away over the first fifth of the
+ *  chapter, onto black. Then the hole condenses out of that black, far off at
+ *  distance 72, and the camera spends the rest of the chapter coming in.
+ *  Flood, void, hole, in that order, and none of it is a cut.
+ *
+ *  IT IS A STAR, NOT A SHEET, AND THIS SENTENCE USED TO SAY OTHERWISE. It read
+ *  "at a size that covers any frame", which is the reading that produced the
+ *  360vmax version the client rejected on sight. The light is local: it blooms
+ *  from the top right corner and never reaches the bottom left, and it is not
+ *  what hides the hole. See LIT_FROM for what does.
  *
  *  IT RECEDES RATHER THAN FADES, which is the difference between flying past a
  *  star and someone turning a light off. It shrinks towards the point it is
@@ -92,49 +97,93 @@ function cameraAt(t: number) {
  *  as an overlay being taken away. */
 const ARRIVE = 0.2;
 
-/** THE LIGHT HAS TO ACTUALLY COVER THE FRAME, and the first version did not.
+/** THE LIGHT IS A STAR YOU FLY INTO, NOT A SHEET LAID OVER THE PAGE, and it was
+ *  briefly made into one. Told that the hole showed up before the flash, I read
+ *  it as the light not reaching far enough and took this to 360vmax with the
+ *  stops opaque out to 0.72. That does cover every pixel of the frame, and it
+ *  is why the whole of Data & Dashboards went cream: the chapter cross-fades in
+ *  over the one before it, so a light that covers the frame covers the chart's
+ *  headline, its body and its chips as well. Rejected on sight, correctly. The
+ *  cause was never the size of the light. See LIT_FROM. */
+const FLOOD_VMAX = 220;
+
+/** WHEN THE HOLE IS LIT, AND WHY IT IS NOT LIT FROM THE FIRST FRAME.
  *
- *  It was 220vmax with stops running to nothing at 0.62 of its own radius, and
- *  it is centred on the star, which the chart leaves at 0.97 across and 0.12
- *  down. From a corner, the far corner of a 1600x1300 frame sits at 1.10 of
- *  that radius: past the end of the gradient, so most of the picture was never
- *  touched and the hole simply sat next to the glow. Reported exactly that way,
- *  the black hole arriving before the flash.
+ *  THIS IS THE BUG THAT WAS REPORTED. A chapter's local `t` is 0 for the whole
+ *  of the cross-fade that brings it in: the machine holds a scene at its own
+ *  opening frame while its opacity ramps from nothing to one over 0.055 of the
+ *  track. So for that entire ramp the flood sat at full AND the hole behind it
+ *  faded up at the chapter's own opacity, together, in the same div. Wherever
+ *  the light did not reach, and a star thrown from the top right corner does
+ *  not reach the bottom left, the hole was arriving in the open. That is the
+ *  black hole showing up before the flash, and it is a fault in the timing, not
+ *  in the coverage.
  *
- *  360vmax puts the far corner at 0.67 of the radius, and the stops below hold
- *  solid to 0.72, so every pixel of the frame is inside the opaque part when
- *  the light is at full. There is then no frame in which the hole is visible
- *  before the light, which is the whole point of the sequence. */
-const FLOOD_VMAX = 360;
+ *  So the hole gets its own fade and it starts after the light has gone rather
+ *  than with it. 0.17 is where the flood is down to a sixteenth of its
+ *  strength, and the ramp runs a quarter of the chapter, about a viewport of
+ *  scroll: slow enough that the hole condenses out of the dark rather than
+ *  switching on. Between the two there is a stretch with neither in it, which
+ *  is the void the sequence is meant to cross.
+ *
+ *  THE CAMERA IS REMAPPED TO MATCH. It used to spend the first fifth of its
+ *  approach behind the light and arrive at distance 51, when this file's own
+ *  note above says it opens at 72. Holding it while the light is up gives the
+ *  whole move back, and the hole is first seen as far off as it was meant to
+ *  be. */
+const LIT_FROM = 0.17;
+const LIT_TO = 0.42;
 
 export function Horizon({ t }: { t: number }) {
-  const cam = cameraAt(t);
-
   /* 1 inside the star, 0 once the dark has opened out. */
   const flood = 1 - smooth(clamp(t / ARRIVE, 0, 1));
+  /* 0 while the light is up, 1 once the hole is all the way out of the dark. */
+  const lit = smooth(clamp((t - LIT_FROM) / (LIT_TO - LIT_FROM), 0, 1));
+  /* The approach starts where the reader first sees it, not a fifth of the way
+     in behind the light. */
+  const cam = cameraAt(clamp((t - LIT_FROM) / (1 - LIT_FROM), 0, 1));
   const [fx, fy] = chartPointAt(1);
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <BlackHoleHeroSection
-      distance={cam.distance}
-      elevation={cam.elevation}
-      azimuth={cam.azimuth}
-      fov={cam.fov}
-      brightness={cam.brightness}
-      diskDensity={cam.diskDensity}
-      /* The copy sits bottom left, so the hole is held up and to the right. */
-      focus={[0.66, 0.4]}
-      /* The camera is already moving with the scroll; a second drift of its own
-         would fight it and pull the eye off the rings. The gas still turns. */
-      orbitSpeed={0}
-      resolution={0.6}
-      steps={260}
-      maxDpr={1.5}
-        scrim="bottom"
-        scrimStrength={0.85}
-        className="h-full w-full"
-      />
+    /* bg-black IS LOAD-BEARING AND WAS NOT HERE. The chapter had no ground of
+       its own: the black it sat on was BlackHoleHeroSection's host, which is
+       bg-black behind an alpha:false canvas. Putting the scene behind `lit`
+       took that away, and for the first third of the chapter the whole thing
+       was transparent over a Chart that is still mounted and still painting
+       until t = 0.3025. The flood is centred on chartPointAt(1), which is
+       exactly where the chart draws its own star, so the flash collapsed onto
+       the chart's star and gave the chart back. There was no void to cross.
+       The ground goes on the root, outside `lit`, so it arrives at the
+       chapter's own cross-fade opacity: an ordinary dissolve to black, which is
+       what this join always was, rather than a sheet over the chapter before. */
+    <div className="absolute inset-0 overflow-hidden bg-black">
+      {/* ITS OWN FADE, INSIDE THE CHAPTER'S. The scene stays mounted through it
+          rather than being gated on `lit`: it is the most expensive thing on
+          the page and mounting it here would compile its shaders in the middle
+          of the flash. Mounted and dark costs what it already cost, and it is
+          warm by the time it is wanted. */}
+      <div className="absolute inset-0" style={{ opacity: lit }}>
+        <BlackHoleHeroSection
+          distance={cam.distance}
+          elevation={cam.elevation}
+          azimuth={cam.azimuth}
+          fov={cam.fov}
+          brightness={cam.brightness}
+          diskDensity={cam.diskDensity}
+          /* The copy sits bottom left, so the hole is held up and to the right. */
+          focus={[0.66, 0.4]}
+          /* The camera is already moving with the scroll; a second drift of its
+             own would fight it and pull the eye off the rings. The gas still
+             turns. */
+          orbitSpeed={0}
+          resolution={0.6}
+          steps={260}
+          maxDpr={1.5}
+          scrim="bottom"
+          scrimStrength={0.85}
+          className="h-full w-full"
+        />
+      </div>
 
       {/* THE STAR, ARRIVED INSIDE. Centred on chartPointAt(1), which is the
           chart's own last vertex and therefore the exact pixel its star
@@ -152,12 +201,8 @@ export function Horizon({ t }: { t: number }) {
             height: `${FLOOD_VMAX}vmax`,
             transform: `translate(-50%, -50%) scale(${(0.06 + 0.94 * flood).toFixed(3)})`,
             opacity: flood,
-            /* Solid out to 0.72, then away. The warm ramp inside it is the
-               star's own: near-white at the core, through the halo's amber, to
-               the deeper orange the accretion disc is made of, so the light the
-               reader is inside is the same light they have been following. */
             background:
-              "radial-gradient(circle, rgba(255,253,247,1) 0%, rgba(255,248,228,1) 34%, rgba(255,232,183,1) 56%, rgba(255,206,140,0.99) 72%, rgba(255,170,88,0.5) 88%, rgba(255,150,60,0) 100%)",
+              "radial-gradient(circle, rgba(255,252,242,1) 0%, rgba(255,244,214,0.98) 9%, rgba(255,214,140,0.72) 20%, rgba(255,178,86,0.28) 36%, rgba(255,150,60,0) 62%)",
             willChange: "transform, opacity",
           }}
         />
