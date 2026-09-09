@@ -4,9 +4,10 @@ import { Journey, type Chapter } from "@/components/hub/Journey";
 import { Ascent } from "@/components/hub/Ascent";
 import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
+import { Uplink } from "@/components/hub/chapters/Uplink";
 import { OpeningLine } from "@/components/hub/OpeningLine";
 import { ForegroundEcho } from "@/components/hub/ForegroundEcho";
-import { horizon, system } from "@/content/ai-hub";
+import { horizon, system, uplink } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
  *
@@ -26,18 +27,18 @@ import { horizon, system } from "@/content/ai-hub";
  *  headlines being legible at once needs the window inside 0.1. Full within
  *  0.035 and out by 0.095 clears it.
  *
- *  THE UPLINK IS THE GAP. The story runs system, uplink, horizon, and the
- *  middle one is not built: 04, 05 and 06 have nowhere to be until it is. The
- *  site's order is kept across the chapters rather than inside them, so those
- *  three slot in between without moving anything that already exists.
- *
- *  Still to come: the airlock before the system, and the uplink before the
- *  horizon. */
+ *  THE STORY RUNS system, uplink, horizon. One category is still unplaced,
+ *  Intelligent Web, and it is left out rather than pushed into a scene built
+ *  for something else. */
 const CHAPTERS: Chapter[] = [
   /* Six, not four. The chapter gained two stops at the end, where the planets
      are thrown across the frame and then taken away, and those need scroll of
      their own or the scatter is over before it registers. */
   { id: "system", viewports: 10, Scene: System, beats: system },
+  /* THE UPLINK. The Sun's light becomes a voice. SiriWave is dependency free
+     raw WebGL, the same shape as the black hole it hands over to, so the page
+     gains a scene without gaining a library. */
+  { id: "uplink", viewports: 4, Scene: Uplink, beats: uplink },
   { id: "horizon", viewports: 4, Scene: Horizon, beats: horizon },
 ];
 

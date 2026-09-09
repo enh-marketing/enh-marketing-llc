@@ -137,6 +137,32 @@ export const system: Beat[] = [
 
 /* ---------------------------------------------------------------- chapter 2 */
 
+/** The uplink. One category, at the light the Sun turns into.
+ *
+ *  IT SITS AFTER DATA & DASHBOARDS rather than at its place in the site's own
+ *  order, and that is a deliberate break from the rule the system chapter
+ *  follows. The order elsewhere is the sitemap's, because any other order would
+ *  be a claim about which service matters most. Here the sequence is set by the
+ *  picture: the Sun finishes climbing the chart, and the thing it becomes is a
+ *  voice. Conversational AI is the only category whose own description mentions
+ *  voice agents, so it is the one that can follow that move honestly.
+ *
+ *  The eyebrow numbers therefore count the journey rather than the sitemap, and
+ *  they always did: Campaign Intelligence is 05 on the site and 04 here. That
+ *  is now consistent from 01 to 07 rather than consistent-ish, which is the
+ *  only version of it a reader can check. */
+export const uplink: Beat[] = [
+  {
+    at: 0.5,
+    eyebrow: "06",
+    title: "Conversational AI",
+    body: "ENH Marketing builds AI chatbots, voice agents and customer service systems for UAE businesses. Every project starts with a paid diagnostic.",
+    quotes: "conversational-ai",
+    href: "/ai-hub/conversational-ai",
+  },
+];
+
+
 /** The horizon. The last two categories, at the thing you can only see by
  *  what it does to the light around it.
  *
@@ -145,15 +171,14 @@ export const system: Beat[] = [
  *  ending wants one. If a closing line is ever wanted it has to come from a
  *  document.
  *
- *  04, 05 and 06 are missing on purpose. Conversational AI, Campaign
- *  Intelligence and Intelligent Web belong to the uplink chapter, which is not
- *  built yet, and the site's order is kept across the chapters rather than
- *  inside each one: 01-03 in the system, 04-06 in the uplink, 07-08 here.
- */
+ *  ONE CATEGORY IS STILL UNPLACED: Intelligent Web. It has no scene of its own
+ *  yet and is deliberately not squeezed into one that was built for something
+ *  else, so the page runs 01 to 07 and the eighth is missing rather than
+ *  misrepresented. */
 export const horizon: Beat[] = [
   {
     at: 0.5,
-    eyebrow: "06",
+    eyebrow: "07",
     title: "AI Workshops & Training",
     body: "ENH Marketing runs practical corporate AI training in Dubai and across the UAE. Each session is built around the team’s actual workflows, tools and responsibilities.",
     quotes: "ai-workshops-and-training",
