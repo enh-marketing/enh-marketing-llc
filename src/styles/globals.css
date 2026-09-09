@@ -591,6 +591,112 @@ html.lenis.lenis-smooth iframe.map-live {
   color: var(--hub-accent);
 }
 
+/* THE GLASS BOX AND THE HAIRLINE THAT GOES ROUND IT.
+ *
+ *  Asked for by name: "high quality apple like glass box, with very thinnnnnn
+ *  glowing in any two opp borders which move slowly around the box border, like
+ *  horizon hair like thin glow".
+ *
+ *  THE GLASS IS THREE THINGS AND NOT ONE. A tint alone is a grey box; what
+ *  reads as glass is a blur that also lifts the saturation of what is behind
+ *  it, a fill that is brighter at the top than the bottom because light comes
+ *  from above, and an edge that is bright where it catches that light and dark
+ *  where it does not. The two edges are a single inset shadow pair rather than
+ *  a ring, so the top hairline and the bottom one can differ, which a ring
+ *  cannot do. */
+[data-hub-story] .hub-glass {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.085) 0%,
+      rgba(255, 255, 255, 0.035) 42%,
+      rgba(255, 255, 255, 0.018) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.055),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.03),
+    0 24px 60px -20px rgba(0, 0, 0, 0.7);
+}
+
+[data-hub-story] .hub-glass-blur {
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+
+/* THE HAIRLINE IS A MASKED RING WITH A WHEEL TURNING BEHIND IT.
+ *
+ *  IT IS NOT AN ANIMATED CONIC GRADIENT, and that is the whole of the technique.
+ *  Animating `from <angle>` in a conic repaints the gradient every frame, on a
+ *  page that is already spending its frames on a ray marcher. A conic painted
+ *  once and rotated is a transform, which is the compositor's own job and costs
+ *  nothing per frame. The ring is cut out of it by masking the padding box
+ *  against the content box, so what survives is a border one pixel wide that
+ *  follows the radius exactly, which a border cannot do with a gradient.
+ *
+ *  TWO WEDGES, 180 DEGREES APART, so there is always one on each of two
+ *  opposite edges however the box is proportioned. They are feathered rather
+ *  than blurred: a filter on a moving layer costs what the conic cost, and the
+ *  gradient can carry its own falloff for free. */
+@keyframes hub-orbit {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+[data-hub-story] .hub-orbit {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  padding: 1px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* The bloom sits under the hairline and is three pixels of the same light. */
+[data-hub-story] .hub-orbit-bloom {
+  padding: 3px;
+  opacity: 0.45;
+}
+
+[data-hub-story] .hub-orbit > i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* Wider than the box's diagonal, so the wheel covers every corner. */
+  width: 220%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 8deg,
+    rgba(255, 206, 110, 0.5) 20deg,
+    rgba(255, 247, 226, 0.95) 28deg,
+    rgba(255, 206, 110, 0.5) 36deg,
+    transparent 48deg 188deg,
+    rgba(255, 206, 110, 0.5) 200deg,
+    rgba(255, 247, 226, 0.95) 208deg,
+    rgba(255, 206, 110, 0.5) 216deg,
+    transparent 228deg 360deg
+  );
+  animation: hub-orbit 18s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hub-story] .hub-orbit > i {
+    animation: none;
+  }
+}
+
 /* Slim scrollbar for panels that scroll inside their own container. */
 .scroll-slim {
   scrollbar-width: thin;

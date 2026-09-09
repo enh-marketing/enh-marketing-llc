@@ -5,6 +5,7 @@ import { usePrefersReducedMotion, useEnhanced } from "@/lib/useEnhanced";
 import { Starfield } from "@/components/hub/Starfield";
 import { WordReveal } from "@/components/hub/WordReveal";
 import { ServiceChip } from "@/components/hub/ServiceChip";
+import { seat, SEAT_LIMIT } from "@/components/hub/circularRun";
 import type { Beat } from "@/content/ai-hub";
 
 /** The chapter machine.
@@ -85,23 +86,21 @@ const REVEAL_OVER = 0.2;
  *  at once by design, and the page no longer has to tune a window per layout.
  */
 
-/** HOW THE RUN IS SPACED AND LIT, in station numbers rather than in chapter
- *  progress, because the run is indexed and not positioned by `at`.
+/** HOW THE RUN IS SPACED AND LIT is not decided here any more.
  *
- *  A station's copy is full strength within ACTIVE_HOLD of the centre and out by
- *  ACTIVE_HOLD + ACTIVE_RAMP. Past that it does not disappear: it holds at GHOST
- *  until GHOST_HOLD and fades out by GHOST_HOLD + GHOST_RAMP, which is what puts
- *  the line just read above the frame and the line coming below it.
+ *  It was five constants: a hold, a ramp, a ghost level and its own hold and
+ *  ramp, which between them dimmed a neighbour to 0.22 and took it out by 1.65
+ *  stations. That is a fade, and a fade is what the run was asked to stop being:
+ *  "i was expecting this kind of text scroll", against 21st.dev's Circular
+ *  Carousel. Placement, scale and dim all come from that component's own
+ *  arithmetic now. See circularRun.ts, which says what was kept and what was
+ *  not.
  *
- *  0.30 and 0.45 mean the two nearest stations cross at 0.556 each, halfway
- *  between them, so the hand-over is a dissolve rather than one going out before
- *  the next comes on. And the ghost reaching 1.65 stations means exactly one
- *  neighbour each way is ever visible: the one after that is past the fade. */
-const ACTIVE_HOLD = 0.3;
-const ACTIVE_RAMP = 0.45;
-const GHOST = 0.22;
-const GHOST_HOLD = 0.75;
-const GHOST_RAMP = 0.9;
+ *  WHAT CHANGES ON SCREEN is that a neighbour is present rather than nearly
+ *  gone. The component's falloff puts the station either side at 0.77 rather
+ *  than 0.22, and it is a strip of dim type on a wide screen, so what the
+ *  reader sees is the line just read and the line coming, legibly, which is
+ *  what a run is for. */
 
 /** Where the run is centred and how far apart its stations sit, per layout.
  *
@@ -152,8 +151,38 @@ const GHOST_RAMP = 0.9;
 const SCENE_TOP_PCT = 7;
 const SCENE_BOTTOM_PCT = 36;
 
+/** THE RADII, NOT THE PITCHES, and the difference is the point.
+ *
+ *  Travel along the run is `sin(d / 5 * PI) * radius`, so a station one away
+ *  has moved 0.5878 of the radius and one two away only 0.9511: they crowd
+ *  towards the ends of the track and slow into them. Each radius is set so that
+ *  the FIRST neighbour lands exactly where the old pitch put it, because both
+ *  pitches were measured against the frame and neither was arbitrary. 68 x
+ *  0.5878 = 40vh, and 153 x 0.5878 = 90vw. Everything past the first neighbour
+ *  is then closer in than a straight run would have put it, which is what makes
+ *  room for it to be visible at all. */
 const WIDE_CENTRE = 50;
-const WIDE_PITCH = 40;
+const WIDE_RADIUS_VH = 68;
+/** AND A FLOOR IN PIXELS, because the card does not scale with the window.
+ *
+ *  A neighbour used to be at 0.09 of full and could sit anywhere; overlapping
+ *  the card was invisible. At the carousel's own 0.77 it is not, and the run
+ *  has to actually clear. The card is content-sized: a headline, four lines of
+ *  body, up to seven pills and a chip come to about 474px at 1440x900 and 520
+ *  in a 1024 wide column, where the same content wraps more. 640px of radius
+ *  puts the first neighbour 376px out, which clears half of the tallest card
+ *  plus half a strip plus a gap at every size measured.
+ *
+ *  IT IS THE FLOOR THAT BINDS UP TO 941px TALL and the vh above it, so the run
+ *  opens out on a big screen and holds its clearance on a small one. Measured
+ *  as the smallest gap between any two lit stations anywhere on the track:
+ *  +35px at 1440x900, +56 at 1280x680, +15 at 1024x700, which is the worst
+ *  case because that column is the narrowest and its card the tallest. */
+const WIDE_RADIUS_MIN_PX = 640;
+/** How far a station off the middle swings across the run, at the far end of
+ *  the arc. Small, because it is the curve and not the layout: the run still
+ *  reads as a column. */
+const WIDE_ARC_PX = 84;
 /* 72, NOT 78, SINCE THE CARDS GREW. Naming what each category contains added
    four to seven pills to every card, and the tallest went from 312px to 484 on
    a 900 tall phone, which put six of the seven over the bottom edge. Raising
@@ -161,7 +190,8 @@ const WIDE_PITCH = 40;
    the scene above it is already masked to nothing, so what it overlaps is not
    picture, it is the fade. */
 const NARROW_CENTRE = 72;
-const NARROW_PITCH_X = 90;
+const NARROW_RADIUS_VW = 153;
+const NARROW_ARC_PX = 44;
 const NARROW_CARD_VW = 84;
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
@@ -187,6 +217,10 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
   const [reveal, setReveal] = useState(0);
   /** How far the stage still has to climb, in viewports. 0 once pinned. */
   const [stageOffset, setStageOffset] = useState(1);
+  /** The window's height, for the run's radius floor. Read in the same handler
+   *  as the scroll, which already runs on resize. 0 until the first read; the
+   *  fallback below is the height the run was measured at. */
+  const [vh, setVh] = useState(0);
 
   const total = chapters.reduce((n, c) => n + c.viewports, 0);
   const bounds = boundsOf(chapters);
@@ -206,6 +240,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
       setP(span <= 0 ? 0 : clamp(-r.top / span, 0, 1));
       setReveal(clamp(1 - r.top / (window.innerHeight * REVEAL_OVER), 0, 1));
       setStageOffset(Math.max(0, r.top) / window.innerHeight);
+      setVh(window.innerHeight);
     };
 
     onScroll();
@@ -272,6 +307,19 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
     }
     return n - 1;
   })();
+
+  /* WHICH STATION IS THE ONE BEING READ, by rounding rather than by a
+     threshold, so there is exactly one of it at every scroll position and never
+     a frame with none. A threshold at half a station has both neighbours below
+     it at the moment they cross, which is a frame with no card in it.
+
+     AND CLAMPED, because the run keeps counting past both ends. It extrapolates
+     below zero above the first station, which rounded to -1 and left the first
+     two frames of the page showing a dim headline and no card at all. */
+  const activeStation = clamp(Math.round(station), 0, stations.length - 1);
+
+  /* The run's radius along its travel, in pixels. */
+  const wideRadius = Math.max(((vh || 900) * WIDE_RADIUS_VH) / 100, WIDE_RADIUS_MIN_PX);
 
   /* The scene box's height as a share of the window, which is what turns a
      window-relative measurement into a host-relative one. */
@@ -538,29 +586,37 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
         <div className="pointer-events-none absolute inset-0 z-10">
           {stations.map((s, i) => {
             const d = i - station;
-            const near = clamp(1 - (Math.abs(d) - ACTIVE_HOLD) / ACTIVE_RAMP, 0, 1);
-            /* Neighbours do not go out, they go quiet. That is the whole point
-               of a run: you can see where you have been and where you are
-               going, so the page reads as one document rather than seven
-               cards. */
-            const ghost = GHOST * clamp(1 - (Math.abs(d) - GHOST_HOLD) / GHOST_RAMP, 0, 1);
-            const shown = reduced ? 0 : Math.max(near, ghost) * reveal;
-            const active = shown > 0.5 && near > 0.5;
+            /* Reduced motion never reaches here; it returns the document
+               branch above. Past the limit there is nothing left to draw. */
+            if (Math.abs(d) > SEAT_LIMIT) return null;
+            /* Placement, scale and dim, all from the carousel's own arithmetic. */
+            const at = seat(d);
+            const shown = at.opacity * reveal;
+            /* The swap happens halfway between two stations, where both are
+               moving and neither is being looked at. */
+            const active = activeStation === i;
             const b = s.beat;
             return (
               <div
                 key={s.key}
                 aria-hidden={!active}
                 inert={!active}
-                className="absolute inset-x-0 text-center lg:w-1/2 lg:px-6 lg:pl-16 lg:pr-8 lg:text-left xl:pl-24"
+                className="absolute inset-x-0 text-left lg:w-1/2 lg:px-6 lg:pl-16 lg:pr-8 xl:pl-24"
                 style={{
                   top: `${wide ? WIDE_CENTRE : NARROW_CENTRE}%`,
-                  /* One transform, one paint. Down the page on a wide screen,
-                     across it on a narrow one; the offset is the run's position
-                     and nothing else moves. */
+                  /* One transform, one paint. The run travels down the page on a
+                     wide screen and across it on a narrow one, and on both the
+                     other axis carries the arc: `along` is the sine and `depth`
+                     the cosine, so a station leaving the middle swings out as
+                     well as away. */
                   transform: wide
-                    ? `translate3d(0, calc(-50% + ${(d * WIDE_PITCH).toFixed(2)}vh), 0)`
-                    : `translate3d(${(d * NARROW_PITCH_X).toFixed(2)}vw, -50%, 0)`,
+                    ? `translate3d(${(-at.depth * WIDE_ARC_PX).toFixed(1)}px, calc(-50% + ${(at.along * wideRadius).toFixed(1)}px), 0) scale(${at.scale.toFixed(3)})`
+                    : `translate3d(${(at.along * NARROW_RADIUS_VW).toFixed(2)}vw, calc(-50% + ${(at.depth * NARROW_ARC_PX).toFixed(1)}px), 0) scale(${at.scale.toFixed(3)})`,
+                  /* The column is anchored left and the carousel is centred, so
+                     each shrinks towards its own axis rather than drifting off
+                     it. */
+                  transformOrigin: wide ? "left center" : "center",
+                  zIndex: at.z,
                   opacity: shown,
                   /* OFF THE COMPOSITOR WHEN IT IS NOT THERE. Each of these
                      carries a backdrop filter, and a backdrop filter at opacity
@@ -594,16 +650,34 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                     for it three times to frost two lines of dim type. */}
                 {active || !wide ? (
                   <div
-                    /* THE BLUR IS THE ACTIVE CARD'S ALONE even in the carousel,
-                       where all three are cards. A neighbour is at 0.16 and
-                       nobody can tell whether what is behind it is frosted, so
-                       paying for two more backdrop filters on a phone buys
-                       nothing at all. */
-                    className={`mx-auto rounded-[26px] bg-white/[0.05] px-5 py-6 ring-1 ring-inset ring-white/10 lg:mx-0 lg:w-full lg:max-w-[40rem] lg:rounded-[28px] lg:px-9 lg:py-9 ${
-                      active ? "backdrop-blur-[6px]" : ""
+                    /* THE BLUR AND THE HAIRLINE ARE THE ACTIVE CARD'S ALONE,
+                       even in the carousel where all three are cards. A
+                       neighbour is dim and nobody can tell whether what is
+                       behind it is frosted, so paying for two more backdrop
+                       filters on a phone buys nothing; and a light going round
+                       three boxes at once is decoration, where one marks the
+                       box you are reading. */
+                    className={`hub-glass relative mx-auto rounded-[26px] px-5 py-6 lg:mx-0 lg:w-full lg:max-w-[40rem] lg:rounded-[28px] lg:px-9 lg:py-9 ${
+                      active ? "hub-glass-blur" : ""
                     }`}
                     style={wide ? undefined : { width: `${NARROW_CARD_VW}vw` }}
                   >
+                    {/* THE HAIRLINE THAT GOES ROUND THE BOX, asked for by name.
+                        Two of them: three pixels of bloom under one pixel of
+                        light, both cut to the border by the same mask and both
+                        turned by the same transform, so they cannot drift out
+                        of step. Nothing here paints per frame; see hub-orbit in
+                        globals.css. */}
+                    {active && (
+                      <>
+                        <span aria-hidden className="hub-orbit hub-orbit-bloom">
+                          <i />
+                        </span>
+                        <span aria-hidden className="hub-orbit">
+                          <i />
+                        </span>
+                      </>
+                    )}
                     <Kicker beat={b} />
                     <h2 className="font-grotesk hub-heading font-bold uppercase text-white">
                       {/* Fully lit by 0.75 rather than only at the centre.
@@ -612,12 +686,15 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                           reads as a rendering fault and not as an arrival. */}
                       <WordReveal
                         text={b.title}
-                        p={clamp((near - 0.25) / 0.5, 0, 1)}
+                        /* Lit between 0.62 and 0.40 of a station out, which is
+                           the window the old `near` resolved to and is finished
+                           before this station becomes the card. */
+                        p={clamp((0.62 - Math.abs(d)) / 0.22, 0, 1)}
                         accentFrom={Math.max(0, b.title.trimEnd().split(" ").length - 1)}
                       />
                     </h2>
                     {b.body && (
-                      <p className="mx-auto mt-3 max-w-[34rem] text-[0.83rem] leading-[1.5] text-white/70 lg:mx-0 lg:mt-4 lg:text-[1rem] lg:leading-[1.65]">
+                      <p className="mt-3 max-w-[34rem] text-[0.83rem] leading-[1.5] text-white/70 lg:mt-4 lg:text-[1rem] lg:leading-[1.65]">
                         {b.body}
                       </p>
                     )}
@@ -638,7 +715,18 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                          words. A wash at 0.06 separates them from the body
                          without drawing a box, and they wrap as type rather
                          than laying out as a grid. */
-                      <ul className="mt-3 flex flex-wrap justify-center gap-x-1 gap-y-1 lg:mt-4 lg:gap-x-1.5 lg:gap-y-1.5 lg:justify-start">
+                      /* AND NOT ON A PHONE, which was offered and is the right
+                         call: "if mobile text box looks bigger and odd with the
+                         services chip, you can remove it". Six of these are
+                         five rows at 84vw, and they took the card to 386px of a
+                         900 tall screen, which is 43 per cent of it and reaches
+                         up into the scene. Without them it is 208 and sits in
+                         the bottom third where the carousel belongs. The
+                         desktop card has the width to lay them out in two rows
+                         and keeps them. Nothing is lost: they are on the
+                         category page the Explore chip goes to, in the same
+                         words. */
+                      <ul className="mt-3 hidden flex-wrap gap-x-1 gap-y-1 lg:mt-4 lg:flex lg:gap-x-1.5 lg:gap-y-1.5">
                         {b.subServices.map((name) => (
                           <li
                             key={name}
@@ -652,7 +740,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                     {b.href && <ServiceChip href={b.href} />}
                   </div>
                 ) : (
-                  <div className="mx-auto w-full max-w-[34rem] px-1 lg:mx-0 lg:max-w-[40rem]">
+                  <div className="w-full max-w-[40rem] px-1">
                     <Kicker beat={b} />
                     <h2 className="font-grotesk hub-heading font-bold uppercase leading-[0.95] text-white/40">
                       {b.title}
@@ -711,7 +799,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
 function Kicker({ beat }: { beat: Beat }) {
   if (!beat.eyebrow && !beat.tagline) return null;
   return (
-    <p className="font-grotesk mb-3 flex items-center justify-center gap-3 whitespace-nowrap text-[0.7rem] font-bold uppercase tracking-[0.12em] lg:mb-4 lg:text-[0.78rem] lg:tracking-[0.16em] lg:justify-start">
+    <p className="font-grotesk mb-3 flex items-center gap-3 whitespace-nowrap text-[0.7rem] font-bold uppercase tracking-[0.12em] lg:mb-4 lg:text-[0.78rem] lg:tracking-[0.16em]">
       {/* The number stays neutral and is the quietest thing in the row, because
           seven ascending numbers are an index rather than decoration. It was
           white/45, which measures 4.4:1 at this size and misses AA; 55 gives
