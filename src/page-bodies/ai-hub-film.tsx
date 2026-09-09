@@ -34,7 +34,7 @@ const CHAPTERS: Chapter[] = [
 export function AiHubFilmPage() {
   return (
     <main>
-      <Journey chapters={CHAPTERS} beatWindow={{ hold: 0.018, ramp: 0.032 }} />
+      <Journey chapters={CHAPTERS} />
     </main>
   );
 }

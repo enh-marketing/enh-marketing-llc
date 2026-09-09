@@ -59,25 +59,6 @@ export type Chapter = {
 /** Share of the track given to the cross-fade on each side of a join. */
 const FADE = 0.055;
 
-/** How a line is lit as the reader reaches it, in chapter progress either side
- *  of the beat: full within HOLD, out by HOLD + RAMP.
- *
- *  A PLATEAU, AND NARROWER THAN THE GAP BETWEEN BEATS. Both parts matter. A
- *  plain triangle is at full strength only at the exact point of the beat, so
- *  the copy is never quite solid; the plateau gives it a stretch to be read in.
- *  And the beats on this page sit 0.33 apart, so anything reaching further than
- *  0.165 has two of them legible at once, which showed up as two headlines
- *  printed over each other the moment the type went to the site's weight. Out
- *  by 0.15 leaves a small gap of picture with no words in it between one
- *  category and the next, which is worth having anyway. */
-const BEAT_HOLD = 0.06;
-const BEAT_RAMP = 0.09;
-
-/** A page with more stations than this one needs a shorter window: the rule is
- *  that hold + ramp must stay inside half the gap between neighbouring beats,
- *  or two are legible at once. */
-export type BeatWindow = { hold: number; ramp: number };
-
 /** How much of a viewport the scene takes to fade up as the stage arrives.
  *
  *  Long enough that the scene gathers rather than switching on: at an eighth of
@@ -86,26 +67,47 @@ export type BeatWindow = { hold: number; ramp: number };
  *  0.8, and the two are never lit together. */
 const REVEAL_OVER = 0.2;
 
-/** How far a line travels as the reader passes it, in viewport heights per unit
- *  of chapter progress.
+/** THE OLD BEAT WINDOW IS GONE, and with it BEAT_TRAVEL_VH and the `beatWindow`
+ *  prop. Both existed because each beat was drawn in the same place and had to
+ *  be lit and put out on its own, which meant the window had to stay inside
+ *  half the gap between neighbouring beats or two headlines printed over each
+ *  other. The run below indexes the beats instead of positioning them by their
+ *  own `at`, so the spacing on screen is uniform, two neighbours can be legible
+ *  at once by design, and the page no longer has to tune a window per layout.
+ */
+
+/** HOW THE RUN IS SPACED AND LIT, in station numbers rather than in chapter
+ *  progress, because the run is indexed and not positioned by `at`.
  *
- *  THE COPY MOVES WITH THE SCROLL RATHER THAN BLINKING IN AND OUT. Fading alone
- *  reads as a slideshow laid over a moving picture: the scene travels, the words
- *  do not, and the two look like separate pages. Each line now rises through its
- *  own window on the same scroll that moves the scene, and the fade is only what
- *  hides its arrival and its exit.
+ *  A station's copy is full strength within ACTIVE_HOLD of the centre and out by
+ *  ACTIVE_HOLD + ACTIVE_RAMP. Past that it does not disappear: it holds at GHOST
+ *  until GHOST_HOLD and fades out by GHOST_HOLD + GHOST_RAMP, which is what puts
+ *  the line just read above the frame and the line coming below it.
  *
- *  THE NUMBER IS SET BY THE WINDOW, not picked. A line is legible across
- *  hold + ramp of chapter progress on each side, which this page narrows to
- *  0.095, so its whole visible life is 0.19 of a chapter. At 160 that is a
- *  little over 30vh of travel from first light to last: enough to read as
- *  movement, not so much that the line is crossing the frame while it is being
- *  read.
+ *  0.30 and 0.45 mean the two nearest stations cross at 0.556 each, halfway
+ *  between them, so the hand-over is a dissolve rather than one going out before
+ *  the next comes on. And the ghost reaching 1.65 stations means exactly one
+ *  neighbour each way is ever visible: the one after that is past the fade. */
+const ACTIVE_HOLD = 0.3;
+const ACTIVE_RAMP = 0.45;
+const GHOST = 0.22;
+const GHOST_HOLD = 0.75;
+const GHOST_RAMP = 0.9;
+
+/** Where the run is centred and how far apart its stations sit, per layout.
  *
- *  DESKTOP ONLY. On a phone the copy has a reserved bottom two fifths and
- *  nothing to move against; sliding it inside that box only collides with its
- *  own edges. */
-const BEAT_TRAVEL_VH = 160;
+ *  WIDE. The copy owns the left half at full height, so the run is centred and
+ *  a neighbour at 42vh sits near the top and bottom edges: present, clearly
+ *  secondary, not competing for the middle.
+ *
+ *  NARROW. The copy owned the bottom two fifths, centred at 80% of the screen,
+ *  and a run centred there has nowhere to put the station coming next. It is
+ *  centred at 62% instead, which keeps the picture the upper half of the frame
+ *  and gives the run both its neighbours: 38% above and 86% below. */
+const WIDE_CENTRE = 50;
+const WIDE_PITCH = 40;
+const NARROW_CENTRE = 62;
+const NARROW_PITCH = 30;
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
@@ -120,13 +122,7 @@ function boundsOf(chapters: Chapter[]) {
   });
 }
 
-export function Journey({
-  chapters,
-  beatWindow = { hold: BEAT_HOLD, ramp: BEAT_RAMP },
-}: {
-  chapters: Chapter[];
-  beatWindow?: BeatWindow;
-}) {
+export function Journey({ chapters }: { chapters: Chapter[] }) {
   const trackRef = useRef<HTMLElement>(null);
   const reduced = usePrefersReducedMotion();
   const wide = useEnhanced("(min-width: 1024px)");
@@ -176,6 +172,47 @@ export function Journey({
     const gap = at < start ? start - at : at - end;
     return clamp(1 - gap / FADE, 0, 1);
   });
+
+  /* EVERY BEAT ON THE PAGE, FLATTENED, with where each one sits on the track.
+     The run is one column across all the chapters, so it cannot be built per
+     chapter. Seven entries; rebuilding it per render costs nothing. */
+  const stations = chapters.flatMap((c, ci) =>
+    c.beats.map((b, bi) => ({
+      key: `${c.id}-${bi}`,
+      beat: b,
+      /* The beat's own point inside its chapter, resolved onto the whole
+         track, so a station's place does not depend on which chapter it is in. */
+      at: bounds[ci].start + b.at * (bounds[ci].end - bounds[ci].start),
+    })),
+  );
+
+  /* WHERE THE RUN IS, as a fractional station number: 0 on the first, 1 on the
+     second, 1.5 halfway between them. Everything the column draws is this
+     number minus a station's own index, so the spacing on screen is uniform
+     however unevenly the beats are spread along the track.
+
+     IT KEEPS COUNTING PAST BOTH ENDS, using the nearest gap as its scale, so
+     the run travels in before the first line and out after the last rather than
+     parking. */
+  const station = (() => {
+    const n = stations.length;
+    if (!n) return 0;
+    if (n === 1) return 0;
+    if (at <= stations[0].at) {
+      return (at - stations[0].at) / (stations[1].at - stations[0].at || 1);
+    }
+    if (at >= stations[n - 1].at) {
+      const gap = stations[n - 1].at - stations[n - 2].at || 1;
+      return n - 1 + (at - stations[n - 1].at) / gap;
+    }
+    for (let i = 1; i < n; i++) {
+      if (at <= stations[i].at) {
+        const gap = stations[i].at - stations[i - 1].at || 1;
+        return i - 1 + (at - stations[i - 1].at) / gap;
+      }
+    }
+    return n - 1;
+  })();
 
   /* Local progress within each chapter, held at its ends so an outgoing scene
      does not rewind while it fades. */
@@ -249,10 +286,13 @@ export function Journey({
               data-chapter={c.id}
               className="mx-auto w-full max-w-[44rem] px-6 py-16 lg:py-24"
             >
-              {b.eyebrow && (
-                <p className="font-grotesk mb-4 flex items-center gap-4 text-[0.8rem] font-bold uppercase tracking-[0.18em] text-white/55">
-                  <span className="tabular-nums">{b.eyebrow}</span>
-                  <span aria-hidden className="block h-px w-10 bg-white/30" />
+              {(b.eyebrow || b.tagline) && (
+                <p className="font-grotesk mb-4 flex items-center gap-3 text-[0.8rem] font-bold uppercase tracking-[0.16em]">
+                  {b.eyebrow && <span className="tabular-nums text-white/50">{b.eyebrow}</span>}
+                  {b.eyebrow && b.tagline && (
+                    <span aria-hidden className="block h-px w-6 bg-white/25" />
+                  )}
+                  {b.tagline && <span className="text-brand">{b.tagline}</span>}
                 </p>
               )}
               <h2 className="font-grotesk hub-heading font-bold uppercase text-white">
@@ -320,133 +360,114 @@ export function Journey({
         >
           <Starfield />
         </div>
+        {/* THE COPY IS ONE COLUMN, AND IT SCROLLS.
+            Every beat on the page sits in a single vertical run at a fixed
+            pitch, and the run slides as the reader scrolls: the line just read
+            is above, the line coming is below, and the one being read is on the
+            centre. Previously each beat was drawn in the same place and faded
+            in and out on its own, which is a slideshow laid over a moving
+            picture. Nothing about the story was ever a slideshow.
 
-        {/* The story. Every beat of the leading chapter stays mounted and
-            fades, so none of them remount as the reader moves. */}
+            THE PITCH IS UNIFORM AND THE BEATS' OWN SPACING IS NOT. Beats sit
+            0.3 of a chapter apart in the system and 0.45 apart in the chart, so
+            positioning by `at` would have made the gaps in the column jump
+            between chapters. The run is indexed instead: the track position is
+            resolved to a fractional station number, and every beat is placed at
+            its own index minus that. Even spacing everywhere, and the scroll
+            speed varies with the story rather than the layout.
+
+            IT IS ONE RUN ACROSS THE WHOLE PAGE, not one per chapter. Beats used
+            to be drawn only for the leading chapter, which meant the column
+            emptied and refilled at every join. Flattened, the copy carries
+            straight through a scene change while the scenes cross-fade
+            underneath, which is the seam this page spends most of its effort
+            on everywhere else. */}
         <div className="pointer-events-none absolute inset-0 z-10">
-          {chapters.map((c, ci) =>
-            c.beats.map((b, bi) => {
-              const near =
-                ci === lead
-                  ? clamp(
-                      1 - (Math.abs(locals[ci] - b.at) - beatWindow.hold) / beatWindow.ramp,
-                      0,
-                      1,
-                    )
-                  : 0;
-              /* AND GATED ON THE STAGE BEING PINNED, exactly as the scenes
-                 are. A beat is placed against its stage, and until the track
-                 reaches the top of the window that stage is still climbing, so
-                 a beat lit early is drawn wherever the stage happens to have
-                 got to. Every beat here sits at 0.2 or later, by which point
-                 the stage is long pinned, so this changes nothing today; it is
-                 kept because the rule is the scenes' rule and a beat placed
-                 nearer the top of a chapter would otherwise surface halfway up
-                 the window with no warning. */
-              const shown = reduced ? (ci === 0 && bi === 0 ? 1 : 0) : near * reveal;
-              /* Signed distance from this beat's own point, in chapter
-                 progress: negative on the way in, zero as it is reached,
-                 positive on the way out. Multiplied out it is the line's
-                 travel, so the words climb past the reader at the speed the
-                 scroll is going rather than sitting still and dimming. */
-              const travel =
-                reduced || !wide ? 0 : -(locals[ci] - b.at) * BEAT_TRAVEL_VH;
-              return (
-                <div
-                  key={`${c.id}-${bi}`}
-                  aria-hidden={shown < 0.5}
-                  /* AND OUT OF THE TAB ORDER. `aria-hidden` takes the block out
-                     of the accessibility tree and `pointer-events: none` takes
-                     it away from the mouse, but neither, nor `opacity: 0`,
-                     removes an <a href> from keyboard focus: without this a
-                     reader tabbing through the page walks every category link
-                     on it, including the seven that are invisible. */
-                  inert={shown < 0.5}
-                  /* TWO LAYOUTS, ONE BLOCK, AND NEITHER OF THEM FLOATS.
-                     The copy used to sit wherever the bottom of the frame left
-                     room, which on a phone put it under whatever the scene
-                     happened to be doing there. It now has a reserved half of
-                     the screen in both directions.
+          {stations.map((s, i) => {
+            const d = i - station;
+            const near = clamp(1 - (Math.abs(d) - ACTIVE_HOLD) / ACTIVE_RAMP, 0, 1);
+            /* Neighbours do not go out, they go quiet. That is the whole point
+               of a run: you can see where you have been and where you are
+               going, so the page reads as one document rather than seven
+               cards. */
+            const ghost = GHOST * clamp(1 - (Math.abs(d) - GHOST_HOLD) / GHOST_RAMP, 0, 1);
+            const shown = reduced ? 0 : Math.max(near, ghost) * reveal;
+            const active = shown > 0.5 && near > 0.5;
+            const b = s.beat;
+            return (
+              <div
+                key={s.key}
+                aria-hidden={!active}
+                inert={!active}
+                className="absolute inset-x-0 px-6 text-center lg:w-1/2 lg:pl-16 lg:pr-8 lg:text-left xl:pl-24"
+                style={{
+                  top: `${wide ? WIDE_CENTRE : NARROW_CENTRE}%`,
+                  /* One transform, one paint. The offset is the run's position
+                     and nothing else moves. */
+                  transform: `translate3d(0, calc(-50% + ${(d * (wide ? WIDE_PITCH : NARROW_PITCH)).toFixed(2)}vh), 0)`,
+                  opacity: shown,
+                  /* OFF THE COMPOSITOR WHEN IT IS NOT THERE. Each of these
+                     carries a backdrop filter, and a backdrop filter at opacity
+                     0 is still a backdrop filter. `visibility` takes it out of
+                     the work entirely; `opacity: 0` alone does not. */
+                  visibility: shown < 0.01 ? "hidden" : "visible",
+                  willChange: shown > 0 ? "transform, opacity" : undefined,
+                  pointerEvents: active ? "auto" : "none",
+                }}
+              >
+                {/* ONE STATION IS A CARD AND THE REST ARE STRIPS, which is
+                    what stops the run being a pile. A card carrying a headline,
+                    four lines of body and a chip is 40vh tall on a phone, and
+                    three of those at any workable pitch overlap each other,
+                    which is exactly what the first attempt did. A station the
+                    reader is not on does not need its body: it needs to say
+                    which one it is and roughly what it is about, so it keeps
+                    its number, its tagline and its title and gives up the rest.
+                    The swap happens as `near` crosses 0.5, which is the middle
+                    of that station's own cross-fade, where it is at half
+                    opacity and moving. There is no moment at which a reader is
+                    looking straight at it while it changes.
 
-                     Phone: the bottom two fifths, centred in it. The scene is
-                     lifted into the top three fifths to match, in
-                     chapters/System, so the two never share space.
-
-                     Desktop: the left half, centred down the side, ranged left.
-                     The system already sits right of centre at every camera
-                     stop (focusX 0.62 to 0.72), so the picture is on one side
-                     and the words are on the other without the scene moving. */
-                  className="absolute inset-x-0 bottom-0 flex h-[40%] flex-col items-center justify-center px-6 text-center lg:inset-y-0 lg:h-full lg:w-1/2 lg:items-start lg:justify-center lg:pl-16 lg:pr-8 lg:text-left xl:pl-24"
-                  style={{
-                    /* NO CSS TRANSITION ON EITHER OF THESE, and the opacity used
-                       to have one. `shown` is already a continuous ramp read off
-                       the scroll, so a 500ms transition on it was not smoothing
-                       a stepped value, it was low-pass filtering a smooth one:
-                       every frame the browser restarted a 500ms curve from
-                       wherever the paint had got to, closing a few per cent of
-                       the gap, so the words trailed the true ramp by several
-                       hundred milliseconds. They peaked after the beat point,
-                       lingered after the reader had left it, and went on moving
-                       for half a second after the scroll stopped.
-                       It also split the copy in two. `inert`, `aria-hidden` and
-                       `pointerEvents` all switch on `shown` crossing 0.5, which
-                       happens the instant the number does, while the paint was
-                       still catching up. So a line could be solid on screen and
-                       already inert, or invisible and still clickable. Painted
-                       opacity and the gates are now the same number in the same
-                       frame.
-                       WHAT THE TRANSITION WAS ALSO DOING, though, was keeping
-                       this block on its own compositor layer: an opacity
-                       transition is an animation, and a running animation gets
-                       promoted. An inline opacity rewritten from JS is not, so
-                       taking the class out took the layer with it, and every
-                       scroll frame then repainted a subtree containing the
-                       chip's `backdrop-blur-sm`, which has to resample the
-                       moving scene behind it. `will-change` asks for the layer
-                       back explicitly, which is what was wanted all along.
-                       ONLY WHILE THE LINE IS UP. Seven permanent layers to
-                       serve the one or two that are ever visible is the other
-                       way to make this slow; this flips twice per beat, not
-                       once per frame. */
-                    opacity: shown,
-                    willChange: shown > 0 ? "opacity, transform" : undefined,
-                    transform: travel ? `translate3d(0, ${travel}vh, 0)` : undefined,
-                    pointerEvents: shown > 0.5 ? "auto" : "none",
-                  }}
-                >
-                  <div className="w-full max-w-[34rem] lg:max-w-[44rem]">
-                    {b.eyebrow && (
-                      <p className="font-grotesk mb-4 flex items-center justify-center gap-4 text-[0.8rem] font-bold uppercase tracking-[0.18em] text-white/55 lg:justify-start">
-                        <span className="tabular-nums">{b.eyebrow}</span>
-                        <span aria-hidden className="block h-px w-10 bg-white/30" />
-                      </p>
-                    )}
-                    {/* SPACE GROTESK, AT THE HUB'S OWN SCALE, LIGHTING WORD BY
-                        WORD. `shown` is already a 0-to-1 ramp that runs as the
-                        beat comes up, so it is exactly the progress the reveal
-                        wants and no second listener is needed. The accent is
-                        the site's two-tone treatment, kept here and dropped in
-                        the opener: over a scene this dark the red reads, and it
-                        is what marks the category name apart from the sentence
-                        under it. */}
+                    THE GLASS IS THE CARD'S ALONE. Asked for by name, and kept
+                    to the one thing glass is for: lifting type off a moving
+                    picture so it can be read. A low tint, a hairline, a wide
+                    radius and a small blur, on one element rather than a run of
+                    them, because a column of bordered cards is the arrangement
+                    this project has rejected twice by name. It is also the most
+                    expensive thing on the page, and there is no sense paying
+                    for it three times to frost two lines of dim type. */}
+                {active ? (
+                  <div className="mx-auto w-full max-w-[34rem] rounded-[28px] bg-white/[0.05] px-6 py-7 ring-1 ring-inset ring-white/10 backdrop-blur-[6px] lg:mx-0 lg:max-w-[40rem] lg:px-9 lg:py-9">
+                    <Kicker beat={b} />
                     <h2 className="font-grotesk hub-heading font-bold uppercase text-white">
+                      {/* Fully lit by 0.75 rather than only at the centre.
+                          Driven straight off `near` the words sat half revealed
+                          and blurred for most of the station's life, which
+                          reads as a rendering fault and not as an arrival. */}
                       <WordReveal
                         text={b.title}
-                        p={shown}
+                        p={clamp((near - 0.25) / 0.5, 0, 1)}
                         accentFrom={Math.max(0, b.title.trimEnd().split(" ").length - 1)}
                       />
                     </h2>
                     {b.body && (
-                      <p className="mx-auto mt-5 max-w-[34rem] text-[0.98rem] leading-[1.6] text-white/65 lg:mx-0 lg:text-[1.02rem]">
+                      <p className="mx-auto mt-4 max-w-[34rem] text-[0.95rem] leading-[1.65] text-white/70 lg:mx-0 lg:text-[1rem]">
                         {b.body}
                       </p>
                     )}
                     {b.href && <ServiceChip href={b.href} />}
                   </div>
-                </div>
-              );
-            }),
-          )}
+                ) : (
+                  <div className="mx-auto w-full max-w-[34rem] px-1 lg:mx-0 lg:max-w-[40rem]">
+                    <Kicker beat={b} />
+                    <h2 className="font-grotesk hub-heading font-bold uppercase leading-[0.95] text-white/40">
+                      {b.title}
+                    </h2>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* How far through the climb you are. */}
@@ -472,5 +493,36 @@ export function Journey({
         </ol>
       </div>
     </section>
+  );
+}
+
+/** The number and the tagline over a station's title.
+ *
+ *  THE TAGLINE IS THE ONE LINE PER SECTION THAT IS WRITTEN RATHER THAN QUOTED.
+ *  A category's title is its navigation label and its body is the first
+ *  sentence of its client document, so between them there was nothing that said
+ *  what the service is FOR. "AI Search Visibility" names a thing; "Found in the
+ *  answer" says why a marketing lead skimming at speed should care.
+ *
+ *  THE ROW HAS A READING ORDER AND NEITHER PART IS RED. The number is
+ *  wayfinding rather than content, so it is the quietest thing here: it matters
+ *  that it is present and ascending, not that it is loud. The tagline sits
+ *  above it in weight and below the title.
+ *
+ *  The accent belongs to the title's last word, which is the site's two-tone
+ *  treatment and is already on screen. Giving the tagline the same red put two
+ *  of them in one card, stacked, and the eye had nowhere to start. Brand red is
+ *  an accent and a mark on this site, and the second use of it in six inches
+ *  stops being either. */
+function Kicker({ beat }: { beat: Beat }) {
+  if (!beat.eyebrow && !beat.tagline) return null;
+  return (
+    <p className="font-grotesk mb-4 flex items-center justify-center gap-3 text-[0.78rem] font-bold uppercase tracking-[0.16em] lg:justify-start">
+      {beat.eyebrow && <span className="tabular-nums text-white/45">{beat.eyebrow}</span>}
+      {beat.eyebrow && beat.tagline && (
+        <span aria-hidden className="block h-px w-6 bg-white/25" />
+      )}
+      {beat.tagline && <span className="text-white/60">{beat.tagline}</span>}
+    </p>
   );
 }

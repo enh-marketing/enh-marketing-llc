@@ -23,12 +23,11 @@ import { chart, horizon, system, uplink } from "@/content/ai-hub";
  *  chapter two once its video is scrubbed from chapter progress instead of
  *  from its own lock, which deletes most of it rather than adding anything.
  *
- *  THE BEAT WINDOW IS NARROWER THAN THE DEFAULT so that no two headlines are
- *  ever legible at once. It was set when the system chapter carried five lines
- *  a fifth of a chapter apart, which needed the window inside 0.1; the reorder
- *  moved lines out to other chapters and the closest pair now sits 0.3 apart,
- *  so this is tighter than it has to be rather than wrong. Full within 0.035
- *  and out by 0.095.
+ *  THERE IS NO BEAT WINDOW TO TUNE ANY MORE. This page used to pass one,
+ *  narrowed so that no two headlines were ever legible at once, because every
+ *  beat was drawn in the same place. The copy is one indexed run now, so two
+ *  neighbours being legible at once is the arrangement rather than the fault,
+ *  and the spacing is uniform whatever the beats' own spacing along the track.
  *
  *  THE STORY RUNS system, uplink, chart, horizon, and the black hole carries
  *  Intelligent Web. A branching structure was built for that category on
@@ -53,7 +52,7 @@ export function AiHubPage() {
   return (
     <main>
       <Ascent />
-      <Journey chapters={CHAPTERS} beatWindow={{ hold: 0.035, ramp: 0.06 }} />
+      <Journey chapters={CHAPTERS} />
       {/* THE OPENING LINE AND THE THING THAT PUTS IT BEHIND THE MAN, in that
           order, because the second has to paint over the first. Both are fixed
           to the window and belong to neither block: the line starts over the
