@@ -183,6 +183,27 @@ export function Journey({
   let lead = 0;
   for (let i = 0; i < levels.length; i++) if (levels[i] >= levels[lead]) lead = i;
 
+  /* AND, SEPARATELY, THE ONE PAINTED ON TOP. These were the same number, and
+     that is why the joins were cuts rather than dissolves.
+     `levels` is exactly 1 everywhere inside a chapter's own stretch and only
+     ramps outside it, so the chapter that is arriving is below 1 for the whole
+     of the overlap while the one it is replacing sits at 1. Painting the one at
+     1 on top, over an opaque background, meant the arriving scene did its whole
+     fade underneath something solid and then appeared complete in a single
+     frame. The overlap was computed, and every note in this file describes it,
+     but none of it ever reached the screen.
+     The scene on top has to be the ARRIVING one, fading up over the one it
+     replaces: that is what a dissolve is. So this is the latest chapter with
+     any presence at all, not the most present one.
+     IT CANNOT ALSO OWN THE COPY, which is the trap. This flips a whole FADE
+     before `lead` does, and at that moment two headlines are still at full
+     opacity: AI Creative Production sits at local 0.849 of the system and Data
+     & Dashboards at 0.798 of the chart, both dead centre of their windows.
+     Tying the copy to this would cut them mid-sentence. `lead` still owns the
+     words and the rail; this owns nothing but z-order. */
+  let top = 0;
+  for (let i = 0; i < levels.length; i++) if (levels[i] > 0) top = i;
+
   return (
     <section
       ref={trackRef}
@@ -197,7 +218,7 @@ export function Journey({
               key={c.id}
               data-chapter={c.id}
               className="absolute inset-0"
-              style={{ opacity: levels[i] * (reduced ? 1 : reveal), zIndex: i === lead ? 2 : 1 }}
+              style={{ opacity: levels[i] * (reduced ? 1 : reveal), zIndex: i === top ? 2 : 1 }}
             >
               <c.Scene
                 t={locals[i]}
