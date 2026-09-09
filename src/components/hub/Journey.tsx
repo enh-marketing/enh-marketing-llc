@@ -612,11 +612,20 @@ function Kicker({ beat }: { beat: Beat }) {
   if (!beat.eyebrow && !beat.tagline) return null;
   return (
     <p className="font-grotesk mb-3 flex items-center justify-center gap-3 whitespace-nowrap text-[0.7rem] font-bold uppercase tracking-[0.12em] lg:mb-4 lg:text-[0.78rem] lg:tracking-[0.16em] lg:justify-start">
-      {beat.eyebrow && <span className="tabular-nums text-white/45">{beat.eyebrow}</span>}
+      {/* The number stays neutral and is the quietest thing in the row, because
+          seven ascending numbers are an index rather than decoration. It was
+          white/45, which measures 4.4:1 at this size and misses AA; 55 gives
+          6.2:1 and is still the quietest mark here. */}
+      {beat.eyebrow && <span className="tabular-nums text-white/55">{beat.eyebrow}</span>}
       {beat.eyebrow && beat.tagline && (
-        <span aria-hidden className="block h-px w-6 bg-white/25" />
+        <span aria-hidden className="block h-px w-6" style={{ background: "rgba(255,206,110,0.30)" }} />
       )}
-      {beat.tagline && <span className="text-white/60">{beat.tagline}</span>}
+      {/* Warm rather than neutral, at the same measured weight as the white/60
+          it replaces. It makes the one written line on a page of quoted lines
+          legible as the written line. */}
+      {beat.tagline && (
+        <span style={{ color: "rgba(255,206,110,0.78)" }}>{beat.tagline}</span>
+      )}
     </p>
   );
 }

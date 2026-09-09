@@ -50,7 +50,7 @@ const CHAPTERS: Chapter[] = [
 ];
 export function AiHubPage() {
   return (
-    <main>
+    <main data-hub-story>
       <Ascent />
       <Journey chapters={CHAPTERS} />
       {/* THE OPENING LINE AND THE THING THAT PUTS IT BEHIND THE MAN, in that

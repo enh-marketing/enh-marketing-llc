@@ -557,6 +557,40 @@ html.lenis.lenis-smooth iframe.map-live {
   color: var(--color-brand);
 }
 
+/* THE AI HUB STORY HAS ITS OWN ACCENT, AND ONLY IT DOES.
+ *
+ *  Brand red appears in the 23 viewports of that page in exactly one role: the
+ *  last word of each of the seven category titles. Divij's note was that red
+ *  does not suit the page, and the diagnosis is more specific than taste. Red
+ *  is not the problem in space; Mars is on that page at #ff4a32 and reads
+ *  correctly. The problem is that --color-brand is fully saturated at hue 357
+ *  with no warmth, on a page where every other colour is emitted light between
+ *  hue 25 and 45, so it behaves like ink in a frame of light sources. It is
+ *  also the dimmest thing in the card at 4.44:1 on black, which makes the
+ *  loudest word of every title the faintest mark on screen.
+ *
+ *  BOTH VALUES ARE SAMPLED FROM THE PAGE, not introduced to it. #FF9838 is the
+ *  accretion disc's own midColor in BlackHoleHeroSection, already emitted by
+ *  the closing scene. #FFCE6E is the star halo's middle stop in hub/star.ts,
+ *  which is the light that travels the whole second half of the page. So the
+ *  accent is the page's own light and needs no tuning against any of the four
+ *  scenes. On black they measure 9.8:1 and 14.3:1 against brand red's 4.44.
+ *
+ *  SCOPED TO THE STORY, NOT TO THE ROUTE AND NOT TO @theme. The seven service
+ *  pages under /ai-hub render on the site's light theme, where #FF9838 is about
+ *  2.1:1 and #FFCE6E about 1.6:1, both below even the 3:1 large-text floor, and
+ *  they carry bg-brand CTA bands. This is one page's exception and the scope is
+ *  what stops it becoming a second brand. --color-brand and the global rule
+ *  above are untouched; 25 files and roughly 141 pages read them. */
+[data-hub-story] {
+  --hub-accent: #ff9838;
+  --hub-accent-quiet: #ffce6e;
+}
+
+[data-hub-story] .text-stroke {
+  color: var(--hub-accent);
+}
+
 /* Slim scrollbar for panels that scroll inside their own container. */
 .scroll-slim {
   scrollbar-width: thin;
