@@ -305,13 +305,26 @@ export function Journey({
                      The system already sits right of centre at every camera
                      stop (focusX 0.62 to 0.72), so the picture is on one side
                      and the words are on the other without the scene moving. */
-                  className="absolute inset-x-0 bottom-0 flex h-[40%] flex-col items-center justify-center px-6 text-center transition-opacity duration-500 motion-reduce:transition-none lg:inset-y-0 lg:h-full lg:w-1/2 lg:items-start lg:justify-center lg:pl-16 lg:pr-8 lg:text-left xl:pl-24"
+                  className="absolute inset-x-0 bottom-0 flex h-[40%] flex-col items-center justify-center px-6 text-center lg:inset-y-0 lg:h-full lg:w-1/2 lg:items-start lg:justify-center lg:pl-16 lg:pr-8 lg:text-left xl:pl-24"
                   style={{
+                    /* NO CSS TRANSITION ON EITHER OF THESE, and the opacity used
+                       to have one. `shown` is already a continuous ramp read off
+                       the scroll, so a 500ms transition on it was not smoothing
+                       a stepped value, it was low-pass filtering a smooth one:
+                       every frame the browser restarted a 500ms curve from
+                       wherever the paint had got to, closing a few per cent of
+                       the gap, so the words trailed the true ramp by several
+                       hundred milliseconds. They peaked after the beat point,
+                       lingered after the reader had left it, and went on moving
+                       for half a second after the scroll stopped.
+                       It also split the copy in two. `inert`, `aria-hidden` and
+                       `pointerEvents` all switch on `shown` crossing 0.5, which
+                       happens the instant the number does, while the paint was
+                       still catching up. So a line could be solid on screen and
+                       already inert, or invisible and still clickable. Painted
+                       opacity and the gates are now the same number in the same
+                       frame. */
                     opacity: shown,
-                    /* No transition on the transform. Opacity is eased because
-                       it is a state change; this is a position read straight
-                       off the scroll, and easing it would make the words lag
-                       the scene they are supposed to be moving with. */
                     transform: travel ? `translate3d(0, ${travel}vh, 0)` : undefined,
                     pointerEvents: shown > 0.5 ? "auto" : "none",
                   }}
