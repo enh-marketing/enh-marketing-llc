@@ -87,30 +87,31 @@ export const ascent: Beat[] = [
 /** What the opener's line becomes once it has crossed into the system. */
 export const ASCENT_HANDOVER = "Explore New Heights With AI";
 
-/** The standfirst under the opening line. THE FIRST COPY ON THIS PAGE THAT WAS
- *  WRITTEN RATHER THAN QUOTED, and it is marked as such deliberately.
+/** The standfirst under the opening line.
  *
- *  WHY IT EXISTS. A reader arriving from search saw a photograph of a mountain
- *  and the words "Explore New Heights With Us", and had to scroll eight
- *  viewports before the page told them what it was about. The categories that
- *  follow are all quoted and none of them can do this job, because each states
- *  one service rather than the offer.
+ *  WHAT IT IS DOING. The headline is a promise, "Explore New Heights With AI".
+ *  A standfirst's job is to make that promise credible in one glance, to a
+ *  reader who is deciding within a screen whether this agency is serious.
  *
- *  WHAT IT IS ALLOWED TO SAY. Divij authorised written copy for this page on
- *  2026-09-09, having been shown that PRODUCT.md's rule is verbatim-from-
- *  document and that no document exists for the pillar. So this is held to the
- *  documents' own discipline rather than released from it: no metric, no
- *  percentage, no currency, no guarantee. "Fifteen years" is the single figure
- *  the source material permits anywhere on the site, and PRODUCT.md states it.
+ *  THE OBJECTION IT ANSWERS is the only one that matters here: every agency in
+ *  Dubai is selling AI this year, and a marketing lead cannot tell which of
+ *  them can actually build any of it. Nothing about the services themselves
+ *  answers that, because every competitor's page says the same words.
  *
- *  AND THE SECOND SENTENCE IS THE POINT OF THE FIRST. The service documents are
- *  unusual in saying what each service cannot do, plainly, in their own FAQs:
- *  "Can you guarantee a citation or mention? No." A page selling honesty about
- *  AI that opened by promising outcomes would be arguing against itself. This
- *  says the offer and the limit in one breath, which is the register the whole
- *  site is written in. */
+ *  SO IT ANSWERS WITH THE SEQUENCE. Fifteen years of marketing came first and
+ *  the AI came after, which is a fact about this agency that a firm founded
+ *  last year cannot copy. It is the difference between a marketing company that
+ *  learned AI and an AI company guessing at marketing, and it is the reason to
+ *  believe the seven services below are pointed at a business rather than at a
+ *  model. That is proof by history, not proof by number, which is the only kind
+ *  available here and, on this subject, the more convincing kind anyway.
+ *
+ *  The first draft of this said "AI services for UAE businesses, run by a Dubai
+ *  agency of fifteen years. What each one does, and where each one stops." It
+ *  opened on a category, which is the weakest sentence available, and closed on
+ *  a hedge dressed as a virtue. Divij's word for it was accurate. */
 export const ASCENT_STANDFIRST =
-  "AI services for UAE businesses, run by a Dubai agency of fifteen years. What each one does, and where each one stops.";
+  "We did the marketing for fifteen years before we did the AI. Which is why every service below starts with your business, not with the model.";
 
 /* ---------------------------------------------------------------- chapter 1 */
 
