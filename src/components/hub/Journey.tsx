@@ -140,6 +140,9 @@ export function Journey({
   const bounds = boundsOf(chapters);
 
   useEffect(() => {
+    /* Nothing downstream of this is read by the reduced-motion branch, and it
+       runs on every scroll event of a very long page. */
+    if (reduced) return;
     const track = trackRef.current;
     if (!track) return;
 
@@ -160,7 +163,7 @@ export function Journey({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, []);
+  }, [reduced]);
 
   const at = reduced ? 0 : p;
 
@@ -203,6 +206,74 @@ export function Journey({
      words and the rail; this owns nothing but z-order. */
   let top = 0;
   for (let i = 0; i < levels.length; i++) if (levels[i] > 0) top = i;
+
+  /* REDUCED MOTION GETS A DOCUMENT, NOT A FROZEN FRAME OF THE MACHINE.
+   *
+   *  IT USED TO STRAND SIX OF THE SEVEN CATEGORIES. The note above this file
+   *  said reduced motion "pins the whole thing to the opening of chapter one",
+   *  which it did: `levels` returned 1 for chapter 0 and 0 for the rest, and
+   *  `shown` was 1 for the first beat of the first chapter and 0 for every
+   *  other. The other six sat at opacity 0 carrying `inert` and `aria-hidden`,
+   *  so they were not merely invisible, they were out of the keyboard order
+   *  too. A reader who asks for less motion was shown one service out of seven
+   *  and given no way to reach the other six. There was no static fallback
+   *  anywhere on the page.
+   *
+   *  So the answer is not a stiller version of the machine, it is not the
+   *  machine. Every beat, in order, as ordinary flowing blocks. No sticky
+   *  stage, no absolute positioning, no opacity, no `inert`, no `aria-hidden`,
+   *  no scenes, and no 2200vh of empty track to scroll past. WordReveal at
+   *  p = 1 lights every word fully with no transform and no blur, so the type
+   *  keeps its treatment without a single animated property.
+   *
+   *  THE COPY IS STILL READ FROM content/ai-hub.ts, so check-hub-copy.mjs
+   *  still guards it and no string is written twice.
+   *
+   *  WHAT THIS DELIBERATELY DOES NOT DO is move the gate so the server renders
+   *  this too. `usePrefersReducedMotion` reports false on the server and during
+   *  hydration on purpose, and inverting that would hand the plain document to
+   *  every reader on first paint and then swap in a 2300vh page one render
+   *  later, changing what the largest element is and losing the scroll position
+   *  on any reload deep in the page. That is a regression for everyone in order
+   *  to fix it for one group. The cost of leaving it is that the served HTML
+   *  still carries the seven inert beats, so a reader with JavaScript off is in
+   *  the same position as before. That is a real gap and it wants its own
+   *  change, not this one. */
+  if (reduced) {
+    return (
+      <section data-section="AI Hub journey" className="relative w-full bg-black">
+        {chapters.map((c) =>
+          c.beats.map((b, bi) => (
+            <div
+              key={`${c.id}-${bi}`}
+              data-chapter={c.id}
+              className="mx-auto w-full max-w-[44rem] px-6 py-16 lg:py-24"
+            >
+              {b.eyebrow && (
+                <p className="font-grotesk mb-4 flex items-center gap-4 text-[0.8rem] font-bold uppercase tracking-[0.18em] text-white/55">
+                  <span className="tabular-nums">{b.eyebrow}</span>
+                  <span aria-hidden className="block h-px w-10 bg-white/30" />
+                </p>
+              )}
+              <h2 className="font-grotesk hub-heading font-bold uppercase text-white">
+                <WordReveal
+                  text={b.title}
+                  p={1}
+                  accentFrom={Math.max(0, b.title.trimEnd().split(" ").length - 1)}
+                />
+              </h2>
+              {b.body && (
+                <p className="mt-5 max-w-[34rem] text-[0.98rem] leading-[1.6] text-white/65 lg:text-[1.02rem]">
+                  {b.body}
+                </p>
+              )}
+              {b.href && <ServiceChip href={b.href} />}
+            </div>
+          )),
+        )}
+      </section>
+    );
+  }
 
   return (
     <section
