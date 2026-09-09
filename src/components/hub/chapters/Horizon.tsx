@@ -91,7 +91,21 @@ function cameraAt(t: number) {
  *  centred on while it dims, so the frame reads as depth opening up rather than
  *  as an overlay being taken away. */
 const ARRIVE = 0.2;
-const FLOOD_VMAX = 220;
+
+/** THE LIGHT HAS TO ACTUALLY COVER THE FRAME, and the first version did not.
+ *
+ *  It was 220vmax with stops running to nothing at 0.62 of its own radius, and
+ *  it is centred on the star, which the chart leaves at 0.97 across and 0.12
+ *  down. From a corner, the far corner of a 1600x1300 frame sits at 1.10 of
+ *  that radius: past the end of the gradient, so most of the picture was never
+ *  touched and the hole simply sat next to the glow. Reported exactly that way,
+ *  the black hole arriving before the flash.
+ *
+ *  360vmax puts the far corner at 0.67 of the radius, and the stops below hold
+ *  solid to 0.72, so every pixel of the frame is inside the opaque part when
+ *  the light is at full. There is then no frame in which the hole is visible
+ *  before the light, which is the whole point of the sequence. */
+const FLOOD_VMAX = 360;
 
 export function Horizon({ t }: { t: number }) {
   const cam = cameraAt(t);
@@ -138,8 +152,12 @@ export function Horizon({ t }: { t: number }) {
             height: `${FLOOD_VMAX}vmax`,
             transform: `translate(-50%, -50%) scale(${(0.06 + 0.94 * flood).toFixed(3)})`,
             opacity: flood,
+            /* Solid out to 0.72, then away. The warm ramp inside it is the
+               star's own: near-white at the core, through the halo's amber, to
+               the deeper orange the accretion disc is made of, so the light the
+               reader is inside is the same light they have been following. */
             background:
-              "radial-gradient(circle, rgba(255,252,242,1) 0%, rgba(255,244,214,0.98) 9%, rgba(255,214,140,0.72) 20%, rgba(255,178,86,0.28) 36%, rgba(255,150,60,0) 62%)",
+              "radial-gradient(circle, rgba(255,253,247,1) 0%, rgba(255,248,228,1) 34%, rgba(255,232,183,1) 56%, rgba(255,206,140,0.99) 72%, rgba(255,170,88,0.5) 88%, rgba(255,150,60,0) 100%)",
             willChange: "transform, opacity",
           }}
         />
