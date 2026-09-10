@@ -165,7 +165,7 @@ export const ASCENT_HANDOVER = "Explore New Heights With AI";
  *  opened on a category, which is the weakest sentence available, and closed on
  *  a hedge dressed as a virtue. Divij's word for it was accurate. */
 export const ASCENT_STANDFIRST =
-  "We spent fifteen years doing the marketing before we did any of this. Which is why every project starts with a paid diagnostic of your business, and why it is as likely to tell you what to leave alone.";
+  "Most AI pitches start with the model. This one starts with your business, because we spent fifteen years doing the marketing the old way before any of this existed.";
 
 /* ---------------------------------------------------------------- chapter 1 */
 
@@ -201,7 +201,7 @@ export const system: Beat[] = [
     eyebrow: "02",
     tagline: "Fewer things typed twice",
     title: "AI & Automation",
-    body: "Every business has work that gets typed twice, chased twice, reconciled twice. We start with a paid diagnostic that says which of it to automate and which should stay in human hands.",
+    body: "Every business has work that gets typed twice, chased twice, reconciled twice. We map which of it a machine should take, and which is better off staying in human hands.",
     subServices: [
       "AI Agents",
       "Workflow Automation",
