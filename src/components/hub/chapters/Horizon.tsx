@@ -2,6 +2,7 @@
 
 import { BlackHoleHeroSection } from "@/components/hub/BlackHoleHeroSection";
 import { chartPointAt } from "@/components/hub/chartPath";
+import { useEnhanced } from "@/lib/useEnhanced";
 
 /** The last chapter: the horizon.
  *
@@ -134,7 +135,37 @@ const FLOOD_VMAX = 220;
 const LIT_FROM = 0.17;
 const LIT_TO = 0.42;
 
+/** WHAT THE RAY MARCHER IS ALLOWED TO COST, per layout.
+ *
+ *  IT IS THE PAGE'S WHOLE BUDGET AND IT WAS NOT BEING ASKED TO EARN IT. At the
+ *  old settings on a 390 wide phone it renders a 585 x 722 canvas with the
+ *  scene at 0.6 of that and 260 steps per ray, which is about 39 million
+ *  ray-march iterations per frame, and it ran at whatever the display offered.
+ *  Nothing else on the page is within two orders of magnitude of it: the
+ *  starfield is drawn once and never again, the orbital canvas is 750k pixels
+ *  of 2d, the waveform is a 422 x 422 shader.
+ *
+ *  THE FRAME CAP IS THE CHEAPEST CUT AND IT IS WHY IT IS HERE. Steps and
+ *  resolution take something off every frame you look at; the cap takes whole
+ *  frames away instead, and a camera this slow over a disc that turns this
+ *  slowly does not read as juddering at 30. On a phone the three together take
+ *  the work from about 39 million iterations sixty times a second to 12 million
+ *  thirty times: a little over a tenth of what it was.
+ *
+ *  AND IT BARELY RUNS AT ALL WHILE IT IS DARK. The hole is invisible for the
+ *  first sixth of its chapter and for the whole of the cross-fade that brings
+ *  it in, which is about 1.8 viewports of scrolling. It was ray marching all of
+ *  it. Eight frames a second there is enough to keep the camera current for the
+ *  frame it becomes visible. */
+const COST = {
+  narrow: { steps: 140, resolution: 0.45, maxDpr: 1.25, fps: 30 },
+  wide: { steps: 220, resolution: 0.55, maxDpr: 1.5, fps: 45 },
+};
+/** While nothing of it is on screen. */
+const DARK_FPS = 8;
+
 export function Horizon({ t }: { t: number }) {
+  const wide = useEnhanced("(min-width: 1024px)");
   /* 1 inside the star, 0 once the dark has opened out. */
   const flood = 1 - smooth(clamp(t / ARRIVE, 0, 1));
   /* 0 while the light is up, 1 once the hole is all the way out of the dark. */
@@ -164,6 +195,8 @@ export function Horizon({ t }: { t: number }) {
           warm by the time it is wanted. */}
       <div className="absolute inset-0" style={{ opacity: lit }}>
         <BlackHoleHeroSection
+          {...(wide ? COST.wide : COST.narrow)}
+          fps={lit <= 0.01 ? DARK_FPS : (wide ? COST.wide : COST.narrow).fps}
           distance={cam.distance}
           elevation={cam.elevation}
           azimuth={cam.azimuth}
@@ -176,9 +209,6 @@ export function Horizon({ t }: { t: number }) {
              own would fight it and pull the eye off the rings. The gas still
              turns. */
           orbitSpeed={0}
-          resolution={0.6}
-          steps={260}
-          maxDpr={1.5}
           scrim="bottom"
           scrimStrength={0.85}
           className="h-full w-full"

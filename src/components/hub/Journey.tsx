@@ -111,17 +111,12 @@ const REVEAL_OVER = 0.2;
  *  above and below, near the top and bottom edges. Present, clearly secondary,
  *  not competing for the middle.
  *
- *  NARROW. There is no left half to own. A vertical run had to spread its
- *  stations over the whole height, which put copy across the picture from 32%
- *  to 92% and left the scene nowhere to be. So it travels ACROSS instead, as a
- *  carousel: every station is a card of the same width, they sit side by side,
- *  and the run slides right to left through the bottom two fifths. The picture
- *  keeps the top three fifths to itself and the copy never crosses it.
- *
- *  The pitch is a radius now and is set from the card rather than from itself;
- *  see NARROW_RADIUS_VW. What has not changed is why a neighbour has to be on
- *  screen at rest: it is what tells a reader there is another one rather than
- *  making them find out by scrolling.
+ *  NARROW TRAVELS THE SAME WAY, DOWN THE PAGE, and used to travel across. It
+ *  was a carousel of full cards sliding right to left through the bottom two
+ *  fifths, which kept the whole picture but was rejected on sight: "horizontal
+ *  scroll in mobile is not good, make it vertical". So it is the same run as
+ *  the wide one now, one card and two strips on the same arc, and the scene box
+ *  above it gives up the height that takes. See NARROW_CENTRE.
  *
  *  THE CARD HAS TO FIT THE TWO FIFTHS IT IS GIVEN, which is 360px on a 900 tall
  *  phone, and the first attempt did not: at 78vw the tagline wrapped to two
@@ -144,13 +139,19 @@ const REVEAL_OVER = 0.2;
  *  put two suns on screen 120px apart, and it was invisible for weeks because
  *  the joins were cuts. One container holds all four, so they cannot disagree.
  *
- *  7 AND 36 ARE SET BY THE TWO THINGS THAT HAVE TO CLEAR. The chart finishes
+ *  7 AND 56 ARE SET BY THE TWO THINGS THAT HAVE TO CLEAR. The chart finishes
  *  its last rise at 0.12 of its own box, and at 0.12 of a box starting at the
  *  top of the screen that is 67px, under an 84px header. Starting the box at 7%
- *  puts that finish at 124px. The bottom is the copy's: the carousel's cards
- *  begin at 61% of the frame. */
+ *  puts that finish at 124px.
+ *
+ *  THE BOTTOM WAS 36 AND IS 56, WHICH IS WHAT TURNING THE RUN UPRIGHT COST.
+ *  The copy used to slide across the bottom two fifths and the picture kept
+ *  everything above it. A run that travels down the page needs that height, and
+ *  the strip above the card now reaches 41 per cent of a 390x844 phone. The box
+ *  ends at 44 and its own mask has faded it to nothing from 34, so what the
+ *  strip crosses is the tail of the picture rather than the picture. */
 const SCENE_TOP_PCT = 7;
-const SCENE_BOTTOM_PCT = 36;
+const SCENE_BOTTOM_PCT = 56;
 
 /** THE RADII, NOT THE PITCHES, and the difference is the point.
  *
@@ -201,7 +202,20 @@ const WIDE_ARC_PX = 84;
    the centre puts the tallest card at 448 to 848 instead. Its top sits where
    the scene above it is already masked to nothing, so what it overlaps is not
    picture, it is the fade. */
-const NARROW_CENTRE = 72;
+/** THE PHONE'S RUN IS UPRIGHT NOW, and it was sideways for a reason that has
+ *  been overruled: "horizontal scroll in mobile is not good, make it vertical".
+ *
+ *  WHAT IT COSTS IS PICTURE, and there is no way round that. A run that travels
+ *  down the screen needs the screen's height, and the only place that height
+ *  can come from is the scene above it. The scene box gives up twelve per cent
+ *  and the neighbours are strips rather than cards, the same as the desktop
+ *  column, because two more 279px cards stacked vertically do not fit on a
+ *  phone at any radius and translucent ones overlapping each other read as a
+ *  fault rather than as depth.
+ *
+ *  What survives is the arc: the strips still swing out and shrink on the
+ *  carousel's own curve, which is what the component was picked for. */
+const NARROW_CENTRE = 68;
 /** DERIVED FROM THE CARD, THE WAY THE COMPONENT DERIVES ITS OWN.
  *
  *  IT WAS 153, BACK-SOLVED FROM THE OLD 90vw PITCH, and that was wrong in a way
@@ -216,8 +230,18 @@ const NARROW_CENTRE = 72;
  *  and 84vw x 220/192 is 96vw. The neighbour then spans 68.6 to 144.2vw, so
  *  31vw of it is on screen at every rest position, under the active card and
  *  behind its blur, which is the original's own stacking. */
-const NARROW_RADIUS_VW = 96;
-const NARROW_ARC_PX = 44;
+/** In pixels, because the run travels down the screen now and the card it has
+ *  to clear is a fixed height rather than a share of the width.
+ *
+ *  340 puts the first strip 200px off centre, and is set by the smallest phone
+ *  rather than the common one: at 360x640 the column is narrowest, so the card
+ *  is tallest at 306px, and 320 left the strips two pixels inside it. Measured
+ *  as the smallest gap between any two lit stations across the whole track:
+ *  +14px at 360x640, +23 at 390x844, +29 at 430x932. On the small one the lower
+ *  strip runs 28px off the bottom of the frame, which is what a run does. */
+const NARROW_RADIUS_PX = 340;
+/** Across the run, the same job WIDE_ARC_PX does: the curve, not the layout. */
+const NARROW_ARC_PX = 30;
 const NARROW_CARD_VW = 84;
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
@@ -643,12 +667,12 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                THE PHONE KEEPS THE SCRUB, because the client asked for the
                right-to-left travel it already had and a 244px card has the room
                to swing. */
-            const d = wide ? i - activeStation : dRun;
+            const d = i - activeStation;
             /* Reduced motion never reaches here; it returns the document
                branch above. Past the limit there is nothing left to draw; on a
                wide screen the whole run is seven stations and the far ones are
                simply held at nothing, so they have something to ease in from. */
-            if (Math.abs(d) > SEAT_LIMIT && !wide) return null;
+            if (Math.abs(d) > SEAT_LIMIT + 1) return null;
             /* Placement, scale and dim, all from the carousel's own arithmetic. */
             const at = seat(d);
             const shown = at.opacity * reveal;
@@ -674,9 +698,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                      other axis carries the arc: `along` is the sine and `depth`
                      the cosine, so a station leaving the middle swings out as
                      well as away. */
-                  transform: wide
-                    ? `translate3d(${(-at.depth * WIDE_ARC_PX).toFixed(1)}px, calc(-50% + ${(at.along * wideRadius).toFixed(1)}px), 0) scale(${at.scale.toFixed(3)})`
-                    : `translate3d(${(at.along * NARROW_RADIUS_VW).toFixed(2)}vw, calc(-50% + ${(at.depth * NARROW_ARC_PX).toFixed(1)}px), 0) scale(${at.scale.toFixed(3)})`,
+                  transform: `translate3d(${(-at.depth * (wide ? WIDE_ARC_PX : NARROW_ARC_PX)).toFixed(1)}px, calc(-50% + ${(at.along * (wide ? wideRadius : NARROW_RADIUS_PX)).toFixed(1)}px), 0) scale(${at.scale.toFixed(3)})`,
                   /* The column is anchored left and the carousel is centred, so
                      each shrinks towards its own axis rather than drifting off
                      it. */
@@ -696,9 +718,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                   willChange: shown > 0 ? "transform" : undefined,
                   /* The component's own easing, on the step it now takes. */
                   transition:
-                    wide && reveal >= 1
-                      ? "transform 0.65s cubic-bezier(0.22,1,0.36,1)"
-                      : undefined,
+                    reveal >= 1 ? "transform 0.65s cubic-bezier(0.22,1,0.36,1)" : undefined,
                   pointerEvents: active ? "auto" : "none",
                 }}
               >
@@ -723,7 +743,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                     this project has rejected twice by name. It is also the most
                     expensive thing on the page, and there is no sense paying
                     for it three times to frost two lines of dim type. */}
-                {active || !wide ? (
+                {active ? (
                   <div
                     /* THE BLUR AND THE HAIRLINE ARE THE ACTIVE CARD'S ALONE,
                        even in the carousel where all three are cards. A
@@ -738,9 +758,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                     style={{
                       opacity: shown,
                       transition:
-                        wide && reveal >= 1
-                          ? "opacity 0.65s cubic-bezier(0.22,1,0.36,1)"
-                          : undefined,
+                        reveal >= 1 ? "opacity 0.65s cubic-bezier(0.22,1,0.36,1)" : undefined,
                       ...(wide ? null : { width: `${NARROW_CARD_VW}vw` }),
                     }}
                   >
@@ -825,11 +843,15 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                   </div>
                 ) : (
                   <div
-                    className="w-full max-w-[40rem] px-1"
+                    /* mx-auto and the card's own width on a phone, so a strip
+                       sits on the same left edge as the card it is a neighbour
+                       of rather than on the frame's. */
+                    className="mx-auto w-full max-w-[40rem] px-5 lg:mx-0 lg:px-1"
                     style={{
                       opacity: shown,
                       transition:
                         reveal >= 1 ? "opacity 0.65s cubic-bezier(0.22,1,0.36,1)" : undefined,
+                      ...(wide ? null : { width: `${NARROW_CARD_VW}vw` }),
                     }}
                   >
                     <Kicker beat={b} />

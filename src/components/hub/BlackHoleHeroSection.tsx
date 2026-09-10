@@ -142,8 +142,20 @@ export interface BlackHoleHeroSectionProps
   scrim?: "none" | "left" | "right" | "top" | "bottom";
   /** How dark that edge gets, 0 to 1. */
   scrimStrength?: number;
-  /** Freeze on the current frame. */
+  /** Freeze on the current frame. Note that this stops the CLOCK, not the
+   *  work: the ray marcher still runs every frame so a moving camera keeps up.
+   *  To stop the work, cap `fps`. */
   paused?: boolean;
+  /**
+   * The most frames a second this may render. 0 leaves it uncapped.
+   *
+   * THE ONE DIAL THAT BUYS TIME WITHOUT COSTING PICTURE. `steps` and
+   * `resolution` both take something off every frame you see; this takes whole
+   * frames away instead, and a slow camera over a disc that turns slowly does
+   * not read as juddering at 30 the way a hand-driven interaction would. Halve
+   * the rate and you halve everything: the marcher, the composite, the upload.
+   */
+  fps?: number;
   children?: React.ReactNode;
 }
 
@@ -671,6 +683,7 @@ export function BlackHoleHeroSection({
   scrim = "none",
   scrimStrength = 0.9,
   paused = false,
+  fps = 0,
   className = "",
   children,
   ...rest
@@ -682,13 +695,13 @@ export function BlackHoleHeroSection({
     distance, elevation, azimuth, orbitSpeed, roll, fov, diskInner, diskOuter,
     diskThickness, diskDensity, brightness, spinSpeed, grain, doppler, hotColor,
     midColor, coolColor, starBrightness, glow, exposure, vignette, steps,
-    resolution, maxDpr, focus, scrim, scrimStrength, paused,
+    resolution, maxDpr, focus, scrim, scrimStrength, paused, fps,
   });
   props.current = {
     distance, elevation, azimuth, orbitSpeed, roll, fov, diskInner, diskOuter,
     diskThickness, diskDensity, brightness, spinSpeed, grain, doppler, hotColor,
     midColor, coolColor, starBrightness, glow, exposure, vignette, steps,
-    resolution, maxDpr, focus, scrim, scrimStrength, paused,
+    resolution, maxDpr, focus, scrim, scrimStrength, paused, fps,
   };
 
   useEffect(() => {
@@ -1115,12 +1128,22 @@ export function BlackHoleHeroSection({
 
     /* --- loop ------------------------------------------------------------- */
 
+    /** When the last frame was actually drawn, for the `fps` cap. */
+    let lastRender = 0;
+
     function tick(now: number) {
       if (!running) return;
       raf = requestAnimationFrame(tick);
       if (!visible) { lastFrame = now; return; }
+      /* THE CAP SKIPS THE WORK, NOT JUST THE CLOCK. Everything expensive on
+         this page is downstream of this one call: at 585 x 722 with the scene
+         at 0.6 and 260 steps it is about 39 million ray-march iterations a
+         frame, and it was running at whatever the display offered. */
+      const cap = props.current.fps;
+      if (cap > 0 && lastRender && now - lastRender < 1000 / cap - 1) return;
       const dt = lastFrame ? Math.min(0.05, (now - lastFrame) / 1000) : 0;
       lastFrame = now;
+      lastRender = now;
       if (!props.current.paused && !reduced) clock += dt;
       render(clock);
     }

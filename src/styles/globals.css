@@ -619,9 +619,25 @@ html.lenis.lenis-smooth iframe.map-live {
     0 24px 60px -20px rgba(0, 0, 0, 0.7);
 }
 
+/* THE BLUR IS THE ONE COST THAT IS ON EVERY CHAPTER, and it is also the newest
+ *  thing on the page: it had never actually rendered until the wrapper stopped
+ *  being a backdrop root, so what was approved as glass was the tint alone.
+ *  It is a real per-frame cost, because what is behind it is a canvas that
+ *  redraws as you scroll, so the filter cannot be cached.
+ *
+ *  8 ON A PHONE, 14 ON A DESKTOP. At 390 wide the card is about 328 x 297 css,
+ *  which is 800k device pixels at a phone's dpr 3, blurred every frame. Half
+ *  the radius is most of the cost and the box still reads as glass. */
 [data-hub-story] .hub-glass-blur {
-  backdrop-filter: blur(14px) saturate(150%);
-  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+}
+
+@media (min-width: 1024px) {
+  [data-hub-story] .hub-glass-blur {
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+  }
 }
 
 /* THE HAIRLINE IS A MASKED RING WITH A WHEEL TURNING BEHIND IT.
