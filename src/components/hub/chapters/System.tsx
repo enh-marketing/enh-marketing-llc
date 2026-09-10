@@ -8,7 +8,7 @@ import {
 } from "@/components/hub/OrbitalHeroSection";
 import { HANDOVER_X, HANDOVER_Y } from "@/components/hub/chartPath";
 import { type TrackCamera } from "@/components/hub/TrackChart";
-import { ENTRY_ON_SCREEN } from "@/components/hub/sun";
+import { ENTRY_ON_SCREEN, sunScreenX } from "@/components/hub/sun";
 
 /** Chapter two: the system.
  *
@@ -387,7 +387,10 @@ export function System({
      scene has to be where the photograph left it, to the pixel. The lift starts
      once that is done and is complete a tenth of the chapter later. */
 
-  const focusX = mix(cam.focusX, ENTRY_ON_SCREEN.x - biasX, entry);
+  /* The handover point is where the photograph's sun actually lands on this
+     window, not the fraction it occupies in its own file. See sunScreenX. */
+  const entryX = typeof window === "undefined" ? 0.5 : sunScreenX(window.innerWidth, window.innerHeight);
+  const focusX = mix(cam.focusX, entryX - biasX, entry);
   const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
   const lead = mix(cam.lead, 0, entry);
 

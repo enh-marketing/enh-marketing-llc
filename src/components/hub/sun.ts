@@ -1,11 +1,15 @@
 /** The sun in the opening photograph, and where it lands on screen.
  *
- *  MEASURED, NOT EYEBALLED. The layer images were decoded to raw RGB with
- *  dwebp and every pixel above luminance 240 collected: in the back layer that
- *  is 1447 pixels forming a single blob whose centroid is at (48.4%, 29.6%) of
- *  the 2000 x 1906 image, peak luminance 252. The middle layer's bright pixels
- *  are scattered snow highlights, 205 of them with no centre, so the sun
- *  belongs to the back layer and travels at the back layer's rate.
+ *  MEASURED, NOT EYEBALLED, AND MEASURED AGAIN FOR THE NEW ART. The plate is
+ *  decoded to raw RGB and every pixel above luminance 240 collected: 1733 of
+ *  them, forming a single blob whose bounding box is 22 pixels across, with its
+ *  centroid at (66.53%, 30.41%) of the 2000 x 2000 image. At 230 and below the
+ *  snow starts joining in and the blob stops being one thing, which is the same
+ *  test the old plate passed at 240.
+ *
+ *  IT USED TO BE (48.4%, 29.6%) OF A 2000 x 1906 FRAME. The height barely moved;
+ *  the sun is further right in the new picture, which is why the entry below is
+ *  computed rather than written down.
  *
  *  This is the hinge between the two halves of the page. The photograph's sun
  *  and the star at the centre of the orbital system are the same object seen
@@ -14,10 +18,10 @@
  *  here rather than being written out twice. */
 
 /** Its centre, as a fraction of the image. */
-export const SUN = { x: 0.484, y: 0.296 };
+export const SUN = { x: 0.6653, y: 0.3041 };
 
 /** The image it was measured in. */
-export const SUN_IMAGE = { w: 2000, h: 1906 };
+export const SUN_IMAGE = { w: 2000, h: 2000 };
 
 /** How far the back layer travels, as a percentage of its own height, across
  *  the opener. The original component's furthest rate, and the sun's. */
@@ -63,7 +67,7 @@ export function sunAfterScroll(w: number, h: number, s: number) {
  *  the sun is at, and everything of theirs below it. As the glow grows, the
  *  mountain and the figure cut into its lower half, which is what a light
  *  behind a thing looks like. */
-export const LAYER_EDGE = { mid: 0.498, front: 0.711 };
+export const LAYER_EDGE = { front: 0.52 };
 
 /** The glow's life, in viewport heights scrolled from the top of the page.
  *
@@ -114,7 +118,22 @@ export const GLOW = {
  *  the camera from there, subtracting however far the stage still has to
  *  travel. The descent is then monotone by construction rather than by
  *  tuning. */
-export const ENTRY_ON_SCREEN = { x: 0.484, y: 0 };
+export const ENTRY_ON_SCREEN = { y: 0 };
+
+/** Where the photograph's sun actually is on the window, as a fraction of its
+ *  width, given a `w` by `h` opener.
+ *
+ *  IT HAS TO BE COMPUTED NOW AND IT USED TO BE A CONSTANT, because the sun has
+ *  moved. `object-fit: cover` crops the sides of a square picture in a tall
+ *  window, so a point's screen position is only its image fraction when it sits
+ *  near the middle. The old sun did: 0.484 against a measured 0.465 on a phone,
+ *  19 thousandths out, which nobody was ever going to see. The new one is at
+ *  0.665, and on a 390 x 844 phone that same crop puts it at 0.857 of the
+ *  window. Handing the orbital chapter the raw fraction would start its star 75
+ *  pixels from where the photograph left its light. */
+export function sunScreenX(w: number, h: number): number {
+  return sunInBox(w, h).x / Math.max(1, w);
+}
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const between = (v: number, a: number, b: number) => clamp((v - a) / (b - a || 1), 0, 1);

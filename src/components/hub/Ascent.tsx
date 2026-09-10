@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { ParallaxLayers } from "@/components/fx/ParallaxLayers";
 import { OpeningLine, OpeningStandfirst } from "@/components/hub/OpeningLine";
-import { BACK, FRONT, LAYER_IMG, MID } from "@/components/hub/parallaxAssets";
+import { BACK, FRONT, LAYER_IMG } from "@/components/hub/parallaxAssets";
 import { SunBridge } from "@/components/hub/SunBridge";
 import { BACK_RATE } from "@/components/hub/sun";
 
@@ -57,7 +57,6 @@ export function Ascent() {
           // The sun's own light, at the sun's own rate, behind everything the
           // photograph puts in front of it.
           { y: BACK_RATE, children: <SunBridge frame={frame} /> },
-          { y: 55, children: <img src={MID} alt="" aria-hidden loading="eager" className={LAYER_IMG} /> },
           /* THE NEAR GROUND, AND IT IS TAGGED because a second copy of it is
              drawn over the opening line in hub/ForegroundEcho, and that copy
              finds this layer by class in order to measure it. The line itself
