@@ -488,7 +488,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
             >
               {(b.eyebrow || b.tagline) && (
                 <p className="font-grotesk mb-4 flex items-center gap-3 text-[0.8rem] font-bold uppercase tracking-[0.16em]">
-                  {b.eyebrow && <span className="tabular-nums text-white/50">{b.eyebrow}</span>}
+                  {b.eyebrow && <span className="tabular-nums text-white/65">{b.eyebrow}</span>}
                   {b.eyebrow && b.tagline && (
                     <span aria-hidden className="block h-px w-6 bg-white/25" />
                   )}
@@ -923,11 +923,13 @@ function Kicker({ beat }: { beat: Beat }) {
   if (!beat.eyebrow && !beat.tagline) return null;
   return (
     <p className="font-grotesk mb-3 flex items-center gap-3 whitespace-nowrap text-[0.7rem] font-bold uppercase tracking-[0.12em] lg:mb-4 lg:text-[0.78rem] lg:tracking-[0.16em]">
-      {/* The number stays neutral and is the quietest thing in the row, because
-          seven ascending numbers are an index rather than decoration. It was
-          white/45, which measures 4.4:1 at this size and misses AA; 55 gives
-          6.2:1 and is still the quietest mark here. */}
-      {beat.eyebrow && <span className="tabular-nums text-white/55">{beat.eyebrow}</span>}
+      {/* THE BODY COPY'S WHITE, asked for, and the number keeps being the
+          quietest thing in the row on weight and size rather than on tone.
+          Seven ascending numbers are an index rather than decoration, but at
+          white/55 against a body set in white/65 the index read as faded
+          instead of quiet, and the page was carrying three whites where it has
+          two. 65 measures 8.0:1 here, comfortably past AA. */}
+      {beat.eyebrow && <span className="tabular-nums text-white/65">{beat.eyebrow}</span>}
       {beat.eyebrow && beat.tagline && (
         <span
           aria-hidden

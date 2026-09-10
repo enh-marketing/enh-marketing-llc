@@ -59,11 +59,22 @@ export function WordReveal({
   className,
   /** Words from this index on take the accent colour. -1 for none. */
   accentFrom = -1,
+  /** WHERE THIS PIECE SITS IN A LINE THAT IS RENDERED IN PIECES. The opener's
+   *  heading is three groups carrying three weights, and each group calling
+   *  this on its own would restart the stagger: three words would light at the
+   *  same instant and the line would arrive in blocks instead of in words.
+   *  Given the offset and the true length, every group keeps the timing it
+   *  would have had as one string. A single-piece line passes neither and
+   *  behaves exactly as it did. */
+  from = 0,
+  total,
 }: {
   text: string;
   p: number;
   className?: string;
   accentFrom?: number;
+  from?: number;
+  total?: number;
 }) {
   const words = text.split(" ").filter(Boolean);
 
@@ -78,7 +89,7 @@ export function WordReveal({
            accessible name reading as a sentence rather than one long word. */
         <Fragment key={`${w}-${i}`}>
           <span
-            style={wordStyle(wordLit(p, i, words.length))}
+            style={wordStyle(wordLit(p, from + i, total ?? words.length))}
             className={i >= accentFrom && accentFrom >= 0 ? "text-stroke" : undefined}
           >
             {w}

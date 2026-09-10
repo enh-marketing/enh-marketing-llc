@@ -76,7 +76,21 @@ const HEAD = opener.title.slice(0, cut);
 const FROM = opener.title.slice(cut + 1);
 const TO = ASCENT_HANDOVER.slice(ASCENT_HANDOVER.trimEnd().lastIndexOf(" ") + 1);
 /** The head's words, plus the one that swaps. */
-const WORDS = HEAD.split(" ").filter(Boolean).length + 1;
+const HEAD_WORDS = HEAD.split(" ").filter(Boolean);
+const WORDS = HEAD_WORDS.length + 1;
+
+/** THE LINE IN THREE GROUPS, WHICH IS HOW IT IS SET AND HOW IT BREAKS.
+ *
+ *  Asked for: EXPLORE heavy, NEW HEIGHTS lighter, WITH US heavy again, and on
+ *  a phone one group to a line. Both come out of the same split, so the weight
+ *  change and the line break are the same event and can never disagree.
+ *
+ *  Still derived rather than written down. The title is one string in the
+ *  content file, and the first word, the middle, and the word the turn hangs
+ *  off are read out of it here. */
+const OPEN = HEAD_WORDS[0];
+const MIDDLE = HEAD_WORDS.slice(1, -1).join(" ");
+const JOIN = HEAD_WORDS[HEAD_WORDS.length - 1];
 
 export function OpeningLine() {
   const reduced = usePrefersReducedMotion();
@@ -346,7 +360,11 @@ function Eyebrow({ innerRef }: { innerRef?: React.RefObject<HTMLParagraphElement
   return (
     <p
       ref={innerRef}
-      className="font-grotesk mb-6 text-[0.8rem] font-bold uppercase tracking-[0.34em] text-white/70"
+      /* THE SAME WHITE AS THE BODY COPY, asked for. It was 70 against the
+         standfirst's 80, which is a third colour on a page that has two, and
+         at this size and letterspacing the difference read as the label being
+         switched off rather than as a hierarchy. */
+      className="font-grotesk mb-6 text-[0.8rem] font-bold uppercase tracking-[0.34em] text-white/80"
     >
       {opener.eyebrow}
     </p>
@@ -373,62 +391,90 @@ function Line({
   const base = wordStyle(lit);
 
   return (
-    <h1 className="font-grotesk hub-display mx-auto max-w-[15ch] font-bold uppercase text-white [text-shadow:0_2px_40px_rgba(0,0,0,0.55)]">
-      {/* The space is its own node. WordReveal splits on it and writes one back
-          between words, which leaves nothing after the last one, and without
-          this the heading read "With Us" as "WithUs". */}
-      <WordReveal text={HEAD} p={p} />{" "}
-      {/* BOTH WORDS ARE ALWAYS HERE NOW, and the turn is four style writes on
-          the ticker rather than three different trees React swaps between. The
-          branches existed to keep the accessibility tree clean, which the
-          `aria-hidden` the loop writes does just as well, and swapping the tree
-          mid-turn meant a React render on a scroll event, which is the thing
-          this file no longer does.
+    /* THE SHADOW IS A DROP SHADOW NOW AND IT WAS A GLOW. One 40px blur at 55
+       per cent black is a halo: it darkens the sky around the words without
+       ever drawing an edge, and against the bright band of cloud behind the
+       ridge the white type still washed out. Three stops instead, tight to
+       wide, so the letters have a hard edge to sit on and the wide one only
+       does the lifting. */
+    <h1 className="font-grotesk hub-display mx-auto max-w-[15ch] uppercase text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.5),0_4px_14px_rgba(0,0,0,0.5),0_12px_44px_rgba(0,0,0,0.62)]">
+      {/* EACH GROUP IS AN inline-block, SO IT CANNOT BREAK INSIDE ITSELF. A
+          break in the middle of NEW HEIGHTS would put half of one weight on the
+          end of a line and half on the start of the next, which reads as a
+          mistake rather than as a treatment. The <br> forces the three lines on
+          a phone; above sm the groups flow and the measure decides.
 
-          A SPACER SETS THE WIDTH AND NEITHER WORD DOES. Holding the outgoing
-          word in the flow and laying the incoming one over it kept the line
-          from reflowing, but it also made the box exactly as wide as whichever
-          word was leaving, and the other then sat centred inside it with a gap
-          beside it: mid-turn the line read "WITH  AI" with a double space. An
-          invisible copy of the longer of the two holds the box instead. */}
-      {/* BOTH WORDS ARE RED, asked for, and it is the page's own carnelian
-          rather than a second one. The rest of the heading stays white: the
-          accent is the word that changes, which is the only word on this line
-          doing any work. */}
-      <span
-        className="relative inline-block"
-        style={{ ...base, color: "var(--hub-accent)" }}
-      >
-        {/* THE HEADING'S ACCESSIBLE NAME DOES NOT CYCLE. Both words are hidden
-            from the tree and one canonical reading is exposed instead, so a
-            screen reader is told "Explore New Heights With AI" once rather than
-            being handed a heading that renames itself every four seconds. */}
-        <span className="sr-only">{TO}</span>
-        <span aria-hidden className="invisible">
-          {FROM.length >= TO.length ? FROM : TO}
-        </span>
-        {/* The outgoing word, leaving upward and out of focus. */}
+          The space is its own node. WordReveal splits on it and writes one back
+          between words, which leaves nothing after the last one, and without
+          this the heading read "With Us" as "WithUs". A space left at the end
+          of a line is dropped by the browser before it is centred, so the ones
+          in front of the breaks cost nothing. */}
+      <span className="inline-block font-extrabold">
+        <WordReveal text={OPEN} p={p} from={0} total={WORDS} />
+      </span>{" "}
+      <br aria-hidden className="sm:hidden" />
+      {/* 500, NOT THE 600 ASKED FOR, AND THE DIFFERENCE IS THE FONT. Cabinet
+          Grotesk ships 500, 700, 800 and 900 and has no 600 at all: asked for
+          600 the browser matches upward to 700, which next to the 800 either
+          side is a step too small to see. 500 is the real one below it. */}
+      <span className="inline-block font-medium">
+        <WordReveal text={MIDDLE} p={p} from={1} total={WORDS} />
+      </span>{" "}
+      <br aria-hidden className="sm:hidden" />
+      <span className="inline-block font-extrabold">
+        <span style={wordStyle(wordLit(p, WORDS - 2, WORDS))}>{JOIN}</span>{" "}
+        {/* BOTH WORDS ARE ALWAYS HERE NOW, and the turn is four style writes on
+            the ticker rather than three different trees React swaps between. The
+            branches existed to keep the accessibility tree clean, which the
+            `aria-hidden` the loop writes does just as well, and swapping the tree
+            mid-turn meant a React render on a scroll event, which is the thing
+            this file no longer does.
+
+            A SPACER SETS THE WIDTH AND NEITHER WORD DOES. Holding the outgoing
+            word in the flow and laying the incoming one over it kept the line
+            from reflowing, but it also made the box exactly as wide as whichever
+            word was leaving, and the other then sat centred inside it with a gap
+            beside it: mid-turn the line read "WITH  AI" with a double space. An
+            invisible copy of the longer of the two holds the box instead. */}
+        {/* BOTH WORDS ARE RED, asked for, and it is the page's own carnelian
+            rather than a second one. The rest of the heading stays white: the
+            accent is the word that changes, which is the only word on this line
+            doing any work. */}
         <span
-          ref={fromRef}
-          aria-hidden
-          className="absolute inset-0"
-          style={{ opacity: 1, transform: "translateY(0%)", willChange: "opacity, transform, filter" }}
+          className="relative inline-block"
+          style={{ ...base, color: "var(--hub-accent)" }}
         >
-          {FROM}
-        </span>
-        {/* The incoming one, rising into the space it leaves. */}
-        <span
-          ref={toRef}
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            opacity: 0,
-            transform: "translateY(42%)",
-            filter: "blur(6px)",
-            willChange: "opacity, transform, filter",
-          }}
-        >
-          {TO}
+          {/* THE HEADING'S ACCESSIBLE NAME DOES NOT CYCLE. Both words are hidden
+              from the tree and one canonical reading is exposed instead, so a
+              screen reader is told "Explore New Heights With AI" once rather than
+              being handed a heading that renames itself every four seconds. */}
+          <span className="sr-only">{TO}</span>
+          <span aria-hidden className="invisible">
+            {FROM.length >= TO.length ? FROM : TO}
+          </span>
+          {/* The outgoing word, leaving upward and out of focus. */}
+          <span
+            ref={fromRef}
+            aria-hidden
+            className="absolute inset-0"
+            style={{ opacity: 1, transform: "translateY(0%)", willChange: "opacity, transform, filter" }}
+          >
+            {FROM}
+          </span>
+          {/* The incoming one, rising into the space it leaves. */}
+          <span
+            ref={toRef}
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              opacity: 0,
+              transform: "translateY(42%)",
+              filter: "blur(6px)",
+              willChange: "opacity, transform, filter",
+            }}
+          >
+            {TO}
+          </span>
         </span>
       </span>
     </h1>
