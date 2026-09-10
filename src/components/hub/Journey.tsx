@@ -492,7 +492,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                   {b.eyebrow && b.tagline && (
                     <span aria-hidden className="block h-px w-6 bg-white/25" />
                   )}
-                  {b.tagline && <span className="text-brand">{b.tagline}</span>}
+                  {b.tagline && <span className="text-white/65">{b.tagline}</span>}
                 </p>
               )}
               <h2 className="font-grotesk hub-heading font-bold uppercase text-white">
@@ -914,11 +914,16 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
  *  that it is present and ascending, not that it is loud. The tagline sits
  *  above it in weight and below the title.
  *
- *  The accent belongs to the title's last word, which is the site's two-tone
- *  treatment and is already on screen. Giving the tagline the same red put two
- *  of them in one card, stacked, and the eye had nowhere to start. Brand red is
- *  an accent and a mark on this site, and the second use of it in six inches
- *  stops being either. */
+ *  NEITHER OF THEM IS RED ANY MORE, asked for, and the whole row is the body
+ *  copy's white. The tagline was carnelian-quiet, a warmed-down version of the
+ *  accent, on the reasoning that the one written line on a page of quoted lines
+ *  should be legible as the written line. It was the wrong axis: the title's
+ *  last word is already carnelian a few millimetres below, and two reds
+ *  stacked in one card left the eye nowhere to start. The kicker earns its
+ *  place on size, weight and letterspacing, which it had all along, and the
+ *  accent goes back to being one mark per card. The hairline between the two
+ *  goes neutral with them, or it is the last red thing in a row that has none,
+ *  which reads as something left behind. */
 function Kicker({ beat }: { beat: Beat }) {
   if (!beat.eyebrow && !beat.tagline) return null;
   return (
@@ -931,18 +936,9 @@ function Kicker({ beat }: { beat: Beat }) {
           two. 65 measures 8.0:1 here, comfortably past AA. */}
       {beat.eyebrow && <span className="tabular-nums text-white/65">{beat.eyebrow}</span>}
       {beat.eyebrow && beat.tagline && (
-        <span
-          aria-hidden
-          className="block h-px w-6"
-          style={{ background: "color-mix(in srgb, var(--hub-accent-quiet) 45%, transparent)" }}
-        />
+        <span aria-hidden className="block h-px w-6 bg-white/25" />
       )}
-      {/* Warm rather than neutral, at the same measured weight as the white/60
-          it replaces. It makes the one written line on a page of quoted lines
-          legible as the written line. */}
-      {beat.tagline && (
-        <span style={{ color: "var(--hub-accent-quiet)" }}>{beat.tagline}</span>
-      )}
+      {beat.tagline && <span className="text-white/65">{beat.tagline}</span>}
     </p>
   );
 }
