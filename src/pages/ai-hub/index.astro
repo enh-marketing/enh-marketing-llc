@@ -1,5 +1,4 @@
 ---
-import { Font } from "astro:assets";
 import Base from "@/layouts/Base.astro";
 import { AiHubPage } from "@/page-bodies/ai-hub-index";
 import { brand } from "@/lib/content";
@@ -142,9 +141,10 @@ const schema = {
       every other route on this site. */}
   <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 
-  {/* Space Grotesk is this page's typeface and no other page's. Declaring it
-      here rather than in Base.astro is what keeps the preload off the other
-      141 pages. */}
-  <Font slot="head" cssVariable="--font-grotesk" preload />
+  {/* THIS PAGE HAD ITS OWN TYPEFACE AND NO LONGER DOES. It carried Space
+      Grotesk, preloaded from this slot so the other 141 pages did not wait on
+      it; asked to go back to the site font, so the family is out of
+      astro.config too and .font-grotesk resolves to Cabinet Grotesk like every
+      other heading. One fewer font on the heaviest page on the site. */}
   <AiHubPage client:load />
 </Base>

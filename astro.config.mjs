@@ -131,17 +131,5 @@ export default defineConfig({
       weights: [500, 700, 800, 900],
       styles: ["normal"],
     },
-    {
-      /* THE AI HUB ONLY. Declared here because families have to be, but the
-         <Font> tag that preloads it is in that page's own head slot rather
-         than in Base.astro, so the other 141 pages neither preload it nor
-         wait on it. Nothing outside /ai-hub sets --font-grotesk. */
-      provider: fontProviders.google(),
-      name: "Space Grotesk",
-      cssVariable: "--font-grotesk",
-      weights: [500, 700],
-      subsets: ["latin"],
-      styles: ["normal"],
-    },
   ],
 });

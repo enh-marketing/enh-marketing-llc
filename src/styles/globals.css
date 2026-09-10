@@ -192,6 +192,12 @@ summary {
    variable is undefined and the fallback is what renders. The fallback is the
    site's own display face, so a stray use of this class elsewhere degrades to
    the house heading rather than to a system serif. */
+/* IT IS THE SITE'S DISPLAY FACE AGAIN. This page carried Space Grotesk, its
+ *  own family, preloaded from its own head slot; asked to go back to the site
+ *  font, so --font-grotesk is no longer set anywhere and this resolves to
+ *  Cabinet Grotesk like every other heading on the site. The class name is kept
+ *  because ten call sites use it and Cabinet is a grotesk too. The family is
+ *  out of astro.config as well, so the page no longer downloads it. */
 .font-grotesk {
   font-family: var(--font-grotesk, var(--font-display));
   /* Space Grotesk's default figures are proportional and its default `1` has
@@ -569,22 +575,30 @@ html.lenis.lenis-smooth iframe.map-live {
  *  also the dimmest thing in the card at 4.44:1 on black, which makes the
  *  loudest word of every title the faintest mark on screen.
  *
- *  BOTH VALUES ARE SAMPLED FROM THE PAGE, not introduced to it. #FF9838 is the
- *  accretion disc's own midColor in BlackHoleHeroSection, already emitted by
- *  the closing scene. #FFCE6E is the star halo's middle stop in hub/star.ts,
- *  which is the light that travels the whole second half of the page. So the
- *  accent is the page's own light and needs no tuning against any of the four
- *  scenes. On black they measure 9.8:1 and 14.3:1 against brand red's 4.44.
+ *  IT IS CARNELIAN NOW AND IT WAS AMBER, asked for by name. The amber was
+ *  sampled off the page's own light, which made it safe and made it bland: the
+ *  loudest word of every title was the same colour as the star behind it, so
+ *  the page had a hue and no accent. Carnelian is red without the fault the
+ *  note above diagnoses in brand red. --color-brand is hue 357 and fully
+ *  saturated with no warmth, which is why it read as ink among light sources;
+ *  #BE2C22 is hue 4 at two thirds of that saturation and a third darker, which
+ *  puts it in the same warm family as everything else on the page while still
+ *  being unmistakably red.
+ *
+ *  TWO VALUES BECAUSE ONE CANNOT DO BOTH JOBS. A carnelian dark enough to read
+ *  as carnelian measures 3.6:1 on black, which carries a 62px display word and
+ *  fails small type. The quiet one is the same hue lifted to 6.3:1 and is what
+ *  the taglines and rules use. Neither was true of the amber pair, where the
+ *  quiet value had no consumers at all.
  *
  *  SCOPED TO THE STORY, NOT TO THE ROUTE AND NOT TO @theme. The seven service
- *  pages under /ai-hub render on the site's light theme, where #FF9838 is about
- *  2.1:1 and #FFCE6E about 1.6:1, both below even the 3:1 large-text floor, and
- *  they carry bg-brand CTA bands. This is one page's exception and the scope is
- *  what stops it becoming a second brand. --color-brand and the global rule
- *  above are untouched; 25 files and roughly 141 pages read them. */
+ *  pages under /ai-hub render on the site's light theme and carry bg-brand CTA
+ *  bands. This is one page's exception and the scope is what stops it becoming
+ *  a second brand. --color-brand and the global rule above are untouched; 25
+ *  files and roughly 141 pages read them. */
 [data-hub-story] {
-  --hub-accent: #ff9838;
-  --hub-accent-quiet: #ffce6e;
+  --hub-accent: #be2c22;
+  --hub-accent-quiet: #e2685a;
 }
 
 [data-hub-story] .text-stroke {
@@ -694,16 +708,19 @@ html.lenis.lenis-smooth iframe.map-live {
   background: conic-gradient(
     from 0deg,
     transparent 0deg 8deg,
-    rgba(255, 206, 110, 0.5) 20deg,
-    rgba(255, 247, 226, 0.95) 28deg,
-    rgba(255, 206, 110, 0.5) 36deg,
+    rgba(226, 104, 90, 0.55) 20deg,
+    rgba(255, 226, 218, 0.95) 28deg,
+    rgba(226, 104, 90, 0.55) 36deg,
     transparent 48deg 188deg,
-    rgba(255, 206, 110, 0.5) 200deg,
-    rgba(255, 247, 226, 0.95) 208deg,
-    rgba(255, 206, 110, 0.5) 216deg,
+    rgba(226, 104, 90, 0.55) 200deg,
+    rgba(255, 226, 218, 0.95) 208deg,
+    rgba(226, 104, 90, 0.55) 216deg,
     transparent 228deg 360deg
   );
-  animation: hub-orbit 18s linear infinite;
+  /* 34s, and it was 18. At 18 a wedge crossed the top edge of a 640px card in
+     about two seconds, which reads as a thing travelling rather than a thing
+     glinting. Slowed, asked for. */
+  animation: hub-orbit 34s linear infinite;
   will-change: transform;
 }
 

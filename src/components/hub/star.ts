@@ -170,10 +170,15 @@ function ribbon(
  *
  *  IT IS TAPERED, THIN AT THE TAIL AND THICK AT THE HEAD, and every layer is
  *  now a filled ribbon rather than a stroke, because a stroke is one width. The
- *  core runs 0.5px where the line began to 3.6px where the star is, so the line
+ *  core runs 0.9px where the line began to 6.4px where the star is, so the line
  *  reads as something the star is dragging rather than a wire it is sliding
  *  along. See TAPER and `ribbon` above for why a ribbon and not a run of short
  *  strokes.
+ *
+ *  THE HEAD WAS 3.6 AND IS 6.4, and the tail went with it: the first taper was
+ *  measurably a taper and still read as a hairline that happened to swell. The
+ *  ratio is the same, the whole line is heavier, and the ends stay in
+ *  proportion to each other.
  *
  *  THE MITRE IS GONE WITH THE STROKES and nothing is lost by it. The note that
  *  used to be here said the 9px halo had to give up its point because a mitred
@@ -215,7 +220,7 @@ export function drawTrack(
     ctx.globalAlpha = a;
     ribbon(ctx, pts, tailW, headW);
   };
-  run(2.4 * bloom, 17 * bloom, 0.14 * alpha);
-  run(1 * bloom, 7 * bloom, 0.32 * alpha);
-  run(0.5, 3.6, alpha);
+  run(4 * bloom, 30 * bloom, 0.14 * alpha);
+  run(1.8 * bloom, 12.5 * bloom, 0.32 * alpha);
+  run(0.9, 6.4, alpha);
 }

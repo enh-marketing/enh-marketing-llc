@@ -929,13 +929,17 @@ function Kicker({ beat }: { beat: Beat }) {
           6.2:1 and is still the quietest mark here. */}
       {beat.eyebrow && <span className="tabular-nums text-white/55">{beat.eyebrow}</span>}
       {beat.eyebrow && beat.tagline && (
-        <span aria-hidden className="block h-px w-6" style={{ background: "rgba(255,206,110,0.30)" }} />
+        <span
+          aria-hidden
+          className="block h-px w-6"
+          style={{ background: "color-mix(in srgb, var(--hub-accent-quiet) 45%, transparent)" }}
+        />
       )}
       {/* Warm rather than neutral, at the same measured weight as the white/60
           it replaces. It makes the one written line on a page of quoted lines
           legible as the written line. */}
       {beat.tagline && (
-        <span style={{ color: "rgba(255,206,110,0.78)" }}>{beat.tagline}</span>
+        <span style={{ color: "var(--hub-accent-quiet)" }}>{beat.tagline}</span>
       )}
     </p>
   );
