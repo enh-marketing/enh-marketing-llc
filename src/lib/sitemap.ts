@@ -21,11 +21,16 @@ export type NavNode = {
 
 // Every AI Hub child is now a page on this site; only the hub's own landing
 // page is missing, so AI_HUB_HREF is the one placeholder left here. It stays
-// `external` so buildablePages() does not start demanding a page for "#", and
-// isPending() renders it as a heading rather than as a link.
-// TODO(client): confirm whether the AI Hub gets a landing page of its own or
-// keeps pointing at a separate property, then replace this.
-const AI_HUB_HREF = "#";
+// IT IS A REAL PAGE NOW, AND IT WAS UNREACHABLE UNTIL IT WAS. This was "#" with
+// a TODO asking whether the AI Hub would ever get a landing page of its own. It
+// got one, the pillar was built and shipped, and this was never changed, so the
+// navigation and the footer went on rendering "AI Hub" as a heading rather than
+// a link. Measured on the build before this change: `grep -rl 'href="/ai-hub"'
+// dist` returned zero. Not one of 142 pages linked to it. A page nothing links
+// to is a page search engines have almost no reason to crawl and no signal to
+// rank, which made every other thing done to this page's structured data and
+// head tags worth very little.
+const AI_HUB_HREF = "/ai-hub";
 
 /* ------------------------------------------------------------------ services */
 
@@ -137,7 +142,6 @@ const industries: NavNode = {
 const aiHub: NavNode = {
   label: "AI Hub",
   href: AI_HUB_HREF,
-  external: true,
   children: [
     { label: "AI Search Visibility (AEO & GEO)", href: "/ai-hub/ai-search-visibility" },
     { label: "AI & Automation", href: "/ai-hub/ai-automation" },
@@ -149,6 +153,16 @@ const aiHub: NavNode = {
     { label: "AI Workshops & Training", href: "/ai-hub/ai-workshops-and-training" },
   ],
 };
+
+/** The eight AI Hub services, in the order the navigation lists them.
+ *
+ *  EXPORTED SO THE PILLAR PAGE'S STRUCTURED DATA CANNOT DRIFT FROM THE MENU.
+ *  /ai-hub emits an ItemList naming all eight, and an answer engine reading it
+ *  is being told what this agency sells. If that list were retyped there it
+ *  would be one edit away from disagreeing with the navigation, the breadcrumbs
+ *  and the eight pages themselves. It is this array or nothing. */
+export const aiHubServices: NavNode[] = aiHub.children ?? [];
+
 
 /* ------------------------------------------------------------------ top-level */
 
@@ -254,13 +268,15 @@ const BUILT = new Set([
   "/services/video-marketing",
   "/services/web-design-development",
   "/services/lead-generation/landing-page-development",
+  "/ai-hub",
+  "/ai-hub/film",
   "/ai-hub/ai-automation",
   "/ai-hub/campaign-intelligence",
   "/ai-hub/ai-search-visibility",
   "/ai-hub/data-and-dashboards",
   "/ai-hub/ai-creative-production",
-  "/ai-hub/conversational-ai",
   "/ai-hub/ai-workshops-and-training",
+  "/ai-hub/conversational-ai",
   "/ai-hub/intelligent-web",
   "/services/lead-generation/b2b-lead-generation",
   "/services/video-marketing/corporate-video",

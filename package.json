@@ -13,7 +13,8 @@
     "check:industry-copy": "node scripts/check-industry-copy.mjs",
     "check:craft-links": "node scripts/check-craft-links.mjs",
     "check:enquiry": "node scripts/check-enquiry-endpoint.mjs",
-    "check:sheets": "node scripts/check-sheets-webhook.mjs"
+    "check:sheets": "node scripts/check-sheets-webhook.mjs",
+    "check:copy": "node scripts/check-hub-copy.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.5",

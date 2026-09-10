@@ -1,0 +1,17 @@
+# enhmedia.com
+#
+# There was no robots.txt at all. A missing one is not neutral: it is a 404 on
+# the first URL most crawlers ask for, and it means nothing here points at the
+# sitemap.
+#
+# Everything is open. This is a marketing site and every page on it exists to be
+# found, with one exception below.
+
+User-agent: *
+Allow: /
+
+# noindex in its own head, and listed here so the two agree. It is a second
+# rendering of the AI Hub story kept for review and is not a page for readers.
+Disallow: /ai-hub/film
+
+Sitemap: https://enhmedia.com/sitemap.xml

@@ -187,6 +187,45 @@ summary {
   font-family: var(--font-display);
 }
 
+/* THE AI HUB'S TYPEFACE, AND ONLY THAT PAGE'S. --font-grotesk is set by the
+   <Font> tag in src/pages/ai-hub/index.astro, so on every other page this
+   variable is undefined and the fallback is what renders. The fallback is the
+   site's own display face, so a stray use of this class elsewhere degrades to
+   the house heading rather than to a system serif. */
+/* IT IS THE SITE'S DISPLAY FACE AGAIN. This page carried Space Grotesk, its
+ *  own family, preloaded from its own head slot; asked to go back to the site
+ *  font, so --font-grotesk is no longer set anywhere and this resolves to
+ *  Cabinet Grotesk like every other heading on the site. The class name is kept
+ *  because ten call sites use it and Cabinet is a grotesk too. The family is
+ *  out of astro.config as well, so the page no longer downloads it. */
+.font-grotesk {
+  font-family: var(--font-grotesk, var(--font-display));
+  /* Space Grotesk's default figures are proportional and its default `1` has
+     no foot; the hub sets category numbers in it, and those want to line up. */
+  font-feature-settings: "ss01";
+}
+
+/* The hub's own two display sizes. They are bigger and tighter than the site's
+   display-2xl and display-lg, which were drawn to sit inside a page with
+   navigation and a footer. This page has neither, and it is read one full
+   screen at a time, so the headline can take the room.
+
+   BOTH CLAMP AGAINST svh AS WELL AS vw. Every one of these sits over a scene
+   with a beat below it, and on a short landscape phone a purely vw-driven size
+   pushes the body copy and the link off the bottom of the frame. min() lets
+   whichever axis is scarcer decide. */
+.hub-display {
+  font-size: clamp(2.9rem, min(7.4vw, 11svh), 6.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.hub-heading {
+  font-size: clamp(2rem, min(4.6vw, 7.4svh), 3.9rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+}
+
 /* Fluid display sizes — restrained for readability on desktop/tablet */
 .mega {
   /* Height-aware, like .display-2xl: the homepage hero is sized to the viewport
@@ -522,6 +561,173 @@ html.lenis.lenis-smooth iframe.map-live {
    of the two CTA bands in brand, so the headings now agree with them. */
 .text-stroke {
   color: var(--color-brand);
+}
+
+/* THE AI HUB STORY HAS ITS OWN ACCENT, AND ONLY IT DOES.
+ *
+ *  Brand red appears in the 23 viewports of that page in exactly one role: the
+ *  last word of each of the seven category titles. Divij's note was that red
+ *  does not suit the page, and the diagnosis is more specific than taste. Red
+ *  is not the problem in space; Mars is on that page at #ff4a32 and reads
+ *  correctly. The problem is that --color-brand is fully saturated at hue 357
+ *  with no warmth, on a page where every other colour is emitted light between
+ *  hue 25 and 45, so it behaves like ink in a frame of light sources. It is
+ *  also the dimmest thing in the card at 4.44:1 on black, which makes the
+ *  loudest word of every title the faintest mark on screen.
+ *
+ *  IT IS CARNELIAN NOW AND IT WAS AMBER, asked for by name. The amber was
+ *  sampled off the page's own light, which made it safe and made it bland: the
+ *  loudest word of every title was the same colour as the star behind it, so
+ *  the page had a hue and no accent. Carnelian is red without the fault the
+ *  note above diagnoses in brand red. --color-brand is hue 357 and fully
+ *  saturated with no warmth, which is why it read as ink among light sources;
+ *  #BE2C22 is hue 4 at two thirds of that saturation and a third darker, which
+ *  puts it in the same warm family as everything else on the page while still
+ *  being unmistakably red.
+ *
+ *  TWO VALUES BECAUSE ONE CANNOT DO BOTH JOBS. A carnelian dark enough to read
+ *  as carnelian measures 3.6:1 on black, which carries a 62px display word and
+ *  fails small type. The quiet one is the same hue lifted to 6.3:1 and is what
+ *  the taglines and rules use. Neither was true of the amber pair, where the
+ *  quiet value had no consumers at all.
+ *
+ *  SCOPED TO THE STORY, NOT TO THE ROUTE AND NOT TO @theme. The seven service
+ *  pages under /ai-hub render on the site's light theme and carry bg-brand CTA
+ *  bands. This is one page's exception and the scope is what stops it becoming
+ *  a second brand. --color-brand and the global rule above are untouched; 25
+ *  files and roughly 141 pages read them. */
+[data-hub-story] {
+  --hub-accent: #be2c22;
+  --hub-accent-quiet: #e2685a;
+}
+
+[data-hub-story] .text-stroke {
+  color: var(--hub-accent);
+}
+
+/* THE GLASS BOX AND THE HAIRLINE THAT GOES ROUND IT.
+ *
+ *  Asked for by name: "high quality apple like glass box, with very thinnnnnn
+ *  glowing in any two opp borders which move slowly around the box border, like
+ *  horizon hair like thin glow".
+ *
+ *  THE GLASS IS THREE THINGS AND NOT ONE. A tint alone is a grey box; what
+ *  reads as glass is a blur that also lifts the saturation of what is behind
+ *  it, a fill that is brighter at the top than the bottom because light comes
+ *  from above, and an edge that is bright where it catches that light and dark
+ *  where it does not. The two edges are a single inset shadow pair rather than
+ *  a ring, so the top hairline and the bottom one can differ, which a ring
+ *  cannot do. */
+[data-hub-story] .hub-glass {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.085) 0%,
+      rgba(255, 255, 255, 0.035) 42%,
+      rgba(255, 255, 255, 0.018) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.055),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.03),
+    0 24px 60px -20px rgba(0, 0, 0, 0.7);
+}
+
+/* THE BLUR IS THE ONE COST THAT IS ON EVERY CHAPTER, and it is also the newest
+ *  thing on the page: it had never actually rendered until the wrapper stopped
+ *  being a backdrop root, so what was approved as glass was the tint alone.
+ *  It is a real per-frame cost, because what is behind it is a canvas that
+ *  redraws as you scroll, so the filter cannot be cached.
+ *
+ *  8 ON A PHONE, 14 ON A DESKTOP. At 390 wide the card is about 328 x 297 css,
+ *  which is 800k device pixels at a phone's dpr 3, blurred every frame. Half
+ *  the radius is most of the cost and the box still reads as glass. */
+[data-hub-story] .hub-glass-blur {
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+}
+
+@media (min-width: 1024px) {
+  [data-hub-story] .hub-glass-blur {
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+  }
+}
+
+/* THE HAIRLINE IS A MASKED RING WITH A WHEEL TURNING BEHIND IT.
+ *
+ *  IT IS NOT AN ANIMATED CONIC GRADIENT, and that is the whole of the technique.
+ *  Animating `from <angle>` in a conic repaints the gradient every frame, on a
+ *  page that is already spending its frames on a ray marcher. A conic painted
+ *  once and rotated is a transform, which is the compositor's own job and costs
+ *  nothing per frame. The ring is cut out of it by masking the padding box
+ *  against the content box, so what survives is a border one pixel wide that
+ *  follows the radius exactly, which a border cannot do with a gradient.
+ *
+ *  TWO WEDGES, 180 DEGREES APART, so there is always one on each of two
+ *  opposite edges however the box is proportioned. They are feathered rather
+ *  than blurred: a filter on a moving layer costs what the conic cost, and the
+ *  gradient can carry its own falloff for free. */
+@keyframes hub-orbit {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+[data-hub-story] .hub-orbit {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  padding: 1px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* The bloom sits under the hairline and is three pixels of the same light. */
+[data-hub-story] .hub-orbit-bloom {
+  padding: 3px;
+  opacity: 0.45;
+}
+
+[data-hub-story] .hub-orbit > i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* Wider than the box's diagonal, so the wheel covers every corner. */
+  width: 220%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 8deg,
+    rgba(226, 104, 90, 0.55) 20deg,
+    rgba(255, 226, 218, 0.95) 28deg,
+    rgba(226, 104, 90, 0.55) 36deg,
+    transparent 48deg 188deg,
+    rgba(226, 104, 90, 0.55) 200deg,
+    rgba(255, 226, 218, 0.95) 208deg,
+    rgba(226, 104, 90, 0.55) 216deg,
+    transparent 228deg 360deg
+  );
+  /* 34s, and it was 18. At 18 a wedge crossed the top edge of a 640px card in
+     about two seconds, which reads as a thing travelling rather than a thing
+     glinting. Slowed, asked for. */
+  animation: hub-orbit 34s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hub-story] .hub-orbit > i {
+    animation: none;
+  }
 }
 
 /* Slim scrollbar for panels that scroll inside their own container. */
@@ -1007,6 +1213,7 @@ html.lenis.lenis-smooth iframe.map-live {
     animation: none !important;
     opacity: 0 !important;
   }
+
 
   [data-first-tick] .ci-blink {
     opacity: 1 !important;
