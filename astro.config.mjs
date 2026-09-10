@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig, fontProviders } from "astro/config";
 import react from "@astrojs/react";
+import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 
 /** Migrated from next.config.ts.
@@ -19,6 +20,34 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://enhmedia.com",
 
+  /** THE SITE IS STILL STATIC. `output` is left at its default of 'static',
+   *  which prerenders every page unless a page opts out, and exactly one file
+   *  opts out: src/pages/api/enquiry.ts. So all fifty-four pages still build to
+   *  flat HTML and deploy the way they always did, and the adapter's only job
+   *  is to turn that one route into a Vercel function.
+   *
+   *  WHY THERE HAD TO BE ONE. The forms needed to send mail through an SMTP
+   *  app password, verify a reCAPTCHA secret, read the visitor's IP and sign a
+   *  Google Sheets webhook. Every one of those is a secret or a server fact,
+   *  and a static page has nowhere to put either.
+   *
+   *  IT ALSO FIXED THE REDIRECTS, FOR FREE. The block below was written when
+   *  this was an adapter-less static build, where Astro can only emit a
+   *  <meta http-equiv="refresh"> page, which search treats as a soft redirect
+   *  that passes less signal than a 301. It says so, and flags the seventy-two
+   *  ranking /blog URLs as the reason to fix it at the host.
+   *
+   *  That is now done and needs nothing at the host. With an adapter present
+   *  Astro hands its redirects to the adapter instead of prerendering them, so
+   *  `astro build` writes all ten into .vercel/output/config.json as real 301s
+   *  -- including the `/blog/[slug]` pattern covering every one of the
+   *  seventy-two posts. Verified in the build output: those routes now emit no
+   *  HTML file at all, because there is no longer a page to emit.
+   *
+   *  So do NOT also add these to a vercel.json. Two sources of redirects for
+   *  the same URLs is how they start disagreeing. */
+  adapter: vercel(),
+
   integrations: [react()],
 
   // AI Automation moved out of Services and into the AI Hub, so its old URL
@@ -35,6 +64,43 @@ export default defineConfig({
     "/services/web-design-development/website-maintenance-and-support":
       "/services/web-design-development/website-maintenance-support",
 
+    // The Industries slug for this page is "ecommerce-retail" in
+    // src/lib/sitemap.ts, which is where the IA was resolved and what the
+    // navbar and footer of every page link to. "ecommerce-and-retail" reads
+    // naturally enough that it gets typed and sent by hand, exactly like the
+    // maintenance slug above, so it lands rather than 404s.
+    "/industries/ecommerce-and-retail": "/industries/ecommerce-retail",
+
+    // Same reason as the industry slug above: "hospitality-hotels" is what
+    // src/lib/sitemap.ts resolved and what every menu links to, and the "and"
+    // variant gets typed by hand.
+    "/industries/hospitality-and-hotels": "/industries/hospitality-hotels",
+
+    // The logistics page is served at "/industries/logistics", which is the
+    // route the team asked for. src/lib/sitemap.ts named the menu entry
+    // "/industries/logistics-shipping" while the page was unbuilt -- so no
+    // link ever pointed at it, `Crosslink` and `routeExists` rendered it as
+    // plain text, and nothing 404'd. The nav label is still "Logistics &
+    // Shipping", though, which is what a reader types, so the slug it implies
+    // lands rather than 404s. Same reasoning as the two slugs above.
+    "/industries/logistics-shipping": "/industries/logistics",
+
+    // And the same for Healthcare, for the same reason and by the same route:
+    // the page is served at "/industries/healthcare", which is what the team
+    // asked for, while src/lib/sitemap.ts named the menu entry
+    // "/industries/healthcare-clinics" for as long as the page was unbuilt --
+    // so nothing ever linked to it. The nav label is still "Healthcare &
+    // Clinics", which is what a reader types, so the slug it implies lands
+    // rather than 404s.
+    "/industries/healthcare-clinics": "/industries/healthcare",
+
+    // The About page's canonical slug is "/about-us", which is what
+    // src/lib/sitemap.ts now names and what the navbar and footer of every page
+    // link to. "/about" is what the sitemap said before the page existed, and
+    // it is short enough that it gets typed by hand and pasted into decks, so
+    // it lands rather than 404s. Same reasoning as the four slugs below.
+    "/about": "/about-us",
+
     // Testimonials is plural in src/lib/sitemap.ts, which is where the IA is
     // resolved and what the navbar and footer of every page link to, so the
     // plural is the canonical URL and the only one with a page behind it. The
@@ -47,14 +113,16 @@ export default defineConfig({
     // migrated notes keep those slugs exactly, so one pattern covers every one
     // of them and any post added later. /blog itself goes to the archive.
     //
-    // CAVEAT WORTH KNOWING: this is a static build with no adapter, so Astro
-    // emits a <meta http-equiv="refresh"> page rather than a 301. That is
-    // enough for a reader following an old link, and it is what the three
-    // redirects above already do. It is NOT as good for search: a meta refresh
-    // is treated as a soft redirect and passes less signal than a real 301.
-    // Seventy-two ranking URLs is enough to be worth doing properly, so these
-    // should also be configured as 301s at the host (vercel.json, Netlify
-    // _redirects, or a Cloudflare rule) when the deploy target is known.
+    // THESE ARE REAL 301s NOW. This used to carry a caveat: with no adapter,
+    // Astro could only emit a <meta http-equiv="refresh"> page, which search
+    // treats as a soft redirect, and the note said seventy-two ranking URLs
+    // deserved better and should be configured at the host by hand.
+    //
+    // Adding the Vercel adapter settled it. Astro hands its redirects to the
+    // adapter rather than prerendering them, so every entry in this block --
+    // this pattern included -- is written into .vercel/output/config.json as a
+    // 301. Nothing needs adding at the host, and nothing should be: see the
+    // note on `adapter` above.
     "/blog": "/insights",
     "/blog/[slug]": "/insights/[slug]",
   },

@@ -34,7 +34,7 @@ export function Voices() {
 
       <Container className="relative text-center">
         <p className="mb-10 flex items-center justify-center gap-3 text-xs font-semibold uppercase text-fog">
-          <span className="text-brand">(07)</span> The voices — don&apos;t take our word
+          <span className="text-brand">(08)</span> The voices — don&apos;t take our word
         </p>
 
         {/* Animated quote emblem */}

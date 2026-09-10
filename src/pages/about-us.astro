@@ -1,0 +1,82 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/about-us";
+import { brand } from "@/lib/content";
+import { availableBadges } from "@/lib/badges";
+import { AboutUsPage } from "@/page-bodies/about-us";
+
+/* Head tags go to the layout as props; the structured data is emitted below as
+   static HTML rather than through the island.
+
+   THE SCHEMA IS THE DOCUMENT, NOT A TEMPLATE. This is the one page on the site
+   whose subject is the company itself, so it is the right place for the
+   Organization node — and every field in it is either the document's or already
+   in lib/content:
+
+     foundingDate    "ENH Marketing was established in 2011"
+     description     the banner paragraph, the only self-description there is
+     areaServed      "national and global brands" is the document's own reach;
+                     the AE address below is where the agency is
+     award           NOT USED. The document names no award. The Google Partner
+                     accreditation is a credential, not a prize, so it is a
+                     `hasCredential` EducationalOccupationalCredential rather
+                     than an `award` string, which is what that property is for.
+
+   WHAT IS DELIBERATELY ABSENT: `numberOfEmployees`, `employee`, `founder` and
+   `aggregateRating`. The document describes the team at length and names not
+   one person, gives no headcount, and carries no review. Emitting any of them
+   would be inventing structured data about real people, which is worse than
+   inventing prose because a search engine will repeat it.
+
+   `sameAs` is absent for the same reason it is a TODO in lib/content: the
+   social profile URLs are still placeholders, and pointing sameAs at "#" is a
+   broken claim about identity. */
+
+const HREF = "/about-us";
+
+const badges = availableBadges().filter((b) => !/^Meta/.test(b.alt));
+
+const organisationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: brand.legal,
+  alternateName: brand.name,
+  url: "https://enhmedia.com",
+  foundingDate: c.story.founded,
+  description: c.hero.sub,
+  telephone: brand.phone,
+  email: brand.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: brand.address,
+    addressLocality: brand.city,
+    addressCountry: "AE",
+  },
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  hasCredential: {
+    "@type": "EducationalOccupationalCredential",
+    name: "Google Partner",
+    credentialCategory: "Partner accreditation",
+    recognizedBy: { "@type": "Organization", name: "Google" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(organisationSchema)} />
+
+  {/* One island for the page. Every chapter runs its own ScrollTrigger or
+      pointer handler, so the tree cannot be split without inventing a shared
+      store. See MIGRATION.md.
+
+      `badges` is resolved here rather than in the island because
+      availableBadges() reads the filesystem: this frontmatter runs in Node at
+      build time, so the check happens once and travels down as plain data.
+
+      META IS FILTERED OUT ABOVE. The four badge files in /public cover Google
+      Partner, two Google Ads certifications and Meta Business Partner. This
+      document is about the Google Partner network and says nothing whatsoever
+      about Meta, so carrying that mark on this page would be a credential the
+      source does not claim. */}
+  <AboutUsPage client:load badges={badges} />
+</Base>

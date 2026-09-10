@@ -150,12 +150,22 @@ export function ConsentField({ id, children }: { id: string; children: ReactNode
 }
 
 /** Red pill with the two-arrow push, matching the channel cards' Know More. */
-export function SubmitButton({ children, className }: { children: ReactNode; className?: string }) {
+export function SubmitButton({
+  children,
+  className,
+  disabled,
+}: {
+  children: ReactNode;
+  className?: string;
+  disabled?: boolean;
+}) {
   return (
     <button
       type="submit"
+      disabled={disabled}
       className={cn(
         "group inline-flex items-center justify-center gap-3 rounded-full bg-brand px-8 py-4 text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-deep",
+        "disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-brand",
         className,
       )}
     >
@@ -165,5 +175,73 @@ export function SubmitButton({ children, className }: { children: ReactNode; cla
         <ArrowRight className="absolute -translate-x-5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
       </span>
     </button>
+  );
+}
+
+/** The honeypot.
+ *
+ *  A field a person never fills in, because a person never sees it. Bots that
+ *  walk the DOM and complete every input give themselves away by putting
+ *  something in it, and the endpoint drops those without sending mail.
+ *
+ *  WHY NOT `type="hidden"` OR `display:none`. Both are trivially recognised by
+ *  anything worth defending against, and `display:none` on a real input also
+ *  hides it from the browser's own autofill heuristics in ways that vary. This
+ *  is a real text input parked outside the viewport, taken out of the tab order
+ *  with tabIndex={-1}, hidden from assistive tech with aria-hidden, and told
+ *  not to autofill. A keyboard user never reaches it and a screen reader never
+ *  announces it, so nobody real can fill it in by accident. The name is
+ *  deliberately plausible: `company_website` is the kind of field a scraper
+ *  expects to find and complete. */
+export function Honeypot({ id }: { id: string }) {
+  return (
+    <div aria-hidden className="pointer-events-none absolute -left-[9999px] top-0 h-0 w-0 overflow-hidden">
+      <label htmlFor={id}>Company website</label>
+      <input id={id} name="company_website" type="text" tabIndex={-1} autoComplete="off" />
+    </div>
+  );
+}
+
+/** Google's required attribution, shown because the floating reCAPTCHA badge
+ *  is hidden in globals.css. Hiding the badge is only permitted with this text
+ *  present, so the two travel together: remove one and remove the other. */
+export function RecaptchaNotice({ className }: { className?: string }) {
+  return (
+    <p className={cn("text-[11px] leading-relaxed text-ash", className)}>
+      Protected by reCAPTCHA. Google&rsquo;s{" "}
+      <a
+        href="https://policies.google.com/privacy"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline underline-offset-2 transition-colors hover:text-brand"
+      >
+        Privacy Policy
+      </a>{" "}
+      and{" "}
+      <a
+        href="https://policies.google.com/terms"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="underline underline-offset-2 transition-colors hover:text-brand"
+      >
+        Terms of Service
+      </a>{" "}
+      apply.
+    </p>
+  );
+}
+
+/** A failed send, in the form's own material rather than an alert().
+ *  `role="alert"` so it is announced the moment it appears, which is the whole
+ *  point: the visitor has just pressed submit and is looking at the button, not
+ *  at the space above it. */
+export function FormError({ children }: { children: ReactNode }) {
+  return (
+    <p
+      role="alert"
+      className="mt-6 flex items-start gap-2 border-l-2 border-brand-hot pl-4 text-sm leading-relaxed text-brand-text"
+    >
+      {children}
+    </p>
   );
 }

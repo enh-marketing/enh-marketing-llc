@@ -25,10 +25,20 @@ export const social = [
   { label: "YouTube", href: "#" },
 ];
 
-export const heroWords = ["EXPLORE", "NEW", "HEIGHTS"];
+/** The hero H1, split across the three treatments the design gives it:
+ *  [0] plain and [1] stroked share the first line, [2] takes the second in
+ *  brand. Read together they are the headline the homepage document supplies,
+ *  "Explore New Heights with Smarter Digital Marketing", unaltered — the split
+ *  is where the line breaks fall, not an edit to the words. */
+export const heroWords = ["Explore", "New Heights", "with Smarter Digital Marketing"];
+
+/** The line above the H1. The document sets it as its H4, under the headline;
+ *  the design's only slot for it is this eyebrow, which sits above. */
+export const heroEyebrow =
+  "ENH Marketing, the Best Digital Marketing Agency in Dubai, UAE";
 
 export const heroSub =
-  "Top digital marketing agency in Dubai, UAE. For fifteen years we've turned ambition into market share — with craft, data and a little bit of theatre.";
+  "For more than 15 years, we have helped startups, SMEs, and enterprises across the UAE turn digital visibility into qualified leads and sales, supported by practical AI where it adds value.";
 
 /** Partner and certification badges shown in the homepage hero.
  *
@@ -84,65 +94,90 @@ export type Craft = {
   tag: string;
   body: string;
   items: string[];
+  /** The service pillar this card is the homepage's summary of, so the card can
+   *  offer a way in. A path rather than a sitemap import because this file is
+   *  content and `@/lib/sitemap` owns structure -- the same split the service
+   *  content files already use for `ChannelScroller`'s channels. The section
+   *  guards every one with `routeExists`, and `npm run check:craft-links`
+   *  fails on a path the sitemap does not contain, so a typo cannot quietly
+   *  cost a card its link.
+   *
+   *  Absent on AI Hub: `AI_HUB_HREF` in the sitemap is still "#" because the
+   *  hub has no landing page of its own yet, and there is no honest single
+   *  destination among its eight children. That card carries no link until the
+   *  hub ships, at which point adding the path here lights it up. */
+  href?: string;
 };
 
-// The 8 live ENH service lines, told as chapters of the climb.
+/** The seven service lines the homepage document lists, in its order, with its
+ *  titles and its descriptions verbatim.
+ *
+ *  `tag` and `items` are the card's own furniture and the document supplies
+ *  neither, so nothing here is invented to fill them: the tags are the ones
+ *  these cards already carried, and the item lists are the service's real child
+ *  pages as named in src/lib/sitemap.ts. Two cards had no predecessor to borrow
+ *  from — Performance Marketing, which replaces the old "Search Advertising"
+ *  card, and AI Hub, which is new — so both take their items from the sitemap.
+ *
+ *  What went: the standalone "Content Creation" card. The document's list does
+ *  not carry one, and the site's content pages live under SEO ("SEO Content
+ *  Creation") and Social Media Marketing ("Social Media Content Creation")
+ *  rather than as a service of their own. */
 export const crafts: Craft[] = [
   {
     no: "01",
     title: "Search Engine Optimization",
+    href: "/services/seo",
     tag: "Organic Growth",
-    body: "Your brand's visibility online and improved search rankings through expert SEO. Tested methods that help people find your website when they most need it — driving qualified traffic, leads and sales.",
+    body: "Improve your search visibility with technical SEO, content and local optimisation that attract relevant traffic and turn searches into qualified business opportunities.",
     items: ["Technical & on-page SEO", "Local SEO services", "Ecommerce SEO", "Authority building"],
   },
   {
     no: "02",
-    title: "Social Media Marketing",
-    tag: "Community & Content",
-    body: "We bring life to your social presence with interesting, viral content that grows your brand communities naturally. Our experts know how to spark conversations with your target audience.",
-    items: ["Facebook marketing", "Instagram marketing", "Community management", "Paid social"],
+    title: "Performance Marketing",
+    href: "/services/performance-marketing",
+    tag: "PPC & Performance",
+    body: "Connect paid media, landing pages and analytics through performance marketing campaigns designed to generate measurable leads, sales and returns from every channel.",
+    items: ["Google Ads", "Meta Ads", "LinkedIn Ads", "YouTube Ads"],
   },
   {
     no: "03",
-    title: "Search Advertising",
-    tag: "PPC & Performance",
-    body: "Be found. Be noticed. Be heard. Turn clicks into conversions — boost sales and make every click count by connecting with high-intent customers at the exact moment they're ready to buy.",
-    items: ["Google Ads", "Shopping campaigns", "Display & YouTube", "Conversion tracking"],
+    title: "Social Media Marketing",
+    href: "/services/social-media-marketing",
+    tag: "Community & Content",
+    body: "Build an active social presence with platform-specific content, community management and paid campaigns that grow reach, engagement and meaningful customer action online.",
+    items: ["Facebook marketing", "Instagram marketing", "Community management", "Paid social"],
   },
   {
     no: "04",
-    title: "Digital Marketing Campaigns",
-    tag: "Strategy & Execution",
-    body: "From strategy creation to campaign execution, our experts create personalized campaigns that have a significant, long-lasting effect on your business.",
-    items: ["Campaign strategy", "Creative direction", "Multi-channel rollout", "Reporting & insights"],
+    title: "Web Design & Development",
+    href: "/services/web-design-development",
+    tag: "Web & Experience",
+    body: "Create a fast, user-friendly website shaped around your business, your audience and the actions you want visitors to take on every device.",
+    items: ["UX & UI design", "Development", "E-commerce builds", "Website support services"],
   },
   {
     no: "05",
-    title: "B2B Lead Generation",
+    title: "Lead Generation",
+    href: "/services/lead-generation",
     tag: "Pipeline & Demand",
-    body: "A lead-generation engine meticulously designed for optimal ROI. We generate leads and increase sales faster by connecting you with high-value decision-makers ready to do business.",
+    body: "Reach decision-makers with focused lead generation campaigns designed to build a pipeline and create more valuable, qualified sales conversations for your business.",
     items: ["Demand generation", "Funnel design", "Marketing automation", "Sales enablement"],
   },
   {
     no: "06",
-    title: "Web Design & Development",
-    tag: "Web & Experience",
-    body: "Your website is the summit flag. High-performance sites engineered for ROI — fast enough to rank, sharp enough to convert, and bold enough to be remembered.",
-    items: ["UX & UI design", "Development", "E-commerce builds", "Website support services"],
+    title: "Video Marketing",
+    href: "/services/video-marketing",
+    tag: "Film & Motion",
+    body: "Use strategic video content across websites, social media and paid campaigns to attract attention, explain your offer and move viewers towards action.",
+    items: ["Corporate & brand films", "Event videos", "Explainer & testimonial", "Social video"],
   },
   {
     no: "07",
-    title: "Content Creation",
-    tag: "Narrative & Copy",
-    body: "Crafting compelling narratives is our art. We breathe life into your brand with captivating content that resonates with your audience — fostering loyalty and turning followers into advocates.",
-    items: ["Brand storytelling", "Copywriting", "Blogs & SEO content", "Social content"],
-  },
-  {
-    no: "08",
-    title: "Video Production",
-    tag: "Film & Motion",
-    body: "Compelling video that captivates — brand films, social videos, corporate and event coverage. Your message is not just seen, but felt and remembered.",
-    items: ["Corporate & brand films", "Event videos", "Explainer & testimonial", "Social video"],
+    title: "AI Hub",
+    tag: "Applied AI",
+    body: "Explore AI solutions for marketing, automation and search visibility that improve efficiency, connect systems and support smarter business growth across your organisation.",
+    items: ["AI Search Visibility", "AI & Automation", "Conversational AI", "Campaign Intelligence"],
   },
 ];
 
@@ -163,38 +198,103 @@ export const crafts: Craft[] = [
 // piece of client work, on a section selling that work, is the same mistake as
 // a stock photograph on an article hero, and the real artwork exists.
 
+/* The document gives this section seven sentences and a partner band, and they
+   are named here so the run below can be read against the source. A1..A3 are
+   its first paragraph, B1..B4 its second, G the band. B2 is the coverage
+   sentence and is split across the four network panels: `COVER_LEAD`, the four
+   `beats`, and `COVER_TAIL` rejoin with single spaces into B2 exactly, which is
+   what lets a horizontal run BE the sentence rather than describe it. */
+const A1 =
+  "With over 15 years of digital marketing experience and hundreds of happy customers, we are a reliable digital marketing company in Dubai, UAE, delivering value and ROI.";
+const A2 =
+  "As a certified partner of Google Business, we have received special recognition from Google for providing exceptional customized digital marketing services in Dubai, UAE.";
+const A3 =
+  "We use a method focused on data and intelligent analysis of information to manage pay-per-click advertising campaigns.";
+const B1 =
+  "This helps guide our digital marketing decisions and maximize sales and return on investment in digital marketing.";
+const B3 =
+  "We strongly believe in the steady growth of Google Ads accounts through constant digital marketing supervision.";
+const B4 =
+  "This allows businesses to achieve the best possible results from their digital marketing efforts.";
+const G_BODY =
+  "Gain trust in your digital marketing agency in Dubai, UAE through the Google Partner network. Being an official Google Partner agency, we hold the esteemed recognition of being an elite business partner acknowledged by Google. Collaborate with us to harness the digital marketing expertise of proven digital marketers dedicated to advancing your online business digital marketing growth.";
+const COVER_LEAD =
+  "We fully use Google's different advertising options, creating ads on digital marketing";
+const COVER_TAIL =
+  "networks to engage users at various stages as they move toward making their final decision.";
+
 export const whyENH = {
   heading: "Why ENH Marketing",
-  about: [
-    "At ENH Marketing LLC, we've earned our reputation as the leading digital marketing agency in Dubai through 15+ years of transforming businesses online. Our expertise spans SEO, PPC, social media, corporate video production and impactful digital campaigns — tailored to Dubai's diverse market and delivering measurable results for startups, SMEs and enterprises alike.",
-    "We use a method focused on data and intelligent analysis to manage campaigns across Google's Search, Shopping, Display and YouTube networks — engaging users at every stage as they move toward a decision, and growing accounts steadily through constant supervision.",
-  ],
-  pillars: [
-    { no: "01", title: "Certified Google Partner", body: "Elite recognition from Google for exceptional, customized digital marketing services in Dubai." },
-    { no: "02", title: "Data-driven decisions", body: "Intelligent analysis of information guides every decision, maximizing sales and return on investment." },
-    { no: "03", title: "Full-funnel coverage", body: "Search, Shopping, Display and YouTube — engaging users at every stage of their journey." },
-    { no: "04", title: "Steady, supervised growth", body: "Constant supervision of accounts so businesses achieve the best possible results." },
-  ],
-  googlePartner: {
-    heading: "We are a certified Google Partner",
-    body: "Being an official Google Partner agency, we hold the esteemed recognition of an elite business partner acknowledged by Google. Collaborate with us to harness the expertise of proven digital marketers dedicated to advancing your online growth.",
+  /** The section's H2, split across the two lines the design sets it on. */
+  title: ["Why ENH Is Among the Best", "Digital Marketing Agencies in Dubai"],
+
+  /** THE CREDENTIAL THE WHOLE SECTION HANGS OFF, AND THE REASON IT IS BUILT
+   *  THE WAY IT IS.
+   *
+   *  Read the document's seven sentences for this section together and every
+   *  one of them is Google: a certified partner of Google Business, special
+   *  recognition from Google, pay-per-click campaigns, Google's four ad
+   *  networks, the steady growth of Google Ads accounts, the Google Partner
+   *  network. It is not a general "why us" list, it is one credential with
+   *  facets. So the credential is held in place and the case moves past it,
+   *  rather than being the last box in a row of peers. */
+  credential: {
+    title: "We are a certified Google Partner",
+    body: G_BODY,
   },
+
+  /** The case, in the document's order. One entry carries the four networks;
+   *  its `lead`, `beats` and `tail` rejoin into the document's coverage
+   *  sentence character for character, so promoting the four buried names to
+   *  display scale costs no rewording and prints nothing twice. */
+  case: [
+    { body: [A1] },
+    { body: [A2] },
+    { body: [A3, B1] },
+    {
+      networks: {
+        lead: COVER_LEAD,
+        beats: ["search,", "shopping,", "display,", "and YouTube"],
+        tail: COVER_TAIL,
+      },
+    },
+    { body: [B3, B4] },
+  ] as { body?: string[]; networks?: { lead: string; beats: string[]; tail: string } }[],
 };
 
 export const ai = {
-  heading: "Step into the AI Digital World",
-  sub: "Enhance AI visibility, accelerate growth, and maximize ROI",
+  heading: "Make AI Useful for Your Business",
+  /** The H2, split across the two lines the design sets it on: the first
+   *  plain, the second in brand. */
+  title: ["Make AI Useful", "for Your Business"],
+  /** The document gives this section one paragraph of two sentences and the
+   *  design has two slots for it — a statement line and the body beneath. The
+   *  sentences take one slot each, so both are filled and no word is dropped
+   *  or added. */
+  sub: "AI works best when it solves a clear business problem.",
   paragraphs: [
-    "At ENH Marketing, we are embracing the future of digital marketing by integrating Artificial Intelligence into our services. As businesses in Dubai evolve in a fast-paced digital environment, AI helps us deliver smarter, faster and more data-driven marketing solutions.",
-    "From intelligent marketing automation and AI-driven SEO insights to smart chatbots and advanced data analytics, we use AI technologies to improve efficiency, personalize user experiences and maximize campaign performance.",
+    "ENH Marketing helps you apply it across marketing, search, automation, and customer journeys to improve efficiency and support better decisions.",
   ],
+  /** THE FOUR NOUNS IN `paragraphs[0]` ARE THESE FOUR CARDS.
+   *
+   *  "apply it across marketing, search, automation, and customer journeys" is
+   *  the section's own contents page, and nothing on the page used to connect
+   *  it to the grid underneath -- so the sentence read as filler and the cards
+   *  read as four unrelated features. `domain` is a verbatim substring of that
+   *  paragraph: the section marks it there, once, and the register below is in
+   *  the card order, so the list and the register are visibly the same four
+   *  things without either being reprinted.
+   *
+   *  The two orders differ -- the sentence puts search second, the card list
+   *  puts automation second -- and neither is rearranged to agree with the
+   *  other, because both are the document's. */
   capabilities: [
-    { title: "Marketing automation", body: "Intelligent workflows that nurture and convert around the clock." },
-    { title: "AI-driven SEO insights", body: "Models that surface the opportunities competitors miss." },
-    { title: "Smart chatbots", body: "Always-on assistants that qualify and engage every visitor." },
-    { title: "Advanced data analytics", body: "Real-time intelligence that tells you what to do next." },
+    { domain: "marketing", title: "AI-Powered Marketing", body: "Use AI to improve targeting, content planning, and campaign decisions, helping your team move faster while keeping people in control." },
+    { domain: "automation", title: "Intelligent Automation", body: "Automate repetitive marketing and operational tasks, connect systems, and give your team more time for work that needs human attention." },
+    { domain: "search", title: "AI Search Visibility", body: "Structure and strengthen your content so search engines and AI assistants can understand your business, services, and expertise more clearly." },
+    { domain: "customer journeys", title: "AI Customer Experience", body: "Use intelligent chatbots and personalised digital journeys to answer questions, guide prospects and make every online interaction more relevant and useful." },
   ],
-  cta: "Get In Touch",
+  cta: "Explore Our AI Hub",
 };
 
 export const process = [
@@ -251,32 +351,121 @@ export const testimonials: Testimonial[] = [
 // held Unsplash URLs, so leaving it exported was an invitation to render stock
 // photography as an article image again.
 
+/** The twelve questions the homepage document carries, in its order, with its
+ *  wording. The numbering it prints on each one ("1.", "2.", ...) is not part
+ *  of a question: the accordion sets its own two-digit index beside every row,
+ *  so carrying the document's numbers here would print them twice. */
 export const faqs = [
   {
-    q: "What makes ENH Marketing the best choice for digital marketing in Dubai?",
-    a: "We combine global digital trends with a deep understanding of the UAE market's cultural and consumer nuances. Based in Dubai, we craft tailored strategies that resonate with local audiences while leveraging cutting-edge tools like AI-driven analytics and hyper-targeted ads. Our proven track record of driving revenue growth across industries sets us apart.",
+    q: "What makes ENH the best digital marketing agency in Dubai?",
+    a: "We pair 15+ years of UAE market experience with a data-driven, results-first approach. As a certified Google Partner with an in-house team across SEO, paid media, social and creative, we build tailored strategies that drive measurable revenue growth, which is why our client retention sits at 95%.",
   },
   {
     q: "How can digital marketing help my business grow in the UAE?",
-    a: "Digital marketing boosts your visibility on platforms where UAE consumers spend their time — Instagram, Google and TikTok. Through localized SEO, social campaigns and Arabic-English bilingual content, we ensure your brand connects with diverse audiences, driving traffic, leads and sales specific to your goals.",
+    a: "Digital marketing boosts your visibility on platforms where UAE consumers spend most of their time, such as Instagram, Google, and TikTok. Through localized SEO, social media campaigns, and Arabic-English bilingual content, ENH Marketing ensures your brand connects with diverse audiences, driving traffic, leads, and sales specific to your business goals.",
   },
   {
-    q: "What is the cost of digital marketing services at ENH Marketing?",
-    a: "Costs vary based on your needs, goals and campaign scope. We offer flexible packages — from budget-friendly options for small businesses to comprehensive strategies for enterprises. Contact us for a free consultation and a customized quote.",
+    q: "How much do digital marketing services in Dubai cost?",
+    a: "It depends on your goals, channels and campaign scope. We offer flexible packages, from focused plans for small businesses to full strategies for enterprises. Contact us for a free consultation and a tailored quote.",
   },
   {
     q: "How long does it take to see results from digital marketing campaigns?",
-    a: "Results depend on the strategy — PPC ads can drive traffic within days, while SEO may take 3–6 months for significant organic growth. We prioritize quick wins alongside long-term growth, with detailed timelines and regular performance reports.",
+    a: "Results depend on the strategy—PPC ads can drive traffic within days, while SEO may take 3-6 months for significant organic growth. At ENH Marketing, we prioritize quick wins alongside long-term growth, providing detailed timelines and regular performance reports to keep you informed every step of the way.",
   },
   {
     q: "How does ENH Marketing measure the success of digital campaigns?",
-    a: "We use advanced analytics to track KPIs like website traffic, conversion rates, click-through rates and return on ad spend. Transparent, real-time reports show exactly how your investment is driving growth.",
+    a: "We use advanced analytics to track key performance indicators (KPIs) like website traffic, conversion rates, click-through rates (CTR), and return on ad spend (ROAS). Our team provides transparent, real-time reports so you can see exactly how your investment is driving business growth in Dubai and beyond.",
   },
   {
     q: "What industries does ENH Marketing specialize in for digital marketing?",
-    a: "We have extensive experience across real estate, hospitality, e-commerce, retail and F&B — industries that dominate the UAE market. We customize strategies to fit your industry's unique challenges, whether you're a startup or an established brand.",
+    a: "We have delivered results across e-commerce, real estate, hospitality, healthcare, automotive, logistics and professional services, and we tailor every strategy to your sector.",
+  },
+  {
+    q: "What makes ENH one of the best social media marketing companies in Dubai?",
+    a: "We manage the full social stack in-house: strategy, content, community management and paid social. Our team builds Arabic and English content calendars suited to UAE audiences, runs paid campaigns across Instagram, Facebook, LinkedIn and TikTok, and reports on leads and sales rather than vanity metrics. As a Meta Business Partner we get direct platform support and early access to ad features.",
+  },
+  {
+    q: "Do you work with businesses outside Dubai?",
+    a: "Yes. We work with clients across the UAE including Abu Dhabi, Sharjah, Ajman and Ras Al Khaimah, and with GCC clients in Saudi Arabia, Qatar and Oman. Our office is in Al Garhoud, Dubai, and most work runs remotely with in-person meetings when useful.",
+  },
+  {
+    q: "Why hire a Dubai-based digital agency instead of an overseas one?",
+    a: "A local agency understands UAE search behaviour, the Arabic and English language split, free zone and mainland business realities, Ramadan and seasonal demand cycles, and regional platform preferences. It also means same time zone communication, VAT-compliant local invoicing, and a team you can meet.",
+  },
+  {
+    q: "How do I choose the right digital marketing agency in Dubai?",
+    a: "Ask for case studies in your industry with real numbers, check certifications (Google Partner and Meta Business Partner status are verifiable), confirm whether work is done in-house or outsourced, ask who your day-to-day contact is, and check that you keep full ownership of your ad accounts, analytics and website. Be cautious of anyone guaranteeing a specific ranking position.",
+  },
+  {
+    q: "Should I hire an agency or build an in-house marketing team?",
+    a: "An in-house hire covers one skill set. An agency gives you SEO, paid media, design, content and analytics specialists for roughly the cost of one mid-level salary, plus tool licences and platform partnerships already in place. Many UAE companies run a hybrid: an internal marketing manager coordinating an agency delivery team.",
+  },
+  {
+    q: "What's included in the free digital marketing audit?",
+    a: "A review of your website's technical SEO health, keyword rankings against your main competitors, backlink profile, Google Business Profile, current paid campaign performance if you run ads, and social presence, delivered with a prioritised list of the fixes likely to move the needle first.",
   },
 ];
+
+/** THE INDUSTRIES SECTION'S CONTENT, WHICH THE HOMEPAGE DOCUMENT DOES NOT
+ *  SUPPLY.
+ *
+ *  That document gives this section a heading and then "[card of all
+ *  industries pages]" -- an instruction, not copy. It names no sector and
+ *  describes none, which is why the first build of the section was five bare
+ *  names in five boxes and read as basic: it was.
+ *
+ *  All five industry pages exist now, and each one opens by saying what its
+ *  sector is trying to WIN. Set side by side, the five say something none of
+ *  them says alone and the homepage never said at all:
+ *
+ *    healthcare   appointment bookings
+ *    logistics    requests for quotations
+ *    automotive   test-drive requests, showroom visits
+ *    hospitality  direct bookings, restaurant reservations
+ *    ecommerce    sales and repeat business
+ *
+ *  ...while the channels underneath barely move -- "SEO, paid advertising,
+ *  social media and local search" turns up almost word for word in four of the
+ *  five. The disciplines are shared; the finish line is not. That is what
+ *  "Digital Marketing Built Around Your Business" actually means, and it is the
+ *  thing the section now has to convey.
+ *
+ *  `description` is each page's own `meta.description` from
+ *  src/content/industries/<slug>.ts, verbatim. COPIED, NOT IMPORTED: pulling
+ *  five content modules into the homepage island would drag their figures,
+ *  FAQs and drawings along for one sentence each. `mark` is the contiguous
+ *  outcome phrase inside that sentence, so the emphasis is applied in place and
+ *  no word is printed twice. Both are checked against the source files by
+ *  scripts/check-industry-copy.mjs, which fails if either drifts. */
+export const industries = {
+  byHref: {
+    "/industries/healthcare": {
+      description:
+        "Increase treatment visibility, patient enquiries and appointment bookings through healthcare SEO, paid advertising, social media and local search.",
+      mark: "treatment visibility, patient enquiries and appointment bookings",
+    },
+    "/industries/logistics": {
+      description:
+        "Generate qualified freight enquiries, requests for quotations and B2B opportunities through logistics SEO, paid advertising, content and LinkedIn marketing.",
+      mark: "qualified freight enquiries, requests for quotations and B2B opportunities",
+    },
+    "/industries/automotive": {
+      description:
+        "Generate qualified enquiries, test-drive requests, showroom visits and service bookings through automotive SEO, paid advertising, social media and local search.",
+      mark: "qualified enquiries, test-drive requests, showroom visits and service bookings",
+    },
+    "/industries/hospitality-hotels": {
+      description:
+        "Increase direct bookings, restaurant reservations and guest enquiries through hospitality SEO, paid advertising, social media and conversion-focused digital campaigns.",
+      mark: "direct bookings, restaurant reservations and guest enquiries",
+    },
+    "/industries/ecommerce-retail": {
+      description:
+        "Build stronger visibility, attract customers with genuine buying intent and turn more of your ecommerce traffic into sales, enquiries and repeat business.",
+      mark: "sales, enquiries and repeat business",
+    },
+  } as Record<string, { description: string; mark: string }>,
+};
 
 export const consultationServices = [
   "Search Engine Optimization",

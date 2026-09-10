@@ -18,7 +18,7 @@ export function FAQ() {
       <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div>
           <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-            <span className="text-brand">(09)</span> FAQ
+            <span className="text-brand">(10)</span> FAQ
           </p>
           <RippleEmblem className="mb-8">
             <span className="font-display text-4xl font-extrabold text-brand">?</span>
@@ -56,8 +56,11 @@ export function FAQ() {
                     id={`${panelBase}-q-${i}`}
                     className="flex w-full items-start gap-5 py-6 text-left"
                   >
+                    {/* Padded rather than prefixed with a literal "0". The
+                        list carries twelve questions now, and "0" + 10 printed
+                        "010". Same two digits as before for the first nine. */}
                     <span className="font-display mt-1 text-sm font-bold text-brand">
-                      0{i + 1}
+                      {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="font-display flex-1 text-lg font-bold leading-snug text-snow sm:text-xl">
                       {f.q}

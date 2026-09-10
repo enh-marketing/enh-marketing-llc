@@ -9,16 +9,22 @@
     "astro": "astro",
     "check": "astro check",
     "lint": "eslint",
-    "check:routes": "node scripts/check-routes.mjs"
+    "check:routes": "node scripts/check-routes.mjs",
+    "check:industry-copy": "node scripts/check-industry-copy.mjs",
+    "check:craft-links": "node scripts/check-craft-links.mjs",
+    "check:enquiry": "node scripts/check-enquiry-endpoint.mjs",
+    "check:sheets": "node scripts/check-sheets-webhook.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.5",
+    "@astrojs/vercel": "^11.0.10",
     "@tailwindcss/vite": "^4.3.3",
     "@types/three": "^0.169.0",
     "astro": "^7.2.10",
     "gsap": "^3.15.0",
     "lenis": "^1.3.23",
     "motion": "^12.40.0",
+    "nodemailer": "^10.0.2",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "three": "^0.169.0"
@@ -26,6 +32,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^10.9.1",

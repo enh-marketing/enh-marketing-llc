@@ -25,8 +25,11 @@ const subscribeHover = (cb: () => void) => {
  *  All three pointed at /contact, which the sitemap named but no page served,
  *  so the site's primary CTA returned a 404 from every page in the build. The
  *  destination it wanted is already on the current page either way: the
- *  homepage closes on LetsTalk (#contact) and all sixteen service pages close
+ *  homepage carries LetsTalk (#contact) and all sixteen service pages close
  *  on CtaBand (#quote), so the button scrolls to the form that is there.
+ *  LetsTalk sat last on the homepage when this was written and now sits above
+ *  the route section, which changes nothing here -- the anchor is the id, not
+ *  the position -- but it does mean the button scrolls to mid-page.
  *
  *  The contact page is now built and needs its own case: it closes on neither
  *  of those anchors, and without this the header CTA on /contact-us pointed at

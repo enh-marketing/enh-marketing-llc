@@ -12,6 +12,7 @@ import { ChannelIconBadge } from "@/components/service/ChannelIcon";
 import { cn } from "@/lib/cn";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 import { CoveragePreview, type PreviewKind } from "@/components/service/CoveragePreview";
+import { GuestSurface, type GuestSurfaceKind } from "@/components/service/GuestSurface";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,6 +25,12 @@ type Channel = {
    *  than platforms or disciplines. When present it replaces the ring badge and
    *  the card leads with the picture. */
   preview?: PreviewKind;
+  /** The same idea for a run whose entries are services that each act on a
+   *  surface a guest actually looks at — a listing, an ad, a reel, a menu, a
+   *  review, a booking step. A second registry rather than more members of the
+   *  first, because the two sets belong to different pages and nothing is
+   *  gained by making one file answer for both. */
+  surface?: GuestSurfaceKind;
 };
 type OrganicNote = { body: string; links: { label: string; href: string }[]; suffix: string };
 
@@ -200,11 +207,15 @@ export function ChannelScroller({
                     live -- can show what it actually produces, and a symbol in
                     a circle would be a worse card than the picture it stands
                     in for. */}
-                {channel.preview ? (
+                {channel.preview || channel.surface ? (
                   <div className="relative overflow-hidden rounded-xl border border-line bg-[color-mix(in_srgb,var(--color-brand)_5%,transparent)] transition-colors duration-500 group-hover:border-brand/45">
                     <div className="p-4 text-snow transition-colors duration-500 group-hover:text-brand">
                       <div className="h-[104px] w-full">
-                        <CoveragePreview kind={channel.preview} />
+                        {channel.preview ? (
+                          <CoveragePreview kind={channel.preview} />
+                        ) : (
+                          <GuestSurface kind={channel.surface!} />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -215,7 +226,7 @@ export function ChannelScroller({
                   id={`${uid}-${i}`}
                   className={cn(
                     "font-display font-extrabold uppercase text-snow transition-colors duration-300 group-hover:text-brand",
-                    channel.preview
+                    channel.preview || channel.surface
                       ? "mt-6 text-[clamp(1.15rem,2vw,1.5rem)] leading-[1.14]"
                       : "display-lg mt-7",
                   )}

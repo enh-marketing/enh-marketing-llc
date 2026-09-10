@@ -135,7 +135,7 @@ export function CaseMasthead({
       </Container>
 
       <Modal open={open} onClose={() => setOpen(false)} title={formTitle}>
-        <LeadForm fields={formFields} submitLabel={masthead.primary} />
+        <LeadForm fields={formFields} submitLabel={masthead.primary} formName="Case Study Hero" />
       </Modal>
     </section>
   );

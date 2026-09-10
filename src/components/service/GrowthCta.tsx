@@ -182,7 +182,7 @@ export function GrowthCta({
       </Container>
 
       <Modal open={open} onClose={() => setOpen(false)} title={formTitle}>
-        <LeadForm fields={formFields} submitLabel={formSubmitLabel} />
+        <LeadForm fields={formFields} submitLabel={formSubmitLabel} formName="Growth CTA" />
       </Modal>
     </section>
   );

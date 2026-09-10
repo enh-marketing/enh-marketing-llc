@@ -151,7 +151,7 @@ export function ServiceHero({
       {footer && <div className="relative z-10">{footer}</div>}
 
       <Modal open={open} onClose={() => setOpen(false)} title={formTitle}>
-        <LeadForm fields={formFields} submitLabel={formSubmitLabel} />
+        <LeadForm fields={formFields} submitLabel={formSubmitLabel} formName="Hero Enquiry" />
       </Modal>
     </section>
   );

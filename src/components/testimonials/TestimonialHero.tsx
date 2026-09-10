@@ -197,7 +197,7 @@ export function TestimonialHero({
       {rail}
 
       <Modal open={open} onClose={() => setOpen(false)} title={formTitle}>
-        <LeadForm fields={formFields} submitLabel={hero.primary} />
+        <LeadForm fields={formFields} submitLabel={hero.primary} formName="Testimonials Hero" />
       </Modal>
     </section>
   );

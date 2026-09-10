@@ -9,8 +9,8 @@ import { Craft } from "@/components/sections/Craft";
 import { Work } from "@/components/sections/Work";
 import { AuditStrip } from "@/components/sections/AuditStrip";
 import { WhyENH } from "@/components/sections/WhyENH";
+import { Industries } from "@/components/sections/Industries";
 import { AISection } from "@/components/sections/AISection";
-import { Process } from "@/components/sections/Process";
 import { Voices } from "@/components/sections/Voices";
 import { Insights } from "@/components/sections/Insights";
 import { FAQ } from "@/components/sections/FAQ";
@@ -49,15 +49,26 @@ export function Experience({ badges = [] }: { badges?: PartnerBadge[] }) {
         <Hero started={started} badges={badges} />
         <Manifesto />
         <Craft />
-        <Work />
+        {/* "Our Work" is the heading the homepage document gives this
+            section. Passed here rather than changed inside the component,
+            which the seventeen service pages also render. */}
+        <Work heading="Our Work" />
         <AuditStrip />
         <WhyENH />
+        {/* The homepage document places the industries section between the
+            Google Partner band and the AI section, so that is where it sits,
+            and the section indices below it all move up one. */}
+        <Industries />
         <AISection />
-        <Process />
-        <Voices />
-        <Insights />
-        <FAQ />
+        {/* The enquiry form sits above the route rather than closing the page.
+            Its id is still "contact", so the anchors that point at it -- the
+            carousel's end card, the AI section's CTA and the navbar button --
+            all still land here; they now land mid-page instead of at the
+            bottom. The page closes on the FAQ, with the footer after it. */}
         <LetsTalk />
+        <Voices />
+        <Insights index="09" />
+        <FAQ />
       </main>
     </>
   );

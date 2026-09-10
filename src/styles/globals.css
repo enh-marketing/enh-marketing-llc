@@ -2832,3 +2832,719 @@ html.dark .va-card:focus-within .va-surface {
 .ri-flag {
   animation: ri-flag 2.4s ease-in-out infinite;
 }
+
+/* ---- Demand leak (Ecommerce & Retail hero) ----
+   The arriving band breathes; the flow down the run, the six escape ports and
+   the two outlet routes each carry a travelling dash. Travel is
+   stroke-dashoffset against pathLength="100", so the dash numbers are
+   percentages of each path's own length and no transform units are involved
+   inside a scaled viewBox.
+
+   Every wall, port and outlet is drawn in full underneath, so stopping all of
+   this leaves the complete run: that is why the reduce block below clears the
+   dash arrays rather than freezing them mid-pattern, which would leave the
+   spine and the two routes as broken lines. */
+@keyframes leak-arrive {
+
+  0%,
+  100% {
+    opacity: 0.13;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.leak-arrive {
+  opacity: 0.34;
+  animation: leak-arrive 3.6s ease-in-out infinite;
+}
+
+@keyframes leak-travel {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+.leak-spine {
+  stroke-dasharray: 16 84;
+  animation: leak-travel 3.2s linear infinite;
+}
+
+.leak-escape {
+  stroke-dasharray: 12 88;
+  animation: leak-travel 2.4s linear infinite;
+}
+
+.leak-out {
+  stroke-dasharray: 22 78;
+  animation: leak-travel 2.8s linear infinite;
+}
+
+.leak-out-late {
+  animation-delay: 1.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .leak-arrive,
+  .leak-spine,
+  .leak-escape,
+  .leak-out {
+    animation: none !important;
+  }
+
+  .leak-spine,
+  .leak-escape,
+  .leak-out {
+    stroke-dasharray: none;
+  }
+}
+
+/* ---- Two journeys (Ecommerce & Retail opening) ----
+   The active track's spine and the retail return loop carry a travelling dash;
+   the three holds on the B2B run pulse. Travel is stroke-dashoffset against
+   pathLength="100" for the same reason as the hero above. Both tracks are drawn
+   in full underneath, so the resting frame is the complete journey and the
+   reduce block clears the dash arrays rather than freezing a broken line.
+
+   The hold pulse needs transform-box: fill-box, the same way .ri-ping does: a
+   circle's transform-origin without it is the SVG viewport's origin, so
+   scaling flings the mark across the drawing instead of growing it in place. */
+@keyframes journey-travel {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+.journey-flow {
+  stroke-dasharray: 15 85;
+  animation: journey-travel 2.4s linear infinite;
+}
+
+/* The B2B run is the longer one, and reads that way at the same dash length. */
+.journey-flow-slow {
+  animation-duration: 4s;
+}
+
+.journey-loop {
+  stroke-dasharray: 9 91;
+  animation: journey-travel 4.4s linear infinite;
+}
+
+@keyframes journey-hold {
+
+  0%,
+  100% {
+    transform: scale(0.62);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.journey-hold {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: journey-hold 2.4s ease-in-out infinite;
+}
+
+@keyframes journey-mark {
+
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.journey-mark {
+  opacity: 0.4;
+  animation: journey-mark 3.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .journey-flow,
+  .journey-loop,
+  .journey-hold,
+  .journey-mark {
+    animation: none !important;
+  }
+
+  .journey-flow,
+  .journey-loop {
+    stroke-dasharray: none;
+  }
+}
+
+/* ---- Demand shift (Ecommerce & Retail: what is changing) ----
+   Six parts of one picture, each arriving with the statement that justifies it.
+   The entrance is a transition rather than an animation because the trigger is
+   a class React toggles as the reader scrolls, and it has to be able to run
+   backwards when they scroll up.
+
+   `.shift-part` is the resting (absent) state and `.shift-on` the present one.
+   Small screens never toggle these -- the component renders the finished
+   picture there -- so the absent state must never be the one a reader without
+   JavaScript is left with: the section applies `.shift-on` unconditionally
+   below the large breakpoint.
+
+   The two travelling dashes are the same pathLength="100" technique as the hero
+   above, and both paths are drawn in full underneath. */
+.shift-part {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shift-on {
+  opacity: 1;
+  transform: none;
+}
+
+.shift-stream {
+  stroke-dasharray: 16 84;
+  animation: journey-travel 2.6s linear infinite;
+}
+
+.shift-return {
+  stroke-dasharray: 12 88;
+  animation: journey-travel 3.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .shift-part {
+    transition: none !important;
+  }
+
+  .shift-stream,
+  .shift-return {
+    animation: none !important;
+    stroke-dasharray: none;
+  }
+}
+
+/* ---- Guest actions (Hospitality & Hotels hero) ----
+   The arriving band breathes; each of the six curves in the fan carries a
+   travelling dash on its own delay, so no single ending is ever the only lit
+   one. Travel is stroke-dashoffset against pathLength="100", so the dash
+   numbers are percentages of each curve's own length and no transform units are
+   involved inside a scaled viewBox.
+
+   Every curve, aperture and glyph is drawn in full underneath, which is why the
+   reduce block clears the dash arrays rather than freezing them mid-pattern:
+   stopped, the six routes are complete lines rather than broken ones. */
+@keyframes ga-arrive {
+
+  0%,
+  100% {
+    opacity: 0.14;
+  }
+
+  50% {
+    opacity: 0.62;
+  }
+}
+
+.ga-arrive {
+  opacity: 0.34;
+  animation: ga-arrive 3.4s ease-in-out infinite;
+}
+
+/* Shares journey-travel's direction and units; declared separately so the two
+   pages' timings can drift apart without touching each other. */
+.ga-travel {
+  stroke-dasharray: 14 86;
+  animation: journey-travel 2.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .ga-arrive,
+  .ga-travel {
+    animation: none !important;
+  }
+
+  .ga-travel {
+    stroke-dasharray: none;
+  }
+}
+
+/* ---- Clearer route (Hospitality & Hotels opening) ----
+   One travelling dash on the route, against pathLength="100" so the dash
+   numbers are percentages of its own length. The route is drawn in full
+   underneath and the five feeders are colour-driven, so stopping this leaves a
+   complete route with every joint on it. */
+.cr-flow {
+  stroke-dasharray: 12 88;
+  animation: journey-travel 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cr-flow {
+    animation: none !important;
+    stroke-dasharray: none;
+  }
+}
+
+/* ---- Booking path work (Hospitality & Hotels process) ----
+   Flow along the repaired path, and down each approach that has been opened.
+   Travel is stroke-dashoffset against pathLength="100" for the same reason as
+   the drawings above. The path, the approaches and the booking are all drawn in
+   full underneath, so a stopped frame is a finished path rather than a broken
+   one — which is why the reduce block clears the dash arrays. */
+.bp-flow {
+  stroke-dasharray: 10 90;
+  animation: journey-travel 3.2s linear infinite;
+}
+
+.bp-feed {
+  stroke-dasharray: 20 80;
+  animation: journey-travel 2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .bp-flow,
+  .bp-feed {
+    animation: none !important;
+    stroke-dasharray: none;
+  }
+}
+
+/* ---- Answer assembly (Hospitality & Hotels: AI search) ----
+   The answer's lines arrive in sequence and hold, then the run restarts, so the
+   card reads as something being generated rather than as a static block. Only
+   opacity animates; every line is present in the markup and at full opacity
+   when the animation is stopped, which is why the reduce rule can simply
+   cancel it. */
+@keyframes aa-stream {
+
+  0%,
+  8% {
+    opacity: 0;
+  }
+
+  18%,
+  86% {
+    opacity: 1;
+  }
+
+  96%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.aa-stream {
+  animation: aa-stream 4.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aa-stream {
+    animation: none !important;
+  }
+}
+
+/* ---- About Us ----
+   One loop. Everything else that moves on this page is either scroll-driven or
+   a CSS transition, and the folding rule in the team chapter needs no keyframe
+   at all: its twenty-five states are committed geometry (see
+   src/components/about/fold.ts) and the scroll picks one.
+
+   AB-APPROACH is the three signals crossing the landscape toward the eye in the
+   third core value ("In the swiftly evolving digital landscape, being alert and
+   proactive is essential"). Its travel is written in USER UNITS, not pixels,
+   because it runs inside a stretched viewBox -- the same reason `ci-scan-x` is
+   written that way -- so the distance covered is the same fraction of the
+   drawing at 375px as at 1920px.
+
+   It sets no opacity of its own outside the keyframes, so cancelling it leaves
+   each signal standing exactly where it is drawn, at full opacity, on the
+   horizon. That still says what the moving version says: things are arriving
+   and the eye is already turned toward them.
+
+   The cairn's summit ring and the folding rule's working tip both use `ri-ping`
+   from the Insights block rather than anything new: it is already correct about
+   transform-box, already in the reduced-motion collapse, and a marked point is
+   exactly what it was drawn for. */
+@keyframes ab-approach {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+
+  10%,
+  84% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-150px);
+    opacity: 0;
+  }
+}
+
+.ab-approach {
+  animation: ab-approach 5.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-approach {
+    animation: none !important;
+  }
+}
+
+/* ---- Arrival lanes (Automotive hero) ----
+   Two approaches to one forecourt, and the only place on the page where the
+   difference between "for weeks" and "within minutes" is felt rather than
+   read: both routes carry the same travelling dash and differ only in
+   duration, eleven seconds against two and a half. The slip road completes
+   four times over while the long approach is still working through its second
+   turn.
+
+   Travel is stroke-dashoffset against pathLength="100" (shared with
+   `journey-travel` above), so the dash numbers are percentages of each route's
+   own length and no transform units are involved inside a scaled viewBox.
+
+   Both routes, both sets of stops, the threshold and every bay are drawn in
+   full underneath, which is why the reduce block clears the dash arrays rather
+   than freezing them mid-pattern: stopped, the two approaches are complete
+   lines rather than broken ones. */
+.al-long {
+  stroke-dasharray: 8 92;
+  animation: journey-travel 11s linear infinite;
+}
+
+.al-short {
+  stroke-dasharray: 22 78;
+  animation: journey-travel 2.5s linear infinite;
+}
+
+/* The places each approach stops to compare. Shares ga-arrive's shape but
+   holds a higher floor, because a stop on a road plan is a place rather than a
+   crowd and has to stay legible as one. */
+@keyframes al-stop {
+
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.al-stop {
+  opacity: 0.8;
+  animation: al-stop 3.8s ease-in-out infinite;
+}
+
+/* The forecourt, occupied. A wash that comes and goes on each bay's own delay,
+   so the plan reads as a place in use rather than as a parking diagram. */
+@keyframes al-bay {
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.al-bay {
+  opacity: 0.75;
+  animation: al-bay 5.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .al-long,
+  .al-short,
+  .al-stop,
+  .al-bay {
+    animation: none !important;
+  }
+
+  .al-long,
+  .al-short {
+    stroke-dasharray: none;
+  }
+}
+
+/* ---- Clock gap (Automotive: why it needs its own strategy) ----
+   The same two durations again, this time on two HTML runs rather than on two
+   SVG routes, and the same ratio: eleven seconds for the buyer's journey,
+   two and a half for the driver's.
+
+   THE RUNNER IS FULL-WIDTH AND TRANSPARENT, WITH THE MARK ON ITS RIGHT EDGE.
+   Walking a dot from one end of a box to the other with a percentage transform
+   is not possible directly -- a percentage on translateX resolves against the
+   element's own width, so a 9px dot would travel 9px. Translating a
+   full-width runner from -100% to 0 moves its right edge from the track's left
+   edge to its right edge, which walks the mark the whole run whatever the run's
+   width. That keeps the whole thing on the compositor and correct at every
+   breakpoint, with no measurement in JavaScript.
+
+   Both runs are drawn in full underneath and every stop is a static mark, so
+   cancelling these leaves two complete journeys with everything they compare
+   still on them. */
+@keyframes cg-run {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.cg-run-long {
+  animation: cg-run 11s linear infinite;
+}
+
+.cg-run-short {
+  animation: cg-run 2.5s linear infinite;
+}
+
+/* The urgent journey's own marker. A repair decision is the one thing this
+   document describes as happening now, and this is the only pulse on the page. */
+@keyframes cg-urgent {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.45;
+    transform: scale(1.5);
+  }
+}
+
+.cg-urgent {
+  animation: cg-urgent 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .cg-run-long,
+  .cg-run-short,
+  .cg-urgent {
+    animation: none !important;
+  }
+
+  /* Stopped, the mark rests at the end of its run: both journeys finish in
+     contact with the business, which is the sentence they were read from. */
+  .cg-run-long,
+  .cg-run-short {
+    transform: translateX(0);
+  }
+}
+
+/* ---- Stage bays (Automotive process) ----
+   Six bays and a job travelling along the floor, advanced by the reader's own
+   scroll rather than by a clock. There is no keyframe here at all: the
+   component sets the runner's transform and toggles `sb-pending` from a
+   ScrollTrigger's progress.
+
+   THE FINISHED FLOOR IS THE DEFAULT. `sb-pending` is only ever added by that
+   effect, and the effect only runs above the large breakpoint with motion
+   allowed -- so a phone, a reader who asked for no motion, a crawler and a
+   failed hydration all get every bay worked, rather than a floor of dimmed
+   ones. Same rule `shift-part` follows on the ecommerce page, for the same
+   reason. */
+.sb-work {
+  opacity: 1;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sb-bay.sb-pending .sb-work {
+  opacity: 0.3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-work {
+    transition: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ---- Logistics (Industries) ----
+   Three loops, and every one of them rests in a finished, readable state.
+
+   The document's own diagram is "Search -> Research -> Trust -> Enquiry", and
+   the sentence beside it says the buying process "may involve procurement
+   teams, operations managers and several rounds of evaluation before an
+   enquiry becomes a contract". So the chain is walked more than once and by
+   more than one person, and `lg-pass` is that: three markers on the same rail
+   at three different speeds, none of them synchronised with the others.
+
+   THE RUNNER IS FULL-WIDTH AND TRANSPARENT, WITH THE MARK ON ITS RIGHT EDGE.
+   Same trick as `cg-run` on the automotive page, for the same reason: a
+   percentage on translateX resolves against the element's own width, so a 9px
+   dot translated 100% moves 9px. Translating a full-width runner from -100% to
+   0 walks its right edge the whole rail at any breakpoint, on the compositor,
+   with nothing measured in JavaScript.
+
+   Stopped, all three rest at translateX(0) -- every round finished, all three
+   readers arrived at the enquiry, which is the sentence they were read from. */
+@keyframes lg-pass {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  7% {
+    opacity: 1;
+  }
+
+  93% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+}
+
+.lg-pass-a {
+  animation: lg-pass 9s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+.lg-pass-b {
+  animation: lg-pass 13s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  animation-delay: -3.5s;
+}
+
+.lg-pass-c {
+  animation: lg-pass 17s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  animation-delay: -8s;
+}
+
+/* A dock in use. The loads standing on the cross-dock floor come and go on
+   their own delays, so the banner drawing reads as a place working rather than
+   as a diagram of one. Holds a high floor for the same reason `al-bay` does: a
+   load that fades to nothing has left, and nothing in the banner says it did. */
+@keyframes lg-live {
+
+  0%,
+  100% {
+    opacity: 0.62;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.lg-live {
+  opacity: 0.85;
+  animation: lg-live 5.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .lg-pass-a,
+  .lg-pass-b,
+  .lg-pass-c,
+  .lg-live {
+    animation: none !important;
+  }
+
+  /* Stopped, every round is finished: all three readers rest at the end of
+     the chain, which is the enquiry the client's sentence ends at. */
+  .lg-pass-a,
+  .lg-pass-b,
+  .lg-pass-c {
+    transform: translateX(0);
+    opacity: 1 !important;
+  }
+
+  .lg-live {
+    opacity: 1 !important;
+  }
+}
+
+
+
+/* ---- Healthcare (Industries) ----
+   One loop, and it rests in a finished, readable state.
+
+   The banner drawing is a patient's shortlist: several providers held in
+   consideration, one of them resolved, and one appointment slot under the
+   column. Everything on it that moves already has a class in this file --
+   `ci-blink` walks the reading down the candidates and `ci-flow` carries the
+   chosen provider into the slot -- except the slot itself, which is not a
+   packet, a beam or a tick and so cannot borrow any of them.
+
+   A SLOT HELD OPEN. It breathes between a high floor and full, never to
+   nothing: an appointment slot that fades out has been taken, and the client's
+   own sentence ends at "appointment bookings" rather than at a booking made.
+   Same reasoning as `al-bay` on the automotive banner and `lg-live` on the
+   logistics one, which is why the floor is high in all three. */
+@keyframes hc-hold {
+
+  0%,
+  100% {
+    opacity: 0.66;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.hc-hold {
+  opacity: 0.88;
+  animation: hc-hold 4.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hc-hold {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ---------------------------------------------------------------- reCAPTCHA
+
+   The floating v3 badge, hidden.
+
+   THIS IS ONLY PERMITTED BECAUSE THE FORMS SAY IT THEMSELVES. Google allows
+   the badge to be hidden on the condition that the reCAPTCHA branding appears
+   in the form instead, which is what <RecaptchaNotice /> in
+   src/components/ui/Field.tsx renders under every submit button. The two are
+   one decision: delete the notice and this rule has to go with it, or the site
+   is in breach of the reCAPTCHA terms.
+
+   Why hide it at all: the badge is a fixed-position white card in the
+   bottom-right corner of every page that loads reCAPTCHA, and on this site
+   that corner already belongs to the floating contact button. */
+.grecaptcha-badge {
+  visibility: hidden;
+}

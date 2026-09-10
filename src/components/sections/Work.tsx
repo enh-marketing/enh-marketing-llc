@@ -54,11 +54,17 @@ const CARD_GAP = 20;
 export function Work({
   index = "03",
   label = "Summits Reached",
+  heading = "Summits reached.",
   ctaHref = "#contact",
   lede,
 }: {
   index?: string;
   label?: string;
+  /** The visible heading. A prop rather than a literal because this section
+   *  renders on seventeen service pages as well as the homepage, and the
+   *  homepage document renames it: the default is what every other page has
+   *  always shown, so only the caller that passes this one changes. */
+  heading?: string;
   ctaHref?: string;
   /** A sentence from the page's own source document, set above the carousel.
    *  Most pages have none: their source hands this section a bracketed
@@ -111,7 +117,7 @@ export function Work({
                 instruction is about the document outline rather than about how
                 large the words are. */}
             <h3 className="font-display display-xl font-extrabold uppercase text-snow">
-              <Chars text="Summits reached." />
+              <Chars text={heading} />
             </h3>
           </div>
           <Rise className="flex items-center gap-4">

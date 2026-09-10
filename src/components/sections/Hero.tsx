@@ -8,7 +8,7 @@ import { SaturnCanvas } from "@/components/fx/SaturnCanvas";
 import { PartnerBadges } from "@/components/sections/PartnerBadges";
 import { TrustStrip } from "@/components/sections/TrustStrip";
 import type { PartnerBadge } from "@/lib/content";
-import { heroWords, heroSub } from "@/lib/content";
+import { heroWords, heroSub, heroEyebrow } from "@/lib/content";
 
 export function Hero({ started, badges = [] }: { started: boolean; badges?: PartnerBadge[] }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -57,9 +57,14 @@ export function Hero({ started, badges = [] }: { started: boolean; badges?: Part
         className="relative z-10 flex flex-1 flex-col justify-center py-3"
       >
         <Container>
+        {/* The document sets this line as an H4 UNDER the headline; this
+            eyebrow, above it, is the only slot the design has for a line of
+            its kind, so that is where it goes. Kept a plain line rather than
+            promoted to a heading element: an h4 with no h2 or h3 above it
+            would read as a hole in the page's outline. */}
         <Rise delay={0.1} className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
           <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-          Digital Growth Studio — Dubai, est. 15 years ago
+          {heroEyebrow}
         </Rise>
 
         {/* Always rendered. It used to sit behind `started &&`, so the real
@@ -68,12 +73,13 @@ export function Hero({ started, badges = [] }: { started: boolean; badges?: Part
             never arrived got no headline at all. Now only the reveal waits,
             through Chars' `play`, so the timing on screen is unchanged. */}
         <h1 className="font-display mega font-extrabold uppercase">
-            {/* "EXPLORE NEW" on one line, "HEIGHTS" on the next. The two words
-                keep their separate treatments, so this is two <Chars> on one
-                line rather than one string — which means the space between them
-                has to be written explicitly. <Chars> only emits spaces between
-                words it was given itself; without the {" "} below the line
-                renders as "EXPLORENEW". */}
+            {/* "EXPLORE NEW HEIGHTS" on one line, the rest of the headline on
+                the next. The first line's two halves keep their separate
+                treatments, so this is two <Chars> on one line rather than one
+                string — which means the space between them has to be written
+                explicitly. <Chars> only emits spaces between words it was
+                given itself; without the {" "} below the line renders as
+                "EXPLORENEW HEIGHTS". */}
             <span className="block">
               <Chars text={heroWords[0]} play={started} delay={0.05} />{" "}
               <span className="text-stroke">

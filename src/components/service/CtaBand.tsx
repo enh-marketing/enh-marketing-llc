@@ -96,7 +96,7 @@ export function CtaBand({
                 aria-hidden
                 className="absolute left-0 top-0 h-px w-0 bg-brand transition-[width] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full"
               />
-              <LeadForm fields={formFields} submitLabel={formSubmitLabel} />
+              <LeadForm fields={formFields} submitLabel={formSubmitLabel} formName="CTA Band" />
             </div>
           </Rise>
         </div>

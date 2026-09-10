@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, type ReactNode } from "react";
 import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -62,6 +62,8 @@ export function SectorField({
   title,
   strokeTitle,
   items,
+  aside,
+  tail,
 }: {
   /** DevTools handle: id anchors the section, data-section names it. */
   id: string;
@@ -70,6 +72,13 @@ export function SectorField({
   title: string;
   strokeTitle?: string;
   items: Item[];
+  /** Copy to set beside the heading, where the source writes a line that
+   *  introduces the field. Optional: the page this was built for has none, and
+   *  nothing is invented to fill it. */
+  aside?: ReactNode;
+  /** A closing line under the field, for a source that ends the section on
+   *  one. Same rule: absent unless the document supplies it. */
+  tail?: ReactNode;
 }) {
   const reduced = usePrefersReducedMotion();
   const field = useRef<HTMLDivElement>(null);
@@ -103,7 +112,13 @@ export function SectorField({
   return (
     <section id={id} data-section={label} className="relative overflow-x-clip py-16 sm:py-20">
       <Container className="relative">
-        <SectionHeader index={index} title={title} strokeTitle={strokeTitle} className="mb-12" />
+        <SectionHeader
+          index={index}
+          title={title}
+          strokeTitle={strokeTitle}
+          aside={aside}
+          className="mb-12"
+        />
 
         <div
           ref={field}
@@ -194,6 +209,8 @@ export function SectorField({
             );
           })}
         </div>
+
+        {tail && <div className="mt-12">{tail}</div>}
       </Container>
     </section>
   );

@@ -64,7 +64,7 @@ export function LetsTalk() {
 
       <Container className="relative">
         <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-          <span className="text-brand">(10)</span> Let&apos;s talk <SpinStar />
+          <span className="text-brand">(07)</span> Let&apos;s talk <SpinStar />
         </p>
 
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">

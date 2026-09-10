@@ -110,6 +110,16 @@ section wanted hover but had no action, the fix was to give it one: the six
 services became a clickable index that jumps the scroll to its own slice of the
 track, which is worth having anyway in a section six viewports tall.
 
+**And the control does not have to be a pin.** Two sections on the healthcare
+page have a drawing whose key is the client's own sentence beside it -- four
+research subjects, five contributions to one decision -- and there the honest
+control is the sentence: `MarkedKeys` splits it on `Marked`'s contract and
+renders each phrase as a button in place, so pointing at a phrase lights the
+part of the drawing it names. Nothing is reworded, nothing is printed twice,
+and with no pointer, no keyboard and no JavaScript the drawing rests with every
+part lit -- which is what both sentences claim. Reach for it wherever a drawing
+would otherwise need captions the label rule does not allow.
+
 ## Layout
 
 - `Container` holds a 1240px measure at `xl`.
@@ -136,7 +146,7 @@ Case studies (`src/components/case-studies/`, consumed by `/case-studies` and `/
 - **"Featured" is the source's order, not our opinion.** `lead()` is whichever study the live index lists first. Nothing on the page calls a study best, and the lede under the heading says where the position came from.
 - **The interlude's number is counted, never written.** `rankingCount()` counts the studies publishing a #1 among their figures, so the one sentence about the whole archive cannot drift from the plates around it.
 
-Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, pinned chapter with an index, scope boundary with tethers, room plans, curriculum run, contents pack, switchback, unequal runs, criteria register with a fork, launch profile, drift sandwich, directional joins, layer stack, watched register, ridge traverse with pins, dated register with year bands, prose with a margin rail, sector tally, cover with a figure strip, unequal mosaic, counted interlude, mirrored neighbour bar.
+Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, pinned chapter with an index, scope boundary with tethers, room plans, curriculum run, contents pack, switchback, unequal runs, criteria register with a fork, launch profile, drift sandwich, directional joins, layer stack, watched register, ridge traverse with pins, dated register with year bands, prose with a margin rail, sector tally, cover with a figure strip, unequal mosaic, counted interlude, mirrored neighbour bar, consideration set, research run with the sentence as its key, contribution members with the chain set as type, plan written across its stages, sheet with two cells the source names, equal figure grid, register of shapes with one structure redrawn, ticked claims against open boxes.
 
 The last twelve are the AI Hub pages. Three of them are worth naming because
 the reason they work is transferable:
@@ -168,6 +178,30 @@ Measured across `/ai-hub/ai-automation` (approved) and the first four attempts a
 | Service names on screen at once | all seven | one |
 | Scroll needed to learn the offer | none | ~4,400px |
 
+**A list with no data behind it has a house treatment, and inventing a shape
+for it is the mistake.** The logistics page's "Who We Work With" is nine
+operator names with no size, service or market attached to any of them, and its
+"Why Choose" is seven single assertions with no figure and no stated
+relationship between them. Four versions of each went looking for a shape of
+their own -- cells with two plans under them, a rule per row with structure on
+the end of it, a gate-and-columns frame, and finally a full-bleed wall of
+display type with a scroll-driven ink wipe. The first three were rejected as
+"just a list" for the reason the four withdrawn arrangements above were; the
+fourth was rejected on sight for not matching the design language, and it is the
+most useful of the four failures because it names the real rule:
+
+> A section that leaves the card system behind stops looking like this site,
+> however good the idea is. `ui/SurfaceCard`'s devices -- the spotlight, the
+> top-edge wipe, the ghost numeral, the one-pixel lift -- and the ruled
+> two-column run are not a fallback for when invention runs out. They are the
+> material.
+
+What works for both is the treatment the other four industry pages already use:
+the house card at unequal widths for the register, the ruled run for the claims.
+What makes each page's version its own is not the frame but the one thing its
+own document adds -- here, a closing sentence that names two of the nine, wired
+as the register's control.
+
 The rules this yields outrank any amount of conceptual cleverness:
 
 1. **Every service name is legible at once.** A services section whose reader cannot see what is being sold has failed before its drawing is judged.
@@ -188,3 +222,37 @@ The rules this yields outrank any amount of conceptual cleverness:
    drop the vector-effect or, better, do not animate the path: give the motion
    to the stations on it, which is more legible anyway.
 10. **A GSAP `from` tween renders its start state on creation.** A timeline waiting on a ScrollTrigger that never fires (deep link, restored scroll, refresh mid-page) leaves its targets at `scaleX(0)` permanently. Pass `immediateRender: false` on every entrance tween.
+11. **A list plus a footnote is not a section.** The healthcare audience
+    section shipped as nine name plates, a note under them, and the contrast
+    sentence at the foot beside two site plans. Every word the document has was
+    on the page and the section still said nothing, because the one claim worth
+    making -- that the work changes shape with the provider -- was a caption
+    under a picture rather than the thing the reader could operate. Where the
+    source makes a claim about variation, the section has to vary: nine
+    providers, nine rows each showing its own structure in miniature, one stage
+    that redraws, and the sentence that placed each shape printed underneath.
+    The test is whether the reader can *run* the claim, not whether they can
+    read it.
+12. **Where the source places nothing, draw nothing -- and say so in its own
+    words.** Four of those nine are placed by the document; five are placed by
+    nothing anywhere in it. Those five draw the same skeleton with its counts
+    left open, captioned by the client's own sentence about what the shape is
+    actually decided by. Inventing five plausible diagrams would have been five
+    fabrications on a page whose own limit is "without creating confusion or
+    making unsupported promises", and the honest version is the better sales
+    argument anyway. Two guards make it read as a position rather than a gap:
+    the register marks every row that shares the shape on screen, so clicking
+    between the five is visibly *the same answer* rather than a dead control;
+    and the open shape keeps something running outward past both ends, so it
+    reads as a plan still open rather than a plan not drawn.
+13. **Rule 4 applies to the motion, not only to the rest state.** Five equal
+    members drawn from the client's "all five contribute to the decision" rest
+    honestly and animate dishonestly: `ci-grow-x` on staggered delays puts five
+    different lengths on screen at every instant, which is a bar chart of a
+    weighting the document does not give. The same trap catches a row of
+    `ci-flow` packets given per-item delays -- nine packets at nine positions
+    along nine rules is nine values to compare. Where the claim is "these are
+    not comparable", either move the packets in lockstep or animate something
+    that carries no position at all. Both fixes are on `/industries/healthcare`,
+    in `DecisionWeights` and `FigureSheet`, with the reason recorded at the call
+    site.

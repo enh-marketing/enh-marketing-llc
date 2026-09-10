@@ -4,10 +4,13 @@ import { useId, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Chars, Rise } from "@/components/fx/Reveal";
-import { FIELD_LABEL } from "@/components/ui/Field";
+import { FIELD_LABEL, FormError, Honeypot, RecaptchaNotice } from "@/components/ui/Field";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { brand } from "@/lib/content";
 import { form } from "@/content/contact";
+import { pageContext, recaptchaAction, submitEnquiry } from "@/lib/enquiry";
+import type { EnquiryField } from "@/lib/enquiry";
+import { getRecaptchaToken, warmRecaptcha } from "@/lib/recaptcha";
 import { cn } from "@/lib/cn";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -48,9 +51,15 @@ const EASE = [0.16, 1, 0.3, 1] as const;
  *  rather than through a ref map. Name, email and the consent box are required,
  *  matching the live form and `standardFormFields`.
  *
- *  TODO(backend): there is still no submit endpoint anywhere on this site. The
- *  handler validates and shows the live page's own "Thank you" state; it posts
- *  nothing. */
+ *  SUBMIT POSTS TO /api/enquiry, the site's one endpoint, which every other
+ *  form on the site also posts to. The "Thank you" state below is now shown
+ *  because the mail was sent, not in place of sending it.
+ *
+ *  THIS FORM SENDS ONE FIELD THE SERVICE PAGES DO NOT: `consent`. The box is
+ *  required here and exists nowhere else, so the payload carries it as its own
+ *  flag rather than as a seventh text field, the email prints "Consent: Given",
+ *  and the sheet keeps a Consent column that is blank for every other form's
+ *  rows. That blankness is correct: those forms never asked. */
 
 type Key = "name" | "email" | "phone" | "company" | "message";
 type Values = Record<Key, string>;
@@ -155,8 +164,14 @@ function Row({
   );
 }
 
-/** The site's magnetic orb, doing the job it was shaped for. */
-function SendOrb() {
+/** The site's magnetic orb, doing the job it was shaped for.
+ *
+ *  While a send is in flight the orb stops leaning toward the pointer and its
+ *  dashed ring speeds up from a 26-second drift to a 1.4-second spin, so the
+ *  ring that was decoration becomes the progress indicator. Under
+ *  prefers-reduced-motion it never span in the first place and it still does
+ *  not; the label changing to "Sending" is what reports the state there. */
+function SendOrb({ sending }: { sending: boolean }) {
   const reduced = usePrefersReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -166,8 +181,10 @@ function SendOrb() {
   return (
     <motion.button
       type="submit"
+      disabled={sending}
+      aria-busy={sending || undefined}
       onPointerMove={(e) => {
-        if (reduced) return;
+        if (reduced || sending) return;
         const r = e.currentTarget.getBoundingClientRect();
         x.set((e.clientX - (r.left + r.width / 2)) * 0.3);
         y.set((e.clientY - (r.top + r.height / 2)) * 0.3);
@@ -177,17 +194,17 @@ function SendOrb() {
         y.set(0);
       }}
       style={reduced ? undefined : { x: sx, y: sy }}
-      whileTap={{ scale: 0.95 }}
-      className="group relative flex h-32 w-32 shrink-0 items-center justify-center rounded-full bg-brand text-white shadow-[0_26px_70px_-24px_rgba(232,0,13,0.7)] transition-colors duration-300 hover:bg-brand-deep sm:h-36 sm:w-36"
+      whileTap={sending ? undefined : { scale: 0.95 }}
+      className="group relative flex h-32 w-32 shrink-0 items-center justify-center rounded-full bg-brand text-white shadow-[0_26px_70px_-24px_rgba(232,0,13,0.7)] transition-colors duration-300 hover:bg-brand-deep disabled:cursor-not-allowed disabled:hover:bg-brand sm:h-36 sm:w-36"
     >
       <motion.span
         aria-hidden
         animate={reduced ? undefined : { rotate: 360 }}
-        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: sending ? 1.4 : 26, repeat: Infinity, ease: "linear" }}
         className="absolute inset-3 rounded-full border border-dashed border-white/35"
       />
       <span className="font-display text-base font-extrabold uppercase tracking-wide">
-        {form.submit}
+        {sending ? "Sending" : form.submit}
       </span>
     </motion.button>
   );
@@ -201,6 +218,10 @@ export function ConsultationForm() {
   const [touched, setTouched] = useState<Partial<Record<Key | "consent", boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [done, setDone] = useState(false);
+  const [sending, setSending] = useState(false);
+  /** A send that failed. Distinct from the per-field errors above: those are
+   *  the visitor's to fix, this one is ours. */
+  const [sendError, setSendError] = useState<string | null>(null);
 
   const errors = {
     name: errorFor("name", values.name),
@@ -228,15 +249,53 @@ export function ConsultationForm() {
     document.getElementById(id)?.focus();
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
-    if (valid) {
-      // TODO(backend): no endpoint exists yet, on this page or any other.
+    if (!valid) {
+      focusFirstError();
+      return;
+    }
+    if (sending) return;
+
+    // Read before the first await: React pools nothing here, but the form
+    // element is easier to reason about taken once, up front.
+    const hp = String(new FormData(e.currentTarget).get("company_website") ?? "");
+
+    setSending(true);
+    setSendError(null);
+
+    // Sent in the order the form draws them, with the labels the visitor read,
+    // so the email and the sheet reproduce the form rather than a developer's
+    // idea of it. The service pill row is a field like any other here.
+    const payloadFields: EnquiryField[] = [
+      { id: "name", label: form.fields.name, value: values.name.trim() },
+      { id: "email", label: form.fields.email, value: values.email.trim() },
+      { id: "phone", label: form.fields.phone, value: values.phone.trim() },
+      { id: "company", label: form.fields.company, value: values.company.trim() },
+      { id: "services", label: form.servicesLabel, value: service },
+      { id: "message", label: form.fields.message, value: values.message.trim() },
+    ];
+
+    const action = recaptchaAction("Contact Consultation");
+    const token = await getRecaptchaToken(action);
+
+    const result = await submitEnquiry({
+      formName: "Contact Consultation",
+      ...pageContext(),
+      fields: payloadFields,
+      consent,
+      token,
+      action,
+      hp,
+    });
+
+    setSending(false);
+    if (result.ok) {
       setDone(true);
       return;
     }
-    focusFirstError();
+    setSendError(result.message);
   };
 
   const rowProps = (key: Key) => ({
@@ -328,10 +387,15 @@ export function ConsultationForm() {
                   key="form"
                   noValidate
                   onSubmit={submit}
+                  // First contact with the form is when reCAPTCHA starts
+                  // loading. See the note at the top of @/lib/recaptcha.
+                  onFocusCapture={warmRecaptcha}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="space-y-11"
+                  className="relative space-y-11"
                 >
+                  <Honeypot id={`${uid}-company_website`} />
+
                   {/* ----------------------------------------- service pills */}
                   <div role="group" aria-labelledby={`${uid}-service-label`}>
                     <p id={`${uid}-service-label`} className={FIELD_LABEL}>
@@ -422,10 +486,13 @@ export function ConsultationForm() {
                           {showConsent}
                         </p>
                       )}
+                      <RecaptchaNotice className="mt-5 max-w-md" />
                     </div>
 
-                    <SendOrb />
+                    <SendOrb sending={sending} />
                   </div>
+
+                  {sendError && <FormError>{sendError}</FormError>}
                 </motion.form>
               )}
             </AnimatePresence>

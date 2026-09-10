@@ -31,6 +31,10 @@ import { IntentPath } from "@/components/service/IntentPath";
 import { CreativeOutputs } from "@/components/service/CreativeOutputs";
 import { CampaignSystem, type Phase } from "@/components/service/CampaignSystem";
 import { DashboardViews } from "@/components/service/DashboardViews";
+import { CommerceSystem } from "@/components/service/CommerceSystem";
+import { DealerSurfaces } from "@/components/service/DealerSurfaces";
+import { FreightPresence } from "@/components/service/FreightPresence";
+import { ClinicPresence } from "@/components/service/ClinicPresence";
 import type { ServiceAnchor } from "@/content/services/instagram-marketing";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -97,7 +101,27 @@ export type DiagramSpec =
   /** Six data and dashboard services, drawn inside one dashboard shell whose
    *  modules are rebuilt per service — except the last, which is not a view at
    *  all and lifts the shell to show the layer underneath it. */
-  | { kind: "dashboards"; roles: string[]; beforeLabel: string };
+  | { kind: "dashboards"; roles: string[]; beforeLabel: string }
+  /** Six ecommerce marketing services, drawn as the six parts of one store
+   *  they each work on: the search surface and its category structure, the
+   *  paid shelf, the feed, the checkout column, the path back, and the
+   *  measurement layer everything else is judged on. */
+  | { kind: "commerce" }
+  /** Six automotive marketing services, drawn as the six surfaces of one
+   *  dealership's presence: the results a search reaches, the placement bought
+   *  above them, the answer an assistant assembles, the feed, the model page
+   *  itself, and the ground all of it is trying to get somebody to. */
+  | { kind: "dealership" }
+  /** Six logistics marketing services, drawn as the six parts of one freight
+   *  company's presence during supplier research: the results a search reaches
+   *  and the route index under them, the bought slot with a request for pricing
+   *  in it, the page a buyer assesses, the professional feed and its three
+   *  desks, the trade corridor and the page at each destination, and the answer
+   *  an assistant assembles out of what was structured for it. */
+  | { kind: "freight" }
+  /** One healthcare provider's presence during a patient's research, with each
+   *  service's pin standing on the part of it that service works. */
+  | { kind: "clinic" };
 
 /** Renders one pin. The diagram calls this where its own region sits, so pin
  *  placement is markup rather than a set of magic percentages maintained
@@ -295,6 +319,14 @@ export function PinnedExplorer({
             labels={diagram.labels}
           />
         );
+      case "commerce":
+        return <CommerceSystem active={active} pin={pin} count={items.length} />;
+      case "dealership":
+        return <DealerSurfaces active={active} pin={pin} count={items.length} />;
+      case "freight":
+        return <FreightPresence active={active} pin={pin} count={items.length} />;
+      case "clinic":
+        return <ClinicPresence active={active} pin={pin} count={items.length} />;
       case "dashboards":
         return (
           <DashboardViews

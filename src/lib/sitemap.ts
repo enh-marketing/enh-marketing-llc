@@ -108,8 +108,13 @@ const industries: NavNode = {
   label: "Industries",
   href: "/industries",
   children: [
-    { label: "Healthcare & Clinics", href: "/industries/healthcare-clinics" },
-    { label: "Logistics & Shipping", href: "/industries/logistics-shipping" },
+    // The page is served at /industries/healthcare, which is the route the
+    // team asked for; the label is the nav's own and is left as it was
+    // written. Same arrangement as Logistics & Shipping below.
+    { label: "Healthcare & Clinics", href: "/industries/healthcare" },
+    // The page is served at /industries/logistics, which is the route the team
+    // asked for; the label is the nav's own and is left as it was written.
+    { label: "Logistics & Shipping", href: "/industries/logistics" },
     { label: "Automotive", href: "/industries/automotive" },
     { label: "Hospitality & Hotels", href: "/industries/hospitality-hotels" },
     { label: "Ecommerce & Retail", href: "/industries/ecommerce-retail" },
@@ -148,7 +153,18 @@ const aiHub: NavNode = {
 /* ------------------------------------------------------------------ top-level */
 
 const home: NavNode = { label: "Home", href: "/" };
-const about: NavNode = { label: "About", href: "/about" };
+// Was "/about", which no page ever served, and which the menus of all 49 pages
+// presented as a live link. The page that serves it is src/pages/about-us.astro,
+// so the node points there — exactly the correction the contact node needed
+// below, for the same reason. "/about" itself is caught by a redirect in
+// astro.config.mjs, because it is short enough to be typed and sent by hand.
+//
+// WORTH KNOWING: scripts/check-routes.mjs compares BUILT against the
+// filesystem only, so shipping the page and adding it to BUILT without editing
+// this line would have PASSED the check and still been broken — isPending()
+// would stay true and About would render as inert text in every navbar and as a
+// grey span in every footer. Nothing in the repo catches that.
+const about: NavNode = { label: "About", href: "/about-us" };
 const caseStudies: NavNode = { label: "Case Studies", href: "/case-studies" };
 const portfolio: NavNode = { label: "Portfolio", href: "/portfolio" };
 const testimonials: NavNode = { label: "Testimonials", href: "/testimonials" };
@@ -230,6 +246,7 @@ export const footerNav: NavNode[] = [
  *  `npm run check:routes` fails the build if the two ever drift apart. */
 const BUILT = new Set([
   "/",
+  "/about-us",
   "/contact-us",
   "/services/lead-generation",
   "/services/seo",
@@ -272,6 +289,11 @@ const BUILT = new Set([
   "/services/social-media-marketing/tiktok-marketing",
   "/services/web-design-development/ecommerce-website-development",
   "/services/web-design-development/website-maintenance-support",
+  "/industries/ecommerce-retail",
+  "/industries/hospitality-hotels",
+  "/industries/automotive",
+  "/industries/logistics",
+  "/industries/healthcare",
   "/testimonials",
   "/insights",
   "/case-studies",
