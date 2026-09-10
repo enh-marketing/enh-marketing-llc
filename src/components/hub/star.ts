@@ -62,6 +62,97 @@ export function drawStar(
   ctx.fill();
 }
 
+/** HOW THE LINE THICKENS FROM ITS TAIL TO ITS HEAD.
+ *
+ *  Asked for: "increase the width of the line chart line as it moves leaving
+ *  the end thinner, so it looks like a power thunder line chart with thin tail
+ *  but thick header and tapered body".
+ *
+ *  1.4 RATHER THAN 1. A straight ramp puts half the width at the halfway point
+ *  and reads as a wedge. Weighting it towards the head keeps the body slim for
+ *  most of its length and gathers the mass into the last third, which is what a
+ *  bolt does and what makes the star look like it is dragging the line rather
+ *  than drawing it. */
+const TAPER = 1.4;
+
+/** How many pieces the line is cut into for the width to vary smoothly.
+ *
+ *  THE PATH'S OWN VERTICES ARE KEPT AND THE PIECES GO BETWEEN THEM, rather than
+ *  the whole thing being resampled at an even pitch. Resampling would put
+ *  samples either side of a corner and cut it off, and this path is corners:
+ *  four turns in a rise of about 1800px, which an even pitch would round away.
+ *
+ *  64 puts the widest layer's step at about a fifth of a pixel, which is under
+ *  what a screen can show. */
+const STEPS = 64;
+
+/** One layer of the line, as a filled ribbon rather than a stroke.
+ *
+ *  A STROKE CANNOT CHANGE WIDTH ALONG ITS LENGTH, so the obvious way to taper
+ *  is a run of short strokes at stepped widths. That is wrong here for a reason
+ *  that is not obvious until you see it: two of these three layers are drawn at
+ *  0.14 and 0.32 alpha, and the round caps of neighbouring strokes overlap, so
+ *  every joint paints twice and the line comes out beaded. A ribbon is one
+ *  closed path and one fill, so its alpha is laid down exactly once.
+ *
+ *  THE CORNERS ARE BEVELLED, which is what the duplicated vertex does: each
+ *  segment contributes its own offset points at both of its ends, so the outer
+ *  edge crosses the corner on a straight chamfer instead of leaving the notch
+ *  two diverging offsets would. On the inside of a turn the ribbon folds over
+ *  itself; nonzero winding fills a fold, so it stays solid. */
+function ribbon(
+  ctx: CanvasRenderingContext2D,
+  pts: Array<[number, number]>,
+  tailW: number,
+  headW: number,
+): void {
+  const n = pts.length;
+  const lens: number[] = [];
+  let total = 0;
+  for (let i = 1; i < n; i++) {
+    const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+    lens.push(d);
+    total += d;
+  }
+  if (total <= 0) return;
+
+  /* Half the width, at `s` along the line. */
+  const half = (s: number) => (tailW + (headW - tailW) * Math.pow(s / total, TAPER)) / 2;
+
+  const left: Array<[number, number]> = [];
+  const right: Array<[number, number]> = [];
+  let acc = 0;
+  for (let i = 1; i < n; i++) {
+    const len = lens[i - 1];
+    if (len <= 0) continue;
+    const [ax, ay] = pts[i - 1];
+    const [bx, by] = pts[i];
+    /* The segment's own normal, so a corner gets one from each side. */
+    const nx = -(by - ay) / len;
+    const ny = (bx - ax) / len;
+    const parts = Math.max(1, Math.round((len / total) * STEPS));
+    for (let j = 0; j <= parts; j++) {
+      const t = j / parts;
+      const px = ax + (bx - ax) * t;
+      const py = ay + (by - ay) * t;
+      const r = half(acc + len * t);
+      left.push([px + nx * r, py + ny * r]);
+      right.push([px - nx * r, py - ny * r]);
+    }
+    acc += len;
+  }
+  if (left.length < 2) return;
+
+  ctx.beginPath();
+  ctx.moveTo(left[0][0], left[0][1]);
+  for (let i = 1; i < left.length; i++) ctx.lineTo(left[i][0], left[i][1]);
+  /* Cut square across the head. The star is drawn on that exact point and its
+     core is wider than this is, so the end is never the thing you see. */
+  for (let i = right.length - 1; i >= 0; i--) ctx.lineTo(right[i][0], right[i][1]);
+  ctx.closePath();
+  ctx.fill();
+}
+
 /** Paint the line the star has come along, from `pts[0]` to `head`.
  *
  *  THIS WAS TRACKCHART'S, AND NOW THE VOICE DRAWS IT TOO. The system chapter
@@ -77,13 +168,21 @@ export function drawStar(
  *  drawing a partial path knows where its head is more cheaply than this can
  *  work it out.
  *
- *  THE WIDE STROKES TURN ROUND CORNERS, THE THIN ONE TURNS SHARP. A mitred join
- *  on a 9px stroke at a turn this tight throws a spike well past the line it is
- *  supposed to be haloing, and that spike is the fold that appeared at every
- *  corner. The halo is what carries the width, so it is the one that gives up
- *  the point; the 1.6px line that actually reads as the chart keeps its mitre.
+ *  IT IS TAPERED, THIN AT THE TAIL AND THICK AT THE HEAD, and every layer is
+ *  now a filled ribbon rather than a stroke, because a stroke is one width. The
+ *  core runs 0.5px where the line began to 3.6px where the star is, so the line
+ *  reads as something the star is dragging rather than a wire it is sliding
+ *  along. See TAPER and `ribbon` above for why a ribbon and not a run of short
+ *  strokes.
  *
- *  `bloom` widens the two soft strokes and leaves the sharp one alone, for the
+ *  THE MITRE IS GONE WITH THE STROKES and nothing is lost by it. The note that
+ *  used to be here said the 9px halo had to give up its point because a mitred
+ *  join on a turn this tight throws a spike past the line it is haloing, and
+ *  that the thin line kept its mitre. A ribbon has no joins to mitre: its
+ *  corners are bevelled by construction, on all three layers, and at 3.6px the
+ *  bevel is under two pixels across.
+ *
+ *  `bloom` widens the two soft layers and leaves the sharp one alone, for the
  *  same reason the star has one: over the waveform's own white there is nothing
  *  a hairline can do, but a warm band wide enough to reach past it reads. At
  *  bloom 1 this is exactly the line the chart draws.
@@ -107,20 +206,16 @@ export function drawTrack(
   grad.addColorStop(0, "rgba(255,246,214,1)");
   grad.addColorStop(0.5, "rgba(255,206,110,0.55)");
   grad.addColorStop(1, "rgba(255,180,80,0.04)");
-  ctx.strokeStyle = grad;
-  ctx.lineCap = "round";
+  ctx.fillStyle = grad;
 
-  const run = (width: number, alpha: number, join: CanvasLineJoin) => {
-    ctx.lineJoin = join;
-    ctx.miterLimit = join === "miter" ? 4 : 10;
-    ctx.globalAlpha = alpha;
-    ctx.lineWidth = width;
-    ctx.beginPath();
-    ctx.moveTo(pts[0][0], pts[0][1]);
-    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
-    ctx.stroke();
+  /* Tail, head. The two soft layers keep roughly the proportions the flat
+     strokes had at their head, so the line is not suddenly a different object;
+     what is new is that all three come to almost nothing at the far end. */
+  const run = (tailW: number, headW: number, a: number) => {
+    ctx.globalAlpha = a;
+    ribbon(ctx, pts, tailW, headW);
   };
-  run(9 * bloom, 0.14 * alpha, "round");
-  run(3.4 * bloom, 0.32 * alpha, "round");
-  run(1.6, alpha, "miter");
+  run(2.4 * bloom, 17 * bloom, 0.14 * alpha);
+  run(1 * bloom, 7 * bloom, 0.32 * alpha);
+  run(0.5, 3.6, alpha);
 }
