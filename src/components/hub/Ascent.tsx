@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { ParallaxLayers } from "@/components/fx/ParallaxLayers";
+import { OpeningLine, OpeningStandfirst } from "@/components/hub/OpeningLine";
 import { BACK, FRONT, LAYER_IMG, MID } from "@/components/hub/parallaxAssets";
 import { SunBridge } from "@/components/hub/SunBridge";
 import { BACK_RATE } from "@/components/hub/sun";
@@ -38,6 +39,11 @@ import { BACK_RATE } from "@/components/hub/sun";
  *  own body. It goes out behind them as the frame leaves, and the orbital
  *  chapter brings the same star down from the top of the next scene, so the two
  *  are never on screen together. */
+/** How far the opening line lags the page, as the stack's own yPercent. The
+ *  page climbs 100 per cent of a viewport across this block and the line slides
+ *  45 back down it, so it travels at 0.55 of the scroll. */
+const LINE_RATE = 45;
+
 export function Ascent() {
   const frame = useRef<HTMLElement>(null);
 
@@ -58,11 +64,29 @@ export function Ascent() {
              is not in this stack: it has to outlive the block and leave through
              the top of the next section, which nothing inside a stage that
              clips can do. See the note in hub/OpeningLine. */
+          /* THE OPENING LINE, UNDER THE FOREGROUND AND OVER THE MOUNTAIN, which
+             is where it always belonged and where it could not be until it
+             stopped having to outlive this block. It was fixed to the window
+             with a second copy of the near ground drawn over it to fake the
+             occlusion; there is one copy of the photograph again.
+
+             45 IS THE PARALLAX AND IT IS NOT A NEW NUMBER. A layer is the
+             stage's own box, so yPercent 45 slides it down 45 per cent of a
+             viewport across the block while the page climbs a whole one: the
+             line lags by 55, which is the rate it was already using. What is
+             new is that the stack's ScrollTrigger writes it, on the frame it
+             writes the mountain, so the two can no longer disagree. */
+          { y: LINE_RATE, children: <OpeningLine /> },
           {
             y: 10,
             className: "hub-foreground",
             children: <img src={FRONT} alt="" aria-hidden loading="eager" className={LAYER_IMG} />,
           },
+          /* AND THE STANDFIRST OVER THE TOP OF IT, on the same rate so the two
+             travel together. The heading wants the man in front of it; a
+             paragraph with a shoulder through the middle is just words the
+             reader cannot have. */
+          { y: LINE_RATE, children: <OpeningStandfirst /> },
         ]}
       />
 

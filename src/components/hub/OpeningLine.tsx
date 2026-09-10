@@ -1,80 +1,51 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { WordReveal, clamp, wordLit, wordStyle } from "@/components/hub/WordReveal";
 import { ascent, ASCENT_HANDOVER, ASCENT_STANDFIRST } from "@/content/ai-hub";
 
-/** The opening line. One element, from the mountain to the top of the system.
+/** The opening line, drawn inside the photograph's own parallax stack.
  *
- *  IT IS OUT OF THE PARALLAX STACK AGAIN, AND THE FOREGROUND CAME WITH IT.
- *  Inside the stack the man occluded the words properly, which was the point,
- *  but the stack is one viewport tall and clips: the line could never reach the
- *  second section, and by the time that section was on screen the only part of
- *  the opener left in the window was the near ground, so the line was hidden
- *  rather than travelling. The two halves of what this has to do were the same
- *  choice made in opposite directions.
+ *  IT IS A LAYER NOW, AND FOR TWO YEARS OF THIS FILE'S NOTES IT WAS NOT. It sat
+ *  outside the stack, fixed to the window, because it had to do two things that
+ *  pulled against each other: pass behind the man, which means being inside the
+ *  stack under the foreground; and outlive the opener, which the stack cannot
+ *  do because it is one viewport tall and clips. A second copy of the
+ *  foreground was drawn over the top of it to buy the first without giving up
+ *  the second, in hub/ForegroundEcho.
  *
- *  So the line is fixed to the window, which lets it go wherever the story
- *  needs, and hub/ForegroundEcho draws a second copy of the opener's near
- *  ground over the top of it. Depth is restored by putting the photograph back
- *  in front rather than by putting the words behind it, and the copy is
- *  measured off the real layer on GSAP's ticker rather than recomputed, so the
- *  two cannot fall a frame apart. The cost is one extra full-screen paint while
- *  the opener is on screen, and only while it is on screen.
+ *  THE SECOND REQUIREMENT IS GONE, so the whole apparatus is. The line was
+ *  asked to stay inside the hero and it now finishes at 0.72 of a viewport,
+ *  well short of the seam, so there is nothing left for it to outlive. Back in
+ *  the stack it is genuinely behind the man rather than under a copy of him.
  *
- *  IT STAYS IN THE PHOTOGRAPH, AND IT USED TO OUTLIVE IT BY A VIEWPORT.
- *  It ran for 2.15 viewports of scroll against an opener that is one, so for
- *  the last 1.15 it was a fixed headline sitting over the orbital system:
- *  "lets not take that Explore new height with us to second section, its not
- *  looking great, let that scroll parallax and hides in her bottom".
+ *  WHICH IS ALSO THE FIX FOR THE DOUBLING. Two copies of one photograph can
+ *  only agree if something keeps them in step, and they were kept in step by
+ *  JavaScript: the real layer is moved by the browser's own scrolling, the copy
+ *  was moved by a transform written on the ticker. Measured at rest they were
+ *  identical to the pixel, which is why it only ever showed while moving. There
+ *  is one man again and no arithmetic between him and himself.
+ *
+ *  THE PARALLAX IS THE STACK'S NOW, NOT THIS FILE'S. See LINE_RATE in
+ *  hub/Ascent: the layer is scrubbed to yPercent 45 over the block, so the line
+ *  lags the page by 55 per cent on the same ScrollTrigger timeline that moves
+ *  the mountain. Nothing here computes a position at all.
  *
  *  THE MOVE, in viewports of scroll, all of it inside the opener:
  *
- *    throughout      it climbs at LAG of the page's own rate, which is the
- *                    parallax: against the photograph, which is going faster,
- *                    the words sink towards the near ground rather than
- *                    floating over it.
  *    TURN_FROM       the last word turns over: Us rolls up and out, AI rises
  *                    into its place. Early enough to be read before the ridge
  *                    reaches it.
  *    GO_FROM/TO      it fades where it stands. What takes it is the foreground
- *                    rising across it, which is the opener's own near ground
- *                    drawn back over this layer by hub/ForegroundEcho, so the
- *                    line is put away by the mountain rather than by an
- *                    animation. Gone by 0.96, which is inside the opener.
+ *                    rising across it, which is now the real foreground.
  *
- *  IT NO LONGER CLIMBS OUT OF THE TOP. That exit existed to hand the frame to
- *  the orbital scene's light, and the light arrives on its own; what the exit
- *  actually did was carry the sentence into a chapter it had no business in.
- *
- *  AND IT IS ON GSAP'S TICKER NOW, WHICH IS WHY IT STOPPED JUDDERING. Every
- *  other layer in this hero is: ParallaxLayers scrubs the photograph on it,
- *  ForegroundEcho copies the near ground on it, SunBridge moves the glow on it,
- *  and Ascent's own note says that is what keeps the opener smooth. This was
- *  the exception. It read the scroll in a `scroll` listener, put the number in
- *  React state, and re-rendered the heading, the eyebrow, the standfirst and
- *  every word of WordReveal on every event, then wrote the result to `top`,
- *  which is a layout property and cannot be composited.
- *
- *  So it landed on React's schedule while the photograph landed on the
- *  ticker's, and the two were never a frame apart in the same direction twice.
- *  It did not show while the line was nearly still. It showed the moment the
- *  line was given a parallax rate of its own, which is when it was reported.
- *
- *  Nothing here re-renders on scroll any more. React draws the structure once
- *  and the ticker writes transforms and opacities onto refs. */
+ *  What is left on the ticker is opacity and the word turn, and neither of
+ *  those can double an edge if it lands a frame late. Nothing re-renders on
+ *  scroll: React draws the structure once and the ticker writes onto refs. */
 
-/** Where the line rests before any scrolling, as a fraction of the window. */
+/** Where the line rests in the stage, as a fraction of it. */
 const REST_Y = 0.46;
-/** HOW MUCH SLOWER THAN THE PAGE IT TRAVELS, which is the whole of the
- *  parallax. At 1 it would be ordinary copy scrolling away; at 0 it would be
- *  pinned, which is what it was, and pinned is how it ended up stranded in the
- *  black under the photograph while the picture climbed out from behind it.
- *  0.55 keeps it inside the frame the whole way and lets the near ground rise
- *  across it, so what puts the words away is the mountain. */
-const LAG = 0.55;
 
 const TURN_FROM = 0.18;
 const TURN_OVER = 0.18;
@@ -158,8 +129,7 @@ export function OpeningLine() {
       const el = block.current;
       if (!el) return;
       const travelled = opener ? -opener.getBoundingClientRect().top : window.scrollY;
-      const h = Math.max(1, window.innerHeight);
-      const k = travelled / h;
+      const k = travelled / Math.max(1, window.innerHeight);
 
       /* Past its end there is nothing to draw. `display` rather than unmounting,
          because unmounting is a React render and this loop is not allowed one. */
@@ -169,13 +139,10 @@ export function OpeningLine() {
       }
       if (last === "gone") { el.style.display = ""; if (stand.current) stand.current.style.display = ""; last = ""; }
 
-      /* IN PIXELS AND ON THE TRANSFORM, not a percentage on `top`. `top` is
-         layout: every frame of it re-ran the box and could not be composited,
-         which is half of why this stuttered against a photograph being moved by
-         a transform on the same tick. */
-      const dy = -LAG * k * h;
+      /* NO POSITION IS WRITTEN HERE. The layer this sits in is scrubbed by the
+         stack's own ScrollTrigger, which is what moves the mountain, so the
+         travel cannot land on a different frame from the picture. */
       const held = 1 - smooth(clamp((k - GO_FROM) / (GO_TO - GO_FROM)));
-      el.style.transform = `translate3d(0, ${dy.toFixed(1)}px, 0) translateY(-50%)`;
       el.style.opacity = held.toFixed(3);
       el.setAttribute("aria-hidden", k > GO_FROM ? "true" : "false");
 
@@ -207,11 +174,25 @@ export function OpeningLine() {
       }
     };
 
-    tick();
-    gsap.ticker.add(tick);
-    return () => {
-      gsap.ticker.remove(tick);
+    /* A PLAIN rAF, NOT gsap.ticker, AND THE DIFFERENCE IS NOT STYLE.
+       GSAP's ticker is the right clock for anything that has to land on the
+       same frame as a GSAP write, which is why the parallax layers use it. It
+       is the wrong clock for anything that has to run every frame full stop:
+       it is Lenis's driver as well as GSAP's, and how often it fires depends on
+       what GSAP has to do. Instrumented here, these writes ran at a few frames
+       a second while the page scrolled smoothly underneath them, so the fade
+       and the word turn simply stopped part way and stayed there.
+
+       Nothing here needs frame-exact agreement with the photograph any more:
+       the travel is the layer's, written by the stack's own ScrollTrigger. What
+       is left is opacity and a word, and a plain rAF always runs. */
+    let raf = 0;
+    const loop = () => {
+      tick();
+      raf = requestAnimationFrame(loop);
     };
+    loop();
+    return () => cancelAnimationFrame(raf);
   }, [reduced]);
 
   /* REDUCED MOTION GETS THE LINE, NOT THE JOURNEY. Absolute inside the opener
@@ -222,7 +203,6 @@ export function OpeningLine() {
       <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex h-screen flex-col items-center justify-center px-6 text-center">
         <Eyebrow />
         <Line p={1} />
-        <Standfirst />
       </div>
     );
   }
@@ -234,11 +214,11 @@ export function OpeningLine() {
     <>
       <div
         ref={block}
-        className="pointer-events-none fixed inset-x-0 z-30 flex flex-col items-center justify-center px-6 text-center"
+        className="pointer-events-none absolute inset-x-0 flex flex-col items-center justify-center px-6 text-center"
         style={{
           top: `${REST_Y * 100}%`,
-          transform: "translate3d(0, 0, 0) translateY(-50%)",
-          willChange: "transform, opacity",
+          transform: "translateY(-50%)",
+          willChange: "opacity",
         }}
       >
         {/* The label goes as the line starts to travel: it belongs to the
@@ -265,9 +245,46 @@ export function OpeningLine() {
 
           Below the line at every point of the climb: the line rests centred at
           0.46 of the window and settles to 0.50, and this sits at 0.66. */}
-      <Standfirst innerRef={stand} />
     </>
   );
+}
+
+/** The paragraph, which is a layer of its own and sits ABOVE the foreground.
+ *
+ *  IT CANNOT SHARE THE LINE'S LAYER, and that is the only reason it is a
+ *  separate export. The heading wants to be behind the man, which is the whole
+ *  effect; a paragraph cut in half by a shoulder is not an effect, it is four
+ *  words the reader cannot have. So the heading goes under the foreground layer
+ *  and this goes over it, on the same rate, and they travel together.
+ *
+ *  It belongs to the photograph rather than to the sentence, so it goes out on
+ *  its own short ramp rather than lasting as long as the line. */
+export function OpeningStandfirst() {
+  const reduced = usePrefersReducedMotion();
+  const stand = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (reduced) return;
+    const opener = document.querySelector<HTMLElement>('[data-section="AI Hub opener"]');
+    const tick = () => {
+      const el = stand.current;
+      if (!el) return;
+      const travelled = opener ? -opener.getBoundingClientRect().top : window.scrollY;
+      const k = travelled / Math.max(1, window.innerHeight);
+      const early = (1 - clamp(k / 0.35)).toFixed(3);
+      el.style.opacity = early;
+      el.setAttribute("aria-hidden", +early <= 0.01 ? "true" : "false");
+    };
+    let raf = 0;
+    const loop = () => {
+      tick();
+      raf = requestAnimationFrame(loop);
+    };
+    loop();
+    return () => cancelAnimationFrame(raf);
+  }, [reduced]);
+
+  return <Standfirst innerRef={stand} />;
 }
 
 /** The sentence that says what the page is.
@@ -286,7 +303,7 @@ function Standfirst({ innerRef }: { innerRef?: React.RefObject<HTMLParagraphElem
          across the middle of all three lines. So this sits over him, at z-50,
          under the navbar at z-70. Depth is worth having on a sentence you read
          in one glance and not on one you read in three. */
-      className="font-grotesk pointer-events-none fixed inset-x-0 z-50 mx-auto max-w-[42ch] px-6 text-center text-[0.95rem] leading-[1.6] text-white/80 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)]"
+      className="font-grotesk pointer-events-none absolute inset-x-0 mx-auto max-w-[42ch] px-6 text-center text-[0.95rem] leading-[1.6] text-white/80 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)]"
       style={{ top: "66%", transform: "translateY(-50%)", willChange: "opacity" }}
     >
       {ASCENT_STANDFIRST}

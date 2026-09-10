@@ -6,8 +6,6 @@ import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
 import { Uplink } from "@/components/hub/chapters/Uplink";
 import { Chart } from "@/components/hub/chapters/Chart";
-import { OpeningLine } from "@/components/hub/OpeningLine";
-import { ForegroundEcho } from "@/components/hub/ForegroundEcho";
 import { chart, horizon, system, uplink } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
@@ -61,14 +59,12 @@ export function AiHubPage() {
     <main data-hub-story>
       <Ascent />
       <Journey chapters={CHAPTERS} />
-      {/* THE OPENING LINE AND THE THING THAT PUTS IT BEHIND THE MAN, in that
-          order, because the second has to paint over the first. Both are fixed
-          to the window and belong to neither block: the line starts over the
-          photograph and leaves through the top of the system, and the echo is
-          a copy of the opener's near ground that gives it back the depth it
-          loses by not being inside the parallax stack. */}
-      <OpeningLine />
-      <ForegroundEcho />
+      {/* THE OPENING LINE IS NOT HERE ANY MORE AND NEITHER IS THE ECHO. Both
+          were, because the line was fixed to the window so it could outlive the
+          opener, and a second copy of the near ground had to be painted over it
+          to put it back behind the man. The line finishes inside the opener
+          now, so it is one of that block's own parallax layers and the man in
+          front of it is the real one. See hub/Ascent. */}
     </main>
   );
 }
