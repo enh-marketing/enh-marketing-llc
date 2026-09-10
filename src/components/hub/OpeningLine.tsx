@@ -34,9 +34,9 @@ import { ascent, ASCENT_HANDOVER, ASCENT_STANDFIRST } from "@/content/ai-hub";
  *
  *  THE MOVE, in viewports of scroll, all of it inside the opener:
  *
- *    TURN_FROM       the last word turns over: Us rolls up and out, AI rises
- *                    into its place. Early enough to be read before the ridge
- *                    reaches it.
+ *    every 4s        the last word turns over, both ways, for as long as the
+ *                    line is on screen. It is on a clock rather than on the
+ *                    scroll; see SWAP_EVERY.
  *    GO_FROM/TO      it fades where it stands. What takes it is the foreground
  *                    rising across it, which is now the real foreground.
  *
@@ -47,8 +47,19 @@ import { ascent, ASCENT_HANDOVER, ASCENT_STANDFIRST } from "@/content/ai-hub";
 /** Where the line rests in the stage, as a fraction of it. */
 const REST_Y = 0.46;
 
-const TURN_FROM = 0.18;
-const TURN_OVER = 0.18;
+/** HOW OFTEN THE LAST WORD TURNS OVER, AND HOW LONG THE TURN TAKES.
+ *
+ *  IT IS ON A CLOCK NOW AND IT WAS ON THE SCROLL. The turn used to happen once,
+ *  at a fixed point of the descent, so a reader who did not scroll never saw
+ *  it: the page's own premise, that this is the site's line with AI in place of
+ *  us, was hidden behind an interaction. Asked for on a four second interval,
+ *  so it says both and keeps saying them.
+ *
+ *  600ms IS THE TURN ITSELF, inside the four. Long enough to read as a roll
+ *  rather than a cut, short enough that the word is settled for the three and a
+ *  bit seconds either side, which is what a reader is actually looking at. */
+const SWAP_EVERY = 4000;
+const SWAP_TURN = 600;
 /** Where it gives up the frame, both inside the opener's one viewport. */
 const GO_FROM = 0.40;
 const GO_TO = 0.72;
@@ -125,7 +136,11 @@ export function OpeningLine() {
     /** Written only when it changes, so a still line costs one comparison. */
     let last = "";
 
-    const tick = () => {
+    /* Offset so the first slot opens already settled: the page does not turn
+       its own headline over the moment it is looked at. */
+    const t0 = performance.now() - SWAP_TURN;
+
+    const tick = (now: number) => {
       const el = block.current;
       if (!el) return;
       const travelled = opener ? -opener.getBoundingClientRect().top : window.scrollY;
@@ -155,22 +170,29 @@ export function OpeningLine() {
         stand.current.setAttribute("aria-hidden", +early <= 0.01 ? "true" : "false");
       }
 
-      /* The last word turning over. Both words are always in the DOM, laid in a
-         spacer, so this is four style writes rather than a re-render. */
-      const swap = smooth(clamp((k - TURN_FROM) / TURN_OVER));
-      const out = clamp(swap / 0.5);
-      const inc = clamp((swap - 0.5) / 0.5);
-      if (from.current) {
-        from.current.style.opacity = (1 - out).toFixed(3);
-        from.current.style.transform = `translateY(${(out * -42).toFixed(2)}%)`;
-        from.current.style.filter = out > 0.001 ? `blur(${(out * 6).toFixed(2)}px)` : "";
-        from.current.setAttribute("aria-hidden", swap >= 0.5 ? "true" : "false");
+      /* THE LAST WORD, TURNING OVER ON ITS OWN CLOCK. Both words are always in
+         the DOM, laid in a spacer, so this is six style writes rather than a
+         re-render or a tree React swaps between.
+
+         IT ALWAYS ROLLS THE SAME WAY, which is why the two spans trade roles
+         rather than one animation being played backwards. Reversed, the word
+         that just left would come back down out of the place it went, which
+         reads as a mistake being undone. Rolling up every time reads as a
+         counter turning over. */
+      const seg = (now - t0) % SWAP_EVERY;
+      const onAI = Math.floor(((now - t0) % (SWAP_EVERY * 2)) / SWAP_EVERY) === 1;
+      const p = smooth(clamp(seg / SWAP_TURN));
+      const enter = onAI ? to.current : from.current;
+      const leave = onAI ? from.current : to.current;
+      if (enter) {
+        enter.style.opacity = p.toFixed(3);
+        enter.style.transform = `translateY(${((1 - p) * 42).toFixed(2)}%)`;
+        enter.style.filter = p < 0.999 ? `blur(${((1 - p) * 6).toFixed(2)}px)` : "";
       }
-      if (to.current) {
-        to.current.style.opacity = inc.toFixed(3);
-        to.current.style.transform = `translateY(${((1 - inc) * 42).toFixed(2)}%)`;
-        to.current.style.filter = inc < 0.999 ? `blur(${((1 - inc) * 6).toFixed(2)}px)` : "";
-        to.current.setAttribute("aria-hidden", swap >= 0.5 ? "false" : "true");
+      if (leave) {
+        leave.style.opacity = (1 - p).toFixed(3);
+        leave.style.transform = `translateY(${(p * -42).toFixed(2)}%)`;
+        leave.style.filter = p > 0.001 ? `blur(${(p * 6).toFixed(2)}px)` : "";
       }
     };
 
@@ -187,11 +209,11 @@ export function OpeningLine() {
        the travel is the layer's, written by the stack's own ScrollTrigger. What
        is left is opacity and a word, and a plain rAF always runs. */
     let raf = 0;
-    const loop = () => {
-      tick();
+    const loop = (now: number) => {
+      tick(now);
       raf = requestAnimationFrame(loop);
     };
-    loop();
+    loop(performance.now());
     return () => cancelAnimationFrame(raf);
   }, [reduced]);
 
@@ -369,14 +391,26 @@ function Line({
           word was leaving, and the other then sat centred inside it with a gap
           beside it: mid-turn the line read "WITH  AI" with a double space. An
           invisible copy of the longer of the two holds the box instead. */}
-      <span className="relative inline-block" style={base}>
+      {/* BOTH WORDS ARE RED, asked for, and it is the page's own carnelian
+          rather than a second one. The rest of the heading stays white: the
+          accent is the word that changes, which is the only word on this line
+          doing any work. */}
+      <span
+        className="relative inline-block"
+        style={{ ...base, color: "var(--hub-accent)" }}
+      >
+        {/* THE HEADING'S ACCESSIBLE NAME DOES NOT CYCLE. Both words are hidden
+            from the tree and one canonical reading is exposed instead, so a
+            screen reader is told "Explore New Heights With AI" once rather than
+            being handed a heading that renames itself every four seconds. */}
+        <span className="sr-only">{TO}</span>
         <span aria-hidden className="invisible">
           {FROM.length >= TO.length ? FROM : TO}
         </span>
         {/* The outgoing word, leaving upward and out of focus. */}
         <span
           ref={fromRef}
-          aria-hidden={false}
+          aria-hidden
           className="absolute inset-0"
           style={{ opacity: 1, transform: "translateY(0%)", willChange: "opacity, transform, filter" }}
         >
