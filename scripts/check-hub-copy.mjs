@@ -1,9 +1,11 @@
-/** Fails if anything the AI Hub landing page quotes has drifted from its source.
+/** Fails if anything the AI Hub landing page CLAIMS has drifted from its source.
  *
- *  The landing page has no copy of its own. Every category title is the label
- *  that src/lib/sitemap.ts already gives that page, and every category body is
- *  that service's own `meta.description`. A beat opts in by carrying
- *  `quotes: "<service slug>"`, and this checks both halves of it.
+ *  Every category title is the label src/lib/sitemap.ts gives that page, every
+ *  sub-service is a real offering on it, and every link goes where it says. A
+ *  beat opts in by carrying `quotes: "<service slug>"`.
+ *
+ *  THE BODY IS THE PILLAR'S OWN AND IS NOT CHECKED. See the note where the
+ *  comparison used to be.
  *
  *  WHY THIS IS A SCRIPT AND NOT AN IMPORT. src/content/ai-hub.ts used to import
  *  `meta` from the service files, which is the obvious way to guarantee the two
@@ -74,12 +76,31 @@ for (const [block, slug, file] of beats) {
 
   compare("title", read(block, "title"), labels.get(slug)?.replace(/\s*\([^)]*\)\s*$/, ""), SITEMAP);
 
-  compare(
-    "description",
-    read(block, "body"),
-    read(service.match(/export const meta = \{[\s\S]*?\n\};/)?.[0] ?? "", "description"),
-    path,
-  );
+  /* THE BODY IS NO LONGER COMPARED, AND THAT IS THE POINT OF THIS BLOCK.
+     It used to have to equal the service's `meta.description` word for word,
+     which sounded like honesty and was actually a category error: a meta
+     description is about 155 characters written for a Google result snippet.
+     Wiring seven of them into seven cards gave the pillar seven versions of one
+     sentence, all opening "ENH Marketing" and six closing "for UAE businesses",
+     and it was rejected three times before anyone worked out why.
+
+     It was not even house style. Ten of this site's forty-one service
+     descriptions open with the brand; the other thirty-one open with a verb or
+     a benefit, and eight of the ten are the AI set, written in a later pass in
+     a different voice. Freeing this line restores the convention rather than
+     breaking one.
+
+     WHAT IS STILL GATED IS EVERY CLAIM ABOUT WHAT EXISTS: the title against the
+     navigation's label, the href against the slug, and each sub-service against
+     a real `title` in that service's file. The pillar still cannot name work
+     the service does not do. What it can now do is say why anyone should care,
+     in its own words, which is the one job a pillar page has.
+
+     A body is still required, because a card with no line is a bug rather than
+     an editorial choice. */
+  if (read(block, "body") === undefined) {
+    problems.push(`${slug}: beat quotes a service but has no body.`);
+  }
 
   const href = read(block, "href");
   if (href !== `/ai-hub/${slug}`) {

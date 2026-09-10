@@ -23,38 +23,48 @@ import { ascent, ASCENT_HANDOVER, ASCENT_STANDFIRST } from "@/content/ai-hub";
  *  two cannot fall a frame apart. The cost is one extra full-screen paint while
  *  the opener is on screen, and only while it is on screen.
  *
- *  THE MOVE, in viewports of scroll:
+ *  IT STAYS IN THE PHOTOGRAPH, AND IT USED TO OUTLIVE IT BY A VIEWPORT.
+ *  It ran for 2.15 viewports of scroll against an opener that is one, so for
+ *  the last 1.15 it was a fixed headline sitting over the orbital system:
+ *  "lets not take that Explore new height with us to second section, its not
+ *  looking great, let that scroll parallax and hides in her bottom".
  *
- *    0 to SETTLE     it travels. It holds near the middle of the window while
- *                    the photograph climbs away behind it, so the near ground
- *                    and the man pass across the words, and it is left standing
- *                    in the space the journey has opened underneath.
+ *  THE MOVE, in viewports of scroll, all of it inside the opener:
+ *
+ *    throughout      it climbs at LAG of the page's own rate, which is the
+ *                    parallax: against the photograph, which is going faster,
+ *                    the words sink towards the near ground rather than
+ *                    floating over it.
  *    TURN_FROM       the last word turns over: Us rolls up and out, AI rises
- *                    into its place. It happens here, at rest and in open
- *                    black, because this is the one stretch where the line is
- *                    not being crossed by anything.
- *    RISE_FROM/TO    it climbs and leaves through the top of the frame, the way
- *                    the orbital scene's own light arrives from it.
+ *                    into its place. Early enough to be read before the ridge
+ *                    reaches it.
+ *    GO_FROM/TO      it fades where it stands. What takes it is the foreground
+ *                    rising across it, which is the opener's own near ground
+ *                    drawn back over this layer by hub/ForegroundEcho, so the
+ *                    line is put away by the mountain rather than by an
+ *                    animation. Gone by 0.96, which is inside the opener.
  *
- *  It has to be gone before 01. That beat sits at 0.2 of a ten-viewport chapter
- *  and lights from 0.14, which is 1.4 viewports past the track's top and so 2.4
- *  viewports of scroll. Clear of the frame by 2.15 leaves a gap. */
+ *  IT NO LONGER CLIMBS OUT OF THE TOP. That exit existed to hand the frame to
+ *  the orbital scene's light, and the light arrives on its own; what the exit
+ *  actually did was carry the sentence into a chapter it had no business in. */
 
 /** Where the line rests before any scrolling, as a fraction of the window. */
 const REST_Y = 0.46;
-/** Where it comes to rest once the photograph has gone. */
-const SETTLE_Y = 0.5;
-/** Where it has climbed to by the time it is done, safely off the top. */
-const EXIT_Y = -0.3;
+/** HOW MUCH SLOWER THAN THE PAGE IT TRAVELS, which is the whole of the
+ *  parallax. At 1 it would be ordinary copy scrolling away; at 0 it would be
+ *  pinned, which is what it was, and pinned is how it ended up stranded in the
+ *  black under the photograph while the picture climbed out from behind it.
+ *  0.55 keeps it inside the frame the whole way and lets the near ground rise
+ *  across it, so what puts the words away is the mountain. */
+const LAG = 0.55;
 
-const SETTLE = 1.05;
-const TURN_FROM = 1.2;
-const TURN_OVER = 0.28;
-const RISE_FROM = 1.62;
-const RISE_TO = 2.15;
+const TURN_FROM = 0.18;
+const TURN_OVER = 0.18;
+/** Where it gives up the frame, both inside the opener's one viewport. */
+const GO_FROM = 0.40;
+const GO_TO = 0.72;
 
 const smooth = (x: number) => x * x * (3 - 2 * x);
-const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 
 const opener = ascent[0];
 
@@ -143,21 +153,21 @@ export function OpeningLine() {
     );
   }
 
-  const settled = smooth(clamp(k / SETTLE));
-  const risen = smooth(clamp((k - RISE_FROM) / (RISE_TO - RISE_FROM)));
-  const y = mix(mix(REST_Y, SETTLE_Y, settled), EXIT_Y, risen);
+  const y = REST_Y - LAG * k;
   const swap = smooth(clamp((k - TURN_FROM) / TURN_OVER));
+  /** What is left of it. The ridge does most of the work; this finishes it. */
+  const held = 1 - smooth(clamp((k - GO_FROM) / (GO_TO - GO_FROM)));
 
-  /* Above the top of the window and climbing: there is nothing left to draw,
-     and the beats of the first category are about to want the frame. */
-  if (k > RISE_TO) return null;
+  /* Inside the opener still, but faded out under its own foreground, and the
+     journey is about to want the frame. */
+  if (k > GO_TO) return null;
 
   return (
     <>
       <div
-        aria-hidden={k > RISE_FROM}
+        aria-hidden={k > GO_FROM}
         className="pointer-events-none fixed inset-x-0 z-30 flex flex-col items-center justify-center px-6 text-center"
-        style={{ top: `${y * 100}%`, transform: "translateY(-50%)" }}
+        style={{ top: `${y * 100}%`, transform: "translateY(-50%)", opacity: held }}
       >
         {/* The label goes as the line starts to travel: it belongs to the
             photograph, not to the sentence. It travels with the line rather than

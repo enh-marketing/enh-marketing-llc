@@ -96,7 +96,18 @@ function cameraAt(t: number) {
  *  star and someone turning a light off. It shrinks towards the point it is
  *  centred on while it dims, so the frame reads as depth opening up rather than
  *  as an overlay being taken away. */
-const ARRIVE = 0.2;
+/** HOW THE LIGHT COMES AND GOES, in fractions of this chapter.
+ *
+ *  IGNITE is the catch: the flash is at nothing on the frame the star lands and
+ *  at full a third of a viewport later, which is what makes it a flash rather
+ *  than something that was already on.
+ *  HOLD is how long it stays at full, and FALL how long it takes to go. The
+ *  order that matters is that LIT_FROM is inside the hold, so the hole has real
+ *  presence before the light starts to recede, and the light is still up while
+ *  it arrives. There is no frame with neither of them in it. */
+const IGNITE = 0.08;
+const HOLD = 0.22;
+const FALL = 0.26;
 
 /** THE LIGHT IS A STAR YOU FLY INTO, NOT A SHEET LAID OVER THE PAGE, and it was
  *  briefly made into one. Told that the hole showed up before the flash, I read
@@ -132,8 +143,8 @@ const FLOOD_VMAX = 220;
  *  note above says it opens at 72. Holding it while the light is up gives the
  *  whole move back, and the hole is first seen as far off as it was meant to
  *  be. */
-const LIT_FROM = 0.17;
-const LIT_TO = 0.42;
+const LIT_FROM = 0.12;
+const LIT_TO = 0.38;
 
 /** WHAT THE RAY MARCHER IS ALLOWED TO COST, per layout.
  *
@@ -164,30 +175,57 @@ const COST = {
 /** While nothing of it is on screen. */
 const DARK_FPS = 8;
 
-export function Horizon({ t }: { t: number }) {
+export function Horizon({ t, level }: { t: number; level: number }) {
   const wide = useEnhanced("(min-width: 1024px)");
-  /* 1 inside the star, 0 once the dark has opened out. */
-  const flood = 1 - smooth(clamp(t / ARRIVE, 0, 1));
-  /* 0 while the light is up, 1 once the hole is all the way out of the dark. */
-  const lit = smooth(clamp((t - LIT_FROM) / (LIT_TO - LIT_FROM), 0, 1));
+
+  /* NOTHING OF THIS CHAPTER EXISTS UNTIL THE STAR HAS LANDED, and that is the
+     bug this reading fixes: "bright flash starts even before the sun hits the
+     screen, it must start only after it hits".
+     A chapter's local `t` is pinned at 0 through the whole cross-fade that
+     brings it in, so the flood sat at full for that entire ramp, multiplied
+     only by the chapter's rising opacity. The chart's star does not reach the
+     top of its last rise until the boundary, which is the END of that ramp, so
+     the light was building over a star still climbing, and the chapter's black
+     ground was putting the climb out as it went.
+     `level` is exactly 1 only inside this chapter's own stretch, which begins
+     on the frame the star arrives. Before that this draws nothing at all and
+     the chart finishes its climb in the clear. */
+  const arrived = level >= 1 ? 1 : 0;
+  /* The light catching, out of the star it is centred on. */
+  const ignite = smooth(clamp(t / IGNITE, 0, 1));
+  /* AND IT HOLDS BEFORE IT GOES. It used to start receding from t = 0, which
+     put its end before the hole had any presence at all and left a frame with
+     neither in it: "the flash must start fading only after the blackhole is
+     visible, currently its not visible and there is a blank space." */
+  const fall = 1 - smooth(clamp((t - HOLD) / FALL, 0, 1));
+  const flood = arrived * ignite * fall;
+  /* The chapter's own ground, which is what replaces the chart. It arrives with
+     the light rather than before it, so what puts the chart away is the flash. */
+  const ground = arrived * ignite;
+  /* The hole comes up UNDER the light and is already there when it clears. */
+  const lit = arrived * smooth(clamp((t - LIT_FROM) / (LIT_TO - LIT_FROM), 0, 1));
   /* The approach starts where the reader first sees it, not a fifth of the way
      in behind the light. */
   const cam = cameraAt(clamp((t - LIT_FROM) / (1 - LIT_FROM), 0, 1));
   const [fx, fy] = chartPointAt(1);
 
   return (
-    /* bg-black IS LOAD-BEARING AND WAS NOT HERE. The chapter had no ground of
-       its own: the black it sat on was BlackHoleHeroSection's host, which is
-       bg-black behind an alpha:false canvas. Putting the scene behind `lit`
-       took that away, and for the first third of the chapter the whole thing
-       was transparent over a Chart that is still mounted and still painting
-       until t = 0.3025. The flood is centred on chartPointAt(1), which is
-       exactly where the chart draws its own star, so the flash collapsed onto
-       the chart's star and gave the chart back. There was no void to cross.
-       The ground goes on the root, outside `lit`, so it arrives at the
-       chapter's own cross-fade opacity: an ordinary dissolve to black, which is
-       what this join always was, rather than a sheet over the chapter before. */
-    <div className="absolute inset-0 overflow-hidden bg-black">
+    /* THE GROUND IS LOAD-BEARING AND ONCE WAS NOT HERE AT ALL. The chapter had
+       none of its own: the black it sat on was BlackHoleHeroSection's host,
+       which is bg-black behind an alpha:false canvas. Putting the scene behind
+       `lit` took that away, and the chapter went transparent over a Chart that
+       is still mounted and painting until t = 0.3025, with the flood centred on
+       the exact point the chart draws its own star, so the flash collapsed onto
+       that star and handed the chart back. It has one now, and it arrives with
+       the light rather than with the cross-fade; see `ground` above. */
+    <div className="absolute inset-0 overflow-hidden">
+      {/* THE GROUND IS A LAYER NOW, NOT A CLASS ON THIS DIV, and the difference
+          is a viewport of the chart. As a class it was opaque from the chapter's
+          first mounted frame, so it came up with the cross-fade and blacked out
+          the star's last climb. On its own element it can arrive with the light
+          instead, which means the thing that puts the chart away is the flash
+          and not a shutter closing before it. */}
+      <div className="absolute inset-0 bg-black" style={{ opacity: ground }} />
       {/* ITS OWN FADE, INSIDE THE CHAPTER'S. The scene stays mounted through it
           rather than being gated on `lit`: it is the most expensive thing on
           the page and mounting it here would compile its shaders in the middle

@@ -90,12 +90,11 @@ export type Beat = {
    *  them, in its own order. Not written here and not summarised here.
    *
    *  WHY THEY BELONG ON THE PILLAR. A category's body is one sentence, which is
-   *  enough to say what a service is and nowhere near enough to say what buying
-   *  it gets you. "ENH Marketing builds AI agents, automated workflows and
-   *  custom tools" is true of a hundred agencies; "Document Processing,
-   *  Enquiry and Request Handling, Reporting and Data Reconciliation" is what
-   *  this one actually does on a Tuesday. A pillar page that names only its
-   *  categories makes a reader click seven times to find that out.
+   *  enough to say why a service matters and nowhere near enough to say what
+   *  buying it gets you. "Document Processing, Enquiry and Request Handling,
+   *  Reporting and Data Reconciliation" is what this one actually does on a
+   *  Tuesday, and no sentence is going to carry that. A pillar page that names
+   *  only its categories makes a reader click seven times to find it out.
    *
    *  GATED LIKE EVERYTHING ELSE QUOTED HERE. check:copy now reads each string
    *  back against the `title` fields of that service's own file, so a client
@@ -103,8 +102,14 @@ export type Beat = {
    *  the service no longer offers. */
   subServices?: string[];
   /** Slug of the service this beat quotes. Its title must match that page's
-   *  sitemap label and its body that page's meta.description, word for word.
-   *  Enforced by scripts/check-hub-copy.mjs. */
+   *  sitemap label, its href that page's slug, and every sub-service a real
+   *  offering in that file. Enforced by scripts/check-hub-copy.mjs.
+   *
+   *  THE BODY IS NOT AMONG THEM ANY MORE. It used to have to equal the
+   *  service's meta.description word for word, which is a string written for a
+   *  search result and read here as a headline's standfirst; seven of them gave
+   *  the page seven versions of one sentence. The pillar writes its own line
+   *  now and still cannot name work the service does not do. */
   quotes?: string;
 };
 
@@ -160,7 +165,7 @@ export const ASCENT_HANDOVER = "Explore New Heights With AI";
  *  opened on a category, which is the weakest sentence available, and closed on
  *  a hedge dressed as a virtue. Divij's word for it was accurate. */
 export const ASCENT_STANDFIRST =
-  "We did the marketing for fifteen years before we did the AI. Which is why every service below starts with your business, not with the model.";
+  "We spent fifteen years doing the marketing before we did any of this. Which is why every project starts with a paid diagnostic of your business, and why it is as likely to tell you what to leave alone.";
 
 /* ---------------------------------------------------------------- chapter 1 */
 
@@ -178,7 +183,7 @@ export const system: Beat[] = [
     eyebrow: "01",
     tagline: "What AI reads first",
     title: "AI Search Visibility",
-    body: "ENH Marketing helps UAE brands improve how they appear in AI-generated search results.",
+    body: "Ask an assistant about your category and it names somebody. Being named is not luck: it takes a site a machine can read and details that agree wherever they appear.",
     subServices: [
       "AI Visibility Baseline",
       "Technical Access",
@@ -196,7 +201,7 @@ export const system: Beat[] = [
     eyebrow: "02",
     tagline: "Fewer things typed twice",
     title: "AI & Automation",
-    body: "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
+    body: "Every business has work that gets typed twice, chased twice, reconciled twice. We start with a paid diagnostic that says which of it to automate and which should stay in human hands.",
     subServices: [
       "AI Agents",
       "Workflow Automation",
@@ -214,7 +219,7 @@ export const system: Beat[] = [
     eyebrow: "03",
     tagline: "Variants without a reshoot",
     title: "AI Creative Production",
-    body: "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
+    body: "What limits how much creative you can test is the shoot. Video, UGC-style spots, product imagery and every variant after the first, made without booking a studio.",
     subServices: [
       "AI Video Ads",
       "AI UGC-Style Ads",
@@ -246,7 +251,7 @@ export const uplink: Beat[] = [
     eyebrow: "04",
     tagline: "Knows where to stop",
     title: "Conversational AI",
-    body: "ENH Marketing builds AI chatbots, voice agents and customer service systems for UAE businesses. Every project starts with a paid diagnostic.",
+    body: "A bot that guesses costs more than no bot. Chat, voice and booking agents that answer from your own material and hand over the moment they are out of their depth.",
     subServices: [
       "AI Chatbot Development",
       "AI Voice Agents",
@@ -270,7 +275,7 @@ export const chart: Beat[] = [
     eyebrow: "05",
     tagline: "Before the money moves",
     title: "Campaign Intelligence",
-    body: "ENH Marketing helps UAE businesses plan campaign budgets using historical performance, relevant benchmarks and forecast ranges.",
+    body: "Most budgets are argued from last year's numbers and a feeling. Plan the split against your own history and your category, in ranges rather than promises, then check it against what happened.",
     subServices: [
       "Pre-Campaign Forecasting",
       "Media Mix Planning",
@@ -287,7 +292,7 @@ export const chart: Beat[] = [
     eyebrow: "06",
     tagline: "One view, one definition",
     title: "Data & Dashboards",
-    body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
+    body: "The argument is never the dashboard, it is that two people have different numbers for the same word. One definition of a lead, one of a sale, one place they both look.",
     subServices: [
       "Marketing Performance Dashboards",
       "Sales and Lead Dashboards",
@@ -333,7 +338,7 @@ export const horizon: Beat[] = [
     eyebrow: "07",
     tagline: "Live from your systems",
     title: "Intelligent Web",
-    body: "ENH Marketing designs and develops intelligent websites for UAE businesses that personalise content, display live information and use a clear structure.",
+    body: "Most websites are a brochure that was true on launch day. Build one that shows what your own systems say today, adapts to who is reading, and is structured so machines can read it too.",
     subServices: [
       "New Website Design and Development",
       "Existing Website Improvements",
