@@ -118,9 +118,10 @@ const REVEAL_OVER = 0.2;
  *  and the run slides right to left through the bottom two fifths. The picture
  *  keeps the top three fifths to itself and the copy never crosses it.
  *
- *  90vw of pitch against an 84vw card leaves 3vw of the next one showing at each
- *  edge, which is what tells a reader there is another one rather than making
- *  them find out by scrolling.
+ *  The pitch is a radius now and is set from the card rather than from itself;
+ *  see NARROW_RADIUS_VW. What has not changed is why a neighbour has to be on
+ *  screen at rest: it is what tells a reader there is another one rather than
+ *  making them find out by scrolling.
  *
  *  THE CARD HAS TO FIT THE TWO FIFTHS IT IS GIVEN, which is 360px on a 900 tall
  *  phone, and the first attempt did not: at 78vw the tagline wrapped to two
@@ -155,30 +156,41 @@ const SCENE_BOTTOM_PCT = 36;
  *
  *  Travel along the run is `sin(d / 5 * PI) * radius`, so a station one away
  *  has moved 0.5878 of the radius and one two away only 0.9511: they crowd
- *  towards the ends of the track and slow into them. Each radius is set so that
- *  the FIRST neighbour lands exactly where the old pitch put it, because both
- *  pitches were measured against the frame and neither was arbitrary. 68 x
- *  0.5878 = 40vh, and 153 x 0.5878 = 90vw. Everything past the first neighbour
- *  is then closer in than a straight run would have put it, which is what makes
- *  room for it to be visible at all. */
+ *  towards the ends of the track and slow into them. */
 const WIDE_CENTRE = 50;
 const WIDE_RADIUS_VH = 68;
-/** AND A FLOOR IN PIXELS, because the card does not scale with the window.
+/** AND A FLOOR IN PIXELS, because the card does not scale with the window and
+ *  the strips still have to clear it. The card is content-sized: a headline,
+ *  four lines of body, up to seven pills and a chip come to about 474px at
+ *  1440x900 and 520 in a 1024 wide column, where the same content wraps more.
  *
- *  A neighbour used to be at 0.09 of full and could sit anywhere; overlapping
- *  the card was invisible. At the carousel's own 0.77 it is not, and the run
- *  has to actually clear. The card is content-sized: a headline, four lines of
- *  body, up to seven pills and a chip come to about 474px at 1440x900 and 520
- *  in a 1024 wide column, where the same content wraps more. 640px of radius
- *  puts the first neighbour 376px out, which clears half of the tallest card
- *  plus half a strip plus a gap at every size measured.
+ *  545 IS THE BOTTOM OF A WINDOW THAT CLOSES ON A SHORT SCREEN. The first
+ *  neighbour has to clear half the card plus half a strip, which wants a big
+ *  radius, and it should still be inside the frame, which wants a small one. It
+ *  is why the strips gave up the display size of their headline: at the 132px
+ *  they were, that window was empty and there was no radius that worked at all.
+ *  545 is set by the worst case, 1024x700, where the column is narrowest and
+ *  the card tallest at 549px; below it the strips cut into the card there.
  *
- *  IT IS THE FLOOR THAT BINDS UP TO 941px TALL and the vh above it, so the run
- *  opens out on a big screen and holds its clearance on a small one. Measured
- *  as the smallest gap between any two lit stations anywhere on the track:
- *  +35px at 1440x900, +56 at 1280x680, +15 at 1024x700, which is the worst
- *  case because that column is the narrowest and its card the tallest. */
-const WIDE_RADIUS_MIN_PX = 640;
+ *  IT USED TO BE 640, sized against clearance alone, which was the wrong half
+ *  of the problem: it put the first strip 376px out, off the top and bottom of
+ *  a 680 tall frame, so a laptop saw the card and no run at all. */
+const WIDE_RADIUS_MIN_PX = 545;
+
+/** THE RUN IS CENTRED ON THE FRAME MINUS THE HEADER, NOT ON THE FRAME.
+ *
+ *  The navigation is fixed, 84px tall and above everything at z-70, so the
+ *  space the run actually has starts at 84 and not at 0. Centred on the frame,
+ *  the tallest card put its own top edge and its whole kicker row inside that
+ *  bar: measured at 1024x700, where the column is narrowest and the card
+ *  therefore tallest at 549px, the top sat at 75 against a bar reaching 84, and
+ *  the reader got a glass box with no lid and no standfirst.
+ *
+ *  HALF THE HEADER IS THE WHOLE OF THE CORRECTION, because centring in the band
+ *  from 84 to the fold is the same as centring on the frame and moving down by
+ *  half of what was taken off the top. It costs 42px of empty space at the
+ *  bottom, which the right half of the page owns anyway. */
+const WIDE_HEADER_PX = 84;
 /** How far a station off the middle swings across the run, at the far end of
  *  the arc. Small, because it is the curve and not the layout: the run still
  *  reads as a column. */
@@ -190,7 +202,21 @@ const WIDE_ARC_PX = 84;
    the scene above it is already masked to nothing, so what it overlaps is not
    picture, it is the fade. */
 const NARROW_CENTRE = 72;
-const NARROW_RADIUS_VW = 153;
+/** DERIVED FROM THE CARD, THE WAY THE COMPONENT DERIVES ITS OWN.
+ *
+ *  IT WAS 153, BACK-SOLVED FROM THE OLD 90vw PITCH, and that was wrong in a way
+ *  that took the carousel off the phone entirely. The old run had no scale; the
+ *  arc has one, and 0.9 of an 84vw card pulls its near edge from 98vw to
+ *  102.1vw. Two vw of the next card used to show at rest and none did, so a
+ *  reader at any station centre saw one card and no evidence a second existed.
+ *  The client asked for this component on both mobile and desktop and only
+ *  desktop had it.
+ *
+ *  96 IS THE COMPONENT'S OWN RATIO: it runs a 220 radius against a 192px card,
+ *  and 84vw x 220/192 is 96vw. The neighbour then spans 68.6 to 144.2vw, so
+ *  31vw of it is on screen at every rest position, under the active card and
+ *  behind its blur, which is the original's own stacking. */
+const NARROW_RADIUS_VW = 96;
 const NARROW_ARC_PX = 44;
 const NARROW_CARD_VW = 84;
 
@@ -289,8 +315,15 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
     const n = stations.length;
     if (!n) return 0;
     if (n === 1) return 0;
+    /* HALF A STATION OF LEAD-IN AND NO MORE. It used to scale the run-in by the
+       gap to the second station, which is 0.109 of the track against a first
+       station at 0.091, so the run entered from -0.833: the whole of the first
+       viewport had station 01 nominally in charge while sitting 320px below
+       centre with its headline at 0.06 opacity and its chip off the bottom of
+       the screen. Half a station is the most the run is ever off elsewhere, so
+       it now enters looking like every other hand-over. */
     if (at <= stations[0].at) {
-      return (at - stations[0].at) / (stations[1].at - stations[0].at || 1);
+      return stations[0].at > 0 ? -0.5 * (1 - at / stations[0].at) : 0;
     }
     /* THE LAST STATION HOLDS AND DOES NOT TRAVEL ON. It used to keep counting
        past the end on the nearest gap, which is right at the front of the run,
@@ -478,7 +511,15 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
       style={{ height: `${total * 100}vh` }}
       className="relative w-full bg-black"
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      {/* overflow-CLIP, NOT HIDDEN, AND THAT IS NOT A TIDY-UP. `hidden` makes
+          this a scroll container, so anything focusable that ends up outside it
+          can be scrolled INTO it by the browser. Tabbing to a card's Explore
+          link while it was still off the bottom moved the stage 181px and left
+          every scene, the starfield and all seven stations drawing that much
+          too high for the remaining twenty-one viewports, with a black band
+          underneath and nothing to reset it. `clip` clips identically and
+          cannot scroll. */}
+      <div className="sticky top-0 h-screen w-full overflow-clip">
         <div
           className="absolute inset-x-0"
           style={{
@@ -585,16 +626,38 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
             on everywhere else. */}
         <div className="pointer-events-none absolute inset-0 z-10">
           {stations.map((s, i) => {
-            const d = i - station;
+            const dRun = i - station;
+            /* THE READ CARD DOES NOT TRAVEL, AND THAT IS THE COMPONENT'S OWN
+               RULE: its offset is `index - activeIndex`, an integer, and the
+               movement is carried by a transition rather than by scrubbing the
+               track. Scrubbed, the card swings 0.309 of the radius at each
+               hand-over, which is 198px on top of a card 421 to 549px tall. At
+               1280x680 that put its headline and kicker behind the navbar and
+               its chip below the fold: the reader was handed a glass box that
+               began with body copy. There is no radius that fixes it, either.
+               Fitting a 474px card that swings 0.309R inside 680px under an
+               84px header wants R under 136; the clearance the strips need
+               wants R over about 470. The two do not overlap, so the card comes
+               off the axis instead.
+
+               THE PHONE KEEPS THE SCRUB, because the client asked for the
+               right-to-left travel it already had and a 244px card has the room
+               to swing. */
+            const d = wide ? i - activeStation : dRun;
             /* Reduced motion never reaches here; it returns the document
-               branch above. Past the limit there is nothing left to draw. */
-            if (Math.abs(d) > SEAT_LIMIT) return null;
+               branch above. Past the limit there is nothing left to draw; on a
+               wide screen the whole run is seven stations and the far ones are
+               simply held at nothing, so they have something to ease in from. */
+            if (Math.abs(d) > SEAT_LIMIT && !wide) return null;
             /* Placement, scale and dim, all from the carousel's own arithmetic. */
             const at = seat(d);
             const shown = at.opacity * reveal;
             /* The swap happens halfway between two stations, where both are
-               moving and neither is being looked at. */
-            const active = activeStation === i;
+               moving and neither is being looked at. AND ONLY WITHIN HALF A
+               STATION: at the two ends the run counts past itself, and a card
+               declared active out there is a real link in the page's tab order
+               sitting off the bottom of the screen. */
+            const active = activeStation === i && Math.abs(dRun) <= 0.5;
             const b = s.beat;
             return (
               <div
@@ -603,7 +666,9 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                 inert={!active}
                 className="absolute inset-x-0 text-left lg:w-1/2 lg:px-6 lg:pl-16 lg:pr-8 xl:pl-24"
                 style={{
-                  top: `${wide ? WIDE_CENTRE : NARROW_CENTRE}%`,
+                  top: wide
+                    ? `calc(${WIDE_CENTRE}% + ${WIDE_HEADER_PX / 2}px)`
+                    : `${NARROW_CENTRE}%`,
                   /* One transform, one paint. The run travels down the page on a
                      wide screen and across it on a narrow one, and on both the
                      other axis carries the arc: `along` is the sine and `depth`
@@ -617,13 +682,23 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                      it. */
                   transformOrigin: wide ? "left center" : "center",
                   zIndex: at.z,
-                  opacity: shown,
-                  /* OFF THE COMPOSITOR WHEN IT IS NOT THERE. Each of these
-                     carries a backdrop filter, and a backdrop filter at opacity
-                     0 is still a backdrop filter. `visibility` takes it out of
-                     the work entirely; `opacity: 0` alone does not. */
+                  /* THE OPACITY IS NOT HERE ANY MORE, AND NEITHER IS ITS HINT,
+                     because between them they were switching off the glass.
+                     A fractional opacity makes an element a backdrop root, and
+                     so does naming opacity in `will-change`; either one on an
+                     ancestor leaves `backdrop-filter` below it sampling nothing
+                     and painting nothing. The card has carried
+                     `backdrop-blur` since it was first asked for and it has
+                     never once rendered. It moves down onto the card itself,
+                     where an element's own opacity does not defeat its own
+                     filter, and the hint here names only the transform. */
                   visibility: shown < 0.01 ? "hidden" : "visible",
-                  willChange: shown > 0 ? "transform, opacity" : undefined,
+                  willChange: shown > 0 ? "transform" : undefined,
+                  /* The component's own easing, on the step it now takes. */
+                  transition:
+                    wide && reveal >= 1
+                      ? "transform 0.65s cubic-bezier(0.22,1,0.36,1)"
+                      : undefined,
                   pointerEvents: active ? "auto" : "none",
                 }}
               >
@@ -660,7 +735,14 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                     className={`hub-glass relative mx-auto rounded-[26px] px-5 py-6 lg:mx-0 lg:w-full lg:max-w-[40rem] lg:rounded-[28px] lg:px-9 lg:py-9 ${
                       active ? "hub-glass-blur" : ""
                     }`}
-                    style={wide ? undefined : { width: `${NARROW_CARD_VW}vw` }}
+                    style={{
+                      opacity: shown,
+                      transition:
+                        wide && reveal >= 1
+                          ? "opacity 0.65s cubic-bezier(0.22,1,0.36,1)"
+                          : undefined,
+                      ...(wide ? null : { width: `${NARROW_CARD_VW}vw` }),
+                    }}
                   >
                     {/* THE HAIRLINE THAT GOES ROUND THE BOX, asked for by name.
                         Two of them: three pixels of bloom under one pixel of
@@ -686,10 +768,11 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                           reads as a rendering fault and not as an arrival. */}
                       <WordReveal
                         text={b.title}
-                        /* Lit between 0.62 and 0.40 of a station out, which is
-                           the window the old `near` resolved to and is finished
-                           before this station becomes the card. */
-                        p={clamp((0.62 - Math.abs(d)) / 0.22, 0, 1)}
+                        /* Lit between 0.62 and 0.40 of a station out, off the
+                           run's own position rather than the stepped one, so
+                           the words still arrive with the scroll on a wide
+                           screen where the card itself no longer moves. */
+                        p={clamp((0.62 - Math.abs(dRun)) / 0.22, 0, 1)}
                         accentFrom={Math.max(0, b.title.trimEnd().split(" ").length - 1)}
                       />
                     </h2>
@@ -720,8 +803,9 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                          services chip, you can remove it". Six of these are
                          five rows at 84vw, and they took the card to 386px of a
                          900 tall screen, which is 43 per cent of it and reaches
-                         up into the scene. Without them it is 208 and sits in
-                         the bottom third where the carousel belongs. The
+                         up into the scene. Without them it is 244 and sits from
+                         60 to 88 per cent, which leaves the picture the top
+                         three fifths it was given. The
                          desktop card has the width to lay them out in two rows
                          and keeps them. Nothing is lost: they are on the
                          category page the Explore chip goes to, in the same
@@ -740,9 +824,25 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                     {b.href && <ServiceChip href={b.href} />}
                   </div>
                 ) : (
-                  <div className="w-full max-w-[40rem] px-1">
+                  <div
+                    className="w-full max-w-[40rem] px-1"
+                    style={{
+                      opacity: shown,
+                      transition:
+                        reveal >= 1 ? "opacity 0.65s cubic-bezier(0.22,1,0.36,1)" : undefined,
+                    }}
+                  >
                     <Kicker beat={b} />
-                    <h2 className="font-grotesk hub-heading font-bold uppercase leading-[0.95] text-white/40">
+                    {/* NOT `hub-heading`, WHICH IS UP TO 3.9rem AND MADE THE
+                        RUN IMPOSSIBLE TO FIT. A strip is wayfinding: it says
+                        which one you have just read and which one is coming,
+                        and at display size it was 132px tall, which left no
+                        radius that both cleared the card and stayed inside a
+                        680px frame. At this size most titles are one line and
+                        the strip is about 66px, which opens that window. It is
+                        also the honest weight for it: the reader is not meant
+                        to be reading these. */}
+                    <h2 className="font-grotesk text-[1.55rem] font-bold uppercase leading-[1.08] tracking-[-0.015em] text-white/40 lg:text-[1.9rem]">
                       {b.title}
                     </h2>
                   </div>
