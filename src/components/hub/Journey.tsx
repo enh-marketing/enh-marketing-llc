@@ -144,14 +144,14 @@ const REVEAL_OVER = 0.2;
  *  top of the screen that is 67px, under an 84px header. Starting the box at 7%
  *  puts that finish at 124px.
  *
- *  THE BOTTOM WAS 36 AND IS 56, WHICH IS WHAT TURNING THE RUN UPRIGHT COST.
+ *  THE BOTTOM WAS 36 AND IS 48, WHICH IS WHAT TURNING THE RUN UPRIGHT COST.
  *  The copy used to slide across the bottom two fifths and the picture kept
- *  everything above it. A run that travels down the page needs that height, and
- *  the strip above the card now reaches 41 per cent of a 390x844 phone. The box
- *  ends at 44 and its own mask has faded it to nothing from 34, so what the
- *  strip crosses is the tail of the picture rather than the picture. */
+ *  everything above it. A run that travels down the page needs some of that
+ *  height. The card's top edge lands between 46 and 55 per cent depending on
+ *  the phone, the box ends at 52, and its own mask has faded it to nothing from
+ *  40, so where the two meet the picture is already gone. */
 const SCENE_TOP_PCT = 7;
-const SCENE_BOTTOM_PCT = 56;
+const SCENE_BOTTOM_PCT = 48;
 
 /** THE RADII, NOT THE PITCHES, and the difference is the point.
  *
@@ -205,17 +205,18 @@ const WIDE_ARC_PX = 84;
 /** THE PHONE'S RUN IS UPRIGHT NOW, and it was sideways for a reason that has
  *  been overruled: "horizontal scroll in mobile is not good, make it vertical".
  *
- *  WHAT IT COSTS IS PICTURE, and there is no way round that. A run that travels
- *  down the screen needs the screen's height, and the only place that height
- *  can come from is the scene above it. The scene box gives up twelve per cent
- *  and the neighbours are strips rather than cards, the same as the desktop
- *  column, because two more 279px cards stacked vertically do not fit on a
- *  phone at any radius and translucent ones overlapping each other read as a
- *  fault rather than as depth.
+ *  AND IT SHOWS ONE STATION, NOT THREE. The neighbours were strips above and
+ *  below for one revision, which is the desktop column's arrangement, and they
+ *  came off: "next and previous title above and below is not needed in mobile".
+ *  They are still mounted and still on the arc at nothing, because they are
+ *  what the hand-over dissolves through, so between steps a phone shows one
+ *  card and no other words at all.
  *
- *  What survives is the arc: the strips still swing out and shrink on the
- *  carousel's own curve, which is what the component was picked for. */
-const NARROW_CENTRE = 68;
+ *  WHICH GIVES THE PICTURE MOST OF ITS HEIGHT BACK. With nothing lit above the
+ *  card, the scene box only has to clear the card itself: it ends at 52 per
+ *  cent against the 44 the strips needed, and its own mask has faded it to
+ *  nothing from 40. */
+const NARROW_CENTRE = 70;
 /** DERIVED FROM THE CARD, THE WAY THE COMPONENT DERIVES ITS OWN.
  *
  *  IT WAS 153, BACK-SOLVED FROM THE OLD 90vw PITCH, and that was wrong in a way
@@ -230,16 +231,15 @@ const NARROW_CENTRE = 68;
  *  and 84vw x 220/192 is 96vw. The neighbour then spans 68.6 to 144.2vw, so
  *  31vw of it is on screen at every rest position, under the active card and
  *  behind its blur, which is the original's own stacking. */
-/** In pixels, because the run travels down the screen now and the card it has
- *  to clear is a fixed height rather than a share of the width.
+/** In pixels, and it is a slide distance rather than a clearance.
  *
- *  340 puts the first strip 200px off centre, and is set by the smallest phone
- *  rather than the common one: at 360x640 the column is narrowest, so the card
- *  is tallest at 306px, and 320 left the strips two pixels inside it. Measured
- *  as the smallest gap between any two lit stations across the whole track:
- *  +14px at 360x640, +23 at 390x844, +29 at 430x932. On the small one the lower
- *  strip runs 28px off the bottom of the frame, which is what a run does. */
-const NARROW_RADIUS_PX = 340;
+ *  IT WAS 340 AND HAD TO BE, back when the phone showed the neighbours' titles:
+ *  the strips had to clear a 306px card at the smallest size. With nothing lit
+ *  either side of the card, the radius has one job left, which is how far the
+ *  outgoing card travels as it fades. 200 puts that at 118px over the 0.65s of
+ *  the step: enough to read as the run moving, short enough that the card never
+ *  rides up over the picture on its way out. */
+const NARROW_RADIUS_PX = 200;
 /** Across the run, the same job WIDE_ARC_PX does: the curve, not the layout. */
 const NARROW_ARC_PX = 30;
 const NARROW_CARD_VW = 84;
@@ -419,13 +419,11 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
     return v;
   })();
 
-  /* The chapter whose line is up: the most present one, and the later of the
-     two while a join is in progress. */
-  let lead = 0;
-  for (let i = 0; i < levels.length; i++) if (levels[i] >= levels[lead]) lead = i;
+  /* WHICH CHAPTER IS PAINTED ON TOP.
 
-  /* AND, SEPARATELY, THE ONE PAINTED ON TOP. These were the same number, and
-     that is why the joins were cuts rather than dissolves.
+     THERE USED TO BE TWO OF THESE and the difference between them was the whole
+     of the dissolve. `lead` was the most present chapter and this is the latest
+     one with any presence; sharing one number is why the joins were cuts.
      `levels` is exactly 1 everywhere inside a chapter's own stretch and only
      ramps outside it, so the chapter that is arriving is below 1 for the whole
      of the overlap while the one it is replacing sits at 1. Painting the one at
@@ -436,12 +434,13 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
      The scene on top has to be the ARRIVING one, fading up over the one it
      replaces: that is what a dissolve is. So this is the latest chapter with
      any presence at all, not the most present one.
-     IT CANNOT ALSO OWN THE COPY, which is the trap. This flips a whole FADE
-     before `lead` does, and at that moment two headlines are still at full
-     opacity: AI Creative Production sits at local 0.849 of the system and Data
-     & Dashboards at 0.798 of the chart, both dead centre of their windows.
-     Tying the copy to this would cut them mid-sentence. `lead` still owns the
-     words and the rail; this owns nothing but z-order. */
+     IT MUST NOT OWN THE COPY, which was the trap and is why the two were ever
+     separate: this flips a whole FADE early, and at that moment two headlines
+     are still at full opacity, AI Creative Production at local 0.849 of the
+     system and Data & Dashboards at 0.798 of the chart, both dead centre of
+     their windows. Tying the copy to it would cut them mid-sentence. The copy
+     is indexed off the run's own station instead, and `lead` is gone with the
+     rail that was its last reader. This owns nothing but z-order. */
   let top = 0;
   for (let i = 0; i < levels.length; i++) if (levels[i] > 0) top = i;
 
@@ -675,13 +674,22 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
             if (Math.abs(d) > SEAT_LIMIT + 1) return null;
             /* Placement, scale and dim, all from the carousel's own arithmetic. */
             const at = seat(d);
-            const shown = at.opacity * reveal;
             /* The swap happens halfway between two stations, where both are
                moving and neither is being looked at. AND ONLY WITHIN HALF A
                STATION: at the two ends the run counts past itself, and a card
                declared active out there is a real link in the page's tab order
                sitting off the bottom of the screen. */
             const active = activeStation === i && Math.abs(dRun) <= 0.5;
+            /* ON A PHONE ONLY THE STATION BEING READ IS LIT, and that is the
+               whole of what changed here: "next and previous title above and
+               below is not needed in mobile". The neighbours are still mounted
+               and still on the arc, at nothing, because they are what the
+               hand-over dissolves through: the outgoing card slides up and
+               fades, the incoming one comes up from below, and between steps
+               there is one card on screen and no other words at all.
+               The wide column keeps the carousel's own falloff, where the line
+               just read and the line coming are the point of a run. */
+            const shown = (wide ? at.opacity : active ? 1 : 0) * reveal;
             const b = s.beat;
             return (
               <div
@@ -714,7 +722,16 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                      never once rendered. It moves down onto the card itself,
                      where an element's own opacity does not defeat its own
                      filter, and the hint here names only the transform. */
-                  visibility: shown < 0.01 ? "hidden" : "visible",
+                  /* A phone's neighbours are transparent rather than absent,
+                     so their fade can play; anything further out is taken off
+                     the compositor entirely. */
+                  visibility: wide
+                    ? shown < 0.01
+                      ? "hidden"
+                      : "visible"
+                    : Math.abs(d) > 1.5
+                      ? "hidden"
+                      : "visible",
                   willChange: shown > 0 ? "transform" : undefined,
                   /* The component's own easing, on the step it now takes. */
                   transition:
@@ -743,7 +760,7 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
                     this project has rejected twice by name. It is also the most
                     expensive thing on the page, and there is no sense paying
                     for it three times to frost two lines of dim type. */}
-                {active ? (
+                {active || !wide ? (
                   <div
                     /* THE BLUR AND THE HAIRLINE ARE THE ACTIVE CARD'S ALONE,
                        even in the carousel where all three are cards. A
@@ -874,27 +891,11 @@ export function Journey({ chapters }: { chapters: Chapter[] }) {
           })}
         </div>
 
-        {/* How far through the climb you are. */}
-        <ol
-          aria-hidden
-          className="pointer-events-none absolute right-5 top-1/2 z-10 flex -translate-y-1/2 flex-col gap-2 sm:right-8"
-        >
-          {chapters.map((c, i) => (
-            <li
-              key={c.id}
-              /* Colour only, and quickly. It was `transition-all duration-500`:
-                 half a second is a card entering, not a hairline marker
-                 acknowledging which chapter you are in, and `all` put the
-                 element's own height in the transition too, so a resize
-                 animated the rail's length for no reason. */
-              className="w-px transition-colors duration-200 motion-reduce:transition-none"
-              style={{
-                height: `${c.viewports * 10}px`,
-                background: i === lead ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.2)",
-              }}
-            />
-          ))}
-        </ol>
+        {/* THE PROGRESS RAIL IS GONE. It was four hairlines down the right edge
+            saying which chapter you were in, aria-hidden and unreadable, and it
+            was asked for by name to come off. The run itself already carries the
+            same information and carries it in words: an ascending number and a
+            title on every station. */}
       </div>
     </section>
   );
