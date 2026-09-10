@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
 import { WordReveal, clamp, wordLit, wordStyle } from "@/components/hub/WordReveal";
 import { ascent, ASCENT_HANDOVER, ASCENT_STANDFIRST } from "@/content/ai-hub";
@@ -46,7 +47,24 @@ import { ascent, ASCENT_HANDOVER, ASCENT_STANDFIRST } from "@/content/ai-hub";
  *
  *  IT NO LONGER CLIMBS OUT OF THE TOP. That exit existed to hand the frame to
  *  the orbital scene's light, and the light arrives on its own; what the exit
- *  actually did was carry the sentence into a chapter it had no business in. */
+ *  actually did was carry the sentence into a chapter it had no business in.
+ *
+ *  AND IT IS ON GSAP'S TICKER NOW, WHICH IS WHY IT STOPPED JUDDERING. Every
+ *  other layer in this hero is: ParallaxLayers scrubs the photograph on it,
+ *  ForegroundEcho copies the near ground on it, SunBridge moves the glow on it,
+ *  and Ascent's own note says that is what keeps the opener smooth. This was
+ *  the exception. It read the scroll in a `scroll` listener, put the number in
+ *  React state, and re-rendered the heading, the eyebrow, the standfirst and
+ *  every word of WordReveal on every event, then wrote the result to `top`,
+ *  which is a layout property and cannot be composited.
+ *
+ *  So it landed on React's schedule while the photograph landed on the
+ *  ticker's, and the two were never a frame apart in the same direction twice.
+ *  It did not show while the line was nearly still. It showed the moment the
+ *  line was given a parallax rate of its own, which is when it was reported.
+ *
+ *  Nothing here re-renders on scroll any more. React draws the structure once
+ *  and the ticker writes transforms and opacities onto refs. */
 
 /** Where the line rests before any scrolling, as a fraction of the window. */
 const REST_Y = 0.46;
@@ -80,9 +98,15 @@ const WORDS = HEAD.split(" ").filter(Boolean).length + 1;
 
 export function OpeningLine() {
   const reduced = usePrefersReducedMotion();
-  const [k, setK] = useState(0);
   /** The on-mount reveal, 0 to 1, which runs once and is then done with. */
   const [intro, setIntro] = useState(0);
+
+  /* Everything the scroll moves is written onto these, on the ticker. */
+  const block = useRef<HTMLDivElement>(null);
+  const brow = useRef<HTMLParagraphElement>(null);
+  const stand = useRef<HTMLParagraphElement>(null);
+  const from = useRef<HTMLSpanElement>(null);
+  const to = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     /* Not `setIntro(1)` in this branch: writing state straight out of an effect
@@ -122,21 +146,71 @@ export function OpeningLine() {
      The opener's own box does not lie. Pinning the body shifts every child by
      the same amount, so the opener's top stays at minus the real distance
      travelled whether the page is pinned or not, and this reads the same number
-     in both states. It is one getBoundingClientRect per scroll event, on an
-     element that is already in the layout. */
+     in both states. */
   useEffect(() => {
     if (reduced) return;
-    const read = () => {
-      const opener = document.querySelector<HTMLElement>('[data-section="AI Hub opener"]');
+    const opener = document.querySelector<HTMLElement>('[data-section="AI Hub opener"]');
+
+    /** Written only when it changes, so a still line costs one comparison. */
+    let last = "";
+
+    const tick = () => {
+      const el = block.current;
+      if (!el) return;
       const travelled = opener ? -opener.getBoundingClientRect().top : window.scrollY;
-      setK(travelled / Math.max(1, window.innerHeight));
+      const h = Math.max(1, window.innerHeight);
+      const k = travelled / h;
+
+      /* Past its end there is nothing to draw. `display` rather than unmounting,
+         because unmounting is a React render and this loop is not allowed one. */
+      if (k > GO_TO || k < -0.5) {
+        if (last !== "gone") { el.style.display = "none"; if (stand.current) stand.current.style.display = "none"; last = "gone"; }
+        return;
+      }
+      if (last === "gone") { el.style.display = ""; if (stand.current) stand.current.style.display = ""; last = ""; }
+
+      /* IN PIXELS AND ON THE TRANSFORM, not a percentage on `top`. `top` is
+         layout: every frame of it re-ran the box and could not be composited,
+         which is half of why this stuttered against a photograph being moved by
+         a transform on the same tick. */
+      const dy = -LAG * k * h;
+      const held = 1 - smooth(clamp((k - GO_FROM) / (GO_TO - GO_FROM)));
+      el.style.transform = `translate3d(0, ${dy.toFixed(1)}px, 0) translateY(-50%)`;
+      el.style.opacity = held.toFixed(3);
+      el.setAttribute("aria-hidden", k > GO_FROM ? "true" : "false");
+
+      /* The label and the standfirst belong to the photograph, so they go on
+         its own short ramp rather than travelling with the sentence. */
+      const early = (1 - clamp(k / 0.35)).toFixed(3);
+      if (brow.current) brow.current.style.opacity = early;
+      if (stand.current) {
+        stand.current.style.opacity = early;
+        stand.current.setAttribute("aria-hidden", +early <= 0.01 ? "true" : "false");
+      }
+
+      /* The last word turning over. Both words are always in the DOM, laid in a
+         spacer, so this is four style writes rather than a re-render. */
+      const swap = smooth(clamp((k - TURN_FROM) / TURN_OVER));
+      const out = clamp(swap / 0.5);
+      const inc = clamp((swap - 0.5) / 0.5);
+      if (from.current) {
+        from.current.style.opacity = (1 - out).toFixed(3);
+        from.current.style.transform = `translateY(${(out * -42).toFixed(2)}%)`;
+        from.current.style.filter = out > 0.001 ? `blur(${(out * 6).toFixed(2)}px)` : "";
+        from.current.setAttribute("aria-hidden", swap >= 0.5 ? "true" : "false");
+      }
+      if (to.current) {
+        to.current.style.opacity = inc.toFixed(3);
+        to.current.style.transform = `translateY(${((1 - inc) * 42).toFixed(2)}%)`;
+        to.current.style.filter = inc < 0.999 ? `blur(${((1 - inc) * 6).toFixed(2)}px)` : "";
+        to.current.setAttribute("aria-hidden", swap >= 0.5 ? "false" : "true");
+      }
     };
-    read();
-    window.addEventListener("scroll", read, { passive: true });
-    window.addEventListener("resize", read);
+
+    tick();
+    gsap.ticker.add(tick);
     return () => {
-      window.removeEventListener("scroll", read);
-      window.removeEventListener("resize", read);
+      gsap.ticker.remove(tick);
     };
   }, [reduced]);
 
@@ -146,35 +220,33 @@ export function OpeningLine() {
   if (reduced) {
     return (
       <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex h-screen flex-col items-center justify-center px-6 text-center">
-        <Eyebrow opacity={1} />
-        <Line p={1} swap={0} />
-        <Standfirst opacity={1} />
+        <Eyebrow />
+        <Line p={1} />
+        <Standfirst />
       </div>
     );
   }
 
-  const y = REST_Y - LAG * k;
-  const swap = smooth(clamp((k - TURN_FROM) / TURN_OVER));
-  /** What is left of it. The ridge does most of the work; this finishes it. */
-  const held = 1 - smooth(clamp((k - GO_FROM) / (GO_TO - GO_FROM)));
-
-  /* Inside the opener still, but faded out under its own foreground, and the
-     journey is about to want the frame. */
-  if (k > GO_TO) return null;
-
+  /* NOTHING SCROLL-DERIVED IS COMPUTED HERE ANY MORE. This renders once, at
+     rest, and the ticker above moves it. `top` is the resting place and does
+     not change; the travel is a transform on top of it. */
   return (
     <>
       <div
-        aria-hidden={k > GO_FROM}
+        ref={block}
         className="pointer-events-none fixed inset-x-0 z-30 flex flex-col items-center justify-center px-6 text-center"
-        style={{ top: `${y * 100}%`, transform: "translateY(-50%)", opacity: held }}
+        style={{
+          top: `${REST_Y * 100}%`,
+          transform: "translate3d(0, 0, 0) translateY(-50%)",
+          willChange: "transform, opacity",
+        }}
       >
         {/* The label goes as the line starts to travel: it belongs to the
             photograph, not to the sentence. It travels with the line rather than
             sitting in its own layer because laid out separately the two
             collided, and the label printed through the middle of the heading. */}
-        <Eyebrow opacity={1 - clamp(k / 0.35)} />
-        <Line p={intro} swap={swap} />
+        <Eyebrow innerRef={brow} />
+        <Line p={intro} fromRef={from} toRef={to} />
       </div>
 
       {/* THE STANDFIRST IS ITS OWN LAYER, and that is not tidiness. The block
@@ -193,7 +265,7 @@ export function OpeningLine() {
 
           Below the line at every point of the climb: the line rests centred at
           0.46 of the window and settles to 0.50, and this sits at 0.66. */}
-      <Standfirst opacity={1 - clamp(k / 0.35)} />
+      <Standfirst innerRef={stand} />
     </>
   );
 }
@@ -202,10 +274,10 @@ export function OpeningLine() {
  *
  *  See ASCENT_STANDFIRST in content/ai-hub for what it says and why it is the
  *  one piece of written copy on a page of quoted copy. */
-function Standfirst({ opacity }: { opacity: number }) {
+function Standfirst({ innerRef }: { innerRef?: React.RefObject<HTMLParagraphElement | null> }) {
   return (
     <p
-      aria-hidden={opacity <= 0.01}
+      ref={innerRef}
       /* ABOVE THE FOREGROUND, WHICH THE HEADING IS NOT. The echo paints the
          photograph's near ground back over this layer at z-40 so the line
          passes behind the figure, which is the whole effect and was asked for.
@@ -215,7 +287,7 @@ function Standfirst({ opacity }: { opacity: number }) {
          under the navbar at z-70. Depth is worth having on a sentence you read
          in one glance and not on one you read in three. */
       className="font-grotesk pointer-events-none fixed inset-x-0 z-50 mx-auto max-w-[42ch] px-6 text-center text-[0.95rem] leading-[1.6] text-white/80 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)]"
-      style={{ top: "66%", transform: "translateY(-50%)", opacity }}
+      style={{ top: "66%", transform: "translateY(-50%)", willChange: "opacity" }}
     >
       {ASCENT_STANDFIRST}
     </p>
@@ -230,13 +302,12 @@ function Standfirst({ opacity }: { opacity: number }) {
  *  0.183 of the frame to 0.207 between one scroll position and the next, which
  *  is a visible kick in the middle of a smooth climb. Fading in place costs one
  *  empty line of height and the climb stays even. */
-function Eyebrow({ opacity }: { opacity: number }) {
+function Eyebrow({ innerRef }: { innerRef?: React.RefObject<HTMLParagraphElement | null> }) {
   if (!opener.eyebrow) return null;
   return (
     <p
-      aria-hidden={opacity <= 0.01}
+      ref={innerRef}
       className="font-grotesk mb-6 text-[0.8rem] font-bold uppercase tracking-[0.34em] text-white/70"
-      style={{ opacity }}
     >
       {opener.eyebrow}
     </p>
@@ -250,16 +321,17 @@ function Eyebrow({ opacity }: { opacity: number }) {
  *  in the flow while the incoming one is absolutely positioned on top of it.
  *  "Us" and "AI" are close enough in width that a reflow would be small, but it
  *  would land exactly at the moment the reader is looking straight at it. */
-function Line({ p, swap }: { p: number; swap: number }) {
+function Line({
+  p,
+  fromRef,
+  toRef,
+}: {
+  p: number;
+  fromRef?: React.RefObject<HTMLSpanElement | null>;
+  toRef?: React.RefObject<HTMLSpanElement | null>;
+}) {
   const lit = wordLit(p, WORDS - 1, WORDS);
   const base = wordStyle(lit);
-  const out = clamp(swap / 0.5);
-  const inc = clamp((swap - 0.5) / 0.5);
-  /* Which word the line actually says right now. The turn crosses over at its
-     midpoint, and the other word is hidden from the accessibility tree
-     throughout, so the heading never announces "With Us AI". */
-  const settled = swap <= 0 ? "from" : swap >= 1 ? "to" : "crossing";
-  const saysTo = swap >= 0.5;
 
   return (
     <h1 className="font-grotesk hub-display mx-auto max-w-[15ch] font-bold uppercase text-white [text-shadow:0_2px_40px_rgba(0,0,0,0.55)]">
@@ -267,47 +339,47 @@ function Line({ p, swap }: { p: number; swap: number }) {
           between words, which leaves nothing after the last one, and without
           this the heading read "With Us" as "WithUs". */}
       <WordReveal text={HEAD} p={p} />{" "}
-      {settled === "from" && <span style={base}>{FROM}</span>}
-      {settled === "to" && <span style={base}>{TO}</span>}
-      {settled === "crossing" && (
-        <span className="relative inline-block" style={base}>
-          {/* A SPACER SETS THE WIDTH AND NEITHER WORD DOES. Holding the outgoing
-              word in the flow and laying the incoming one over it kept the line
-              from reflowing, but it also made the box exactly as wide as
-              whichever word was leaving, and the other then sat centred inside
-              it with a gap beside it: mid-turn the line read "WITH  AI" with a
-              double space. An invisible copy of the longer of the two holds the
-              box instead, both words are laid in it, and the spacing is the
-              same at every point of the turn. */}
-          <span aria-hidden className="invisible">
-            {FROM.length >= TO.length ? FROM : TO}
-          </span>
-          {/* The outgoing word, leaving upward and out of focus. */}
-          <span
-            aria-hidden={saysTo}
-            className="absolute inset-0"
-            style={{
-              opacity: 1 - out,
-              transform: `translateY(${out * -42}%)`,
-              filter: out > 0.001 ? `blur(${out * 6}px)` : undefined,
-            }}
-          >
-            {FROM}
-          </span>
-          {/* The incoming one, rising into the space it leaves. */}
-          <span
-            aria-hidden={!saysTo}
-            className="absolute inset-0"
-            style={{
-              opacity: inc,
-              transform: `translateY(${(1 - inc) * 42}%)`,
-              filter: inc < 0.999 ? `blur(${(1 - inc) * 6}px)` : undefined,
-            }}
-          >
-            {TO}
-          </span>
+      {/* BOTH WORDS ARE ALWAYS HERE NOW, and the turn is four style writes on
+          the ticker rather than three different trees React swaps between. The
+          branches existed to keep the accessibility tree clean, which the
+          `aria-hidden` the loop writes does just as well, and swapping the tree
+          mid-turn meant a React render on a scroll event, which is the thing
+          this file no longer does.
+
+          A SPACER SETS THE WIDTH AND NEITHER WORD DOES. Holding the outgoing
+          word in the flow and laying the incoming one over it kept the line
+          from reflowing, but it also made the box exactly as wide as whichever
+          word was leaving, and the other then sat centred inside it with a gap
+          beside it: mid-turn the line read "WITH  AI" with a double space. An
+          invisible copy of the longer of the two holds the box instead. */}
+      <span className="relative inline-block" style={base}>
+        <span aria-hidden className="invisible">
+          {FROM.length >= TO.length ? FROM : TO}
         </span>
-      )}
+        {/* The outgoing word, leaving upward and out of focus. */}
+        <span
+          ref={fromRef}
+          aria-hidden={false}
+          className="absolute inset-0"
+          style={{ opacity: 1, transform: "translateY(0%)", willChange: "opacity, transform, filter" }}
+        >
+          {FROM}
+        </span>
+        {/* The incoming one, rising into the space it leaves. */}
+        <span
+          ref={toRef}
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            opacity: 0,
+            transform: "translateY(42%)",
+            filter: "blur(6px)",
+            willChange: "opacity, transform, filter",
+          }}
+        >
+          {TO}
+        </span>
+      </span>
     </h1>
   );
 }
