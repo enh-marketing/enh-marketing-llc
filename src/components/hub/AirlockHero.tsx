@@ -111,6 +111,20 @@ export interface AirlockHeroProps {
   /** The scrub, 0 to 1 across scrubDistance and holdDistance together, on
    *  every painted frame. A read: nothing here waits on what it is used for. */
   onProgress?: (p: number) => void;
+  /** HOW CLOSE TO ITS TOP THE HERO WILL TAKE THE WHEEL BACK, in pixels.
+   *
+   *  0, the default, is the published rule: the reader has to be climbing and
+   *  at the very top. That is exact and on a page with smooth scrolling it
+   *  reads as sluggish, because the last stretch of an eased scroll is its
+   *  slowest. Measured with Lenis on this page, a climb arrived 236, 214, 193,
+   *  175, 158, 142, 130, 118, 104, 96, 86, 77, 70, 63, 56 and then, about two
+   *  seconds after the reader stopped, 0. Fifteen chances to notice nothing
+   *  was happening before the one that armed it.
+   *
+   *  Given a band, the hero arms on the first of those inside it, which is
+   *  what "climbing back into it" feels like from the reader's side. The lock
+   *  still pins the page where it takes it, so nothing jumps. */
+  armWithin?: number;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -157,6 +171,7 @@ export default function AirlockHero({
   theme = "vacuum",
   skipLabel = "Skip intro",
   onProgress,
+  armWithin = 0,
   className,
   style,
 }: AirlockHeroProps) {
@@ -392,7 +407,7 @@ export default function AirlockHero({
       const y = window.scrollY;
       const climbing = y < lastY;
       lastY = y;
-      if (climbing && y <= section!.offsetTop) {
+      if (climbing && y <= section!.offsetTop + armWithin) {
         target = shown = 1;
         paint(1);
         engageLock();
@@ -452,7 +467,7 @@ export default function AirlockHero({
       cancelAnimationFrame(rafId);
       releaseLock();
     };
-  }, [scrubDistance, holdDistance]);
+  }, [scrubDistance, holdDistance, armWithin]);
 
   return (
     <div

@@ -91,6 +91,21 @@ const PUSH_TO = 2.6;
  *  push: reach zero exactly where the lock lets go. */
 const CLEAR_AT = 0.98;
 
+/** HOW CLOSE TO THE TOP THE HATCH TAKES THE WHEEL BACK.
+ *
+ *  The component's own rule is the very top and nothing else, which is exact
+ *  and felt sluggish, reported as such. The last stretch of an eased scroll is
+ *  its slowest: measured climbing with Lenis, the page arrived 236, 214, 193,
+ *  175, 158, 142, 130, 118, 104, 96, 86, 77, 70, 63, 56 and then 0 about two
+ *  seconds after the gesture stopped. Everything after 140 is the tail.
+ *
+ *  140 rather than a fraction of the window, because what is being measured is
+ *  the tail of an easing curve in pixels and it is the same tail on a phone.
+ *  It is a seventh of a short viewport, so a reader is only ever inside it
+ *  when they are already at the top of the first chapter and still going up.
+ *  The lock pins the page where it takes it, so nothing jumps when it does. */
+const ARM_WITHIN = 140;
+
 const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 /** Smooth at both ends. The reader's input is already lerped by the component,
  *  so what this has to do is start and stop without a corner. */
@@ -210,6 +225,7 @@ export function Opening() {
         theme="vacuum"
         scrubDistance={SCRUB}
         holdDistance={HOLD}
+        armWithin={ARM_WITHIN}
         title={<HeroHeadline />}
         tagline={<HeroStandfirst innerRef={stand} />}
         /* NO WORD UNDER THE ARROW, asked for. The arrow is the instruction and
