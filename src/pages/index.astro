@@ -8,11 +8,25 @@ import { availableBadges } from "@/lib/badges";
    Astro this frontmatter runs at build time in Node, so the check still
    happens once, at build, and travels down as plain data. */
 const badges = availableBadges();
+
+/** The homepage was the ONE page on the site with no canonical. Fifty-seven
+ *  `.astro` pages passed one and this did not, so the most-linked URL on the
+ *  domain was the only one not naming itself — and it is the URL most likely
+ *  to be reached by several spellings at once (with and without `www`, over
+ *  http, with campaign parameters on the end from every ad the agency runs).
+ *
+ *  Written as the same `const HREF` every other page uses, and as a path
+ *  rather than a URL: the layout resolves it against `site` in
+ *  astro.config.mjs, so there is one place the domain is written down.
+ *  "/" resolves to `https://enhmedia.com/`, which is character for character
+ *  what src/pages/sitemap.xml.ts already lists for this route. */
+const HREF = "/";
 ---
 
 <Base
   title="ENH — Explore New Heights | Digital Growth Studio, Dubai"
   description="ENH is a Dubai-based digital growth studio crafting brands, campaigns and digital experiences that move markets. Fifteen years. One obsession: growth with proof."
+  canonical={HREF}
   ogTitle="ENH — Explore New Heights"
   ogDescription="A Dubai-based digital growth studio crafting brands, campaigns and experiences that move markets."
 >

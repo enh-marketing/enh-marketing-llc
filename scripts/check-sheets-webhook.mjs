@@ -236,7 +236,7 @@ check(
   `found "${cell("Phone")}"`,
 );
 
-console.log("\nConsent, which only the contact form sends");
+console.log("\nConsent, which only the two consultation forms send");
 res = call({
   secret: "test-secret",
   row: {

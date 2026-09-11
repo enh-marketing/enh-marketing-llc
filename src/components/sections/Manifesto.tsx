@@ -9,7 +9,6 @@ import { Button, ArrowRight } from "@/components/ui/Button";
 import { pages, routeExists } from "@/lib/sitemap";
 import { Container } from "@/components/ui/Container";
 import { Sparkline } from "@/components/fx/Adornments";
-import { BoltCanvas, type BoltHandle } from "@/components/fx/BoltCanvas";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -69,7 +68,11 @@ const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 export function Manifesto() {
   const root = useRef<HTMLElement>(null);
   const runway = useRef<HTMLDivElement>(null);
-  const boltRef = useRef<BoltHandle>(null);
+  /** The rising light. Written to by `reveal` alongside the lines and the
+   *  words, so the ground comes up on the same scrub that reads the story --
+   *  one mechanic driving the whole stage rather than a second one added for
+   *  the background. */
+  const horizon = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = root.current;
@@ -82,7 +85,13 @@ export function Manifesto() {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const reveal = (p: number) => {
-      boltRef.current?.setProgress(p);
+      if (horizon.current) {
+        /* Comes up and brightens across the three paragraphs. Anchored at the
+           bottom, so translating it is the light rising rather than a box
+           sliding. */
+        horizon.current.style.opacity = String(0.34 + 0.5 * p);
+        horizon.current.style.transform = `translateY(${((1 - p) * 13).toFixed(2)}%)`;
+      }
       for (let si = 0; si < N; si++) {
         const lp = clamp((p - si / N) / (1 / N));
         const fin = clamp(lp / 0.16);
@@ -104,7 +113,10 @@ export function Manifesto() {
         l.style.transform = "none";
       });
       words.flat().forEach((w) => (w.style.opacity = "1"));
-      boltRef.current?.setProgress(0);
+      if (horizon.current) {
+        horizon.current.style.opacity = "0.6";
+        horizon.current.style.transform = "none";
+      }
       return;
     }
 
@@ -152,52 +164,93 @@ export function Manifesto() {
       {/* Tall runway; the stage inside pins while the scene plays */}
       <div ref={runway} className="relative h-[340vh]">
         <div className="sticky top-0 h-svh overflow-hidden">
-          {/* 3D bolt + soft halo behind the words.
+          {/* THE GROUND, AND THERE IS NO BOLT ON IT ANY MORE.
           
-              THE BOLT IS HELD AT HALF STRENGTH. It is a narrow, tall object --
-              roughly 135px wide and 450px tall at a 900px stage, dead centre,
-              because the camera frames it on the origin -- and the copy over it
-              is centred too, so its glossy specular highlights ran straight
-              through the middle of every line. At full strength it competes
-              with the words for the same 40% of the stage and wins, which is
-              what "the text is clashing with the icon" is. Nothing about the
-              scene changes: it is the same bolt, the same spin, the same
-              scroll-driven turn. It just sits behind the reading rather than
-              in it. */}
-          <BoltCanvas className="pointer-events-none absolute inset-0 z-0 opacity-50" />
-          <div
-            className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[42vh] w-[42vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(232,0,13,0.28) 0%, rgba(232,0,13,0.05) 45%, transparent 70%)",
-            }}
-          />
-
-          {/* The reading veil, between the artwork and the words.
+              This stage used to hold a glossy 3D lightning bolt on a Three.js
+              canvas, dead centre, with the copy centred over it. The two wanted
+              the same 40% of the stage, so the bolt ran at half strength under a
+              veil painted from 72% of the page's own ground colour -- and what a
+              reader actually saw was centred text on a flat field with a faint
+              pink smudge in it. An expensive object, hidden to make room for the
+              words. Team direction removed it, and the veil went with it: there
+              is nothing behind the type now that the type has to be protected
+              from.
           
-              A wide, soft ellipse of the page's own ground colour: strongest
-              where the text block is and gone by 78%, so the bolt's tips and
-              the red halo still read at the edges of the stage while the type
-              sits on something close to flat page. `--color-void` rather than a
-              hardcoded colour, so it is the page's ground in both themes --
-              near-white at #e6e3de in light and near-black at #060606 in dark.
-              The same device StudioMap uses to lift its address panel off the
-              map, at the same `color-mix(in srgb, ..., transparent)` house
-              spelling.
-              
-              z-[5] puts it over the canvas and the halo at z-0 and under
-              everything the reader is meant to read at z-10. */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 z-[5]"
-            style={{
-              background:
-                "radial-gradient(72% 44% at 50% 50%, color-mix(in srgb, var(--color-void) 72%, transparent) 0%, color-mix(in srgb, var(--color-void) 58%, transparent) 45%, transparent 78%)",
-            }}
-          />
+              WHAT IS THERE INSTEAD IS ATMOSPHERE AND DEPTH, which is what this
+              page uses in place of pictures everywhere else, in the same three
+              devices the hero uses -- drifting brand auroras, a faint grid, and
+              a warm wash -- with two decisions of its own:
+          
+              THE GRID IS LAID DOWN AS A FLOOR. `perspective` on the wrapper and
+              a single `rotateX` on the plane, origin at the bottom, so it
+              recedes from the reader's feet to a horizon instead of sitting flat
+              behind the words. Masked out before it reaches the copy. That is
+              the section's own subject drawn as a ground plane: a company built
+              around growth, and a page whose every other label is a climb.
+          
+              AND THE LIGHT RISES AS THE STORY IS READ. The wash below is driven
+              by the same scrubbed progress that lights the words, so by the last
+              paragraph the horizon has come up and brightened. It peaks at the
+              bottom of the stage and is gone by 72% of its height, which is
+              under the copy block -- the light is put where the text is not,
+              which is why none of this needs a veil over it.
+          
+              ALL CSS. No canvas, nothing to load, nothing to fail, and the
+              section no longer pulls Three.js into the homepage island at all.
+              Two other components still use it, so the dependency stays. */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+            {/* Atmosphere, low, so it reads as ground light.
 
-          <p className="absolute left-1/2 top-10 z-10 -translate-x-1/2 text-xs font-semibold uppercase text-fog">
-            <span className="text-brand">(01)</span> The story
+                NO BRAND RED IN ANY OF IT. These were `bg-brand/25` and
+                `bg-brand-deep/25` and the wash below was a red gradient, which
+                put a pink field behind the whole stage in light mode. `ink-3`
+                instead, which is the one token that means "lighter than the
+                ground" in BOTH themes -- pure white against the off-white
+                `void` in light, #1e1e1e against near-black in dark -- so the
+                same markup reads as light rising either way, with no colour in
+                it. The red left on this stage is the heading's own last line
+                and the pulse dot, both of which are the section's design
+                rather than its background. */}
+            <div className="aurora-a absolute -left-[6%] bottom-[-14%] h-[46vw] w-[46vw] rounded-full bg-ink-3/60 blur-[150px]" />
+            <div className="aurora-b absolute -right-[8%] bottom-[-10%] h-[38vw] w-[38vw] rounded-full bg-ink-3/40 blur-[130px]" />
+
+            {/* The floor. */}
+            <div className="absolute inset-x-0 bottom-0 h-[64%] [perspective:560px]">
+              <div
+                className="absolute inset-0 origin-bottom opacity-[0.22]"
+                style={{
+                  transform: "rotateX(69deg)",
+                  backgroundImage:
+                    "linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px)",
+                  backgroundSize: "88px 88px",
+                  maskImage: "linear-gradient(to top, black 0%, rgba(0,0,0,0.35) 42%, transparent 78%)",
+                  WebkitMaskImage: "linear-gradient(to top, black 0%, rgba(0,0,0,0.35) 42%, transparent 78%)",
+                }}
+              />
+            </div>
+
+            {/* The rising light. Scrubbed.
+            
+                A hairline once ran across where the floor meets it, to tie the
+                two into one horizon. It is gone: at 940px it grazed the last
+                line of the paragraph, and any height that cleared the text put
+                it through the button instead. A rule that has to dodge two
+                moving elements at every viewport height is not earning its
+                place, and the floor's own recession already reads as a
+                horizon without it. */}
+            <div
+              ref={horizon}
+              className="absolute inset-x-0 bottom-0 h-[56%] will-change-[opacity,transform]"
+              style={{
+                opacity: 0.34,
+                background:
+                  "radial-gradient(64% 100% at 50% 100%, color-mix(in srgb, var(--color-ink-3) 92%, transparent) 0%, color-mix(in srgb, var(--color-ink-3) 42%, transparent) 38%, transparent 72%)",
+              }}
+            />
+          </div>
+
+          <p className="absolute left-1/2 top-10 z-10 -translate-x-1/2 text-xs font-semibold uppercase text-fog [@media(max-height:720px)]:top-6">
+            The story
           </p>
 
           {/* The heading always lit, the paragraphs cycling under it.
@@ -210,7 +263,17 @@ export function Manifesto() {
               overlap AND the cell measures the tallest of them. Absolute
               positioning gave the overlap and no height, which is what used to
               force the whole scene into a single centred stack. */}
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-8 px-6 sm:gap-12">
+          {/* THE GAPS TIGHTEN ON A SHORT STAGE, which is what buys the button
+              its place in here. The stage is one viewport tall and the centred
+              block is now heading + paragraph + button: measured, it clears the
+              eyebrow above and the dot below by 184px and 140px at 940px tall,
+              by 24px and 12px at 620px, and at 560px it fails -- the heading
+              rides 6px into the eyebrow and the dot lands 42px inside the
+              button. A 720px height query takes the two gaps from 48px to
+              20px, lifts the eyebrow, and drops the dot, which is the one
+              element here with nothing to say. That holds it down to 500px,
+              which is a laptop with browser chrome or a tablet in landscape. */}
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-8 px-6 sm:gap-12 [@media(max-height:720px)]:gap-5">
             {/* The Craft section's heading treatment, exactly: display face,
                 `display-xl`, extrabold, uppercase, and split over two block
                 lines with the second in brand. Only the centring is this
@@ -258,8 +321,18 @@ export function Manifesto() {
                        heading, which is now display face and bold against body
                        face and regular rather than the same treatment twice at
                        two sizes. `text-balance` evens the rag, which is what
-                       centred copy needs most. */
-                    className="story-line pointer-events-none col-start-1 row-start-1 statement text-balance text-center leading-[1.25] text-snow will-change-[opacity,transform]"
+                       centred copy needs most.
+
+                       AND THE SIZE IS NOW SET HERE RATHER THAN BY `.statement`,
+                       which is the only thing that changed. That clamp lands on
+                       30.4px at 1440, and these paragraphs are 330 to 400
+                       characters apiece, so each one ran to six centred lines --
+                       which is exactly what the note above calls the hardest
+                       thing on the page to read, and then sets anyway. 24px at
+                       1.45 is four lines, keeps a clear step down from the
+                       display-xl heading, and reads as prose. The composition,
+                       the centring, the balance and the scrub are untouched. */
+                    className="story-line pointer-events-none col-start-1 row-start-1 text-balance text-center text-[1.125rem] leading-[1.5] text-snow will-change-[opacity,transform] sm:text-[1.3125rem] sm:leading-[1.45] lg:text-[1.5rem]"
                     style={{ opacity: 0 }}
                   >
                     {/* The word carries a trailing space of its own.
@@ -284,6 +357,36 @@ export function Manifesto() {
                 );
               })}
             </div>
+
+            {/* "Know More", which is how the document closes this section.
+
+                IN THE STAGE, UNDER THE PARAGRAPHS, at the team's request. It
+                used to sit in flow below the whole runway, and the note that
+                put it there was right at the time: the paragraphs were set at
+                `.statement`, the tallest measured 580px in a 900px stage, and
+                a button in the stage would have collided with the last one on
+                any short screen. That is no longer the arithmetic. The
+                paragraphs are 24px now, the tallest measures nearer 140px, and
+                the whole centred block comes to about 470px -- so on a 940px
+                stage the button clears the eyebrow above and the pulse dot
+                below with room to spare. Measured at 1440x940, 1024x900,
+                1440x620 and 390x844.
+
+                IT POINTS AT /about-us. The document gives the label and no
+                destination. This section is the company introduction -- "ENH
+                Marketing is a full-service digital marketing company in Dubai,
+                UAE" -- so About is what "know more" means here; nothing else on
+                the site continues that sentence. Guarded, so if that route ever
+                leaves BUILT the button goes with it rather than becoming a
+                404. */}
+            {routeExists(pages.about.href) && (
+              <Rise delay={0.15}>
+                <Button href={pages.about.href}>
+                  Know More
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+              </Rise>
+            )}
           </div>
 
           {/* Decorative pulse dot, as in the reference.
@@ -298,37 +401,10 @@ export function Manifesto() {
               clear; 10% satisfies that from about 578px up, and 16% only from
               about 680px. Still proportional rather than a fixed inset, so the
               composition still breathes on a tall screen. */}
-          <span className="absolute bottom-[10%] left-1/2 z-10 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-brand shadow-[0_0_12px_rgba(232,0,13,0.9)]" />
+          <span className="absolute bottom-[10%] left-1/2 z-10 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-brand shadow-[0_0_12px_rgba(232,0,13,0.9)] [@media(max-height:720px)]:hidden" />
         </div>
       </div>
 
-      {/* "Know More", which is how the document closes this section.
-
-          IT IS BELOW THE PINNED SCENE, NOT INSIDE IT. The stage is one viewport
-          tall and the document's three paragraphs are set at display scale
-          inside it: the tallest measures 580px in a 900px stage, and the eyebrow
-          and the pulse dot already take the space above and below that. A
-          button placed in the stage would either collide with the last
-          paragraph on a short screen or have to be timed to the scrub, and it
-          would leave the scene as the reader scrolls out of it. In flow, it
-          arrives exactly when the story finishes and cannot be missed.
-
-          IT POINTS AT /about-us. The document gives the label and no
-          destination. This section is the company introduction -- "ENH
-          Marketing is a full-service digital marketing company in Dubai, UAE"
-          -- so About is what "know more" means here; nothing else on the site
-          continues that sentence. Guarded, so if that route ever leaves BUILT
-          the button goes with it rather than becoming a 404. */}
-      {routeExists(pages.about.href) && (
-        <Container className="py-14 text-center sm:py-16">
-          <Rise>
-            <Button href={pages.about.href}>
-              Know More
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-          </Rise>
-        </Container>
-      )}
     </section>
   );
 }

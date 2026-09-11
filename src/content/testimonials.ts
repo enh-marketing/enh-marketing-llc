@@ -47,7 +47,7 @@
 export const meta = {
   title: "Client Testimonials | ENH Marketing, Dubai",
   description:
-    "Eighteen ENH Marketing clients in their own words, from Gulf Radiant at fifteen years to Helpsters at two. Read what businesses across Dubai say about our SEO, websites, social media and support.",
+    "Twenty ENH Marketing clients in their own words, from Gulf Radiant at fifteen years to Helpsters at two. Read what businesses across Dubai say about our SEO, websites, social media and support.",
 };
 
 export const STARS = 5;
@@ -92,7 +92,8 @@ export type Voice = {
   mentions?: { service: Service; evidence: string }[];
 };
 
-/** All eighteen, in the order the source page lists them. */
+/** All twenty: the eighteen the source page lists, in its order, then the two
+ *  the team supplied afterwards. */
 export const voices: Voice[] = [
   {
     no: "01",
@@ -272,6 +273,43 @@ export const voices: Voice[] = [
       { service: "seo", evidence: "SEO management" },
     ],
   },
+  {
+    /* 19 AND 20 DID NOT COME FROM THE SOURCE PAGE. The eighteen above were
+       transcribed from https://enhmedia.com/testimonial on 2026-09-07; these
+       two were supplied directly by the team on 2026-09-11 and are not
+       published there yet. Same rule applies to both: the words are the
+       client's and nothing here edits them.
+
+       NEITHER HAS LOGO ARTWORK IN THIS REPOSITORY, so neither appears in
+       `LOGOS` and both fall back to the monogram plate in VoiceArchive. Drop a
+       file into /public/clients and add the entry to light them up.
+
+       BOTH NAME "SEO and Google Ads" AND ONLY SEO IS TAGGED. There is no
+       service in this page's four that means paid search -- `social` is
+       "Social & campaigns" and stretching it to cover Google Ads would put a
+       tag on the card with nothing in the sentence behind it, which is the one
+       thing `mentions` exists to prevent. Silence is the honest answer until
+       the filter has a tag for it. */
+    no: "19",
+    name: "Dr. Vrata Shetty",
+    org: "Rex Medicals",
+    quote:
+      "ENH has been managing our SEO and Google Ads, and we’ve been very happy with their work and commitment. The team has been proactive, responsive and consistently focused on delivering results. Their understanding of digital marketing and willingness to go the extra mile has made them a valuable partner for Rex Dental Clinic. We appreciate their efforts and would definitely recommend ENH to businesses looking for a reliable digital marketing partner.",
+    mark: "proactive, responsive and consistently focused on delivering results",
+    mentions: [{ service: "seo", evidence: "SEO" }],
+  },
+  {
+    /* Four paragraphs, and they are kept. The quote carries its own newlines
+       and the card sets `whitespace-pre-line`; every other quote on this page
+       is a single run, so nothing else is affected. */
+    no: "20",
+    name: "Sona Malek",
+    org: "Spectrum Exhibitions",
+    quote:
+      "Working with ENH has been a great experience for Spectrum. They took the time to understand our exhibition business, the different industries we cater to and the kind of clients we want to reach.\n\nTheir consistent efforts across SEO and Google Ads have helped strengthen our online visibility and bring more relevant enquiries and leads to our business. We particularly appreciate the team’s proactive approach to exploring new strategies and identifying industry-specific opportunities to reach potential customers.\n\nWhile our team is focused on delivering successful exhibitions for our clients, ENH has taken ownership of strengthening our digital presence and ensuring that Spectrum remains visible to people looking for exhibition services in Dubai.\n\nThe team is responsive, easy to work with and committed to continuous improvement. We’re happy with the progress so far and look forward to achieving even more together. We would definitely recommend ENH as a reliable digital marketing partner.",
+    mark: "strengthen our online visibility and bring more relevant enquiries and leads",
+    mentions: [{ service: "seo", evidence: "SEO" }],
+  },
 ];
 
 /* ----------------------------------------------------------------- derived */
@@ -366,26 +404,25 @@ export const LOGOS: Record<string, Logo> = {
   "18": { src: "/clients/avoria.jpg", w: 400, h: 399 },
 };
 
-/** THE ORDER THE CARDS ARE LAID OUT IN, and why it is not the source order.
+/** THE ORDER THE CARDS ARE LAID OUT IN, WHICH IS NOW SIMPLY THE SOURCE'S.
  *
- *  The five testimonials that name a duration are set as wide cards, and in
- *  source order three of them fall consecutively (14, 15, 16). Three wide cards
- *  in a row is a block, not a rhythm. Interleaving them so a wide card opens
- *  every fourth slot gives the wall a beat you can feel scrolling it.
+ *  This used to interleave: the five testimonials that name a duration were
+ *  set as WIDE cards taking two columns, three of them fell consecutively in
+ *  source order, and three wide cards in a row is a block rather than a
+ *  rhythm -- so they were spread one every fourth slot to give the wall a
+ *  beat.
  *
- *  Reordering is a presentational choice and nothing on the page claims an
- *  order: the source page numbers none of them, and the index that used to sit
- *  on each card is gone. */
-export const layout: Voice[] = (() => {
-  const wide = voices.filter((v) => v.held);
-  const rest = voices.filter((v) => !v.held);
-  const out: Voice[] = [];
-  while (wide.length || rest.length) {
-    if (wide.length) out.push(wide.shift() as Voice);
-    for (let i = 0; i < 3 && rest.length; i++) out.push(rest.shift() as Voice);
-  }
-  return out;
-})();
+ *  There is one card weight now, so there is nothing left to space out and
+ *  nothing the reshuffle buys. Reordering was only ever defensible as a
+ *  presentational fix for that problem; with the problem gone it would just be
+ *  this file having an opinion about whose testimonial comes first, and
+ *  nothing on the page claims an order. Back to the order the source lists
+ *  them in, with the two the team supplied afterwards at the end.
+ *
+ *  Kept as a named export rather than folded into `voices` at the call site so
+ *  the archive keeps one thing to render and a future ordering has one place
+ *  to live. */
+export const layout: Voice[] = voices;
 
 /** Initials for the monogram, matching the treatment TrustStrip already uses
  *  for clients. Skips a leading initial-with-a-dot so "N. Gopaldas Gems" reads
@@ -405,10 +442,10 @@ export function monogram(org: string): string {
 
 export const archive = {
   index: "01",
-  title: "All Eighteen,",
+  title: "All Twenty,",
   strokeTitle: "In Their Own Words",
   lede:
-    "Every testimonial ENH has been given, transcribed exactly as published. Five of them say how long the relationship has run, in their own words, and those five lead. Filter by the service a client names, or open any card to read it in full.",
+    "Every testimonial ENH has been given, reproduced exactly as received. Five of them say how long the relationship has run, in their own words. Filter by the service a client names, or open any card to read it in full.",
 };
 
 export const finalCta = {
@@ -416,7 +453,7 @@ export const finalCta = {
   title: "Ready To Be Our",
   strokeTitle: "Next Success Story",
   body: "Every quote on this page started as a first conversation about where a business had stalled. Tell us where yours has, and we will tell you honestly whether we are the ones to move it.",
-  note: "Not one figure on this page was written by us. In three years we would like yours to be the nineteenth that was not either.",
+  note: "Not one figure on this page was written by us. In three years we would like yours to be the twenty-first that was not either.",
   submitLabel: "Get In Touch",
   whatsappLabel: "Chat On WhatsApp",
 };

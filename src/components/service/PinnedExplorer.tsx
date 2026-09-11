@@ -14,6 +14,7 @@ import { StoreArchitecture } from "@/components/service/StoreArchitecture";
 import { VenueFloor } from "@/components/service/VenueFloor";
 import { CampaignBoard } from "@/components/service/CampaignBoard";
 import { ProcessTrack } from "@/components/service/ProcessTrack";
+import { SitePasses } from "@/components/service/SitePasses";
 import { ProfileAnatomy } from "@/components/service/ProfileAnatomy";
 import { PageBuild, type BuildAnchor } from "@/components/service/PageBuild";
 import { LeadSystem } from "@/components/service/LeadSystem";
@@ -67,6 +68,9 @@ export type DiagramSpec =
   | { kind: "venue" }
   | { kind: "board" }
   | { kind: "track"; axis?: [string, string]; openEnded?: boolean }
+  /** One website, and the passes a programme makes over it. Distinct from
+   *  `track`, which draws an ordered run whose stages share no object. */
+  | { kind: "sitepasses" }
   | { kind: "profile"; anchors: ServiceAnchor[] }
   | { kind: "pagebuild"; anchors: BuildAnchor[] }
   | { kind: "leadsystem" }
@@ -341,6 +345,8 @@ export function PinnedExplorer({
         return (
           <HandoverMap active={active} pin={pin} count={items.length} loop={diagram.loop} />
         );
+      case "sitepasses":
+        return <SitePasses active={active} pin={pin} />;
       case "track":
         return (
           <ProcessTrack

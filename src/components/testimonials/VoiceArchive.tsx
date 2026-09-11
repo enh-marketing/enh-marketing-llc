@@ -14,6 +14,7 @@ import {
   layout,
   archive,
   LOGOS,
+  monogram,
   countFor,
   STARS,
   SERVICE_LABEL,
@@ -182,8 +183,10 @@ export function VoiceArchive({ id, label }: { id: string; label: string }) {
           })}
         </div>
 
-        {/* Dense auto-flow, because the wide cards leave holes a normal grid
-            would carry all the way down the wall. */}
+        {/* Dense auto-flow, because an OPENED card spans two or three
+            columns and would otherwise leave a hole a normal grid carries all
+            the way down the wall. It used to be the second card weight that
+            made the holes; that weight is gone and opening one still does. */}
         <motion.ul
           ref={grid}
           layout={!reduced}
@@ -208,7 +211,12 @@ export function VoiceArchive({ id, label }: { id: string; label: string }) {
             "seo" mid-sentence, and a colon lets it sit there as a label. */}
         <p className="mt-8 text-sm leading-relaxed text-fog">
           {filter === null
-            ? `All ${voices.length} shown, transcribed exactly as published.`
+            /* "as given" rather than "as published": eighteen of these were
+               transcribed from the live testimonials page, and two were
+               supplied by the team and are not published there yet. Both are
+               reproduced without edit, which is what the line is actually
+               promising. */
+            ? `All ${voices.length} shown, reproduced exactly as given.`
             : `Showing ${shown.length} of ${voices.length}: the clients who name ${SERVICE_LABEL[filter]} in their own words.`}
         </p>
       </Container>
@@ -241,7 +249,6 @@ function Card({
   const y = useSpring(ly, { stiffness: 130, damping: 20 });
 
   const logo = LOGOS[v.no];
-  const wide = Boolean(v.held);
 
   /* Measured rather than guessed from a character count: the clamp is a line
      count at a fluid font size, so where it bites depends on the column width
@@ -285,7 +292,7 @@ function Card({
       }}
       className={cn(
         "va-card group relative isolate",
-        open ? "sm:col-span-2 lg:col-span-3" : wide && "sm:col-span-2",
+        open && "sm:col-span-2 lg:col-span-3",
       )}
     >
       {/* GSAP's entrance writes here, so it never touches the transform Motion
@@ -310,61 +317,85 @@ function Card({
 
           <div
             className={cn(
-              "relative z-10 flex flex-1 gap-8 p-7 sm:p-8",
-              wide && !open ? "flex-col lg:flex-row lg:items-start lg:gap-10" : "flex-col",
+              "relative z-10 flex flex-1 flex-col gap-8 p-7 sm:p-8",
               open && "lg:gap-12",
             )}
           >
             {/* ---- the mark, and the years where the client names them ---- */}
-            <div
-              className={cn(
-                "flex shrink-0 flex-col items-start gap-6",
-                wide && !open && "lg:w-[13.5rem]",
-              )}
-            >
+            <div className="flex shrink-0 flex-col items-start gap-6">
               {/* Fixed height, width follows: thirteen of these marks are
                   square and five are landscape, so one box would either shrink
                   the wordmarks to a square or strand the square ones in air.
                   The plate is pure white rather than a theme token, because
                   every file carries its own opaque white background and any
-                  off-white plate shows the seam where they meet. */}
-              <span className="flex h-16 items-center justify-center overflow-hidden rounded-xl bg-white px-4 py-3">
-                <img
-                  src={logo.src}
-                  alt={`${v.org} logo`}
-                  width={logo.w}
-                  height={logo.h}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-auto max-w-[10rem] object-contain"
-                />
+                  off-white plate shows the seam where they meet.
+
+                  THE PLATE IS 80px AND THE PADDING IS THINNER, because at 64px
+                  with `py-3` the mark itself only ever got 40px -- measured,
+                  every one of the eighteen, and the square ones came out
+                  40x40. More than a third of the plate was padding, and
+                  against files that are 200 to 400px natural there was nothing
+                  to gain by it. 80px against `py-3` puts the mark at 56px: the
+                  plate grows a quarter and the logo grows two fifths, which is
+                  the visible part. `max-w-[10rem]` still never binds -- the
+                  widest ratio here is Media Interactive at 209x101, which
+                  reaches 116px. */}
+              <span className="flex h-20 items-center justify-center overflow-hidden rounded-xl bg-white px-5 py-3">
+                {logo ? (
+                  <img
+                    src={logo.src}
+                    alt={`${v.org} logo`}
+                    width={logo.w}
+                    height={logo.h}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-auto max-w-[10rem] object-contain"
+                  />
+                ) : (
+                  /* NO ARTWORK, SO THE MONOGRAM STANDS IN -- and this branch is
+                     what stops a new testimonial taking the page down with it.
+                     `LOGOS` is keyed by `no` and covers only the eighteen that
+                     were downloaded from the source page, so a nineteenth read
+                     `logo.src` off undefined and threw during render. On this
+                     site that does not cost one card: the page body is a single
+                     island, so the throw discards all of it and /testimonials
+                     renders as a bare footer.
+
+                     `monogram()` has been exported from the content file since
+                     it was written, for exactly this, and never wired up. It is
+                     the treatment TrustStrip already gives a client with no
+                     mark. The colour is a literal rather than a token for the
+                     same reason the plate is `bg-white`: the plate does not
+                     flip with the theme, so neither can the ink on it. */
+                  <span className="font-display px-2 text-3xl font-extrabold tracking-tight text-[#15120f]">
+                    {monogram(v.org)}
+                  </span>
+                )}
               </span>
 
-              {wide && (
-                <span className="hidden lg:block">
-                  <YearMark voice={v} />
-                </span>
-              )}
             </div>
 
             {/* ---------------------------- the words --------------------- */}
             <div className="flex min-w-0 flex-1 flex-col">
-              {wide && (
-                <div className="mb-6 lg:hidden">
-                  <YearMark voice={v} />
-                </div>
-              )}
-
               <blockquote className="relative flex-1">
                 <p
                   ref={quote}
                   className={cn(
                     "font-display font-bold text-snow",
+                    /* `whitespace-pre-line` ON THE OPEN STATE ONLY. A quote
+                       written as several paragraphs should keep them once it is
+                       open -- the twentieth is four, and set as one block it is
+                       a wall. But `line-clamp-6` counts a blank line as a line,
+                       so honouring the breaks while CLAMPED spent two of the
+                       six on nothing and stranded the ellipsis on a line of its
+                       own. Captured at 1440: the closed card showed one
+                       paragraph and a lone "...". Closed it is one run and the
+                       clamp gets six lines of words. The other nineteen have no
+                       newline in them, so nothing about them changes either
+                       way. */
                     open
-                      ? "text-[clamp(1.1rem,1.7vw,1.45rem)] leading-[1.45] lg:max-w-4xl"
-                      : wide
-                        ? "line-clamp-6 text-[clamp(1.02rem,1.35vw,1.2rem)] leading-[1.5]"
-                        : "line-clamp-6 text-[1.02rem] leading-[1.5]",
+                      ? "whitespace-pre-line text-[clamp(1.1rem,1.7vw,1.45rem)] leading-[1.45] lg:max-w-4xl"
+                      : "line-clamp-6 text-[1.02rem] leading-[1.5]",
                   )}
                 >
                   {/* The claim carries a drawn brand rule rather than a colour
@@ -401,10 +432,9 @@ function Card({
               )}
 
               {/* WHO SAID IT, AND HOW THEY RATED IT, ON ONE LINE.
-                  The stars started in the card's top-right corner, which read
-                  well on the narrow cards and collided with the first line of
-                  the quote on the wide ones, where the words column runs to
-                  the card's right edge. Here they cannot collide with
+                  The stars started in the card's top-right corner, where
+                  they collided with the first line of the quote on the wider
+                  layout the card used to have. Here they cannot collide with
                   anything, and they sit with the attribution they belong to
                   rather than floating above the words.
 
@@ -456,32 +486,3 @@ function Card({
   );
 }
 
-/** The years, where the client states them. The one strictly factual figure a
- *  card can carry, and it is always shown next to the client's own wording so
- *  the number is never presented as ours. */
-function YearMark({ voice: v }: { voice: Voice }) {
-  const years = v.held?.years;
-  return (
-    <span className="block border-t-2 border-brand pt-4">
-      {years ? (
-        <span className="font-display flex items-baseline gap-2 leading-none">
-          <span className="text-[clamp(2.6rem,4.4vw,3.6rem)] font-extrabold tabular-nums text-snow">
-            {years}
-          </span>
-          <span className="text-[0.9rem] font-extrabold uppercase text-brand">
-            {years === 1 ? "Year" : "Years"}
-          </span>
-        </span>
-      ) : (
-        <span className="font-display block text-[clamp(1.3rem,2vw,1.7rem)] font-extrabold uppercase leading-tight text-snow">
-          Since
-          <br />
-          Jan 2018
-        </span>
-      )}
-      <span className="mt-3 block max-w-[14rem] text-[0.78rem] leading-snug text-fog">
-        Their words: &ldquo;{v.held?.phrase}&rdquo;
-      </span>
-    </span>
-  );
-}

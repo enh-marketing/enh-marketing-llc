@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "motion/react";
 import { brand } from "@/lib/content";
 import { Chars, Rise } from "@/components/fx/Reveal";
@@ -11,7 +11,18 @@ import {
   TextareaField,
   ConsentField,
   SubmitButton,
+  Honeypot,
+  RecaptchaNotice,
+  FormError,
 } from "@/components/ui/Field";
+import { pageContext, recaptchaAction, submitEnquiry } from "@/lib/enquiry";
+import type { EnquiryField } from "@/lib/enquiry";
+import { getRecaptchaToken, warmRecaptcha } from "@/lib/recaptcha";
+
+/** Which form this is, for the notification email and the sheet column. The
+ *  contact page's is "Contact Consultation"; this one has to be distinguishable
+ *  from it or the team cannot tell a homepage enquiry from a contact-page one. */
+const FORM_NAME = "Homepage Consultation";
 
 function MagneticOrb() {
   const x = useMotionValue(0);
@@ -49,8 +60,89 @@ function MagneticOrb() {
   );
 }
 
+/** "Let's explore new heights, together." — the homepage consultation form.
+ *
+ *  IT DID NOT SEND ANYTHING. Until now this form's entire submit handler was
+ *  `e.preventDefault(); setDone(true);`. It drew six fields and a consent box,
+ *  validated them natively, and then printed "Thank you. Thanks for reaching
+ *  out. We will get back to you soon." without opening a connection. Every
+ *  enquiry made from the homepage -- the most-visited page on the site -- was
+ *  discarded in the browser, and the visitor was told it had arrived.
+ *
+ *  THE MARKUP IS UNTOUCHED. The panel, the hairline sweep, the field layout,
+ *  the consent box, the thank-you and the magnetic orb are exactly as they
+ *  were; this change is the wiring behind them. What is added is what a real
+ *  submit needs and this one never had: a honeypot, a reCAPTCHA token, a
+ *  sending state, an error path, and the reCAPTCHA attribution.
+ *
+ *  IT IS NOT `LeadForm` OR `ConsultationForm`. The first draws a plain grid
+ *  from a field list and has no consent box; the second is the contact page's,
+ *  with per-field error messages, a service pill row and its own submit button
+ *  built as a spinning orb. This panel is a third composition and replacing it
+ *  with either would be redesigning the section, not fixing it. What it shares
+ *  with both is the part that matters: the payload shape, the endpoint, and
+ *  `@/lib/enquiry`.
+ *
+ *  NAMES ARE THE SITE'S, NOT THE DOM'S. The inputs carry `lt-` prefixed ids
+ *  because the homepage mounts other forms too, but they submit as `name`,
+ *  `email`, `phone`, `company`, `services`, `message` -- the ids the sheet
+ *  keys its columns off. Prefixed ids reaching the payload would have opened
+ *  six new columns saying the same thing as the existing six. */
 export function LetsTalk() {
   const [done, setDone] = useState(false);
+  const [sending, setSending] = useState(false);
+  /** A send that failed: ours to explain, not the visitor's to fix. */
+  const [error, setError] = useState<string | null>(null);
+  /** The thank-you replaces the form, which pulls focus out of the document.
+   *  Moved here on success so a screen reader lands on the confirmation. */
+  const doneRef = useRef<HTMLDivElement>(null);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (sending) return;
+
+    const data = new FormData(event.currentTarget);
+    setSending(true);
+    setError(null);
+
+    /* In the order the panel draws them, with the labels the visitor actually
+       read, so the email and the sheet reproduce the form rather than a
+       developer's idea of it. */
+    const value = (key: string) => String(data.get(key) ?? "").trim();
+    const fields: EnquiryField[] = [
+      { id: "name", label: "Name", value: value("name") },
+      { id: "email", label: "Email", value: value("email") },
+      { id: "phone", label: "Phone", value: value("phone") },
+      { id: "company", label: "Company", value: value("company") },
+      { id: "services", label: "Services", value: value("services") },
+      { id: "message", label: "Message", value: value("message") },
+    ];
+
+    const action = recaptchaAction(FORM_NAME);
+    const token = await getRecaptchaToken(action);
+
+    const result = await submitEnquiry({
+      formName: FORM_NAME,
+      ...pageContext(),
+      fields,
+      /* The panel has a consent box, so it is sent, the way the contact form
+         sends its own. Native `required` means it cannot be false here, but
+         the value recorded is the box's rather than a hardcoded true. */
+      consent: data.get("lt-consent") !== null,
+      token,
+      action,
+      hp: String(data.get("company_website") ?? ""),
+    });
+
+    setSending(false);
+    if (result.ok) {
+      setDone(true);
+      // After the swap, not before: the node does not exist yet on this tick.
+      requestAnimationFrame(() => doneRef.current?.focus());
+      return;
+    }
+    setError(result.message);
+  }
 
   return (
     <section id="contact" className="relative overflow-hidden py-16 sm:py-20">
@@ -64,7 +156,7 @@ export function LetsTalk() {
 
       <Container className="relative">
         <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-          <span className="text-brand">(07)</span> Let&apos;s talk <SpinStar />
+          Let&apos;s talk <SpinStar />
         </p>
 
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">
@@ -140,10 +232,14 @@ export function LetsTalk() {
                 {done ? (
                   <motion.div
                     key="ok"
+                    ref={doneRef}
+                    tabIndex={-1}
+                    // Announced on arrival; the form it replaced is gone.
+                    role="status"
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex min-h-80 flex-col items-center justify-center text-center"
+                    className="flex min-h-80 flex-col items-center justify-center text-center outline-none"
                   >
                     <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand/15 text-brand">
                       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -160,11 +256,14 @@ export function LetsTalk() {
                     key="form"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      setDone(true);
-                    }}
+                    onSubmit={handleSubmit}
+                    /* First contact with the form is when reCAPTCHA starts
+                       loading. See the note at the top of @/lib/recaptcha for
+                       why it is not in the layout. */
+                    onFocusCapture={warmRecaptcha}
                   >
+                    <Honeypot id="lt-company-website" />
+
                     <h3 className="font-display mb-9 max-w-sm text-lg font-bold leading-snug text-snow">
                       Book a free digital marketing consultation with our strategists
                     </h3>
@@ -173,20 +272,26 @@ export function LetsTalk() {
                       {/* The site's standard set: Name, Email, Phone, Company,
                           Services, Message. Team direction, 2026-09-02. This
                           form had no Company or Message before. */}
-                      <Field id="lt-name" label="Name" autoComplete="name" required />
-                      <Field id="lt-email" label="Email" type="email" autoComplete="email" required />
-                      <Field id="lt-phone" label="Phone" type="tel" autoComplete="tel" required />
-                      <Field id="lt-company" label="Company" autoComplete="organization" />
+                      <Field id="lt-name" name="name" label="Name" autoComplete="name" required />
+                      <Field id="lt-email" name="email" label="Email" type="email" autoComplete="email" required />
+                      <Field id="lt-phone" name="phone" label="Phone" type="tel" autoComplete="tel" required />
+                      <Field id="lt-company" name="company" label="Company" autoComplete="organization" />
                       {/* TEAM DIRECTION, 2026-09-08: a text box, not a
                           dropdown. Matches the service pages, whose shared
                           field set changed at the same time. */}
                       <Field
                         id="lt-service"
+                        name="services"
                         label="Services"
                         required
                         className="sm:col-span-2"
                       />
-                      <TextareaField id="lt-message" label="Message" className="sm:col-span-2" />
+                      <TextareaField
+                        id="lt-message"
+                        name="message"
+                        label="Message"
+                        className="sm:col-span-2"
+                      />
                     </div>
 
                     <div className="mt-9">
@@ -196,7 +301,19 @@ export function LetsTalk() {
                       </ConsentField>
                     </div>
 
-                    <SubmitButton className="mt-8 w-full sm:w-auto">Submit</SubmitButton>
+                    {error && <FormError>{error}</FormError>}
+
+                    <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+                      <SubmitButton className="w-full sm:w-auto" disabled={sending}>
+                        {sending ? "Sending…" : "Submit"}
+                      </SubmitButton>
+                      {/* Required wherever a token is minted: the floating
+                          reCAPTCHA badge is hidden in globals.css, and hiding
+                          it is only permitted with this text present. This
+                          form minted no token before, so it correctly had no
+                          notice; it does now. */}
+                      <RecaptchaNotice className="sm:max-w-[16rem] sm:text-right" />
+                    </div>
                   </motion.form>
                 )}
               </AnimatePresence>

@@ -31,9 +31,12 @@ import { SpinStar } from "@/components/fx/Adornments";
  *  Server component. It carries no state or effects of its own; the reveal
  *  wrappers and the card are the client parts. */
 export function Insights({
-  index = "08",
   label = "Insights",
 }: {
+  /** Accepted and ignored: the red section counter it used to print is gone
+   *  sitewide. Every page body still passes one, so the prop stays rather than
+   *  forcing a rename across fifty-odd files, and putting the numbering back
+   *  stays a one-line change. */
   index?: string;
   label?: string;
 } = {}) {
@@ -47,7 +50,7 @@ export function Insights({
     <section id="insights" data-section={label} className="relative py-16 sm:py-20">
       <Container>
         <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-          <span className="text-brand">({index})</span> Our insights <SpinStar />
+          Our insights <SpinStar />
         </p>
 
         <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">

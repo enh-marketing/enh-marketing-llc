@@ -1,14 +1,15 @@
 /** The one shape every form on this site submits, and the one client helper
  *  that submits it.
  *
- *  WHY A SHARED SHAPE. There are two form components -- `LeadForm`, mounted in
- *  seven places across roughly eighteen pages, and `ConsultationForm` on the
- *  contact page -- and they draw different field sets. `standardFormFields` and
- *  `seoFormFields` in src/content/forms.ts already differ, and the contact form
- *  adds a service pill row and a consent box that no service page has. A server
- *  endpoint that knew about each of those would have to be edited every time
- *  the team changes a field, which is exactly the drift src/content/forms.ts
- *  exists to prevent.
+ *  WHY A SHARED SHAPE. There are three form components -- `LeadForm`, mounted
+ *  in eight places across roughly eighteen pages; `ConsultationForm` on the
+ *  contact page; and the panel inside `LetsTalk` on the homepage -- and they
+ *  draw different field sets. `standardFormFields` and `seoFormFields` in
+ *  src/content/forms.ts already differ, and the two consultation forms add a
+ *  consent box that no service page has, with the contact one adding a service
+ *  pill row on top. A server endpoint that knew about each of those would have
+ *  to be edited every time the team changes a field, which is exactly the
+ *  drift src/content/forms.ts exists to prevent.
  *
  *  So the endpoint knows nothing about field sets. The form sends its fields as
  *  an ordered list of `{ id, label, value }`, and the email and the sheet both
@@ -33,7 +34,9 @@ export type EnquiryPayload = {
   pagePath: string;
   pageUrl: string;
   fields: EnquiryField[];
-  /** Only the contact form has a consent box; `undefined` elsewhere. */
+  /** The two consultation forms have a consent box -- `ConsultationForm` on
+   *  the contact page and the panel in `LetsTalk` on the homepage. `undefined`
+   *  from the service-page forms, which have none. */
   consent?: boolean;
   /** reCAPTCHA v3 token, or null when no site key is configured (local dev). */
   token: string | null;

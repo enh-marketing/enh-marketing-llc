@@ -14,7 +14,14 @@
     "check:craft-links": "node scripts/check-craft-links.mjs",
     "check:enquiry": "node scripts/check-enquiry-endpoint.mjs",
     "check:sheets": "node scripts/check-sheets-webhook.mjs",
-    "check:copy": "node scripts/check-hub-copy.mjs"
+    "check:copy": "node scripts/check-hub-copy.mjs",
+    "check:consultation-copy": "node scripts/check-consultation-copy.mjs",
+    "check:smtp": "node scripts/check-smtp-login.mjs",
+    "check:sheets:live": "node scripts/check-sheets-live.mjs",
+    "check:enquiry:live": "node scripts/check-enquiry-live.mjs",
+    "check:recaptcha": "node scripts/check-recaptcha.mjs",
+    "check:recaptcha:live": "node scripts/check-recaptcha-live.mjs",
+    "check:live": "node scripts/check-live.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.5",

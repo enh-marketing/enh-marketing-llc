@@ -54,7 +54,7 @@ export function AISection() {
       <Container className="relative mb-12 sm:mb-14">
         <NodeWeb className="absolute -top-6 right-0 hidden opacity-80 lg:block" />
         <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-          <span className="text-brand">(06)</span> Explore New Heights
+          Explore New Heights
         </p>
         <h2 className="font-display display-xl font-extrabold uppercase text-snow">
           <span className="block">

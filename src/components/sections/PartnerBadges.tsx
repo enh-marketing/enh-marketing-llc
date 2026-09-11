@@ -58,15 +58,44 @@ export function PartnerBadges({
   const reduced = usePrefersReducedMotion();
   if (badges.length === 0) return null;
 
+  /** THE COMPACT ROW IS SIZED TO FIT ALL FOUR ON ONE LINE OF A PHONE.
+   *
+   *  Team direction, and it is arithmetic rather than taste. Fixing the height
+   *  and letting the width follow (see the note above) means the row's total
+   *  width is the sum of four aspect ratios times one number. The four marks
+   *  are 500x274, 500x286, 380x379 and 500x500, so their aspects sum to 5.576:
+   *  a row is `5.576 x imageHeight + 8 x sidePadding + 3 x gap`.
+   *
+   *  At the old mobile values — a 44px image in `px-4` with `gap-3` — that is
+   *  409px against the 327px a 375px phone leaves inside the container, so the
+   *  fourth badge wrapped to a line of its own. A 36px image in `px-2` with
+   *  `gap-2` is 289px, which fits 375 with 38px to spare and 360 with 23.
+   *
+   *  Nothing about the artwork changes: the plate still fixes the height and
+   *  lets each width follow, so the four marks stay at one optical size and
+   *  none of them is squeezed into a common box.
+   *
+   *  THE LAST 17 PIXELS ARE BOUGHT BACK ONLY WHERE THEY ARE NEEDED. At 320px —
+   *  the narrowest width this site is checked at — the container leaves 272 and
+   *  289 does not fit, so the fourth badge wrapped there. Trimming the side
+   *  padding and the gap to 6px brings the row to 267, and it is scoped to
+   *  `max-[359px]` rather than applied to every phone: at 375 there are 38px
+   *  spare and no reason to crowd the marks. `flex-wrap` stays as the safety
+   *  net under any width narrower still. */
   const plate =
     size === "compact"
-      ? "h-[4.25rem] px-4 py-3 sm:h-[4.75rem] sm:px-5 sm:py-3.5"
+      ? "h-[3.25rem] px-2 py-2 max-[359px]:px-1.5 sm:h-[4.75rem] sm:px-5 sm:py-3.5"
       : "h-[4.75rem] px-5 py-3.5 sm:h-[5.5rem] sm:px-7 sm:py-4";
+
+  /** The gap is part of the same sum, so the compact row tightens with it. */
+  const gap =
+    size === "compact" ? "gap-2 max-[359px]:gap-1.5 sm:gap-5" : "gap-3 sm:gap-5";
 
   return (
     <ul
       className={cn(
-        "flex flex-wrap items-center gap-3 sm:gap-5",
+        "flex flex-wrap items-center",
+        gap,
         align === "start" ? "justify-start" : "justify-center",
       )}
     >

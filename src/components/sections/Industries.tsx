@@ -64,7 +64,10 @@ import { pages, routeExists } from "@/lib/sitemap";
  *  READABLE WITH NO POINTER AND ON A PHONE. Below `lg` the deck is a plain
  *  stacked list with every sector's sentence visible at once and no interaction
  *  needed; the spine labels are ordinary headings there rather than rotated. */
-export function Industries({ index = "05" }: { index?: string } = {}) {
+/** `index` is accepted and ignored: the red section counter it used to print
+ *  is gone sitewide. Kept in the signature so the page bodies that pass one do
+ *  not all need editing, and so putting the numbering back stays one line. */
+export function Industries({}: { index?: string } = {}) {
   /** Built AND quoted. `routeExists` keeps a planned-but-unbuilt sector out, as
    *  every link on this site does; the second test matters because the panel
    *  reads `copy.description`, and a sector added to the sitemap and shipped
@@ -83,7 +86,7 @@ export function Industries({ index = "05" }: { index?: string } = {}) {
     <section id="industries" data-section="Industries" className="relative overflow-x-clip py-16 sm:py-20">
       <Container>
         <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-          <span className="text-brand">({index})</span> {pages.industries.label} <SpinStar />
+          {pages.industries.label} <SpinStar />
         </p>
 
         {/* The document's H2, over the two lines the design sets it on. No lede
