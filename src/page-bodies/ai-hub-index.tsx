@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { Journey, type Chapter } from "@/components/hub/Journey";
-import { Opening } from "@/components/hub/Opening";
+import { Ascent } from "@/components/hub/Ascent";
 import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
 import { Uplink } from "@/components/hub/chapters/Uplink";
@@ -11,26 +11,22 @@ import { chart, horizon, system, uplink } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
  *
- *  THE AIRLOCK OPENS IT, and it is the one place on this page where something
- *  other than the chapter machine may own the scroll. It pins the body and
- *  spends the wheel on a video's currentTime; first on the page there is
- *  nothing above it to fight, and it hands the page back when the film runs
- *  out. Anywhere else it is a second scroll controller. See hub/Opening for
- *  what was here before it and how to get that back.
+ *  The mountain opens the page as an ordinary scrolling block, because the
+ *  parallax it runs on is built from the block travelling past the viewport and
+ *  stops dead the moment it is pinned. See the note in hub/Ascent.tsx. The
+ *  journey, which does pin, begins underneath it.
  *
- *  IT IS NOT IN THE FLOW. The opening is fixed over the page rather than being
- *  the first block of it, so the journey's first chapter is at the top of the
- *  document from the moment it loads and is simply covered. The cover is
- *  pushed through the screen and faded off over the last stretch of the scrub,
- *  which is how the hatch opens on to the next scene instead of the next scene
- *  scrolling up underneath it. Nothing here has to know: the journey is the
- *  whole document either way.
+ *  THE AIRLOCK WAS HERE AND IS NOT. A scroll-locked film hero was tried in this
+ *  slot on 2026-09-11 and taken out the same day: it worked, it was measured
+ *  working both ways, and it did not pass the team. The mountain came back off
+ *  the `hero/mountain-ascent` tag. What went with it: a 3.7MB video, the push
+ *  through the hatch, and the seven adaptations the component needed. Anyone
+ *  looking for it will find the whole thing in the history.
  *
- *  THE HERO IS A PROP SO THE OPTIONS CAN BE COMPARED SIDE BY SIDE. Pass one and
- *  the page is the same story behind a different opening; pass nothing and it
- *  is the airlock, which is what /ai-hub renders. Each option gets a page of
- *  its own under /ai-hub/hero-*, noindex, listed in sitemap.ts only because
- *  check:routes will not build a route it has not been told about.
+ *  THE HERO IS STILL A PROP, because the opening is not settled and the next
+ *  candidate will want a page of its own to be compared on. Pass one and the
+ *  page is the same story behind a different opening; pass nothing and it is
+ *  the mountain, which is what /ai-hub renders.
  *
  *  THERE IS NO BEAT WINDOW TO TUNE ANY MORE. This page used to pass one,
  *  narrowed so that no two headlines were ever legible at once, because every
@@ -68,13 +64,14 @@ const CHAPTERS: Chapter[] = [
 export function AiHubPage({ hero }: { hero?: ReactNode } = {}) {
   return (
     <main data-hub-story>
-      {hero ?? <Opening />}
+      {hero ?? <Ascent />}
       <Journey chapters={CHAPTERS} />
-      {/* THE OPENING LINE IS NOT HERE EITHER. It lives in the airlock's own
-          title slot, which fades and blurs it out over the first third of the
-          scrub, and the sentence under it lives in the tagline slot, which
-          brings it up over the last fifth. Nothing about the copy measures the
-          page any more. See hub/HeroCopy. */}
+      {/* THE OPENING LINE IS NOT HERE AND NEITHER IS THE ECHO. Both were,
+          because the line was fixed to the window so it could outlive the
+          opener, and a second copy of the near ground had to be painted over
+          it to put it back behind the man. The line finishes inside the opener
+          now, so it is one of that block's own parallax layers and the man in
+          front of it is the real one. See hub/Ascent. */}
     </main>
   );
 }
