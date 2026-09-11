@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-12-05",
   hero: {
-    src: "/insights/how-to-do-a-website-audit-to-boost-conversions-seo/hero.webp",
+    src: "/blog/how-to-do-a-website-audit-to-boost-conversions-seo/hero.webp",
     alt: "local seo services in dubai",
     w: 2000,
     h: 2000
@@ -142,7 +142,7 @@ export const note: Note = {
       text: [
         "A website audit is a vital step in enhancing both user experience and ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [

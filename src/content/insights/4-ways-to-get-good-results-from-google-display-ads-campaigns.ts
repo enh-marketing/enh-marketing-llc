@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-10-16",
   hero: {
-    src: "/insights/4-ways-to-get-good-results-from-google-display-ads-campaigns/hero.webp",
+    src: "/blog/4-ways-to-get-good-results-from-google-display-ads-campaigns/hero.webp",
     alt: "google adwords company in dubai",
     w: 1080,
     h: 1080
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Getting impressive results from Google Display Ads campaigns takes some strategizing. Here are 4 key factors to focus on for boosting success when working with ",
         {
-          a: "/services/performance-marketing/google-ads",
+          a: "/google-adwords-company-dubai",
           children: [
             {
               b: [
@@ -97,7 +97,7 @@ export const note: Note = {
       text: [
         "Set realistic budgets relative to business goals. Control costs by monitoring, lowering bids on less viable placements, or pausing underperforming ad groups. Bid optimally rather than maximums by experimenting with bids from lowest to highest values. Remain diligent in tracking spend versus target allocations. Consult with a top agency providing quality ",
         {
-          a: "/services/performance-marketing/google-ads",
+          a: "/google-adwords-company-dubai",
           children: [
             {
               b: [

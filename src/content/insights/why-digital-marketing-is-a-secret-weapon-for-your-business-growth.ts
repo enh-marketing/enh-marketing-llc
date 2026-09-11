@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-09-18",
   hero: {
-    src: "/insights/why-digital-marketing-is-a-secret-weapon-for-your-business-growth/hero.webp",
+    src: "/blog/why-digital-marketing-is-a-secret-weapon-for-your-business-growth/hero.webp",
     alt: "digital marketing services in dubai",
     w: 2362,
     h: 2362

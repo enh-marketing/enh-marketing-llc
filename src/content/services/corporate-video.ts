@@ -168,7 +168,7 @@ export const distribution = {
   /** The four the sentence above names, marked in place. */
   discoveryItems: ["descriptive title", "transcript", "chapters", "relevant video schema"],
   /** The document points at another ENH page here. That page is built. */
-  discoveryLink: { label: "AEO and GEO services", href: "/services/seo/aeo-and-geo" },
+  discoveryLink: { label: "AEO and GEO services", href: "/aeo-geo-optimization" },
   discoveryTail: "cover this work in more detail.",
   /** Four versions from one shoot. The ratios are the standard frames those
    *  names refer to; the document names the versions, not the numbers, so the

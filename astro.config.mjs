@@ -50,99 +50,101 @@ export default defineConfig({
 
   integrations: [react()],
 
-  // AI Automation moved out of Services and into the AI Hub, so its old URL
-  // has to keep working: it was already deployed at the address below, and a
-  // bare 404 is the worst outcome for anyone holding the link. Astro emits a
-  // redirect page for this in a static build.
+  // EVERY URL BELOW 301s IN EXACTLY ONE HOP.
+  //
+  // The SEO team flattened the whole URL tree on 2026-09-11: every page moved
+  // from its section path to the site root, so /services/seo/local-seo-services
+  // is now /local-seo-services. The pages did NOT move -- src/lib/sitemap.ts
+  // still models the same Services / AI Hub / Industries hierarchy, the menus
+  // and breadcrumbs still nest the same way, and no page changed its content,
+  // design or parent. Only the public URL is flatter.
+  //
+  // THE ONE RULE THIS BLOCK EXISTS TO KEEP: no chains. A redirect whose target
+  // is itself a redirect source costs a hop, leaks a little equity every time,
+  // and is invisible until someone crawls the site. So where a legacy redirect
+  // already pointed at a URL that has now moved, it was REPOINTED at the final
+  // destination rather than left to fall through the new one. Anything added
+  // here later must be checked the same way.
   redirects: {
-    "/services/ai/ai-automation": "/ai-hub/ai-automation",
 
-    // The maintenance page's canonical slug is the one src/lib/sitemap.ts has
-    // named since the IA was resolved, and the one the pillar and ecommerce
-    // pages link to. The "and" variant reads naturally enough that it gets
-    // typed and sent by hand, so it lands rather than 404s.
-    "/services/web-design-development/website-maintenance-and-support":
-      "/services/web-design-development/website-maintenance-support",
+    /* ---------------------------------------------------------- SERVICES */
+    "/services/lead-generation": "/lead-generation-company-dubai",
+    "/services/lead-generation/b2b-lead-generation": "/b2b-lead-generation-dubai",
+    "/services/lead-generation/landing-page-development": "/landing-page-development-services",
+    "/services/performance-marketing": "/performance-marketing-agency-dubai",
+    "/services/performance-marketing/google-ads": "/google-adwords-company-dubai",
+    "/services/performance-marketing/linkedin-ads": "/linkedin-advertising-dubai",
+    "/services/performance-marketing/meta-ads": "/meta-ads-agency-dubai",
+    "/services/performance-marketing/snapchat-ads": "/snapchat-advertising-dubai",
+    "/services/performance-marketing/tiktok-ads": "/tiktok-advertising-agency-dubai",
+    "/services/performance-marketing/youtube-ads": "/youtube-advertising-agency-dubai",
+    "/services/seo": "/seo-company-in-dubai",
+    "/services/seo/aeo-and-geo": "/aeo-geo-optimization",
+    "/services/seo/ecommerce-seo": "/ecommerce-seo-agency-dubai",
+    "/services/seo/local-seo-services": "/local-seo-services",
+    "/services/seo/on-page-seo": "/on-page-seo-audit",
+    "/services/seo/seo-audit": "/seo-audit-services-dubai",
+    "/services/seo/seo-content-creation": "/content-creation-in-dubai",
+    "/services/social-media-marketing": "/social-media-agency-in-dubai",
+    "/services/social-media-marketing/content-creation": "/social-media-content-creation-agency",
+    "/services/social-media-marketing/facebook-marketing": "/facebook-marketing-agency-in-dubai",
+    "/services/social-media-marketing/influencer-marketing": "/influencer-marketing-agency-dubai",
+    "/services/social-media-marketing/instagram-marketing": "/instagram-marketing-agency-dubai",
+    "/services/social-media-marketing/linkedin-marketing": "/linkedin-marketing-agency-dubai",
+    "/services/social-media-marketing/tiktok-marketing": "/tiktok-marketing-agency",
+    "/services/video-marketing": "/video-production-services-dubai",
+    "/services/video-marketing/corporate-video": "/corporate-video-production",
+    "/services/video-marketing/event-video": "/event-video-production",
+    "/services/video-marketing/explainer-video": "/explainer-video-production",
+    "/services/video-marketing/interview-video": "/interview-video-production",
+    "/services/video-marketing/testimonial-video": "/testimonial-video-production",
+    "/services/web-design-development": "/web-design-company-dubai",
+    "/services/web-design-development/ecommerce-website-development": "/ecommerce-web-development-dubai",
+    "/services/web-design-development/web-hosting": "/web-hosting-services",
+    "/services/web-design-development/website-maintenance-support": "/web-support-services-dubai",
 
-    // The hosting page's canonical slug is the one src/lib/sitemap.ts has named
-    // since the IA was resolved, and the one the pillar and ecommerce pages
-    // link to. Its own document is headed "Web Hosting Services in Dubai", so
-    // the "-services" variant is what gets typed and pasted by hand: it lands
-    // rather than 404s. Same arrangement, same reason, as the maintenance slug
-    // above.
-    "/services/web-design-development/web-hosting-services":
-      "/services/web-design-development/web-hosting",
+    /* ------------------------------------------------------------ AI HUB */
+    "/ai-hub/ai-automation": "/ai-automation-agency-dubai",
+    "/ai-hub/ai-creative-production": "/ai-creative-production-uae",
+    "/ai-hub/ai-search-visibility": "/ai-search-visibility-dubai",
+    "/ai-hub/ai-workshops-and-training": "/ai-training-workshops-dubai",
+    "/ai-hub/campaign-intelligence": "/campaign-intelligence-dubai",
+    "/ai-hub/conversational-ai": "/conversational-ai-services",
+    "/ai-hub/data-and-dashboards": "/data-dashboard-services-dubai",
+    "/ai-hub/intelligent-web": "/ai-website-development-dubai",
 
-    // The Industries slug for this page is "ecommerce-retail" in
-    // src/lib/sitemap.ts, which is where the IA was resolved and what the
-    // navbar and footer of every page link to. "ecommerce-and-retail" reads
-    // naturally enough that it gets typed and sent by hand, exactly like the
-    // maintenance slug above, so it lands rather than 404s.
-    "/industries/ecommerce-and-retail": "/industries/ecommerce-retail",
+    /* -------------------------------------------------------- INDUSTRIES */
+    "/industries/automotive": "/automotive-digital-marketing-agency",
+    "/industries/ecommerce-retail": "/e-commerce-marketing-agency",
+    "/industries/healthcare": "/healthcare-marketing-agency",
+    "/industries/hospitality-hotels": "/hospitality-marketing-agency",
+    "/industries/logistics": "/logistics-marketing-agency",
 
-    // Same reason as the industry slug above: "hospitality-hotels" is what
-    // src/lib/sitemap.ts resolved and what every menu links to, and the "and"
-    // variant gets typed by hand.
-    "/industries/hospitality-and-hotels": "/industries/hospitality-hotels",
+    /* --------------------------------------------------------- TOP LEVEL */
+    "/insights": "/blog",
+    "/testimonials": "/testimonial",
 
-    // The logistics page is served at "/industries/logistics", which is the
-    // route the team asked for. src/lib/sitemap.ts named the menu entry
-    // "/industries/logistics-shipping" while the page was unbuilt -- so no
-    // link ever pointed at it, `Crosslink` and `routeExists` rendered it as
-    // plain text, and nothing 404'd. The nav label is still "Logistics &
-    // Shipping", though, which is what a reader types, so the slug it implies
-    // lands rather than 404s. Same reasoning as the two slugs above.
-    "/industries/logistics-shipping": "/industries/logistics",
+    // The blog and testimonials pages move BACK to the slugs the live site
+    // already ranks on. enhmedia.com serves /blog and /testimonial with a 200
+    // today and 404s /insights and /testimonials, so the earlier rename to
+    // /insights would have abandoned seventy-three ranking post URLs. The two
+    // redirects that used to point the other way (/blog -> /insights and
+    // /testimonial -> /testimonials) are deleted, not kept: keeping either
+    // alongside its reverse is an infinite loop that takes both URLs down.
+    "/insights/[slug]": "/blog/[slug]",
 
-    // And the same for Healthcare, for the same reason and by the same route:
-    // the page is served at "/industries/healthcare", which is what the team
-    // asked for, while src/lib/sitemap.ts named the menu entry
-    // "/industries/healthcare-clinics" for as long as the page was unbuilt --
-    // so nothing ever linked to it. The nav label is still "Healthcare &
-    // Clinics", which is what a reader types, so the slug it implies lands
-    // rather than 404s.
-    "/industries/healthcare-clinics": "/industries/healthcare",
-
-    // The consultation page is served at
-    // "/marketing-consultations-strategies-dubai", which is the route the team
-    // asked for. src/lib/sitemap.ts named the menu entry
-    // "/marketing-consultation" for as long as the page was unbuilt, so
-    // nothing ever linked to it. The nav label is "Marketing Consultation",
-    // which is what a reader types, so the slug it implies lands rather than
-    // 404s. Same reasoning as the two industry slugs above.
-    "/marketing-consultation": "/marketing-consultations-strategies-dubai",
-
-    // The About page's canonical slug is "/about-us", which is what
-    // src/lib/sitemap.ts now names and what the navbar and footer of every page
-    // link to. "/about" is what the sitemap said before the page existed, and
-    // it is short enough that it gets typed by hand and pasted into decks, so
-    // it lands rather than 404s. Same reasoning as the four slugs below.
+    /* ------------------------------------------------------ LEGACY, REPOINTED */
+    // These predate the flattening. Each one's old target has just moved, so
+    // each now names the final URL directly -- see the no-chains rule above.
     "/about": "/about-us",
-
-    // Testimonials is plural in src/lib/sitemap.ts, which is where the IA is
-    // resolved and what the navbar and footer of every page link to, so the
-    // plural is the canonical URL and the only one with a page behind it. The
-    // singular gets typed and sent by hand often enough to be worth catching,
-    // for exactly the reason the redirect above exists.
-    "/testimonial": "/testimonials",
-
-    // THE BLOG MOVED TO /insights, AND ITS URLS ARE LIVE AND RANKING. All
-    // seventy-two posts are served today at enhmedia.com/blog/<slug> and the
-    // migrated notes keep those slugs exactly, so one pattern covers every one
-    // of them and any post added later. /blog itself goes to the archive.
-    //
-    // THESE ARE REAL 301s NOW. This used to carry a caveat: with no adapter,
-    // Astro could only emit a <meta http-equiv="refresh"> page, which search
-    // treats as a soft redirect, and the note said seventy-two ranking URLs
-    // deserved better and should be configured at the host by hand.
-    //
-    // Adding the Vercel adapter settled it. Astro hands its redirects to the
-    // adapter rather than prerendering them, so every entry in this block --
-    // this pattern included -- is written into .vercel/output/config.json as a
-    // 301. Nothing needs adding at the host, and nothing should be: see the
-    // note on `adapter` above.
-    "/blog": "/insights",
-    "/blog/[slug]": "/insights/[slug]",
+    "/industries/ecommerce-and-retail": "/e-commerce-marketing-agency",
+    "/industries/healthcare-clinics": "/healthcare-marketing-agency",
+    "/industries/hospitality-and-hotels": "/hospitality-marketing-agency",
+    "/industries/logistics-shipping": "/logistics-marketing-agency",
+    "/marketing-consultation": "/marketing-consultations-strategies-dubai",
+    "/services/ai/ai-automation": "/ai-automation-agency-dubai",
+    "/services/web-design-development/web-hosting-services": "/web-hosting-services",
+    "/services/web-design-development/website-maintenance-and-support": "/web-support-services-dubai",
   },
 
   // Tailwind v4 through the Vite plugin rather than PostCSS. The stylesheet

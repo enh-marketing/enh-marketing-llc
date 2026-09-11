@@ -19,7 +19,7 @@ export function Breadcrumbs({ href, className }: { href: string; className?: str
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     // `item` only where a page answers the URL. The pillar routes in this
-    // trail ("/services", "/services/seo") are still unbuilt, and declaring a
+    // trail ("/services", "/seo-company-in-dubai") are still unbuilt, and declaring a
     // 404 as a breadcrumb URL invites search engines to crawl it and devalues
     // the trail. schema.org allows a name-only ListItem, which describes the
     // level truthfully without pointing anywhere.

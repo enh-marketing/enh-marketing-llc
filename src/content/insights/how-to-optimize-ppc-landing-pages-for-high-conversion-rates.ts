@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-09-23",
   hero: {
-    src: "/insights/how-to-optimize-ppc-landing-pages-for-high-conversion-rates/hero.webp",
+    src: "/blog/how-to-optimize-ppc-landing-pages-for-high-conversion-rates/hero.webp",
     alt: "Google Ads services in Dubai",
     w: 1000,
     h: 1000
@@ -142,14 +142,14 @@ export const note: Note = {
       text: [
         "Revamping your PPC landing pages for high conversion rates is essential for driving the success of your advertising campaigns. Remember to continually monitor and analyze your landing page performance, making data-driven adjustments to achieve optimal results. Embrace the art of conversion optimization and unlock the true potential of your ",
         {
-          a: "/services/performance-marketing/google-ads",
+          a: "/google-adwords-company-dubai",
           children: [
             "PPC campaigns"
           ]
         },
         " with the assistance of reputed ",
         {
-          a: "/services/performance-marketing/google-ads",
+          a: "/google-adwords-company-dubai",
           children: [
             "Google Ads services in Dubai"
           ]

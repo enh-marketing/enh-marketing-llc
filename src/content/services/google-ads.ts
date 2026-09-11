@@ -294,7 +294,7 @@ export const managed = {
   youtube: {
     before: "YouTube campaigns are covered on our ",
     link: "YouTube Ads page",
-    href: "/services/performance-marketing/youtube-ads",
+    href: "/youtube-advertising-agency-dubai",
     after: ", although they run through the same Google Ads account.",
   },
   cta: "Know More",
@@ -426,10 +426,10 @@ export const industries = {
     { label: "Industrial and B2B businesses" },
     { label: "Education and training" },
     { label: "Logistics", href: "/industries/logistics-shipping" },
-    { label: "Automotive", href: "/industries/automotive" },
+    { label: "Automotive", href: "/automotive-digital-marketing-agency" },
     { label: "Home services" },
-    { label: "Ecommerce and retail", href: "/industries/ecommerce-retail" },
-    { label: "Hospitality", href: "/industries/hospitality-hotels" },
+    { label: "Ecommerce and retail", href: "/e-commerce-marketing-agency" },
+    { label: "Hospitality", href: "/hospitality-marketing-agency" },
   ],
 };
 

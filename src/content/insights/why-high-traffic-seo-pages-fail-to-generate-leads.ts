@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2026-03-19",
   hero: {
-    src: "/insights/why-high-traffic-seo-pages-fail-to-generate-leads/hero.webp",
+    src: "/blog/why-high-traffic-seo-pages-fail-to-generate-leads/hero.webp",
     alt: "seo agency in uae",
     w: 1254,
     h: 1254
@@ -48,7 +48,7 @@ export const note: Note = {
       text: [
         "For companies investing in ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO services in Dubai"
           ]
@@ -185,7 +185,7 @@ export const note: Note = {
       text: [
         "If you’re investing in ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO services in Dubai"
           ]

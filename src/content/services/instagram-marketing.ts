@@ -145,7 +145,7 @@ export const services = {
 export const adsLink = {
   lead: "If you want ads running alongside your organic content, see our",
   label: "Instagram Ads page",
-  href: "/services/performance-marketing/meta-ads",
+  href: "/meta-ads-agency-dubai",
 };
 
 export type ProgrammeStage = {

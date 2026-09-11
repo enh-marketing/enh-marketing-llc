@@ -35,7 +35,7 @@ export const filmCategories: Beat[] = [
     title: "AI Search Visibility",
     body: "ENH Marketing helps UAE brands improve how they appear in AI-generated search results.",
     quotes: "ai-search-visibility",
-    href: "/ai-hub/ai-search-visibility",
+    href: "/ai-search-visibility-dubai",
   },
   {
     at: 0.26,
@@ -43,7 +43,7 @@ export const filmCategories: Beat[] = [
     title: "AI & Automation",
     body: "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
     quotes: "ai-automation",
-    href: "/ai-hub/ai-automation",
+    href: "/ai-automation-agency-dubai",
   },
   {
     at: 0.37,
@@ -51,7 +51,7 @@ export const filmCategories: Beat[] = [
     title: "AI Creative Production",
     body: "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
     quotes: "ai-creative-production",
-    href: "/ai-hub/ai-creative-production",
+    href: "/ai-creative-production-uae",
   },
   {
     at: 0.48,
@@ -59,7 +59,7 @@ export const filmCategories: Beat[] = [
     title: "Conversational AI",
     body: "ENH Marketing builds AI chatbots, voice agents and customer service systems for UAE businesses. Every project starts with a paid diagnostic.",
     quotes: "conversational-ai",
-    href: "/ai-hub/conversational-ai",
+    href: "/conversational-ai-services",
   },
   {
     at: 0.61,
@@ -67,7 +67,7 @@ export const filmCategories: Beat[] = [
     title: "Campaign Intelligence",
     body: "ENH Marketing helps UAE businesses plan campaign budgets using historical performance, relevant benchmarks and forecast ranges.",
     quotes: "campaign-intelligence",
-    href: "/ai-hub/campaign-intelligence",
+    href: "/campaign-intelligence-dubai",
   },
   {
     at: 0.72,
@@ -75,7 +75,7 @@ export const filmCategories: Beat[] = [
     title: "Intelligent Web",
     body: "ENH Marketing designs and develops intelligent websites for UAE businesses that personalise content, display live information and use a clear structure.",
     quotes: "intelligent-web",
-    href: "/ai-hub/intelligent-web",
+    href: "/ai-website-development-dubai",
   },
   {
     at: 0.83,
@@ -83,7 +83,7 @@ export const filmCategories: Beat[] = [
     title: "Data & Dashboards",
     body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
     quotes: "data-and-dashboards",
-    href: "/ai-hub/data-and-dashboards",
+    href: "/data-dashboard-services-dubai",
   },
   {
     at: 0.94,
@@ -91,7 +91,7 @@ export const filmCategories: Beat[] = [
     title: "AI Workshops & Training",
     body: "ENH Marketing runs practical corporate AI training in Dubai and across the UAE. Each session is built around the team’s actual workflows, tools and responsibilities.",
     quotes: "ai-workshops-and-training",
-    href: "/ai-hub/ai-workshops-and-training",
+    href: "/ai-training-workshops-dubai",
   },
 ];
 

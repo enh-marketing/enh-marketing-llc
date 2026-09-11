@@ -125,7 +125,7 @@ const base = {
   timestampIso: "2026-09-10T10:32:05.000Z",
   formName: "CTA Band",
   pageName: "Google Ads Agency Dubai",
-  pagePath: "/services/performance-marketing/google-ads",
+  pagePath: "/google-adwords-company-dubai",
   pageUrl: "https://enhmedia.com/services/performance-marketing/google-ads",
   ip: "94.200.1.55",
   userAgent: "Mozilla/5.0",

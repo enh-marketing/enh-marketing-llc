@@ -212,7 +212,7 @@ export const crafts: Craft[] = [
   {
     no: "01",
     title: "Search Engine Optimization",
-    href: "/services/seo",
+    href: "/seo-company-in-dubai",
     tag: "Organic Growth",
     body: "Improve your search visibility with technical SEO, content and local optimisation that attract relevant traffic and turn searches into qualified business opportunities.",
     items: ["Technical & on-page SEO", "Local SEO services", "Ecommerce SEO", "Authority building"],
@@ -220,7 +220,7 @@ export const crafts: Craft[] = [
   {
     no: "02",
     title: "Performance Marketing",
-    href: "/services/performance-marketing",
+    href: "/performance-marketing-agency-dubai",
     tag: "PPC & Performance",
     body: "Connect paid media, landing pages and analytics through performance marketing campaigns designed to generate measurable leads, sales and returns from every channel.",
     items: ["Google Ads", "Meta Ads", "LinkedIn Ads", "YouTube Ads"],
@@ -228,7 +228,7 @@ export const crafts: Craft[] = [
   {
     no: "03",
     title: "Social Media Marketing",
-    href: "/services/social-media-marketing",
+    href: "/social-media-agency-in-dubai",
     tag: "Community & Content",
     body: "Build an active social presence with platform-specific content, community management and paid campaigns that grow reach, engagement and meaningful customer action online.",
     items: ["Facebook marketing", "Instagram marketing", "Community management", "Paid social"],
@@ -236,7 +236,7 @@ export const crafts: Craft[] = [
   {
     no: "04",
     title: "Web Design & Development",
-    href: "/services/web-design-development",
+    href: "/web-design-company-dubai",
     tag: "Web & Experience",
     body: "Create a fast, user-friendly website shaped around your business, your audience and the actions you want visitors to take on every device.",
     items: ["UX & UI design", "Development", "E-commerce builds", "Website support services"],
@@ -244,7 +244,7 @@ export const crafts: Craft[] = [
   {
     no: "05",
     title: "Lead Generation",
-    href: "/services/lead-generation",
+    href: "/lead-generation-company-dubai",
     tag: "Pipeline & Demand",
     body: "Reach decision-makers with focused lead generation campaigns designed to build a pipeline and create more valuable, qualified sales conversations for your business.",
     items: ["Demand generation", "Funnel design", "Marketing automation", "Sales enablement"],
@@ -252,7 +252,7 @@ export const crafts: Craft[] = [
   {
     no: "06",
     title: "Video Marketing",
-    href: "/services/video-marketing",
+    href: "/video-production-services-dubai",
     tag: "Film & Motion",
     body: "Use strategic video content across websites, social media and paid campaigns to attract attention, explain your offer and move viewers towards action.",
     items: ["Corporate & brand films", "Event videos", "Explainer & testimonial", "Social video"],
@@ -524,27 +524,27 @@ export const faqs = [
  *  scripts/check-industry-copy.mjs, which fails if either drifts. */
 export const industries = {
   byHref: {
-    "/industries/healthcare": {
+    "/healthcare-marketing-agency": {
       description:
         "Increase treatment visibility, patient enquiries and appointment bookings through healthcare SEO, paid advertising, social media and local search.",
       mark: "treatment visibility, patient enquiries and appointment bookings",
     },
-    "/industries/logistics": {
+    "/logistics-marketing-agency": {
       description:
         "Generate qualified freight enquiries, requests for quotations and B2B opportunities through logistics SEO, paid advertising, content and LinkedIn marketing.",
       mark: "qualified freight enquiries, requests for quotations and B2B opportunities",
     },
-    "/industries/automotive": {
+    "/automotive-digital-marketing-agency": {
       description:
         "Generate qualified enquiries, test-drive requests, showroom visits and service bookings through automotive SEO, paid advertising, social media and local search.",
       mark: "qualified enquiries, test-drive requests, showroom visits and service bookings",
     },
-    "/industries/hospitality-hotels": {
+    "/hospitality-marketing-agency": {
       description:
         "Increase direct bookings, restaurant reservations and guest enquiries through hospitality SEO, paid advertising, social media and conversion-focused digital campaigns.",
       mark: "direct bookings, restaurant reservations and guest enquiries",
     },
-    "/industries/ecommerce-retail": {
+    "/e-commerce-marketing-agency": {
       description:
         "Build stronger visibility, attract customers with genuine buying intent and turn more of your ecommerce traffic into sales, enquiries and repeat business.",
       mark: "sales, enquiries and repeat business",

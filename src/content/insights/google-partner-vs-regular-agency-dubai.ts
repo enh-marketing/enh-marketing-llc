@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-10-09",
   hero: {
-    src: "/insights/google-partner-vs-regular-agency-dubai/hero.webp",
+    src: "/blog/google-partner-vs-regular-agency-dubai/hero.webp",
     alt: "google partner agency in dubai",
     w: 1024,
     h: 1024
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Not all agencies are built the same. In Dubai’s fast-moving digital advertising market, where CPCs rise sharply during peak seasons like Ramadan and DSF, choosing the right partner can determine whether your campaigns scale profitably or burn budget. The difference between a regular shop and a certified ",
         {
-          a: "/services/performance-marketing",
+          a: "/performance-marketing-agency-dubai",
           children: [
             "Google Partner agency in Dubai "
           ]

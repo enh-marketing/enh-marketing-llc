@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-05-25",
   hero: {
-    src: "/insights/expo-2020-most-effective-marketing-strategies-for-retail-logistics-industries/hero.webp",
+    src: "/blog/expo-2020-most-effective-marketing-strategies-for-retail-logistics-industries/hero.webp",
     alt: "digital marketing strategies",
     w: 500,
     h: 500

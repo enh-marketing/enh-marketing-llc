@@ -350,7 +350,7 @@ export const faqs: Faq[] = [
     // Now that the page exists, the document's reference links to it.
     aLink: {
       label: "LinkedIn marketing",
-      href: "/services/social-media-marketing/linkedin-marketing",
+      href: "/linkedin-marketing-agency-dubai",
     },
   },
 ];

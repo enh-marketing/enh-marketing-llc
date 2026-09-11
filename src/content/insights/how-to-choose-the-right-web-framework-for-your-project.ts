@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-10-07",
   hero: {
-    src: "/insights/how-to-choose-the-right-web-framework-for-your-project/hero.webp",
+    src: "/blog/how-to-choose-the-right-web-framework-for-your-project/hero.webp",
     alt: "best web design company in dubai",
     w: 500,
     h: 500
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "The success of your project depends on your choice of web framework when starting a web development project. A web framework is a type of software framework that offers a systematic method for developing web applications. The perfect ",
         {
-          a: "/services/web-design-development",
+          a: "/web-design-company-dubai",
           children: [
             "website design in Dubai "
           ]
@@ -124,7 +124,7 @@ export const note: Note = {
       text: [
         "Choosing the right web framework is an essential part of the web development process and is incorporated by every ",
         {
-          a: "/services/web-design-development",
+          a: "/web-design-company-dubai",
           children: [
             "web development company in Dubai"
           ]

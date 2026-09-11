@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-10-15",
   hero: {
-    src: "/insights/corporate-video-dubai-fast-production-10-days/hero.webp",
+    src: "/blog/corporate-video-dubai-fast-production-10-days/hero.webp",
     alt: "corporate video production dubai",
     w: 1024,
     h: 1024
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "ENH produces ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             "corporate videos"
           ]

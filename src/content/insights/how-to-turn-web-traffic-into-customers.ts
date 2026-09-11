@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-07-28",
   hero: {
-    src: "/insights/how-to-turn-web-traffic-into-customers/hero.webp",
+    src: "/blog/how-to-turn-web-traffic-into-customers/hero.webp",
     alt: "digiral marketing company in dubai",
     w: 500,
     h: 500

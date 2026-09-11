@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-06-11",
   hero: {
-    src: "/insights/googles-ai-search-update/hero.webp",
+    src: "/blog/googles-ai-search-update/hero.webp",
     alt: "Google’s AI Search Update",
     w: 800,
     h: 800
@@ -120,7 +120,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/googles-ai-search-update/01.png",
+        src: "/blog/googles-ai-search-update/01.png",
         alt: "",
         w: 1024,
         h: 1024,
@@ -455,7 +455,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/googles-ai-search-update/02.png",
+        src: "/blog/googles-ai-search-update/02.png",
         alt: "",
         w: 832,
         h: 1154,

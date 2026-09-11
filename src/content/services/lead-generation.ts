@@ -122,7 +122,7 @@ export const routes = {
       no: "06",
       title: "Landing Page Development",
       glyph: "schema",
-      href: "/services/lead-generation/landing-page-development",
+      href: "/landing-page-development-services",
       lead: "Every other lead generation route on this list eventually lands here. We build each page around one action, connect it to the campaign, and keep testing until it performs better.",
       tail: "Sending paid traffic to a general homepage is one of the costliest mistakes in lead generation, and one of the easiest to fix.",
     },
@@ -292,7 +292,7 @@ export const faqs: Faq[] = [
     // The document writes this reference in brackets. The answer above carries
     // the sentence unbracketed so the FAQ schema stays clean, and the list
     // links this phrase where it occurs.
-    aLink: { label: "performance marketing", href: "/services/performance-marketing" },
+    aLink: { label: "performance marketing", href: "/performance-marketing-agency-dubai" },
   },
   {
     q: "Do UAE rules restrict marketing emails and WhatsApp messages?",

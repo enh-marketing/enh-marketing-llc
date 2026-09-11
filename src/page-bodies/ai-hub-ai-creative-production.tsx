@@ -24,7 +24,7 @@ import { StickyCTABar } from "@/components/service/StickyCTABar";
 
 /* Drives <Breadcrumbs href={HREF} />. A subpage of the AI Hub, so the trail
    reads Home > AI Hub > AI Creative Production. See sitemap.ts. */
-const HREF = "/ai-hub/ai-creative-production";
+const HREF = "/ai-creative-production-uae";
 const FORM_TITLE = c.hero.primary;
 
 export function AiCreativeProductionPage() {

@@ -66,7 +66,7 @@ export function InsightNotePage({
       <main>
         <ArticleHero
           note={note}
-          breadcrumbs={<Breadcrumbs key="crumbs" href="/insights" />}
+          breadcrumbs={<Breadcrumbs key="crumbs" href="/blog" />}
         />
 
         <div ref={article} className="relative py-14 sm:py-16">

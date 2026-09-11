@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-07-29",
   hero: {
-    src: "/insights/turn-ai-search-into-revenue/hero.webp",
+    src: "/blog/turn-ai-search-into-revenue/hero.webp",
     alt: "ai search visibility revenue growth",
     w: 2048,
     h: 2048
@@ -75,35 +75,35 @@ export const note: Note = {
       text: [
         "AI often pulls insights from trusted third-party sources such as review roundups, Reddit threads, affiliate lists, and YouTube demonstrations. Securing mentions in these spaces can shape buyer perceptions well before they reach your website, making it essential to establish a presence there. Our team at ENH Marketing crafts strategies to get your brand cited in these influential channels, leveraging our expertise in ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO"
           ]
         },
         ", ",
         {
-          a: "/services/performance-marketing/google-ads",
+          a: "/google-adwords-company-dubai",
           children: [
             "PPC/Search Ads"
           ]
         },
         ", ",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             "Social Media Marketing"
           ]
         },
         ", ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             "corporate video production"
           ]
         },
         ", and ",
         {
-          a: "/services/performance-marketing",
+          a: "/performance-marketing-agency-dubai",
           children: [
             "Digital campaigns"
           ]

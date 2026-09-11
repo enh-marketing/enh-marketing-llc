@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-08-21",
   hero: {
-    src: "/insights/local-seo-vs-national-seo-vs-global-seo/hero.webp",
+    src: "/blog/local-seo-vs-national-seo-vs-global-seo/hero.webp",
     alt: "Local SEO vs. National SEO vs. Global SEO",
     w: 1080,
     h: 1080
@@ -212,7 +212,7 @@ export const note: Note = {
       text: [
         "A strategic ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [
@@ -239,7 +239,7 @@ export const note: Note = {
       text: [
         "That’s where a results-driven ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [

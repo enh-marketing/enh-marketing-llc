@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-11-04",
   hero: {
-    src: "/insights/how-ai-is-transforming-social-media-marketing-for-uae-brands/hero.webp",
+    src: "/blog/how-ai-is-transforming-social-media-marketing-for-uae-brands/hero.webp",
     alt: "social media marketing agency in dubai",
     w: 1024,
     h: 1024
@@ -116,7 +116,7 @@ export const note: Note = {
       text: [
         "Agencies using advanced tools for ",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             {
               b: [

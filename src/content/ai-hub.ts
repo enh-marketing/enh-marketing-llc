@@ -194,7 +194,7 @@ export const system: Beat[] = [
       "Visibility Monitoring and Reporting",
     ],
     quotes: "ai-search-visibility",
-    href: "/ai-hub/ai-search-visibility",
+    href: "/ai-search-visibility-dubai",
   },
   {
     at: 0.55,
@@ -212,7 +212,7 @@ export const system: Beat[] = [
       "Custom AI Tools",
     ],
     quotes: "ai-automation",
-    href: "/ai-hub/ai-automation",
+    href: "/ai-automation-agency-dubai",
   },
   {
     at: 0.85,
@@ -227,7 +227,7 @@ export const system: Beat[] = [
       "Creative Variants at Scale",
     ],
     quotes: "ai-creative-production",
-    href: "/ai-hub/ai-creative-production",
+    href: "/ai-creative-production-uae",
   },
 ];
 
@@ -261,7 +261,7 @@ export const uplink: Beat[] = [
       "Messaging App Automation",
     ],
     quotes: "conversational-ai",
-    href: "/ai-hub/conversational-ai",
+    href: "/conversational-ai-services",
   },
 ];
 
@@ -285,7 +285,7 @@ export const chart: Beat[] = [
       "Forecast Versus Actual Reporting",
     ],
     quotes: "campaign-intelligence",
-    href: "/ai-hub/campaign-intelligence",
+    href: "/campaign-intelligence-dubai",
   },
   {
     at: 0.8,
@@ -302,7 +302,7 @@ export const chart: Beat[] = [
       "Data Integration and Preparation",
     ],
     quotes: "data-and-dashboards",
-    href: "/ai-hub/data-and-dashboards",
+    href: "/data-dashboard-services-dubai",
   },
 ];
 /* ---------------------------------------------------------------- chapter 4 */
@@ -348,6 +348,6 @@ export const horizon: Beat[] = [
       "Website Migration",
     ],
     quotes: "intelligent-web",
-    href: "/ai-hub/intelligent-web",
+    href: "/ai-website-development-dubai",
   },
 ];

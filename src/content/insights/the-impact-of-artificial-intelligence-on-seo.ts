@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-06-04",
   hero: {
-    src: "/insights/the-impact-of-artificial-intelligence-on-seo/hero.webp",
+    src: "/blog/the-impact-of-artificial-intelligence-on-seo/hero.webp",
     alt: "best seo company in dubai",
     w: 500,
     h: 500
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "The world of search engine optimization is constantly evolving, with new trends and technologies emerging all the time. One of the most significant developments in recent years has been the impact of artificial intelligence on SEO. AI is revolutionizing the way we approach SEO, and its impact is already being felt across the industry. Several ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO companies in Dubai"
           ]
@@ -99,7 +99,7 @@ export const note: Note = {
       text: [
         "Across the industry, AI is already having an effect on SEO, and this effect is likely to grow in the future. SEO experts can refine their tactics to make sure they continue to work in a world that is becoming more and more AI-driven by remaining current on trends and changes. Choose only the ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "best SEO services in Dubai"
           ]

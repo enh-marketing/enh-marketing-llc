@@ -25,7 +25,7 @@ import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 import { ResultStats } from "@/components/service/ResultStats";
 
-const HREF = "/services/social-media-marketing/influencer-marketing";
+const HREF = "/influencer-marketing-agency-dubai";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 export function InfluencerMarketingPage() {

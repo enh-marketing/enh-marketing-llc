@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-03-12",
   hero: {
-    src: "/insights/tips-to-prevent-seo-penalties-and-recover-from-google-penalties/hero.webp",
+    src: "/blog/tips-to-prevent-seo-penalties-and-recover-from-google-penalties/hero.webp",
     alt: "seo agency in dubai",
     w: 1080,
     h: 1080
@@ -138,7 +138,7 @@ export const note: Note = {
       text: [
         "Efficient ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [

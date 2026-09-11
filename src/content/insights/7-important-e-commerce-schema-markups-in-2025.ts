@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-08-21",
   hero: {
-    src: "/insights/7-important-e-commerce-schema-markups-in-2025/hero.webp",
+    src: "/blog/7-important-e-commerce-schema-markups-in-2025/hero.webp",
     alt: "ecommerce seo company dubai",
     w: 1080,
     h: 1080
@@ -42,7 +42,7 @@ export const note: Note = {
       text: [
         "If you're managing an online store in 2025, here are seven schema types every ",
         {
-          a: "/services/seo/ecommerce-seo",
+          a: "/ecommerce-seo-agency-dubai",
           children: [
             {
               b: [
@@ -135,7 +135,7 @@ export const note: Note = {
       text: [
         "In 2025, structured data is no longer a technical bonus — it’s a strategic necessity. Whether you're a growing brand or working with an ",
         {
-          a: "/services/seo/ecommerce-seo",
+          a: "/ecommerce-seo-agency-dubai",
           children: [
             {
               b: [
@@ -152,7 +152,7 @@ export const note: Note = {
       text: [
         "As Google continues to prioritize clarity and structured context, it's essential that every ",
         {
-          a: "/services/seo/ecommerce-seo",
+          a: "/ecommerce-seo-agency-dubai",
           children: [
             {
               b: [

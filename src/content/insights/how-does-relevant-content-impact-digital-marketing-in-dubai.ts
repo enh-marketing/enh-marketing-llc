@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-06-16",
   hero: {
-    src: "/insights/how-does-relevant-content-impact-digital-marketing-in-dubai/hero.webp",
+    src: "/blog/how-does-relevant-content-impact-digital-marketing-in-dubai/hero.webp",
     alt: "digital marketing company in uae",
     w: 500,
     h: 500
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "It’s no longer a secret that good content is the driving force to elevate the digital marketing performance of brands and draw out the best results in favour of their businesses. Being a much more affordable way to enhance the brand’s digital presence and improve search engine rankings, digital marketing has the potential to pull game-changing results for your business – provided the content is relevant, highly audience-centric and professionally curated and managed by a ",
         {
-          a: "/services/seo/seo-content-creation",
+          a: "/content-creation-in-dubai",
           children: [
             "content development services"
           ]
@@ -69,7 +69,7 @@ export const note: Note = {
       text: [
         "With the right strategies done consistently, backed by well-researched keywords and ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO tactics"
           ]

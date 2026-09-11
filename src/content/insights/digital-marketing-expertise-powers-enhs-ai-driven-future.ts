@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-06-12",
   hero: {
-    src: "/insights/digital-marketing-expertise-powers-enhs-ai-driven-future/hero.webp",
+    src: "/blog/digital-marketing-expertise-powers-enhs-ai-driven-future/hero.webp",
     alt: "digital marketing agency dubai",
     w: 1080,
     h: 1080
@@ -78,7 +78,7 @@ export const note: Note = {
         },
         " means we have demonstrated proficiency in ",
         {
-          a: "/services/performance-marketing/google-ads",
+          a: "/google-adwords-company-dubai",
           children: [
             "Google Ads management"
           ]

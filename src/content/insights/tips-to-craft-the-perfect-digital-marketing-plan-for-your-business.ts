@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-01-14",
   hero: {
-    src: "/insights/tips-to-craft-the-perfect-digital-marketing-plan-for-your-business/hero.webp",
+    src: "/blog/tips-to-craft-the-perfect-digital-marketing-plan-for-your-business/hero.webp",
     alt: "digital marketing services in dubai",
     w: 500,
     h: 500

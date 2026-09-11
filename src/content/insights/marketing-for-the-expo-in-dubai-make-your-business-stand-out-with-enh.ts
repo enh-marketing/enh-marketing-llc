@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-12-25",
   hero: {
-    src: "/insights/marketing-for-the-expo-in-dubai-make-your-business-stand-out-with-enh/hero.webp",
+    src: "/blog/marketing-for-the-expo-in-dubai-make-your-business-stand-out-with-enh/hero.webp",
     alt: "digital marketing agency dubai",
     w: 500,
     h: 500

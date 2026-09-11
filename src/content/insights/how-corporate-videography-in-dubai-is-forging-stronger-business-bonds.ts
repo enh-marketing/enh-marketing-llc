@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-12-01",
   hero: {
-    src: "/insights/how-corporate-videography-in-dubai-is-forging-stronger-business-bonds/hero.webp",
+    src: "/blog/how-corporate-videography-in-dubai-is-forging-stronger-business-bonds/hero.webp",
     alt: "corporate video production company dubai",
     w: 1969,
     h: 1969
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "In Dubai’s business landscape where competition is fierce and innovation is key, forging strong connections with clients and partners is paramount. Corporate videography has emerged as a potent tool in this endeavor, allowing businesses to communicate their values, offerings, and brand identity effectively. Read on to learn how ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [
@@ -103,7 +103,7 @@ export const note: Note = {
       text: [
         "Dubai's unique blend of global appeal and dynamic culture further amplifies the impact of corporate videography, allowing businesses to leverage the city's reputation for growth and prosperity. As companies continue to explore innovative ways to foster trust and growth, ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [

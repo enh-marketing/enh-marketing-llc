@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-09-24",
   hero: {
-    src: "/insights/what-is-the-role-of-web-design-in-a-successful-digital-marketing-strategy/hero.webp",
+    src: "/blog/what-is-the-role-of-web-design-in-a-successful-digital-marketing-strategy/hero.webp",
     alt: "best web design company in dubai",
     w: 1000,
     h: 1000
@@ -154,7 +154,7 @@ export const note: Note = {
       text: [
         "The foundation of any effective digital marketing plan is good web design. In addition to drawing visitors, a well-designed website guarantees a great and smooth user experience, increasing engagement, conversions, and brand recognition. By investing in an effective ",
         {
-          a: "/services/web-design-development",
+          a: "/web-design-company-dubai",
           children: [
             "web design company in Dubai"
           ]

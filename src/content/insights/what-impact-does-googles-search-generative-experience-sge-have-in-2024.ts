@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-03-15",
   hero: {
-    src: "/insights/what-impact-does-googles-search-generative-experience-sge-have-in-2024/hero.webp",
+    src: "/blog/what-impact-does-googles-search-generative-experience-sge-have-in-2024/hero.webp",
     alt: "digital marketing company in dubai",
     w: 1969,
     h: 1969
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Google announced a while ago their latest development in artificial intelligence system called Search Generative Experience (SGE) which is set to transform how we search online. SGE utilizes large language models to generate content directly in response to ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [
@@ -118,7 +118,7 @@ export const note: Note = {
       text: [
         "For instance, after an initial search on \"",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             {
               b: [

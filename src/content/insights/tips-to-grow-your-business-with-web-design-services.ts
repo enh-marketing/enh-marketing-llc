@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-09-02",
   hero: {
-    src: "/insights/tips-to-grow-your-business-with-web-design-services/hero.webp",
+    src: "/blog/tips-to-grow-your-business-with-web-design-services/hero.webp",
     alt: "best web design company in dubai",
     w: 500,
     h: 500
@@ -96,7 +96,7 @@ export const note: Note = {
       text: [
         "For better or worse, most people will judge your company’s credibility based on the appearance of your website and the quality of information it provides. As a result, having a modern, professional ",
         {
-          a: "/services/web-design-development",
+          a: "/web-design-company-dubai",
           children: [
             "website design"
           ]
@@ -131,7 +131,7 @@ export const note: Note = {
       text: [
         "ENH Media, as experienced ",
         {
-          a: "/services/web-design-development",
+          a: "/web-design-company-dubai",
           children: [
             "web development company in Dubai"
           ]

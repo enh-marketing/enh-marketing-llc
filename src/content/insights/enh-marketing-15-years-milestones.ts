@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2026-02-11",
   hero: {
-    src: "/insights/enh-marketing-15-years-milestones/hero.webp",
+    src: "/blog/enh-marketing-15-years-milestones/hero.webp",
     alt: "15 years digital world",
     w: 1080,
     h: 1080

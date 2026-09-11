@@ -24,7 +24,7 @@ import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 import { ResultStats } from "@/components/service/ResultStats";
 
-const HREF = "/services/lead-generation";
+const HREF = "/lead-generation-company-dubai";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 export function LeadGenerationPage() {

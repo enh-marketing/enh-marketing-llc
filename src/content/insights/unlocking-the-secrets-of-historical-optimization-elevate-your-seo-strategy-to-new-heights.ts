@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-12-08",
   hero: {
-    src: "/insights/unlocking-the-secrets-of-historical-optimization-elevate-your-seo-strategy-to-new-heights/hero.webp",
+    src: "/blog/unlocking-the-secrets-of-historical-optimization-elevate-your-seo-strategy-to-new-heights/hero.webp",
     alt: "best seo company in dubai",
     w: 1969,
     h: 1969
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Staying ahead of the curve in the ever-changing world of SEO necessitates not just following the most recent trends but also going back and revitalizing your older content. The top digital marketing agencies that provide the ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [
@@ -143,7 +143,7 @@ export const note: Note = {
       text: [
         "Releasing your work to the public after it has been updated and optimized. Through social media, email newsletters, and any other appropriate channels, your dependable ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [
@@ -230,7 +230,7 @@ export const note: Note = {
       text: [
         "Historical optimization is all about reimagining and revitalizing your past content to make it relevant for the present and future. Embrace this powerful strategy by working with the ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [

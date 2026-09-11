@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-08-01",
   hero: {
-    src: "/insights/how-seo-factor-boosts-traffic-faster/hero.webp",
+    src: "/blog/how-seo-factor-boosts-traffic-faster/hero.webp",
     alt: "seo factors",
     w: 1080,
     h: 1080
@@ -156,7 +156,7 @@ export const note: Note = {
             },
             " against competitors to identify gaps and opportunities. With over 15 years of experience, our team crafts tailored strategies using ",
             {
-              a: "/services/seo",
+              a: "/seo-company-in-dubai",
               children: [
                 {
                   b: [
@@ -173,7 +173,7 @@ export const note: Note = {
             },
             ", and ",
             {
-              a: "/services/social-media-marketing",
+              a: "/social-media-agency-in-dubai",
               children: [
                 {
                   b: [
@@ -190,7 +190,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/how-seo-factor-boosts-traffic-faster/01.webp",
+        src: "/blog/how-seo-factor-boosts-traffic-faster/01.webp",
         alt: "",
         w: 3877,
         h: 2938,
@@ -271,7 +271,7 @@ export const note: Note = {
       text: [
         "Navigating the complexities of topical authority and AI-driven search requires expertise and innovation—qualities at the heart of ENH Marketing LLC. Whether through ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [
@@ -282,7 +282,7 @@ export const note: Note = {
         },
         " to showcase your expertise or targeted ",
         {
-          a: "/services/performance-marketing/google-ads",
+          a: "/google-adwords-company-dubai",
           children: [
             {
               b: [

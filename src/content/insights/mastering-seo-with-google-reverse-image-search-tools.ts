@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-02-12",
   hero: {
-    src: "/insights/mastering-seo-with-google-reverse-image-search-tools/hero.webp",
+    src: "/blog/mastering-seo-with-google-reverse-image-search-tools/hero.webp",
     alt: "seo agency in dubai",
     w: 1080,
     h: 1080
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Search Engine Optimization is a complex field and it is completely dependent on the complexities of search algorithms. The traditional SEO is based on text based strategies like link building and keyword optimization, utilising visual content is important in getting top search rankings. An efficient ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [
@@ -91,7 +91,7 @@ export const note: Note = {
       text: [
         "A professional ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [

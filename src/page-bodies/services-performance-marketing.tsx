@@ -24,7 +24,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
-const HREF = "/services/performance-marketing";
+const HREF = "/performance-marketing-agency-dubai";
 
 export function PerformanceMarketingPage() {
   const whatsapp = `https://wa.me/${brand.whatsapp}`;

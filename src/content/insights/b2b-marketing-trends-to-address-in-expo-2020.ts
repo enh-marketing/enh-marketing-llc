@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-09-29",
   hero: {
-    src: "/insights/b2b-marketing-trends-to-address-in-expo-2020/hero.webp",
+    src: "/blog/b2b-marketing-trends-to-address-in-expo-2020/hero.webp",
     alt: "b2b marketing services",
     w: 500,
     h: 500

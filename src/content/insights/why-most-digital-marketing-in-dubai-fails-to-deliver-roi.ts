@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-12-30",
   hero: {
-    src: "/insights/why-most-digital-marketing-in-dubai-fails-to-deliver-roi/hero.webp",
+    src: "/blog/why-most-digital-marketing-in-dubai-fails-to-deliver-roi/hero.webp",
     alt: "digital marketing dubai",
     w: 2048,
     h: 2048
@@ -345,7 +345,7 @@ export const note: Note = {
         },
         " that ",
         {
-          a: "/insights/digital-marketing-expertise-powers-enhs-ai-driven-future",
+          a: "/blog/digital-marketing-expertise-powers-enhs-ai-driven-future",
           children: [
             "understands ROI treats the website as a conversion system"
           ]

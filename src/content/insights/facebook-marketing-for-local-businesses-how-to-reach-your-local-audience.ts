@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-08-12",
   hero: {
-    src: "/insights/facebook-marketing-for-local-businesses-how-to-reach-your-local-audience/hero.webp",
+    src: "/blog/facebook-marketing-for-local-businesses-how-to-reach-your-local-audience/hero.webp",
     alt: "facebook marketing agency in dubai",
     w: 1080,
     h: 1080
@@ -56,7 +56,7 @@ export const note: Note = {
       text: [
         "Create Facebook Events for any in-store promotions, classes, or workshops you offer. Invite local customers and allow people to indicate their attendance. Events create buzz and remind people of your business. Consider partnering with a leading ",
         {
-          a: "/services/social-media-marketing/facebook-marketing",
+          a: "/facebook-marketing-agency-in-dubai",
           children: [
             {
               b: [
@@ -113,7 +113,7 @@ export const note: Note = {
       text: [
         "Optimizing your Facebook presence on a local scale allows you to directly connect with potential customers near your business. With the right targeting, promotions, and consistent activity, you can boost brand awareness and generate more opportunities within your local community through Facebook. A top ",
         {
-          a: "/services/social-media-marketing/facebook-marketing",
+          a: "/facebook-marketing-agency-in-dubai",
           children: [
             {
               b: [

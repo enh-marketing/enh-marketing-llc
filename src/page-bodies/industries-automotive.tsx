@@ -27,7 +27,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
-const HREF = "/industries/automotive";
+const HREF = "/automotive-digital-marketing-agency";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 /** Automotive — the third page under Industries.

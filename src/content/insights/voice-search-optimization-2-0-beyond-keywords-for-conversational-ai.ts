@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-09-19",
   hero: {
-    src: "/insights/voice-search-optimization-2-0-beyond-keywords-for-conversational-ai/hero.webp",
+    src: "/blog/voice-search-optimization-2-0-beyond-keywords-for-conversational-ai/hero.webp",
     alt: "Voice Search Optimization",
     w: 1080,
     h: 1080

@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-08-31",
   hero: {
-    src: "/insights/the-future-of-seo-predictions-for-the-next-decade/hero.webp",
+    src: "/blog/the-future-of-seo-predictions-for-the-next-decade/hero.webp",
     alt: "seo company dubai",
     w: 1969,
     h: 1969
@@ -98,7 +98,7 @@ export const note: Note = {
       text: [
         "With over half of all searches now done on mobile devices, location-based search intelligence will become crucial. ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [
@@ -125,7 +125,7 @@ export const note: Note = {
       text: [
         "The lines between SEO, ",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             {
               b: [

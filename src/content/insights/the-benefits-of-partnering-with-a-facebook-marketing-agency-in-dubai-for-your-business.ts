@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-11-13",
   hero: {
-    src: "/insights/the-benefits-of-partnering-with-a-facebook-marketing-agency-in-dubai-for-your-business/hero.webp",
+    src: "/blog/the-benefits-of-partnering-with-a-facebook-marketing-agency-in-dubai-for-your-business/hero.webp",
     alt: "Facebook marketing in Dubai",
     w: 1080,
     h: 1080
@@ -48,7 +48,7 @@ export const note: Note = {
       text: [
         "Expert knowledge of Facebook algorithms: Tapping into ",
         {
-          a: "/services/social-media-marketing/facebook-marketing",
+          a: "/facebook-marketing-agency-in-dubai",
           children: [
             {
               b: [
@@ -89,7 +89,7 @@ export const note: Note = {
       text: [
         "Cost-Efficient Solutions: Professional marketing agencies fetch cheaper rates with ",
         {
-          a: "/services/social-media-marketing/facebook-marketing",
+          a: "/facebook-marketing-agency-in-dubai",
           children: [
             {
               b: [
@@ -166,7 +166,7 @@ export const note: Note = {
       text: [
         "This concludes that partnering with a ",
         {
-          a: "/services/social-media-marketing/facebook-marketing",
+          a: "/facebook-marketing-agency-in-dubai",
           children: [
             {
               b: [

@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-09-05",
   hero: {
-    src: "/insights/5-smart-quick-ways-to-help-your-business-stand-out-in-expo-2020/hero.webp",
+    src: "/blog/5-smart-quick-ways-to-help-your-business-stand-out-in-expo-2020/hero.webp",
     alt: "digital marketing services in dubai",
     w: 500,
     h: 500

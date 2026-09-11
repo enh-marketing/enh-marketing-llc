@@ -29,10 +29,37 @@ const HUBS = readdirSync(CONTENT)
   .map((f) => `${CONTENT}/${f}`);
 const SITEMAP = "src/lib/sitemap.ts";
 
-/** The navigation's own name for each AI Hub page, by slug. */
-const labels = new Map(
-  [...readFileSync(SITEMAP, "utf8").matchAll(/\{\s*label:\s*"([^"]+)",\s*href:\s*"\/ai-hub\/([^"]+)"\s*\}/g)]
-    .map(([, label, slug]) => [slug, label]),
+/** The navigation's own name for each AI Hub page, by the href it lists.
+ *
+ *  BY HREF, AND IT USED TO BE BY SLUG. The old map matched
+ *  `href: "/ai-hub/<slug>"` and keyed on that slug, and the href check below
+ *  asserted the beat pointed at `/ai-hub/<slug>`. Both stopped working on
+ *  2026-09-11, when the SEO sheet flattened every page to the site root:
+ *  /ai-hub/intelligent-web became /ai-website-development-dubai, the regex
+ *  matched nothing, and all eight categories failed with "could not read the
+ *  title" while the content they were guarding was correct. A gate that cannot
+ *  find what it is checking is not a gate.
+ *
+ *  Nothing about the rule has changed and nothing is now unchecked. The title
+ *  is still the navigation's label for that page and the href must still be one
+ *  the navigation actually lists; they are simply joined on the href, which is
+ *  the one thing both files hold, instead of on a slug that only the old URL
+ *  shape contained.
+ *
+ *  SCOPED TO THE aiHub NODE. Services and Industries carry labels of their own
+ *  and a flat href no longer says which section it belongs to, so the block is
+ *  cut out first and the pairs are read from inside it. */
+const AI_HUB_BLOCK = (() => {
+  const src = readFileSync(SITEMAP, "utf8");
+  const start = src.indexOf("const aiHub: NavNode = {");
+  if (start < 0) throw new Error("check:copy: the aiHub node is not in " + SITEMAP);
+  const end = src.indexOf("\n};", start);
+  return src.slice(start, end);
+})();
+
+const labelByHref = new Map(
+  [...AI_HUB_BLOCK.matchAll(/\{\s*label:\s*"([^"]+)",\s*href:\s*"([^"]+)"\s*\}/g)]
+    .map(([, label, href]) => [href, label]),
 );
 
 /* Beat object literals that name a source. None of them nest braces, so the
@@ -74,7 +101,12 @@ for (const [block, slug, file] of beats) {
     }
   };
 
-  compare("title", read(block, "title"), labels.get(slug)?.replace(/\s*\([^)]*\)\s*$/, ""), SITEMAP);
+  compare(
+    "title",
+    read(block, "title"),
+    labelByHref.get(read(block, "href") ?? "")?.replace(/\s*\([^)]*\)\s*$/, ""),
+    SITEMAP,
+  );
 
   /* THE BODY IS NO LONGER COMPARED, AND THAT IS THE POINT OF THIS BLOCK.
      It used to have to equal the service's `meta.description` word for word,
@@ -103,8 +135,10 @@ for (const [block, slug, file] of beats) {
   }
 
   const href = read(block, "href");
-  if (href !== `/ai-hub/${slug}`) {
-    problems.push(`${slug}: href is ${href ?? "missing"}, which does not lead to the page it quotes.`);
+  if (href === undefined || !labelByHref.has(href)) {
+    problems.push(
+      `${slug}: href is ${href ?? "missing"}, which the navigation does not list as an AI Hub page.`,
+    );
   }
 
   /* AND THE SUB-SERVICES, which are the newest thing quoted here and the most

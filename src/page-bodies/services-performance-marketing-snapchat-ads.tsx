@@ -21,7 +21,7 @@ import { ExclusionBand } from "@/components/service/ExclusionBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 import { ResultStats } from "@/components/service/ResultStats";
 
-const HREF = "/services/performance-marketing/snapchat-ads";
+const HREF = "/snapchat-advertising-dubai";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 export function SnapchatAdsPage() {

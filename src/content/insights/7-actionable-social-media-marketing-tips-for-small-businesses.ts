@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-07-22",
   hero: {
-    src: "/insights/7-actionable-social-media-marketing-tips-for-small-businesses/hero.webp",
+    src: "/blog/7-actionable-social-media-marketing-tips-for-small-businesses/hero.webp",
     alt: "social media marketing company in dubai",
     w: 500,
     h: 500
@@ -133,7 +133,7 @@ export const note: Note = {
       text: [
         "Are you looking for social media services for your small business? We are a ",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             "social media agency"
           ]

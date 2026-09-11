@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-08-16",
   hero: {
-    src: "/insights/7-tips-to-benefit-from-expo-for-your-ecommerce-website/hero.webp",
+    src: "/blog/7-tips-to-benefit-from-expo-for-your-ecommerce-website/hero.webp",
     alt: "e-Commerce website development in Dubai",
     w: 500,
     h: 500

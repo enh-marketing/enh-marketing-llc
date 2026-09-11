@@ -83,32 +83,32 @@ export const channelsIntro =
 export const channels: Channel[] = [
   {
     name: "Google Ads",
-    href: "/services/performance-marketing/google-ads",
+    href: "/google-adwords-company-dubai",
     body: "People are already searching for what you sell. This is how you get in front of them before a competitor does. Search, Shopping, Performance Max, and Display, built on the words your buyers type, not the ones that look good in a report.",
   },
   {
     name: "Meta Ads",
-    href: "/services/performance-marketing/meta-ads",
+    href: "/meta-ads-agency-dubai",
     body: "Facebook and Instagram together reach the biggest combined audience in the country. Nobody scrolling it was looking for you, and that is the point. This is where you create demand, and where you win back the people who left without buying. On Meta, the ad itself decides the result more than the targeting does, so we test creative every week.",
   },
   {
     name: "LinkedIn Ads",
-    href: "/services/performance-marketing/linkedin-ads",
+    href: "/linkedin-advertising-dubai",
     body: "B2B only. Target by job title, seniority, company size, industry or a named list of accounts, with Lead Gen Forms where the offer suits them. Clicks cost more here than anywhere else, which works when one deal pays for a hundred of them.",
   },
   {
     name: "TikTok Ads",
-    href: "/services/performance-marketing/tiktok-ads",
+    href: "/tiktok-advertising-agency-dubai",
     body: "Still written off as a teenagers' app but it has the largest adult audience of any platform in the UAE. Vertical, sound-on, hook in the first second, tested in volume. Recut TV ads die here, and fast.",
   },
   {
     name: "Snapchat Ads",
-    href: "/services/performance-marketing/snapchat-ads",
+    href: "/snapchat-advertising-dubai",
     body: "Most Dubai agencies skip it. That is precisely why attention costs less on it. Strong with younger adults and across the wider Gulf, and useful when you need reach without Meta's floor price.",
   },
   {
     name: "YouTube Ads",
-    href: "/services/performance-marketing/youtube-ads",
+    href: "/youtube-advertising-agency-dubai",
     body: "For anything that needs showing instead of saying. It sits inside Google, so search history and intent feed the targeting. Give it thirty seconds of something worth watching, and it will outwork a six-second logo every time.",
   },
 ];
@@ -116,9 +116,9 @@ export const channels: Channel[] = [
 export const organicNote = {
   body: "Organic social is a separate service. If you want the accounts run alongside the paid campaigns, see our",
   links: [
-    { label: "Instagram marketing", href: "/services/social-media-marketing/instagram-marketing" },
-    { label: "TikTok marketing", href: "/services/social-media-marketing/tiktok-marketing" },
-    { label: "LinkedIn marketing", href: "/services/social-media-marketing/linkedin-marketing" },
+    { label: "Instagram marketing", href: "/instagram-marketing-agency-dubai" },
+    { label: "TikTok marketing", href: "/tiktok-marketing-agency" },
+    { label: "LinkedIn marketing", href: "/linkedin-marketing-agency-dubai" },
   ],
   suffix: "pages.",
 };
@@ -206,13 +206,13 @@ export const fit = {
   // services" have no single counterpart in the sitemap, and sending them to an
   // approximate page would be worse than leaving them as plain text.
   industries: [
-    { label: "Ecommerce and retail", detail: "fashion, beauty, homeware, speciality goods", href: "/industries/ecommerce-retail" },
+    { label: "Ecommerce and retail", detail: "fashion, beauty, homeware, speciality goods", href: "/e-commerce-marketing-agency" },
     { label: "Real estate", detail: "brokerages, developers, off-plan sales, holiday homes" },
     { label: "Healthcare and aesthetics", detail: "clinics, dental, dermatology, cosmetic surgery", href: "/industries/healthcare-clinics" },
     { label: "Education and training", detail: "schools, universities, professional certification" },
     { label: "Professional services", detail: "legal, audit, corporate services, company formation" },
     { label: "Technology", detail: "SaaS, fintech, IT services and managed service providers" },
-    { label: "Hospitality and leisure", detail: "hotels, restaurants, venues, attractions", href: "/industries/hospitality-hotels" },
+    { label: "Hospitality and leisure", detail: "hotels, restaurants, venues, attractions", href: "/hospitality-marketing-agency" },
     { label: "Home and trade services", detail: "fit-out, maintenance, moving, automotive" },
   ],
 };

@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-07-30",
   hero: {
-    src: "/insights/ai-driven-insights-digital-marketing-success/hero.webp",
+    src: "/blog/ai-driven-insights-digital-marketing-success/hero.webp",
     alt: "ai driven results",
     w: 1024,
     h: 1024
@@ -50,7 +50,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/ai-driven-insights-digital-marketing-success/01.webp",
+        src: "/blog/ai-driven-insights-digital-marketing-success/01.webp",
         alt: "ai matter",
         w: 2048,
         h: 2048,
@@ -106,21 +106,21 @@ export const note: Note = {
             },
             " to refine long-term strategies. While such tools provide valuable data, ENH Marketing takes it further by crafting tailored campaigns based on these insights, using our expertise in ",
             {
-              a: "/services/seo",
+              a: "/seo-company-in-dubai",
               children: [
                 "SEO"
               ]
             },
             ", ",
             {
-              a: "/services/performance-marketing/google-ads",
+              a: "/google-adwords-company-dubai",
               children: [
                 "PPC/Search Ads"
               ]
             },
             ", and ",
             {
-              a: "/services/social-media-marketing",
+              a: "/social-media-agency-in-dubai",
               children: [
                 "Social Media Marketing"
               ]
@@ -178,7 +178,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/ai-driven-insights-digital-marketing-success/02.webp",
+        src: "/blog/ai-driven-insights-digital-marketing-success/02.webp",
         alt: "",
         w: 2048,
         h: 2048,

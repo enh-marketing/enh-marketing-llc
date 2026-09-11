@@ -10,7 +10,7 @@ import { VoiceArchive } from "@/components/testimonials/VoiceArchive";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
-const HREF = "/testimonials";
+const HREF = "/testimonial";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 /** Testimonials.

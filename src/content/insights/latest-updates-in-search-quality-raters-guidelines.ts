@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-01-02",
   hero: {
-    src: "/insights/latest-updates-in-search-quality-raters-guidelines/hero.webp",
+    src: "/blog/latest-updates-in-search-quality-raters-guidelines/hero.webp",
     alt: "best seo company in dubai",
     w: 1969,
     h: 1969
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Search Quality Raters (SQA) hold considerable influence over search engine results. It also enhances the user’s search experience by providing important feedback. If you are searching for the ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [
@@ -167,7 +167,7 @@ export const note: Note = {
       text: [
         "Google's commitment to improvement remains an annual affair, marked by detailed changes rather than foundational shifts. Armed with the latest insights into Google's algorithms, ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [

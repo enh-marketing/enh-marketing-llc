@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-03-21",
   hero: {
-    src: "/insights/9-social-media-marketing-tips-that-help-you-drive-results/hero.webp",
+    src: "/blog/9-social-media-marketing-tips-that-help-you-drive-results/hero.webp",
     alt: "social media agency in dubai",
     w: 500,
     h: 500
@@ -149,14 +149,14 @@ export const note: Note = {
       text: [
         "ENH Media & Communications LLC is a well-known ",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             "social media agency in the UAE"
           ]
         },
         " that provides a wide range of clients with unique digital marketing services to target the right audience. We specialize in digital marketing and web design, with a focus on internet marketing. If you are looking for a ",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             "social media advertising in Dubai"
           ]

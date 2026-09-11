@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-04-03",
   hero: {
-    src: "/insights/elevating-your-brand-with-an-effective-campaign-plan/hero.webp",
+    src: "/blog/elevating-your-brand-with-an-effective-campaign-plan/hero.webp",
     alt: "digital marketing agency dubai",
     w: 3543,
     h: 3543
@@ -53,7 +53,7 @@ export const note: Note = {
       text: [
         "Dubai represents a diverse mix of cultures, languages, and demographics. When planning a ",
         {
-          a: "/services/performance-marketing",
+          a: "/performance-marketing-agency-dubai",
           children: [
             "digital marketing campaign in Dubai"
           ]
@@ -80,7 +80,7 @@ export const note: Note = {
       text: [
         "Having clear campaign goals and success metrics aligned to your Dubai-based business objectives is crucial. Outline tangible objectives like increased local website traffic, Google search ranking improvements, ",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             "boosted social media engagement"
           ]

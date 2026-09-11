@@ -249,7 +249,7 @@ export const website = {
   strokeTitle: "and Development",
   lead: "AI search visibility often requires changes to the website. Existing pages may need clearer information, stronger structure or corrected technical settings. New service, product, location or educational pages may also be required.",
   body: "ENH Marketing can implement these changes on a suitable existing website. If the current website cannot support the required work, a rebuild can be scoped through our AI Website Development service. The diagnostic will state whether the existing website can be improved or whether larger development work is needed.",
-  link: { label: "AI Website Development service", href: "/ai-hub/intelligent-web" },
+  link: { label: "AI Website Development service", href: "/ai-website-development-dubai" },
   /** The four kinds of change the lead paragraph names, split into its own
    *  phrases so each can be pointed at a region of the site being read:
    *  "Existing pages may need clearer information, stronger structure or
