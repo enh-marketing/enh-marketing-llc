@@ -28,7 +28,7 @@ export function getStaticPaths() {
 const { note } = Astro.props;
 
 const SITE = "https://enhmedia.com";
-const HREF = `/insights/${note.slug}`;
+const HREF = `/blog/${note.slug}`;
 const url = `${SITE}${HREF}`;
 
 /* The share image: the note's own, or nothing. No fallback to a site-wide

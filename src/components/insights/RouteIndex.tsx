@@ -432,7 +432,7 @@ export function RouteIndex({
               is a title, which is all the archive honestly holds for it. */}
           {hasBody(note) ? (
             <a
-              href={`/insights/${note.slug}`}
+              href={`/blog/${note.slug}`}
               className="group font-display mt-2 flex items-baseline gap-3 text-[clamp(1.05rem,1.9vw,1.45rem)] font-extrabold leading-tight text-snow transition-colors duration-300 hover:text-brand"
             >
               <span className="min-w-0">{note.title}</span>

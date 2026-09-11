@@ -44,7 +44,7 @@ const EXCLUDE = new Set(["/ai-hub/film"]);
 export const GET: APIRoute = () => {
   const routes = [
     ...buildablePages(),
-    ...insights.published().map((n) => `/insights/${n.slug}`),
+    ...insights.published().map((n) => `/blog/${n.slug}`),
     ...studies.published().map((s) => `/case-studies/${s.slug}`),
     ...portfolio.all().map((p) => `/portfolio/${p.slug}`),
   ]

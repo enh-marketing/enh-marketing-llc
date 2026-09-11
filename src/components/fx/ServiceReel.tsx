@@ -643,7 +643,7 @@ function SceneVideo({ platform }: { platform: string }) {
  *  hold, so a typo here is a missing mark rather than a wrong logo. */
 const PERF_PLATFORMS = crafts[1].items; // Google Ads, Meta Ads, LinkedIn Ads, YouTube Ads
 /** The four platforms with their own built page under the social pillar
- *  (`/services/social-media-marketing/{facebook,instagram,linkedin,tiktok}-marketing`).
+ *  (`/{facebook,instagram,linkedin,tiktok}-marketing-agency…`).
  *  The keys carry "Ads" because that is how `ChannelIcon` indexes them; the
  *  marks themselves are labelled LinkedIn and TikTok. */
 const SOCIAL_PLATFORMS = ["Facebook", "Instagram", "LinkedIn Ads", "TikTok Ads"];

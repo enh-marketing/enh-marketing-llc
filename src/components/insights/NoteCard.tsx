@@ -92,7 +92,7 @@ export function NoteCardFace({ note }: { note: Note }) {
 
   return (
     <Root
-      {...(live ? { href: `/insights/${note.slug}` } : {})}
+      {...(live ? { href: `/blog/${note.slug}` } : {})}
       className={cn(
         "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-ink-2",
         "transition-[border-color,transform] duration-500 motion-reduce:transition-none",
