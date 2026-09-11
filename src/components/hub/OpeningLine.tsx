@@ -269,27 +269,21 @@ export function OpeningLine() {
       <div
         ref={block}
         data-hub-line-block
-        /* THE COPY SITS LEFT OF THE ROBOT ON A WIDE SCREEN, and that is the
-           picture's doing rather than a preference. The figure stands right of
-           centre and it is large: centred, the heading ran straight through it
-           and lost a letter of NEW HEIGHTS behind a shoulder. The line passing
-           behind the figure is the effect and was asked for, but a word the
-           reader cannot have is not an effect. Padding the right of the box
-           moving the box's right edge in moves the centre of the copy left
-           without moving the copy off centre within its own box, so the three
-           lines still balance on each other.
+        /* CENTRED AT EVERY WIDTH, ASKED FOR. It was pulled left of centre on
+           wide screens for one opening's sake: the cupola's robot stands right
+           of centre and is large, and centred the heading ran through him and
+           lost a letter of NEW HEIGHTS behind a shoulder. That is measured and
+           still true - at 1440 the box is the full width, NEW HEIGHTS spans 423
+           to 1017, and he starts at 835 - so on that opening the line now
+           crosses him and the wash behind it is what keeps it readable. The
+           other two openings have nothing at centre-right to avoid: the rocket
+           film's bright half is lower right and the particle field has no
+           subject at all.
 
-           `right`, NOT PADDING AND NOT A TRANSFORM. Padding the box squeezed
-           the content instead of moving it: the heading carries max-w-[15ch]
-           and the sentence max-w-[42ch], so the first overflowed off the left
-           edge and the second collapsed to one word a line. A transform would
-           have worked and would have composed with the inline translateY the
-           hard way, because Tailwind v4 writes `translate` as its own property
-           rather than into `transform`. Moving the edge is the plain answer.
-
-           Below lg the picture is cropped to its middle and the figure is at
-           the edge of the frame, so there is nothing to move away from. */
-        className="pointer-events-none absolute inset-x-0 flex flex-col items-center justify-center px-6 text-center lg:right-[30vw]"
+           If the cupola wants its old inset back it is `lg:right-[30vw]` on
+           this element and on the sentence below, and it belongs behind a prop
+           rather than applied to all three. */
+        className="pointer-events-none absolute inset-x-0 flex flex-col items-center justify-center px-6 text-center"
         style={{
           top: `${REST_Y * 100}%`,
           transform: "translateY(-50%)",
@@ -399,7 +393,7 @@ function Standfirst({ innerRef }: { innerRef?: React.RefObject<HTMLParagraphElem
          across the middle of all three lines. So this sits over him, at z-50,
          under the navbar at z-70. Depth is worth having on a sentence you read
          in one glance and not on one you read in three. */
-      className="font-grotesk pointer-events-none absolute inset-x-0 mx-auto max-w-[42ch] px-6 text-center text-[0.95rem] leading-[1.6] text-white/80 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)] lg:right-[30vw]"
+      className="font-grotesk pointer-events-none absolute inset-x-0 mx-auto max-w-[42ch] px-6 text-center text-[0.95rem] leading-[1.6] text-white/80 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)]"
       /* `top` is written by the loop above, off the heading's own bottom. */
       style={{ top: "66%", willChange: "opacity" }}
     >
