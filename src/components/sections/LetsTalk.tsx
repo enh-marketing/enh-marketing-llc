@@ -183,7 +183,7 @@ export function LetsTalk() {
                 <div className="flex items-center justify-between gap-4">
                   <dt className="text-fog">Email</dt>
                   <dd>
-                    <a href={`mailto:${brand.email}`} className="font-medium text-snow transition-colors hover:text-brand">
+                    <a href={`mailto:${brand.email}`} className="tap-safe font-medium text-snow transition-colors hover:text-brand">
                       {brand.email}
                     </a>
                   </dd>
@@ -191,7 +191,7 @@ export function LetsTalk() {
                 <div className="flex items-center justify-between gap-4">
                   <dt className="text-fog">Phone</dt>
                   <dd>
-                    <a href={`tel:${brand.phoneHref}`} className="font-medium text-snow transition-colors hover:text-brand">
+                    <a href={`tel:${brand.phoneHref}`} className="tap-safe font-medium text-snow transition-colors hover:text-brand">
                       {brand.phone}
                     </a>
                   </dd>
@@ -203,7 +203,7 @@ export function LetsTalk() {
                       href={`https://wa.me/${brand.whatsapp}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-medium text-snow transition-colors hover:text-brand"
+                      className="tap-safe font-medium text-snow transition-colors hover:text-brand"
                     >
                       Live chat — connect now
                     </a>

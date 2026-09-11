@@ -240,7 +240,7 @@ export function Work({
             {routeExists("/case-studies") && (
               <a
                 href="/case-studies"
-                className="group mr-1 hidden items-center gap-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-snow transition-colors duration-300 hover:text-brand sm:inline-flex"
+                className="tap-safe group mr-1 hidden items-center gap-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-snow transition-colors duration-300 hover:text-brand sm:inline-flex"
               >
                 All {studies.length} case studies
                 <span className="relative flex h-3.5 w-3.5 items-center justify-center overflow-hidden text-brand">

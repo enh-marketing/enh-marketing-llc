@@ -187,7 +187,7 @@ export function WhyENH() {
                   href={PARTNER_PROFILE}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative mt-7 inline-flex items-center gap-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-snow transition-colors duration-300 hover:text-brand"
+                  className="tap-safe group relative mt-7 inline-flex items-center gap-2.5 text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-snow transition-colors duration-300 hover:text-brand"
                 >
                   View our Google Partners profile
                   <span className="relative flex h-3.5 w-3.5 items-center justify-center overflow-hidden text-brand">

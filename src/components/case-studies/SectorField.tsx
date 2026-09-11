@@ -83,7 +83,7 @@ export function SectorField({
                   aria-pressed={on}
                   onClick={() => jump(row.label)}
                   className={cn(
-                    "font-display w-[7.5rem] shrink-0 text-left text-[0.6875rem] font-extrabold uppercase leading-tight tracking-[0.06em]",
+                    "tap-safe font-display w-[7.5rem] shrink-0 text-left text-[0.6875rem] font-extrabold uppercase leading-tight tracking-[0.06em]",
                     "transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:w-[9.5rem]",
                     on ? "text-brand" : "text-fog group-hover:text-snow",
                   )}

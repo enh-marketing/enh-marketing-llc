@@ -101,7 +101,7 @@ export function CategoryField({
                   aria-pressed={on}
                   onClick={() => jump(row.key)}
                   className={cn(
-                    "font-display mt-1 text-left text-[0.6875rem] font-extrabold uppercase leading-tight tracking-[0.06em]",
+                    "tap-safe font-display mt-1 text-left text-[0.6875rem] font-extrabold uppercase leading-tight tracking-[0.06em]",
                     "transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
                     on ? "text-brand" : "text-fog group-hover:text-snow",
                   )}

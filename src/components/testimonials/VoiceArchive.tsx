@@ -413,7 +413,7 @@ function Card({
                   type="button"
                   onClick={onToggle}
                   aria-expanded={open}
-                  className="group/btn mt-6 inline-flex w-fit items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-wide text-snow transition-colors duration-300 hover:text-brand"
+                  className="tap-safe group/btn mt-6 inline-flex w-fit items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-wide text-snow transition-colors duration-300 hover:text-brand"
                 >
                   <span
                     aria-hidden

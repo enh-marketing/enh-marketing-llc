@@ -284,6 +284,14 @@ export function CairnStack({
                   aria-pressed={active}
                   style={{ top: at.top }}
                   className={cn(
+                    /*  NOT .tap-safe, AND THAT WAS MEASURED. These sit stacked a few pixels
+                     apart in the cairn, so growing each hit box to 24px makes it
+                     overlap its neighbour -- npm run check:responsive probed the
+                     real target and reported 20px AFTER the change against 22px
+                     before it, because the point now lands on the sibling. A
+                     21px target that hits the right row beats a 24px one that
+                     hits the wrong one. This block is desktop-only (1024px and
+                     up), where the pointer is a mouse. */
                     "group pointer-events-auto absolute flex w-[19rem] -translate-y-1/2 items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand xl:w-[21rem]",
                     onLeft ? "left-0 flex-row text-right" : "right-0 flex-row-reverse text-left",
                   )}

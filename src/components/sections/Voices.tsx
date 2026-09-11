@@ -185,7 +185,7 @@ export function Voices() {
                   type="button"
                   onClick={() => setOpen((o) => !o)}
                   aria-expanded={open}
-                  className="group/btn mt-6 inline-flex w-fit items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-wide text-snow transition-colors duration-300 hover:text-brand-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                  className="tap-safe group/btn mt-6 inline-flex w-fit items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-wide text-snow transition-colors duration-300 hover:text-brand-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 >
                   <span
                     aria-hidden

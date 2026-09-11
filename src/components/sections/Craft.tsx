@@ -82,7 +82,7 @@ function Card({ craft, index, total }: { craft: CraftType; index: number; total:
             {craft.href && routeExists(craft.href) && (
               <a
                 href={craft.href}
-                className="group/more inline-flex items-center gap-3 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                className="tap-safe group/more inline-flex items-center gap-3 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
                 <span className="text-xs font-semibold uppercase tracking-[0.08em] text-snow transition-colors duration-500 group-hover/more:text-brand-text motion-reduce:transition-none">
                   Know More

@@ -4031,3 +4031,35 @@ html.dark .va-card:focus-within .va-surface {
 .grecaptcha-badge {
   visibility: hidden;
 }
+
+/* ------------------------------------------------------- pointer targets
+
+   Grows a control's tappable area to the 24px minimum WITHOUT moving it.
+
+   MEASURED, NOT GUESSED. `npm run check:responsive` drives the built site in a
+   real browser at seventeen widths from 320 to 1920 and reports every
+   standalone control under 24px. It found these at EVERY width, not just on a
+   phone -- they are 14-22px tall on a 1920px desktop too -- which is why the
+   fix belongs here rather than inside a media query.
+
+   Footer already solved this once, with `inline-block py-1`, and that is still
+   right where a link sits alone in a list and extra height costs nothing. It is
+   wrong inside a measured row: the sector filter on the case-studies index sets
+   its rows to a rhythm, and padding there would push every row apart.
+
+   So the element keeps its own box and a transparent pseudo-element centred on
+   it carries the extra area. Type, spacing, alignment and every measured layout
+   are untouched; only the hit region grows. `max()` means a control already
+   taller than 24px is left entirely alone. */
+.tap-safe {
+  position: relative;
+}
+
+.tap-safe::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: max(100%, 24px);
+  transform: translateY(-50%);
+}
