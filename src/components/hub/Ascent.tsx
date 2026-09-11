@@ -3,9 +3,9 @@
 import { useRef } from "react";
 import { ParallaxLayers } from "@/components/fx/ParallaxLayers";
 import { OpeningLine, OpeningStandfirst } from "@/components/hub/OpeningLine";
-import { BACK, FRONT, LAYER_IMG, LAYER_POS } from "@/components/hub/parallaxAssets";
+import { FAR, MID, NEAR, LAYER_IMG, LAYER_POS } from "@/components/hub/parallaxAssets";
 import { SunBridge } from "@/components/hub/SunBridge";
-import { BACK_RATE } from "@/components/hub/sun";
+import { FAR_RATE, MID_RATE } from "@/components/hub/sun";
 
 /** The page opener: the mountain, with the name in the middle of it.
  *
@@ -53,10 +53,12 @@ export function Ascent() {
         className="h-screen w-full"
         stageClassName="bg-[#0b0f14]"
         layers={[
-          { y: BACK_RATE, children: <img src={BACK} alt="" aria-hidden loading="eager" className={LAYER_IMG} style={LAYER_POS} /> },
+          /* THE VIEW. The Earth, the sun and the black above the limb, with the
+             cupola and the robot both taken out of it. See parallaxAssets. */
+          { y: FAR_RATE, children: <img src={FAR} alt="" aria-hidden loading="eager" className={LAYER_IMG} style={LAYER_POS} /> },
           // The sun's own light, at the sun's own rate, behind everything the
           // photograph puts in front of it.
-          { y: BACK_RATE, children: <SunBridge frame={frame} /> },
+          { y: FAR_RATE, children: <SunBridge frame={frame} /> },
           /* THE NEAR GROUND, AND IT IS TAGGED because a second copy of it is
              drawn over the opening line in hub/ForegroundEcho, and that copy
              finds this layer by class in order to measure it. The line itself
@@ -75,10 +77,21 @@ export function Ascent() {
              line lags by 55, which is the rate it was already using. What is
              new is that the stack's ScrollTrigger writes it, on the frame it
              writes the mountain, so the two can no longer disagree. */
+          /* THE CUPOLA. Frames, seals, cable runs and lamps, cut off the clean
+             frame on plain luminance. It is the window we are looking through,
+             so it moves least of the two behind the robot. */
+          {
+            y: MID_RATE,
+            children: <img src={MID} alt="" aria-hidden loading="eager" className={LAYER_IMG} style={LAYER_POS} />,
+          },
+          /* AND THE ROBOT, NEAREST, which is what the third plate bought. He is
+             painted over the frames rather than behind them, so he is in front
+             of the cupola and not inside it, and he is in no other plate, which
+             is why he can travel without doubling. */
           {
             y: 0,
             className: "hub-foreground",
-            children: <img src={FRONT} alt="" aria-hidden loading="eager" className={LAYER_IMG} style={LAYER_POS} />,
+            children: <img src={NEAR} alt="" aria-hidden loading="eager" className={LAYER_IMG} style={LAYER_POS} />,
           },
           /* THE LINE AND THE SENTENCE BOTH GO OVER THE NEAR PLATE NOW, and on
              the mountain the line went under it. That was the effect and it

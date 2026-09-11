@@ -32,9 +32,19 @@ export const SUN = { x: 0.7662, y: 0.2929 };
 /** The image it was measured in. */
 export const SUN_IMAGE = { w: 2000, h: 2000 };
 
-/** How far the back layer travels, as a percentage of its own height, across
- *  the opener. The original component's furthest rate, and the sun's. */
-export const BACK_RATE = 8;
+/** How far each plate travels, as a percentage of its own height, across the
+ *  opener. The furthest one is the sun's, because the sun is in it.
+ *
+ *  14 AND 7 AND 0, AND THE TWO-PLATE VERSION HAD 8 AND 0. What capped it at 8
+ *  was the far plate carrying its own copy of the robot: past about 160 plate
+ *  pixels of travel he doubled and the window openings collapsed, simulated at
+ *  0, 60, 160, 300 and 460 before a rate was picked. He lives in the near
+ *  plate alone now, so that limit is gone. What remains is the window itself -
+ *  the far plate still holds the cupola behind the mid one - so far against
+ *  mid keeps the same 160-pixel budget, which is 7, and mid against near takes
+ *  the other 7. The robot stands proud of the frame without floating off it. */
+export const FAR_RATE = 14;
+export const MID_RATE = 7;
 
 /** Where the sun lands, in pixels, in a `w` by `h` box showing the image under
  *  `object-fit: cover`. Cover scales to the larger ratio and centres the
@@ -58,7 +68,7 @@ export function sunInBox(w: number, h: number) {
 /** Where the sun sits in the photograph once the opener has been scrolled by
  *  `s`.
  *
- *  The frame rises by `s` while the back layer slides down by `BACK_RATE` per
+ *  The frame rises by `s` while the back layer slides down by `FAR_RATE` per
  *  cent of that, so the sun's net travel is `s * (rate - 1)`: it drifts up at
  *  under a third of the page's speed, which is what reading as "far away"
  *  means. Left to itself that still carries it off the top of the screen before
@@ -66,7 +76,7 @@ export function sunInBox(w: number, h: number) {
  *  which is why the bridge below does not simply follow it. */
 export function sunAfterScroll(w: number, h: number, s: number) {
   const at = sunInBox(w, h);
-  return { x: at.x, y: at.y - s * (1 - BACK_RATE / 100) };
+  return { x: at.x, y: at.y - s * (1 - FAR_RATE / 100) };
 }
 
 /** The layers' opaque edges, as fractions of the image, measured from the
