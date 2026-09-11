@@ -52,7 +52,7 @@ function startSmtpServer() {
         if (end !== -1) {
           session.data = session.data.slice(0, end);
           readingData = false;
-          inboxes.push({ ...session });
+          inboxes.push({ ...session, receivedAt: Date.now() });
           socket.write("250 2.0.0 Ok: queued\r\n");
         }
         return;
@@ -117,20 +117,25 @@ function startSmtpServer() {
 
 /* ------------------------------------------- a stand-in for the Apps Script */
 
-function startWebhookServer({ failing = false } = {}) {
+function startWebhookServer({ failing = false, delayMs = 0 } = {}) {
   const received = [];
+  const repliedAt = [];
   const server = http.createServer((req, res) => {
     let body = "";
     req.on("data", (c) => (body += c));
     req.on("end", () => {
       received.push(JSON.parse(body));
-      res.writeHead(failing ? 500 : 200, { "Content-Type": "application/json" });
-      res.end(failing ? '{"ok":false,"error":"simulated outage"}' : '{"ok":true}');
+      // Apps Script really is this slow, so the double can be too.
+      setTimeout(() => {
+        repliedAt.push(Date.now());
+        res.writeHead(failing ? 500 : 200, { "Content-Type": "application/json" });
+        res.end(failing ? '{"ok":false,"error":"simulated outage"}' : '{"ok":true}');
+      }, delayMs);
     });
   });
   return new Promise((resolve) => {
     server.listen(0, "127.0.0.1", () =>
-      resolve({ port: server.address().port, received, close: () => server.close() }),
+      resolve({ port: server.address().port, received, repliedAt, close: () => server.close() }),
     );
   });
 }
@@ -176,6 +181,15 @@ const basePayload = {
     { id: "message", label: "Message", value: "We need help with search campaigns." },
   ],
 };
+
+const loggedErrors = [];
+{
+  const original = console.error;
+  console.error = (...args) => {
+    loggedErrors.push(args.map((a) => (typeof a === "string" ? a : JSON.stringify(a))).join(" "));
+    original(...args);
+  };
+}
 
 async function main() {
   const smtp = await startSmtpServer();
@@ -324,11 +338,18 @@ async function main() {
   const degraded = await POST({ request: post(basePayload), clientAddress: "127.0.0.1" });
   check("visitor still gets a success", degraded.status === 200);
   check("mail was still sent", smtp.inboxes.length === degradedBefore + 1);
-  const degradedBody = smtp.inboxes[smtp.inboxes.length - 1]?.data ?? "";
-  const decoded = Buffer.from(degradedBody.replace(/[\r\n]/g, ""), "base64").toString("utf8");
+  // The email can no longer carry the sheet's fate -- it is composed before
+  // that is known -- so the guarantee is now that the whole row is logged and
+  // therefore recoverable by hand from the Vercel function log.
   check(
-    "the email warns the team the row was not written",
-    /NOT ADDED|NOT written to the Google Sheet/i.test(degradedBody + decoded),
+    "the lost row is logged in full, so it can be recovered",
+    loggedErrors.some(
+      (line) =>
+        /sheet append FAILED/i.test(line) &&
+        line.includes("layla@example.com") &&
+        line.includes("Google Ads Agency Dubai"),
+    ),
+    loggedErrors.at(-1)?.slice(0, 160),
   );
 
   // The rejection path needs a real answer from Google, so it is skipped when
@@ -365,6 +386,53 @@ async function main() {
     check("a missing token is refused when a secret IS configured", noToken.status === 403);
     process.env.RECAPTCHA_SECRET_KEY = "";
   }
+
+  // A credential pasted into a dashboard keeps its whitespace, and Gmail
+  // rejects a padded password with the same EAUTH as a wrong one. The endpoint
+  // trims, so this must still authenticate and send.
+  console.log("\nCredentials arriving with stray whitespace");
+  const paddedBefore = smtp.inboxes.length;
+  process.env.SMTP_PASS = "  test-app-password  ";
+  process.env.SMTP_USER = " seo@enhmedia.com ";
+  process.env.MAIL_TO = " info@enhmedia.com ";
+  const padded = await POST({ request: post(basePayload), clientAddress: "127.0.0.1" });
+  check("still sends", padded.status === 200, `got ${padded.status}`);
+  check("mail really went out", smtp.inboxes.length === paddedBefore + 1);
+  const paddedHeaders = (smtp.inboxes[smtp.inboxes.length - 1]?.data ?? "").split("\r\n\r\n")[0] ?? "";
+  check(
+    "the padding did not leak into the To: header",
+    /^To: info@enhmedia\.com$/m.test(paddedHeaders),
+    paddedHeaders.split("\r\n").find((l) => l.startsWith("To:")),
+  );
+  process.env.SMTP_PASS = "test-app-password";
+  process.env.SMTP_USER = "seo@enhmedia.com";
+  process.env.MAIL_TO = "info@enhmedia.com";
+
+  // PROVES THE TWO ACTUALLY OVERLAP. With a webhook that stalls for 1.2s, a
+  // sequential handler could not possibly have finished the email before the
+  // webhook replied. If the email landed first, they ran concurrently.
+  console.log("\nThe sheet and the email overlap");
+  const slow = await startWebhookServer({ delayMs: 1200 });
+  process.env.SHEETS_WEBHOOK_URL = `http://127.0.0.1:${slow.port}/exec`;
+  const beforeSlow = smtp.inboxes.length;
+  const t0 = Date.now();
+  const slowRes = await POST({ request: post(basePayload), clientAddress: "127.0.0.1" });
+  const elapsed = Date.now() - t0;
+  check("still succeeds", slowRes.status === 200);
+  check("mail was sent", smtp.inboxes.length === beforeSlow + 1);
+  const mailAt = smtp.inboxes.at(-1)?.receivedAt ?? Infinity;
+  const sheetAt = slow.repliedAt.at(-1) ?? 0;
+  check(
+    "the email completed BEFORE the slow sheet replied",
+    mailAt < sheetAt,
+    `email at +${mailAt - t0}ms, sheet at +${sheetAt - t0}ms`,
+  );
+  check(
+    "total time is the slower of the two, not their sum",
+    elapsed < 1200 + 400,
+    `${elapsed}ms elapsed against a 1200ms webhook`,
+  );
+  slow.close();
 
   console.log("\nA GET");
   const { ALL } = await import(pathToFileURL(outfile).href);

@@ -151,10 +151,91 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
       } catch {}
     </script>
 
+    {/* SEARCH-ENGINE SITE VERIFICATION. One tag per property. They are inert
+        HTML that each console reads once to confirm ownership of the domain,
+        and they sit here rather than on one page so verification holds whichever
+        URL the console is pointed at. */}
+    <meta name="google-site-verification" content="j0n5ARfu9TyV1QZCd0ojc2QLJ2J4wkMqri_Krxxdsaw" />
+    <meta name="msvalidate.01" content="6A89C0AE3DFA8FA72ABF2DF8D4B3E132" />
+    <meta name="yandex-verification" content="a574e68bf88a76d2" />
+
+    {/* ANALYTICS AND TAG MANAGEMENT. Every page on the site renders through
+        this layout, so this is the one place they need to be.
+
+        PRODUCTION ONLY. `import.meta.env.PROD` is false under `astro dev` and
+        true under `astro build`, and it is resolved at build time rather than
+        in the browser -- so in dev these tags are not merely inert, they are
+        not in the document at all, and in the built HTML there is no trace of
+        the condition. Without the gate, every local page view from
+        localhost:4321 was a real hit against the GA4 property and a real
+        recorded session in Clarity, mixed in with live traffic and impossible
+        to filter out afterwards.
+
+        ALL THREE ARE `is:inline`, AND HAVE TO BE. Astro bundles, hashes and
+        hoists <script> tags by default. These are vendor snippets that must
+        reach the browser byte for byte and execute where they are written --
+        gtag() in particular is a function the GA4 loader looks for by name on
+        `window`, which does not survive being scoped into a module. `is:inline`
+        is what turns that processing off.
+
+        THEY SIT BELOW THE <Font> PRELOADS ON PURPOSE. Google's snippet
+        documentation says "as high in the head as possible", but each of these
+        does its real work by injecting its own async <script>, so none of them
+        blocks parsing or first paint from here. Moving them above the preloads
+        would only hand a third-party request the head's first fetch slots and
+        push the preloaded Inter and Cabinet 800 faces down the priority list,
+        which is the one thing the preload note above exists to protect. */}
+    {import.meta.env.PROD && (
+      <Fragment>
+        <!-- Google Tag Manager -->
+        <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TFZ3XNX');</script>
+        <!-- End Google Tag Manager -->
+
+        <!-- Google tag (gtag.js) -->
+        <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-E5RDWP3M8Q"></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-E5RDWP3M8Q');
+        </script>
+
+        <!-- Microsoft Clarity -->
+        <script is:inline type="text/javascript">
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "ezrckj0h7d");
+        </script>
+      </Fragment>
+    )}
+
     <slot name="head" />
   </head>
 
   <body class="min-h-full bg-void text-snow antialiased">
+    {/* GTM's no-JavaScript fallback, first thing in the body because that is
+        where the tag fires a pageview from when the head snippet above never
+        ran. It is a 0x0 hidden iframe and paints nothing.
+
+        Gated with the head snippet it belongs to: it is a pageview beacon like
+        the rest, and leaving it ungated would send a hit from any dev page
+        view with JavaScript off -- the one case the head gate cannot cover. */}
+    {import.meta.env.PROD && (
+      <Fragment>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TFZ3XNX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+      </Fragment>
+    )}
+
     {/* SmoothScroll rendered a bare fragment around its children and did all
         its work in an effect, so in Astro it needs no children at all: it is a
         headless island that starts Lenis and fuses it to GSAP's ticker. The

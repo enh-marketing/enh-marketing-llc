@@ -4,6 +4,7 @@ import { Fragment, useEffect, useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Container } from "@/components/ui/Container";
+import { Marked } from "@/components/service/Marked";
 import { cn } from "@/lib/cn";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -34,11 +35,21 @@ export function Narrative({
   highlight,
   outro,
   closing,
+  closingMark,
   children,
 }: {
   /** DevTools handle: id anchors the section, data-section names it. */
   id: string;
   label: string;
+  /** The section's number in the page's run. Optional, because the page this
+   *  component was written for opens on it and numbers nothing; a page that
+   *  numbers every other section has to be able to number this one too, or its
+   *  run starts at 02. */
+  /** Accepted and ignored: the red section counter it used to print is gone
+   *  sitewide. Every page body still passes one, so the prop stays rather than
+   *  forcing a rename across fifty-odd files, and putting the numbering back
+   *  stays a one-line change. */
+  index?: string;
   headline: [string, string];
   question: string;
   questionEmphasis: string;
@@ -67,6 +78,11 @@ export function Narrative({
    *  on a promise rather than an explanation — printing that as another fog
    *  paragraph throws away the one line the reader should leave with. */
   closing?: string;
+  /** Phrases inside `closing` to carry brand. Where a document's closing
+   *  sentence lists what it produces and one of those is the page's whole
+   *  argument, setting the lot in one colour flattens it. Absent phrases are
+   *  simply not marked, which is `Marked`'s contract. */
+  closingMark?: string[];
   /** Anything the page needs under the section: calls to action, a set of
    *  examples. Kept as a slot rather than more props, because what goes here
    *  differs on every page that uses one. */
@@ -202,6 +218,13 @@ export function Narrative({
       </div>
 
       <Container>
+        {/* NO SECTION COUNTER. Team direction: the red "(01)", "(02)"
+            ... that ran down the side of every section is gone sitewide. The
+            `index` prop stays in the signature and stays unused: every page
+            body passes one, so removing it would be a rename across fifty-odd
+            files to delete a value nobody reads, and keeping it means putting
+            the numbering back is one line here rather than fifty. */}
+
         {/* The claim */}
         {/* One continuous heading. The two halves were `block`, which broke the
             line between them whatever room was left, so "What We Do" came out
@@ -332,7 +355,7 @@ export function Narrative({
 
         {closing && (
           <p className="font-display mt-10 text-[clamp(1.2rem,2.4vw,1.9rem)] font-extrabold uppercase leading-[1.16] text-snow">
-            {closing}
+            <Marked text={closing} mark={closingMark} className="text-brand" />
           </p>
         )}
 

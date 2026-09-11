@@ -32,18 +32,64 @@ import { Rise } from "@/components/fx/Reveal";
  *  regulated is nowhere in the document, so it stays a note on the whole
  *  listing.
  *
- *  MOTION. Tiles arrive on a stagger and then hold; pointing at one lifts it.
- *  All of it is cancelled under prefers-reduced-motion. */
+ *  MOTION. Tiles arrive on a stagger and then hold; pointing at one lifts its
+ *  mark and tints the cell. All of it is cancelled under
+ *  prefers-reduced-motion. */
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+/** `non-scaling-stroke` because every product below is scaled to a common
+ *  optical size, and without it that scaling would carry the stroke with it:
+ *  the tallest mark came out noticeably heavier than the widest. There is no
+ *  `pathLength` or dash animation anywhere in this set, so the trap
+ *  `docs/DESIGN.md` records for `.ci-draw` does not apply. */
 const S = {
   fill: "none",
   stroke: "currentColor",
-  strokeWidth: 1.7,
+  strokeWidth: 2,
   strokeLinecap: "round",
   strokeLinejoin: "round",
+  vectorEffect: "non-scaling-stroke",
 } as const;
+
+/** The drawn bounds of each product, measured off the rendered SVG.
+ *
+ *  THIS EXISTS BECAUSE THE FRAME CAME OFF. Boxed, a mark could be any size
+ *  inside its box and the box did the aligning; bare on the tile, these are
+ *  what the eye compares, and they ran from 28 to 66 units wide and 30 to 52
+ *  tall. So each is fitted to one optical box and centred on it. Measured
+ *  rather than eyeballed, and kept as data so a redrawn product is one line to
+ *  re-fit. */
+const BOUNDS: [number, number, number, number][] = [
+  [26, 18, 62, 66],
+  [30, 20, 58, 66],
+  [30, 16, 74, 68],
+  [28, 22, 62, 66],
+  [26, 20, 64, 68],
+  [22, 26, 72, 62],
+  [28, 22, 62, 68],
+  [22, 22, 78, 66],
+  [18, 24, 78, 54],
+  [16, 26, 82, 66],
+];
+
+/** The box they are fitted into, and where its centre sits in the viewBox. */
+const FIT_W = 64;
+const FIT_H = 52;
+const CX = 47;
+const CY = 43;
+
+/** Rounded before it reaches JSX: an unrounded double can print a different
+ *  final digit on the server and in the browser, and React throws the whole
+ *  island away over one attribute. See `docs/DESIGN.md`. */
+const round = (n: number) => Math.round(n * 100) / 100;
+
+const PLACE = BOUNDS.map(([x0, y0, x1, y1]) => {
+  const k = Math.min(FIT_W / (x1 - x0), FIT_H / (y1 - y0));
+  const cx = (x0 + x1) / 2;
+  const cy = (y0 + y1) / 2;
+  return `translate(${round(CX - cx * k)} ${round(CY - cy * k)}) scale(${round(k)})`;
+});
 
 /** One product per category, in the document's order. */
 function Product({ i }: { i: number }) {
@@ -242,24 +288,26 @@ export function CatalogueGrid({
                     transition={{ duration: 0.5, delay: (i % 5) * 0.06, ease: EASE }}
                     className="group border-b border-r border-line"
                   >
-                    <div className="flex h-full flex-col px-4 pb-6 pt-5 transition-colors duration-400 group-hover:bg-brand/[0.05] motion-reduce:transition-none">
+                    <div className="flex h-full flex-col px-4 pb-7 pt-8 transition-colors duration-400 group-hover:bg-brand/[0.05] motion-reduce:transition-none">
+                      {/* NO FRAME ROUND THE MARK. It carried one -- a filled,
+                          bordered box -- and inside a panel already ruled into
+                          cells that is a box inside a box: two borders a few
+                          pixels apart, and the mark reading as a sticker stuck
+                          on the tile rather than as the tile's own subject.
+                          The cell is the frame. The viewBox is cropped to what
+                          the marks occupy rather than to the box that used to
+                          hold them, so removing it makes them larger instead
+                          of leaving a hole where it was. */}
                       <svg
-                        viewBox="0 0 96 88"
+                        viewBox="9 11 76 64"
                         aria-hidden
-                        className="mx-auto w-full max-w-[7rem] transition-transform duration-500 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0"
+                        className="mx-auto w-full max-w-[6.25rem] transition-transform duration-500 group-hover:-translate-y-1 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0"
                       >
-                        <rect
-                          x="4"
-                          y="4"
-                          width="88"
-                          height="80"
-                          rx="6"
-                          className="fill-ink-2 stroke-line transition-colors duration-500 group-hover:stroke-brand/70 motion-reduce:transition-none"
-                          strokeWidth="1.2"
-                        />
-                        <Product i={i} />
+                        <g transform={PLACE[i]}>
+                          <Product i={i} />
+                        </g>
                       </svg>
-                      <p className="mt-4 text-center text-sm font-semibold leading-snug text-fog transition-colors duration-400 group-hover:text-brand motion-reduce:transition-none">
+                      <p className="mt-5 text-center text-sm font-semibold leading-snug text-fog transition-colors duration-400 group-hover:text-brand motion-reduce:transition-none">
                         {name}
                       </p>
                     </div>

@@ -16,7 +16,7 @@ export function Process() {
     <section id="process" className="relative py-16 sm:py-20">
       <Container>
       <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-        <span className="text-brand">(08)</span> The route
+        The route
       </p>
       <h2 className="font-display display-xl mb-20 font-extrabold uppercase text-snow">
         <span className="block"><Chars text="How the" /></span>

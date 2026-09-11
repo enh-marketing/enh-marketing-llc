@@ -146,7 +146,7 @@ Case studies (`src/components/case-studies/`, consumed by `/case-studies` and `/
 - **"Featured" is the source's order, not our opinion.** `lead()` is whichever study the live index lists first. Nothing on the page calls a study best, and the lede under the heading says where the position came from.
 - **The interlude's number is counted, never written.** `rankingCount()` counts the studies publishing a #1 among their figures, so the one sentence about the whole archive cannot drift from the plates around it.
 
-Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, pinned chapter with an index, scope boundary with tethers, room plans, curriculum run, contents pack, switchback, unequal runs, criteria register with a fork, launch profile, drift sandwich, directional joins, layer stack, watched register, ridge traverse with pins, dated register with year bands, prose with a margin rail, sector tally, cover with a figure strip, unequal mosaic, counted interlude, mirrored neighbour bar, consideration set, research run with the sentence as its key, contribution members with the chain set as type, plan written across its stages, sheet with two cells the source names, equal figure grid, register of shapes with one structure redrawn, ticked claims against open boxes.
+Arrangements already used, which new sections must not repeat: pinned explorer, waypoint path, diagnostic sheet, launch track, operations reach, phase rail, converging inputs, two-sided split, bedded mass, upright plate, horizontal schedule, vertical swimlanes, spine with return loop, pinned chapter with an index, scope boundary with tethers, room plans, curriculum run, contents pack, switchback, unequal runs, criteria register with a fork, launch profile, drift sandwich, directional joins, layer stack, watched register, ridge traverse with pins, dated register with year bands, prose with a margin rail, sector tally, cover with a figure strip, unequal mosaic, counted interlude, mirrored neighbour bar, consideration set, research run with the sentence as its key, contribution members with the chain set as type, plan written across its stages, sheet with two cells the source names, equal figure grid, register of shapes with one structure redrawn, ticked claims against open boxes, plan cut to four stated stops, survey of one business drawn in nine passes against a sticky panel, claims split into position and reason across one rule, a decoded block of the questions a document asks and does not answer, a catalogue of sectors set inside the page's own native object.
 
 The last twelve are the AI Hub pages. Three of them are worth naming because
 the reason they work is transferable:
@@ -165,6 +165,78 @@ Two hero visuals also earned their shape from one sentence of the banner rather
 than from the service category: `HandoverThread` draws the boundary because the
 banner sells the boundary, and `PageSwap` keeps its frame fixed because
 personalisation is a rule, not a second website.
+
+The last five are the Marketing Consultation page, and the reason they work is
+that the document sells a DECISION rather than a channel, so every shape on it
+is about what is not settled yet:
+
+- **Board of unresolved mechanisms** (`OpenQuestions`). The four questions in
+  the source's second paragraph are four different KINDS of question -- a
+  choice between two, a question of order, a selection from many, a fault
+  along a chain of four -- so there are four mechanisms on one ground at four
+  sizes, and none of them resolves, because the document answers none of them.
+  The client's own paragraph is the key, through `MarkedKeys`, so no question
+  is printed twice and the coupling runs both ways.
+- **A survey of one business, drawn in nine passes** (`CoverageSurvey`). This
+  is `CreativeRhythm`'s arrangement -- a sticky panel beside a tall
+  scroll-driven list -- which the team asked for by name, with a drawing that
+  is this document's own. Rule 7 says N subjects need N pictures and that one
+  diagram in N states collapses into the shape they share; the exception is
+  when the N are not N subjects. These nine are nine readings of ONE business,
+  so the panel is one plan of it and each stage draws a different, specific
+  part: what it already runs, what it is for, who comes to it, what stands
+  around it, what it says, where they land, what it publishes, where it
+  appears, and the layer that joins all of it up. Nine pictures, one ground,
+  and the ground is the claim. The last frame is the deliverable, and it is
+  the client's own last sentence -- "repetitive processes that could be
+  connected or simplified" -- so the plan finishes connected.
+  Three things it got wrong first, all of which only showed when every stage
+  was rendered side by side on a throwaway page: a travelling packet toggled
+  by a CLASS is a solid brand stroke when the class is absent, so three
+  surveyed stages kept a red route and "resolved is ash" was true of none of
+  them (render the overlay only while the stage is live); four outlined
+  rectangles of four heights on a baseline is a bar chart whatever it is meant
+  to be, so the market is drawn as premises with roofs and doors; and a tick
+  crossing a rule is a plus sign at drawing scale, so the posting cadence
+  hangs its posts off the run instead of through it.
+  What makes it worth reading is the same thing the section always had: every
+  one of those nine paragraphs buries a list inside a sentence -- eight
+  channels audited, seven things assessed on a website, seven tools -- and each
+  paragraph is split at its own comma run into a stem, the register set out
+  properly, and whatever the paragraph says afterwards. A document's "may"
+  stays a "may": those entries take an open mark and keep the client's own
+  qualifier. And because nine stages is nine viewports of scroll, the sticky
+  panel carries an index of all nine names -- which is rule 1's requirement,
+  and a control that jumps the scroll, through Lenis rather than `scrollTo`.
+- **A catalogue of sectors, set inside the page's own object**
+  (`SectorCatalogue`). This is `CatalogueGrid`'s arrangement, asked for by
+  name, and it is the fourth attempt at this section. The first three are worth
+  recording because together they draw the boundary: twelve bordered cards read
+  as a list; an instrument of datums and drifting modules that argued the
+  strategy varies was rigorous and read as a puzzle; and twelve drawn premises
+  on one street had character but still left the reader scanning a frieze.
+  What works is the treatment a sibling page already proved -- the twelve names
+  set inside the native object of the page they are on (a category listing
+  there, the strategy document here), each with a conventional mark, and the
+  document's own closing sentences as a note on the whole listing rather than
+  sorted into it.
+  The transferable lesson is the one `docs/DESIGN.md` already states and I
+  broke twice: overcorrecting from "too basic" lands straight in "too
+  abstract". Between those two there is usually a house treatment that has
+  already been approved on another page, and reaching for it is not a failure
+  of invention.
+
+- **A decoded block of the questions a document asks and does not answer**
+  (`Narrative`, on the consultation page). Also asked for by name. The effect
+  was written for a page whose subject is an unreadable report, and it fits a
+  block of four unanswered questions better than the page it was written for:
+  the resolve IS the section's subject rather than an effect laid over it, and
+  `body` as an array sets the four as numbered lines instead of flattening
+  four distinct decisions into one run-on sentence. Two optional props were
+  added for it -- `index`, so a page that numbers every section can number this
+  one, and `closingMark`, so the one phrase in the closing statement that is
+  the page's whole thesis can carry brand while the rest of the list does
+  not.
 
 Withdrawn, and not to be revived: stepped boundary, narrowing measure, measured type silhouette, staged canvas. All four were rejected as "just a list", and the reason is worth keeping. Each changed the ornament and kept the skeleton: one item per row, copy on one side, a picture on the other. A stepped hairline, a tinted bed, a measured outline and a pinned canvas are four coats on the same list.
 

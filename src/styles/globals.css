@@ -237,6 +237,66 @@ summary {
 
 }
 
+/* THE HOMEPAGE HERO'S HEADLINE, WHICH NO LONGER HAS THE ROW TO ITSELF.
+ *
+ *  Team direction: the hero is two columns from `lg` up — all of the copy in the
+ *  first and the visual in the second. Below `lg` it is still one column and
+ *  this is `.mega` to the pixel, deliberately: nothing about the phone or the
+ *  tablet hero changes.
+ *
+ *  WHY IT IS A SEPARATE CLASS RATHER THAN AN EDIT TO `.mega`. Two other places
+ *  set that size — the preloader's wordmark and the About masthead's H1 — and
+ *  both of them are a full-container line with nothing beside it. Stepping
+ *  `.mega` down for this column would have shrunk both of those as collateral.
+ *
+ *  WHY 4.4rem AND NOT 5.9. Measured at 1440: the copy column is about 690px, and
+ *  the headline's second designed line ("with Smarter Digital Marketing") is 30
+ *  characters — at 90px it needs roughly 1,700px and wraps to three ragged
+ *  lines, which with the first line's two puts a five-line wall over the
+ *  standfirst and pushes the certification row into the logo strip. At 70px the
+ *  headline sets as two lines plus two, which is four lines of about 250px, and
+ *  the column closes with room to spare. The `svh` term is `.mega`'s own trick
+ *  and it is kept: this hero is one viewport tall and ends on a strip that has
+ *  to stay above the fold, so on a short screen the heading gives way first. */
+.mega-split {
+  font-size: clamp(2.5rem, min(6.3vw, 10svh), 5.9rem);
+  line-height: 0.92;
+}
+
+@media (min-width: 1024px) {
+  /* BIGGER, ON TEAM DIRECTION, AND SIZED OFF THE COLUMN RATHER THAN THE
+     VIEWPORT. Measured at 1366 with a 780px copy column: the headline sets as
+     EXPLORE NEW / HEIGHTS WITH / SMARTER DIGITAL / MARKETING anywhere from 72px
+     to 88px, and breaks to five lines at 92px, where the hero also stops fitting
+     one viewport (928px tall against 860). So the useful range is wide and the
+     cap is what picks a point in it.
+
+     THE CAP IS 5.1rem BECAUSE THE COPY COLUMN GETS NARROWER AS THE VIEWPORT
+     GETS WIDER, which is the trap here. The container is capped at 1320 while
+     the visual column is `clamp(340px, 29vw, 460px)`, so past 1280 the visual
+     takes the extra width and the copy column SHRINKS: 805px at 1280, 780 at
+     1366, 758 at 1440, 716 at 1920. A vw-driven size would grow while its
+     measure shrank and the longest line ("SMARTER DIGITAL", which runs 8.53px
+     per point of font size) would overflow into a fifth line at the top end.
+     81.6px against a 716px column leaves 20px of slack at 1920, which is the
+     narrowest the column ever gets.
+
+     THE vw COEFFICIENT IS SET BY 1024, NOT BY THE MIDDLE OF THE RANGE. That is
+     the narrowest width this two-column hero exists at: the copy column is 541px
+     there, and 6.2vw put the type at 63.49px, which needs 541.4px for "SMARTER
+     DIGITAL" — over by four tenths of a pixel. It broke to five lines and the
+     hero grew to 797px against a 768px viewport. 6.0vw gives 61.4px and 524px,
+     which clears it by 17. Below 1280 this term is what binds; at and above it
+     the `svh` term and the cap take over, so nothing else moved.
+
+     The `svh` term is `.mega`'s own trick and it is kept: this hero is one
+     viewport tall and closes on a logo strip that has to stay above the fold,
+     so on a short screen the heading gives way first. */
+  .mega-split {
+    font-size: clamp(2.5rem, min(6vw, 9.6svh), 5.1rem);
+  }
+}
+
 /* Inner-page hero: below the homepage's .mega, above section .display-xl. */
 /* Service-page hero heading — the only user of this size.
    Sized on both axes, not width alone. That hero is exactly one viewport tall
@@ -1217,6 +1277,184 @@ html.lenis.lenis-smooth iframe.map-live {
 
   [data-first-tick] .ci-blink {
     opacity: 1 !important;
+  }
+}
+
+/* ---- The homepage hero reel (fx/ServiceReel) ----
+
+   A POINTER DEMONSTRATING ONE SERVICE AT A TIME. Each scene in the reel is a
+   screen, and a pointer moves across it, stops, and clicks; what it clicks then
+   appears. Team direction was that the hero should feel like a product demo
+   rather than a diagram, and a cursor that pauses before it acts is the whole
+   difference between a demo and a moving picture.
+
+   SIX SCENES SHARE THESE FIVE KEYFRAMES, and that is the point of writing them
+   here rather than one loop per scene. The timing is fixed in this file; only
+   the four WAYPOINTS vary, and each scene passes its own as custom properties.
+   So "where the pointer goes" is authored beside the drawing it belongs to, and
+   "how a pointer behaves" is decided once.
+
+   THE CYCLE IS ONE PASS, NOT A LOOP. `--reel-dwell` is the same number the
+   component uses to hand over to the next service, and every animation here
+   runs `1 both`, so a scene plays its demonstration once and is replaced. Only
+   the scene on stage is mounted, so each pass starts from its own first frame.
+
+   EVERYTHING RESTS FINISHED, which is the rule for every loop on this site: the
+   pointer rests on its last target, the ripple rests invisible, and everything
+   the pointer was going to reveal rests revealed. So a reader who has asked for
+   no motion, a browser that never animates and a failed hydration all get the
+   completed screen rather than an empty one. The reduced-motion block at the
+   foot of this section is therefore a plain `animation: none`. */
+
+/* The pointer: four waypoints, three of them held long enough to read as a
+   stop before a click. `translate` is an independent transform property, so it
+   composes with the ripple's `scale` instead of fighting it over `transform`. */
+@keyframes reel-travel {
+  0%, 3% {
+    translate: var(--p1x) var(--p1y);
+  }
+
+  14%, 26% {
+    translate: var(--p2x) var(--p2y);
+  }
+
+  42%, 54% {
+    translate: var(--p3x) var(--p3y);
+  }
+
+  70%, 100% {
+    translate: var(--p4x) var(--p4y);
+  }
+}
+
+/* The ripple under the pointer, timed to the three holds above. */
+@keyframes reel-press {
+  0%, 13% {
+    opacity: 0;
+    scale: 0.3;
+  }
+
+  17% {
+    opacity: 0.9;
+    scale: 0.55;
+  }
+
+  25% {
+    opacity: 0;
+    scale: 1.6;
+  }
+
+  41% {
+    opacity: 0;
+    scale: 0.3;
+  }
+
+  45% {
+    opacity: 0.9;
+    scale: 0.55;
+  }
+
+  53% {
+    opacity: 0;
+    scale: 1.6;
+  }
+
+  69% {
+    opacity: 0;
+    scale: 0.3;
+  }
+
+  73% {
+    opacity: 0.9;
+    scale: 0.55;
+  }
+
+  81%, 100% {
+    opacity: 0;
+    scale: 1.6;
+  }
+}
+
+/* What each click reveals. Three stops, matching the three presses. */
+@keyframes reel-after-1 {
+  0%, 18% {
+    opacity: 0;
+  }
+
+  27%, 100% {
+    opacity: 1;
+  }
+}
+
+@keyframes reel-after-2 {
+  0%, 46% {
+    opacity: 0;
+  }
+
+  55%, 100% {
+    opacity: 1;
+  }
+}
+
+@keyframes reel-after-3 {
+  0%, 74% {
+    opacity: 0;
+  }
+
+  83%, 100% {
+    opacity: 1;
+  }
+}
+
+/* A pointer does not travel at a constant rate and it does not overshoot: it
+   leaves fast and settles. Rests on the last waypoint. */
+.reel-pointer {
+  translate: var(--p4x) var(--p4y);
+  animation: reel-travel var(--reel-dwell, 6400ms) cubic-bezier(0.3, 0, 0.18, 1) 1 both;
+}
+
+/* Rides the same waypoints, so the ripple is always under the tip. `fill-box`
+   is what makes `transform-origin: center` mean this circle's own centre
+   rather than the middle of the viewBox, which is where an SVG element scales
+   from by default. */
+.reel-press {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation:
+    reel-travel var(--reel-dwell, 6400ms) cubic-bezier(0.3, 0, 0.18, 1) 1 both,
+    reel-press var(--reel-dwell, 6400ms) linear 1 both;
+}
+
+.reel-after-1 {
+  animation: reel-after-1 var(--reel-dwell, 6400ms) linear 1 both;
+}
+
+.reel-after-2 {
+  animation: reel-after-2 var(--reel-dwell, 6400ms) linear 1 both;
+}
+
+.reel-after-3 {
+  animation: reel-after-3 var(--reel-dwell, 6400ms) linear 1 both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  /* The pointer keeps its resting `translate` (the last waypoint) and
+     everything it would have revealed is already at full opacity, so the screen
+     reads as the finished demonstration rather than as its first frame. */
+  .reel-pointer,
+  .reel-after-1,
+  .reel-after-2,
+  .reel-after-3 {
+    animation: none !important;
+  }
+
+  /* A ripple's finished state is "gone", so it goes rather than freezing
+     half-expanded under the pointer. */
+  .reel-press {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }
 

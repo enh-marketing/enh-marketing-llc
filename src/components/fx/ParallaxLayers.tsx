@@ -30,7 +30,7 @@ gsap.registerPlugin(ScrollTrigger);
  *  2. Its cleanup runs `ScrollTrigger.getAll().forEach(st => st.kill())`, which
  *     kills every ScrollTrigger on the page rather than its own. Thirty files
  *     here share that registry, so unmounting it would silently stop the motion
- *     in Manifesto, FooterCurve, Narrative, ProcessSequence, StageLadder and
+ *     in Manifesto, FooterCurve, Narrative, PinnedExplorer, StageLadder and
  *     two dozen more.
  *
  *  3. It adds an anonymous `gsap.ticker.add(...)` and never removes it, so the

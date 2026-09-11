@@ -32,10 +32,17 @@ export const social = [
  *  is where the line breaks fall, not an edit to the words. */
 export const heroWords = ["Explore", "New Heights", "with Smarter Digital Marketing"];
 
-/** The line above the H1. The document sets it as its H4, under the headline;
- *  the design's only slot for it is this eyebrow, which sits above. */
-export const heroEyebrow =
-  "ENH Marketing, the Best Digital Marketing Agency in Dubai, UAE";
+/** THE HOMEPAGE H1. The document sets this line as its own H4, under the
+ *  headline; the design's only slot for it is the eyebrow above, and team
+ *  direction made it the page's H1 while leaving the display headline below it
+ *  at its own size as the H2.
+ *
+ *  "ENH Marketing," CAME OFF THE FRONT at the team's request, so the H1 leads
+ *  on what the page is trying to rank for rather than on the brand. "The" is
+ *  capitalised because the line now opens a heading instead of sitting in the
+ *  middle of one; it renders uppercase either way, so this is about the text a
+ *  crawler and a screen reader get, not about what is on screen. */
+export const heroEyebrow = "The Best Digital Marketing Agency in Dubai, UAE";
 
 export const heroSub =
   "For more than 15 years, we have helped startups, SMEs, and enterprises across the UAE turn digital visibility into qualified leads and sales, supported by practical AI where it adds value.";
@@ -79,13 +86,91 @@ export const stats = [
   { value: 22, suffix: "+", label: "Team of experts" },
 ];
 
-export const clients = [
-  "EKC", "EKX", "Ariiz International", "Blue Bell Shipping", "Axcl",
-  "CHS Pharmacy", "BW Interiors", "Comply", "Masterkraft", "Manipal",
-  "Fabinex", "Nalsoft", "Matrix Finishes", "PKF UAE", "NewEast",
-  "Supercad", "Texol", "Saifee Computers", "Top Shelf", "Trosten",
-  "TTC", "Allday", "TRCpamco", "Atlas", "Bin Dasmal Group",
-  "Dubai Duty Free", "Dubai Islamic Bank", "Procat", "RHS Logistics", "Venesta",
+export type ClientLogo = {
+  src: string;
+  /** The client's name as its own artwork spells it. */
+  alt: string;
+  /** Intrinsic pixel size. Only the ratio matters -- it is what stops the row
+   *  reflowing as each logo loads. */
+  w: number;
+  h: number;
+};
+
+/** The client wall.
+ *
+ *  IT WAS THIRTY NAMES IN A TYPEFACE. This list used to be `string[]`, and
+ *  TrustStrip drew each entry as a chip with a two-letter monogram and the name
+ *  set in Cabinet Grotesk. So a section whose entire job is "these companies
+ *  hired us" showed no company's actual mark, and every one of them appeared in
+ *  ENH's own brand font -- which is the one thing a logo wall must not do. The
+ *  real marks are in /public/trust now, supplied by the team.
+ *
+ *  ORDER IS THE TEAM'S, exactly as the files were handed over.
+ *
+ *  ALT TEXT IS READ OFF THE ARTWORK, NOT OFF THE FILENAME, and every one of
+ *  the thirty-one was opened to check. That was not ceremony -- ten of them
+ *  disagreed with the old name list, and one filename is simply wrong:
+ *
+ *    ekx.webp          the mark reads EKC, "Most Trusted Gas Cylinder". So the
+ *                      list's "EKC" is this file and its "EKX" is the name with
+ *                      no logo, which is the opposite of what the filename says
+ *    comply.webp       COMPLYFIN, not "Comply"
+ *    chs.webp          CHS Community Pharmacy, not "CHS Pharmacy"
+ *    ttc.webp          The Travel Collection; the mark is Arabic calligraphy
+ *                      over those three words and never prints "TTC"
+ *    all-day.webp      allday retail, not "Allday"
+ *    top-shelf.webp    Top Shelf Technical Services, not "Top Shelf"
+ *    fapinex.webp      FAPINEX, not "Fabinex"
+ *    altas-cop-co.webp Atlas Copco, not "Atlas"
+ *    axcl.webp         AXCL, set in caps
+ *    manipal.webp      Manipal Academy of Higher Education, not "Manipal"
+ *
+ *  THE RULE, where a mark prints more than a name: the brand, without taglines
+ *  or legal suffixes. So Procat rather than "Procat Professional Catering &
+ *  Beyond", Saifee Computers rather than "saifee -- Making ERP & IT work for
+ *  you", Blue Bell Shipping rather than "Blue Bell Shipping L.L.C.".
+ *
+ *  TWO MARKS HAD NO NAME IN THE LIST AT ALL and are named from their own
+ *  artwork rather than guessed: `aao.png` reads "Abdullah Al Othaim Leisure
+ *  Co." and the file delivered as "download-removebg-preview (1).png" reads
+ *  "desertcart" -- renamed to desertcart.png here, since a build asset should
+ *  not be called that.
+ *
+ *  ONE NAME LOST ITS PLACE. "EKX" was in the old list and no logo was supplied
+ *  for it, so it is not on the wall. Nothing was invented to fill the gap; drop
+ *  a file in /public/trust and add a line here. */
+export const clients: ClientLogo[] = [
+  { src: "/trust/aao.png", alt: "Abdullah Al Othaim Leisure Co.", w: 531, h: 145 },
+  { src: "/trust/ekx.webp", alt: "EKC", w: 651, h: 378 },
+  { src: "/trust/ariiz.webp", alt: "Ariiz International", w: 297, h: 57 },
+  { src: "/trust/desertcart.png", alt: "desertcart", w: 482, h: 104 },
+  { src: "/trust/blue-bell.webp", alt: "Blue Bell Shipping", w: 300, h: 117 },
+  { src: "/trust/axcl.webp", alt: "AXCL", w: 100, h: 120 },
+  { src: "/trust/chs.webp", alt: "CHS Community Pharmacy", w: 741, h: 249 },
+  { src: "/trust/bw.webp", alt: "BW Interiors", w: 200, h: 75 },
+  { src: "/trust/comply.webp", alt: "Complyfin", w: 335, h: 35 },
+  { src: "/trust/masterkraft.webp", alt: "Masterkraft", w: 300, h: 39 },
+  { src: "/trust/manipal.webp", alt: "Manipal Academy of Higher Education", w: 197, h: 57 },
+  { src: "/trust/fapinex.webp", alt: "FAPINEX", w: 1293, h: 1337 },
+  { src: "/trust/nalsoft.webp", alt: "Nalsoft", w: 1956, h: 416 },
+  { src: "/trust/matrix.webp", alt: "Matrix Finishes", w: 2560, h: 1254 },
+  { src: "/trust/pkf.webp", alt: "PKF UAE", w: 238, h: 91 },
+  { src: "/trust/new-east.webp", alt: "NewEast", w: 180, h: 30 },
+  { src: "/trust/supercad.webp", alt: "Supercad", w: 200, h: 71 },
+  { src: "/trust/taxol.webp", alt: "Texol", w: 1553, h: 696 },
+  { src: "/trust/saifee.webp", alt: "Saifee Computers", w: 1021, h: 467 },
+  { src: "/trust/top-shelf.webp", alt: "Top Shelf Technical Services", w: 250, h: 65 },
+  { src: "/trust/trosten.webp", alt: "Trosten", w: 300, h: 62 },
+  { src: "/trust/ttc.webp", alt: "The Travel Collection", w: 226, h: 184 },
+  { src: "/trust/all-day.webp", alt: "Allday Retail", w: 530, h: 194 },
+  { src: "/trust/trc.webp", alt: "TRCpamco", w: 2011, h: 394 },
+  { src: "/trust/altas-cop-co.webp", alt: "Atlas Copco", w: 582, h: 280 },
+  { src: "/trust/bin-dasmal-group.webp", alt: "Bin Dasmal Group", w: 412, h: 324 },
+  { src: "/trust/dubai-duty-free.webp", alt: "Dubai Duty Free", w: 340, h: 335 },
+  { src: "/trust/dubai-lslamic-bank.webp", alt: "Dubai Islamic Bank", w: 621, h: 202 },
+  { src: "/trust/procat.webp", alt: "Procat", w: 668, h: 190 },
+  { src: "/trust/rhs-logistic.webp", alt: "RHS Logistics", w: 453, h: 329 },
+  { src: "/trust/venesta.webp", alt: "Venesta", w: 564, h: 135 },
 ];
 
 export type Craft = {

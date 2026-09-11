@@ -1,14 +1,42 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import { Rise } from "@/components/fx/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Radar } from "@/components/fx/Adornments";
+import { ArrowRight } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
+import { LeadForm } from "@/components/service/LeadForm";
+import { standardFormFields } from "@/content/forms";
 
-/** Live site's mid-page free-audit email capture, reimagined as a band. */
+/** The free-audit band: a headline and one button that opens the form.
+ *
+ *  THE BAND USED TO CARRY THE FORM ITSELF, and that form went nowhere. It was
+ *  an email box, a consent tick and a Submit that called `preventDefault`, set
+ *  a `done` flag and printed "Thank you! Your submission has been received."
+ *  Nothing was posted, nothing reached the inbox, nothing reached the sheet.
+ *  Every other form on this site posts to /api/enquiry through `LeadForm`;
+ *  this one was the last that did not, so replacing it fixes a silently
+ *  dropped enquiry as well as answering the request.
+ *
+ *  THE PATTERN IS THE SITE'S OWN. A CTA that opens `Modal` with a `LeadForm`
+ *  inside it is what the service heroes, the growth band and the three
+ *  mastheads already do, so the dialog behaves the way the rest of the site's
+ *  dialogs do: focus moves in and returns to the button, Tab is trapped,
+ *  Escape closes, and the panel scrolls under Lenis.
+ *
+ *  THE FIELD SET IS THE STANDARD ONE. Team direction of 2026-09-02 is one set
+ *  across the whole site with a single exception for the two SEO pages, so
+ *  this uses `standardFormFields` rather than inventing a third variant --
+ *  see the note in `src/content/forms.ts`. Worth a decision: an audit is of a
+ *  website and the standard set does not ask for one, so the team has to read
+ *  it out of the Company or Message field. `seoFormFields` already has a
+ *  Website field if that is wanted here.
+ *
+ *  WHAT THE BAND KEEPS. The heading, the radar and the red are untouched; the
+ *  right-hand column is a button where the form used to be. */
 export function AuditStrip() {
-  const [done, setDone] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <section className="relative overflow-hidden bg-brand">
@@ -24,50 +52,31 @@ export function AuditStrip() {
           </div>
         </Rise>
 
-        <AnimatePresence mode="wait">
-          {done ? (
-            <motion.p
-              key="ok"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="font-display text-lg font-bold text-white"
-            >
-              Thank you! Your submission has been received.
-            </motion.p>
-          ) : (
-            <motion.form
-              key="form"
-              exit={{ opacity: 0, y: -12 }}
-              onSubmit={(e) => {
-                e.preventDefault();
-                setDone(true);
-              }}
-              className="flex w-full flex-col gap-3"
-            >
-              <div className="flex w-full overflow-hidden rounded-full border border-white/40 bg-white/10 backdrop-blur">
-                <input
-                  type="email"
-                  required
-                  aria-label="Work email"
-                  placeholder="you@company.com"
-                  className="w-full bg-transparent px-6 py-4 text-sm text-white placeholder:text-white/60 focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  className="shrink-0 bg-white px-7 text-sm font-semibold text-brand transition-colors hover:bg-snow"
-                >
-                  Submit
-                </button>
-              </div>
-              <label className="flex items-center gap-2 text-xs text-white/80">
-                <input type="checkbox" required className="h-[18px] w-[18px] shrink-0 accent-white" />
-                I agree with the terms of the Privacy Policy — your information is 100%
-                secure and confidential.
-              </label>
-            </motion.form>
-          )}
-        </AnimatePresence>
+        <Rise delay={0.12} className="lg:justify-self-end">
+          {/* Inverted, because the band is already brand red: the site's
+              primary button would disappear into it. White on red is the
+              treatment the Submit button in this band already had. */}
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="group inline-flex items-center justify-center gap-3 rounded-full bg-white px-9 py-4 text-sm font-bold uppercase text-brand transition-colors duration-300 hover:bg-snow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          >
+            Get Your Audit
+            <span className="relative flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden">
+              <ArrowRight className="absolute transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-5 motion-reduce:transition-none" />
+              <ArrowRight className="absolute -translate-x-5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 motion-reduce:transition-none" />
+            </span>
+          </button>
+        </Rise>
       </Container>
+
+      <Modal open={open} onClose={() => setOpen(false)} title="Get your free digital marketing audit">
+        <LeadForm
+          fields={standardFormFields}
+          submitLabel="Request my audit"
+          formName="Audit Strip"
+        />
+      </Modal>
     </section>
   );
 }

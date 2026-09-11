@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { buildablePages } from "@/lib/sitemap";
 import * as insights from "@/content/insights";
 import * as studies from "@/content/case-studies";
+import * as portfolio from "@/content/portfolio";
 
 /** The XML sitemap.
  *
@@ -15,10 +16,11 @@ import * as studies from "@/content/case-studies";
  *  instead, which means a new dependency to rediscover something this codebase
  *  already knows, and it would have listed /ai-hub/film, which is noindex.
  *
- *  THE TWO DYNAMIC ROUTES COME FROM `published()`, which is the same function
- *  their own getStaticPaths walks, so the sitemap lists exactly the notes and
- *  studies that have a page behind them. An archived entry with no body builds
- *  no page and is not listed.
+ *  THE THREE DYNAMIC ROUTES COME FROM THE SAME SELECTOR THEIR OWN
+ *  getStaticPaths WALKS, so the sitemap lists exactly the notes, studies and
+ *  projects that have a page behind them. An archived note or study with no
+ *  body builds no page and is not listed; the portfolio has no such gate, so
+ *  `all()` is both its router and its listing.
  *
  *  NO lastmod, DELIBERATELY. Nothing in this content model records when a page
  *  last changed, and a lastmod invented at build time is a date that says every
@@ -46,6 +48,7 @@ export const GET: APIRoute = () => {
     ...buildablePages(),
     ...insights.published().map((n) => `/insights/${n.slug}`),
     ...studies.published().map((s) => `/case-studies/${s.slug}`),
+    ...portfolio.all().map((p) => `/portfolio/${p.slug}`),
   ]
     .filter((href) => href.startsWith("/") && !EXCLUDE.has(href))
     /* The registry can list the same URL twice where a page sits under two

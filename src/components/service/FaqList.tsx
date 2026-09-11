@@ -28,7 +28,6 @@ const FAQ_LEDE =
 
 export function FaqList({
   label,
-  index,
   title = FAQ_TITLE,
   brandTitle = FAQ_BRAND,
   lede = FAQ_LEDE,
@@ -36,6 +35,10 @@ export function FaqList({
 }: {
   /** DevTools handle: names the section in data-section. */
   label: string;
+  /** Accepted and ignored: the red section counter it used to print is gone
+   *  sitewide. Every page body still passes one, so the prop stays rather than
+   *  forcing a rename across fifty-odd files, and putting the numbering back
+   *  stays a one-line change. */
   index?: string;
   title?: string;
   /** Second line, set in brand red to match the homepage heading. */
@@ -63,7 +66,7 @@ export function FaqList({
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div>
             <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-              {index && <span className="text-brand">({index})</span>} FAQ
+              FAQ
             </p>
             <RippleEmblem className="mb-8">
               <span className="font-display text-4xl font-extrabold text-brand">?</span>

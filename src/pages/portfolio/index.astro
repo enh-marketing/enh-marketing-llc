@@ -1,0 +1,81 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as p from "@/content/portfolio";
+import { brand } from "@/lib/content";
+import { PortfolioPage } from "@/page-bodies/portfolio";
+
+/* Portfolio — the index.
+ *
+ * Same shape as every other page: head tags handed to the layout as props, the
+ * React body mounted as one island, structured data emitted here as static HTML
+ * so a crawler reads it without running any JavaScript.
+ *
+ * CollectionPage + ItemList, NOT a list of CreativeWorks. The index is a page
+ * that lists things; each thing it lists has its own schema on its own route.
+ * Duplicating the per-project markup here would put thirty-five names into
+ * search results pointing at one URL.
+ *
+ * THE LIST NAMES EVERY PROJECT, because every project answers a URL:
+ * [slug].astro walks the same `all()` this does. Unlike the case studies there
+ * is no publication gate, so there is no gap between what the schema claims and
+ * what the router serves.
+ *
+ * The route lives at portfolio/index.astro rather than portfolio.astro so the
+ * project route can sit beside it as portfolio/[slug].astro.
+ */
+
+const HREF = "/portfolio";
+const SITE = "https://enhmedia.com";
+
+const projects = p.all();
+
+const collectionSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": `${SITE}${HREF}#collection`,
+  name: "ENH Portfolio",
+  description: p.meta.description,
+  url: `${SITE}${HREF}`,
+  inLanguage: "en-AE",
+  publisher: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: SITE,
+    telephone: brand.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: brand.address,
+      addressCountry: "AE",
+    },
+  },
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: projects.length,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    itemListElement: projects.map((project, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: project.title,
+      url: `${SITE}${HREF}/${project.slug}`,
+    })),
+  },
+};
+
+// The first card on the page, which is also the first project the live index
+// lists. Same selector the archive's own order uses, so the share image is
+// always the picture at the top of the page.
+const ogImage = projects[0]?.thumb.src;
+---
+
+<Base
+  title={p.meta.title}
+  description={p.meta.description}
+  canonical={HREF}
+  ogTitle={p.meta.ogTitle}
+  ogDescription={p.meta.ogDescription}
+  ogImage={ogImage}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionSchema)} />
+
+  <PortfolioPage client:load />
+</Base>

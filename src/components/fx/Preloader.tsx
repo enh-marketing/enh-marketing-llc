@@ -72,8 +72,17 @@ export function Preloader({ onDone }: { onDone: () => void }) {
             <span className="text-xs uppercase text-fog hidden sm:block">Dubai, UAE</span>
           </div>
 
+          {/* NOT AN H1. This is the wordmark on a loading veil, and it was
+              marked up as one -- so the homepage shipped two h1 elements,
+              "Explore." here and the real headline in the hero. Two h1s on the
+              page whose whole job is to rank for one phrase, and the one a
+              crawler met first belonged to a screen that is gone a second
+              later. A `div` with the same classes renders identically: `.mega`
+              is unlayered CSS that applies to any element, and Tailwind's
+              preflight had already reset the heading's own font-size, weight
+              and margin to inherit. */}
           <div className="overflow-hidden">
-            <motion.h1
+            <motion.div
               initial={{ y: "110%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
@@ -81,7 +90,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
             >
               Explore
               <span className="text-brand">.</span>
-            </motion.h1>
+            </motion.div>
           </div>
 
           <div className="flex items-end justify-between">

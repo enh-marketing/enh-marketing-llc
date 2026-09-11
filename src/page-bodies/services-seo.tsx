@@ -13,7 +13,7 @@ import { Narrative } from "@/components/service/Narrative";
 import { SearchPromise } from "@/components/service/SearchPromise";
 import { ChannelScroller } from "@/components/service/ChannelScroller";
 import { SignalLedger } from "@/components/service/SignalLedger";
-import { ProcessSequence } from "@/components/service/ProcessSequence";
+import { PinnedExplorer } from "@/components/service/PinnedExplorer";
 import { SectorChips } from "@/components/service/SectorChips";
 import { ClosingBeacon } from "@/components/service/ClosingBeacon";
 import { GrowthCta } from "@/components/service/GrowthCta";
@@ -119,16 +119,42 @@ export function SeoPage() {
           noteMark={c.measure.noteMark}
         />
 
-        {/* One site, drawn as the graph a search engine sees, and six things
-            that happen to it while the section holds still. See
-            ProcessSequence. */}
-        <ProcessSequence
+        {/* The pinned explorer the Local SEO page uses for its services, with
+            the drawing this section's own content asks for rather than that
+            page's.
+            
+            WHY `track` AND NOT `setup`. Local SEO explores a set of surfaces
+            that all exist at once -- profile, website, listings -- so its
+            drawing is a map of them. This is six stages in a stated order, one
+            after another, which is what `ProcessTrack` draws and what it was
+            built for: the Performance Marketing and Meta Ads process sections
+            are the same content shape and already share it. Transplanting
+            `SetupMap` here would have drawn a map of places for a sequence of
+            steps.
+            
+            NO `axis`. `ProcessTrack` takes the two ends of the run "where the
+            source document names them" -- Performance Marketing carries
+            Day 0 to Day 90 because its document says so. The SEO document
+            names no span for any stage, so this run carries none rather than
+            borrowing a scale it never claimed.
+            
+            `openEnded` STAYS AT ITS DEFAULT, and the copy is why: stage six is
+            "Review and Adjust", and "the next month's priorities come from
+            what the data shows". The last leg fades rather than terminating,
+            which is the truth of it. */}
+        <PinnedExplorer
           id="process"
           label="How Our SEO Process Works"
           index="05"
           title={c.process.title}
           strokeTitle={c.process.strokeTitle}
-          stages={c.process.stages}
+          items={c.process.stages}
+          diagramSide="left"
+          mark={{
+            variant: "progression",
+            label: "Six stages, and the last one feeds the next month",
+          }}
+          diagram={{ kind: "sitepasses" }}
         />
 
         {/* Nine industries, each named with the pages that actually carry its

@@ -1,0 +1,44 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/marketing-consultation";
+import { brand } from "@/lib/content";
+import { MarketingConsultationPage } from "@/page-bodies/marketing-consultation";
+
+/* Head tags are handed to the layout as props; the structured data is emitted
+   below as static HTML rather than through the island.
+
+   THE SCHEMA IS BUILT FROM THE DOCUMENT, NOT WRITTEN. `serviceType` joins the
+   nine headings the client's own "What Our Marketing Consultation Covers"
+   section lists, and `audience` is the twelve kinds of business its
+   "Industries We Work With" section names, so no wording here is ours.
+
+   NOT `isPartOf` A PILLAR. The document sells the consultation as the thing
+   that decides which pillar a business needs -- "We do not force every
+   business into the same combination of SEO, social media and paid
+   advertising" -- so filing it under one of them would contradict the page's
+   own argument. It sits at the top level of the IA for the same reason. */
+
+const HREF = "/marketing-consultations-strategies-dubai";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Digital Marketing Consultant in Dubai",
+  serviceType: c.coverage.items.map((a) => a.title).join(", "),
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  audience: c.industries.items.map((a) => ({ "@type": "Audience", audienceType: a })),
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <MarketingConsultationPage client:load />
+</Base>

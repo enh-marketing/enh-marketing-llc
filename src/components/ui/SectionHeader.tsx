@@ -7,7 +7,6 @@ import { cn } from "@/lib/cn";
  *  Locked to display-xl with a stroked second line, which is exactly what the
  *  homepage uses for 8 of its 10 section headings. Do not step this down. */
 export function SectionHeader({
-  index,
   title,
   strokeTitle,
   lede,
@@ -17,6 +16,10 @@ export function SectionHeader({
   className,
   children,
 }: {
+  /** Accepted and ignored: the red section counter it used to print is gone
+   *  sitewide. Every page body still passes one, so the prop stays rather than
+   *  forcing a rename across fifty-odd files, and putting the numbering back
+   *  stays a one-line change. */
   index?: string;
   title: string;
   strokeTitle?: string;
@@ -48,10 +51,12 @@ export function SectionHeader({
           wrapped for want of a hundred pixels while the decorative mark beside
           it sat in empty space. The mark shrinks before the words do. */}
       <div className={aside ? undefined : "min-w-0 max-w-4xl"}>
-        {/* Index only. The source document has no kicker text, so none is invented. */}
-        {index && (
-          <p className="mb-7 text-xs font-semibold uppercase text-brand-text">({index})</p>
-        )}
+        {/* NO SECTION COUNTER. Team direction: the red "(01)", "(02)"
+            ... that ran down the side of every section is gone sitewide. The
+            `index` prop stays in the signature and stays unused: every page
+            body passes one, so removing it would be a rename across fifty-odd
+            files to delete a value nobody reads, and keeping it means putting
+            the numbering back is one line here rather than fifty. */}
         {/* One continuous heading, not two stacked rows.
             The two halves used to be `block`, which forced a line break between
             them however much room was left: "Our AI Automation Services" came

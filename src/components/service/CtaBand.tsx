@@ -10,7 +10,6 @@ import { LeadForm, type FormField } from "@/components/service/LeadForm";
  *  CTA for this section. */
 export function CtaBand({
   label,
-  index,
   title,
   strokeTitle,
   body,
@@ -23,6 +22,10 @@ export function CtaBand({
 }: {
   /** DevTools handle: names the section in data-section. */
   label: string;
+  /** Accepted and ignored: the red section counter it used to print is gone
+   *  sitewide. Every page body still passes one, so the prop stays rather than
+   *  forcing a rename across fifty-odd files, and putting the numbering back
+   *  stays a one-line change. */
   index?: string;
   title: string;
   strokeTitle: string;
@@ -48,11 +51,12 @@ export function CtaBand({
         <div className="grid gap-16 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
           {/* Ask */}
           <div className="lg:sticky lg:top-32 lg:h-fit lg:self-start">
-            {index && (
-              <p className="mb-7 text-xs font-semibold uppercase text-brand-text">
-                ({index})
-              </p>
-            )}
+            {/* NO SECTION COUNTER. Team direction: the red "(01)", "(02)"
+                ... that ran down the side of every section is gone sitewide. The
+                `index` prop stays in the signature and stays unused: every page
+                body passes one, so removing it would be a rename across fifty-odd
+                files to delete a value nobody reads, and keeping it means putting
+                the numbering back is one line here rather than fifty. */}
             <h2 className="font-display display-xl font-extrabold uppercase text-snow">
               <span className="block">
                 <Chars text={title} />

@@ -1,0 +1,119 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as p from "@/content/portfolio";
+import * as c from "@/content/case-studies";
+import { brand } from "@/lib/content";
+import { PortfolioProjectPage } from "@/page-bodies/portfolio-project";
+
+/* One portfolio project.
+ *
+ * getStaticPaths WALKS `all()`, WHICH IS EVERY PROJECT. Unlike the case
+ * studies there is no publication gate: a portfolio entry is its title, its
+ * profile and the thing that was made, and all thirty-five have all three. The
+ * archive and this router are built from the same list, so a card can never
+ * point at a route that does not exist.
+ *
+ * NINE PROJECTS ARE FILED UNDER TWO DISCIPLINES AND BUILD ONE PAGE. The
+ * category is a field on the project, not a path segment, so /portfolio/pkf is
+ * the only URL PKF has however many tabs the live index lists it under. That is
+ * the whole reason the model carries `categories` as a list.
+ *
+ * CreativeWork, WITH `about` NAMING THE CLIENT. A portfolio entry is a piece of
+ * work made for another organisation, and `about` is the field that says so.
+ * There is NO datePublished: not one of the thirty-five live pages publishes a
+ * date, and inventing one to satisfy a schema validator would be putting a
+ * fabricated fact in front of a search engine. `genre` carries the disciplines,
+ * which are the live index's own tabs.
+ *
+ * THE CASE STUDY LINK IS RESOLVED HERE. Twelve pages link out to this agency's
+ * own case study archive, and that archive is a separate content module with
+ * its own publication gate. Resolving it in the frontmatter keeps twenty-two
+ * studies out of the portfolio island's bundle and applies the site's standing
+ * rule in one place: a study with no page is not offered as a link.
+ */
+
+export function getStaticPaths() {
+  return p.all().map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props;
+
+const SITE = "https://enhmedia.com";
+const HREF = `/portfolio/${project.slug}`;
+const url = `${SITE}${HREF}`;
+
+const description = p.describe(project);
+const categories = p.categoriesOf(project);
+
+const study = project.caseStudy ? c.bySlug(project.caseStudy) : undefined;
+const caseStudy =
+  study && c.hasStory(study)
+    ? { href: `/case-studies/${study.slug}`, title: `${study.client}: ${study.title}` }
+    : undefined;
+
+const workSchema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "@id": `${url}#project`,
+  name: project.title,
+  url,
+  mainEntityOfPage: { "@type": "WebPage", "@id": url },
+  isPartOf: { "@type": "CollectionPage", "@id": `${SITE}/portfolio#collection` },
+  description,
+  genre: categories.map((category) => category.label),
+  inLanguage: "en-AE",
+  image: new URL(project.thumb.src, SITE).href,
+  about: {
+    "@type": "Organization",
+    name: project.title,
+    ...(project.projectUrl ? { url: project.projectUrl } : {}),
+  },
+  // The film, where the page publishes one. A VideoObject with no thumbnail and
+  // no upload date is worth less than none, so the project's own card -- which
+  // on every one of these eleven is a still from the film -- is the thumbnail,
+  // and no date is invented.
+  ...(project.film
+    ? {
+        video: {
+          "@type": "VideoObject",
+          name: project.film.title,
+          description,
+          thumbnailUrl: new URL(project.thumb.src, SITE).href,
+          embedUrl: `https://player.vimeo.com/video/${project.film.id}`,
+        },
+      }
+    : {}),
+  creator: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: SITE,
+    telephone: brand.phone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: brand.address,
+      addressCountry: "AE",
+    },
+  },
+};
+---
+
+<Base
+  title={`${project.title} | ENH Marketing Portfolio`}
+  description={description}
+  canonical={HREF}
+  ogTitle={project.title}
+  ogDescription={description}
+  ogImage={project.thumb.src}
+  ogType="article"
+>
+  <Fragment slot="head">
+    {/* A project is shared by people rather than only crawled, so the canonical
+        address travels with it. One `article:tag` per discipline, which is the
+        one taxonomy this archive has. */}
+    <meta property="og:url" content={url} />
+    {categories.map((category) => <meta property="article:tag" content={category.label} />)}
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(workSchema)} />
+  </Fragment>
+
+  <PortfolioProjectPage project={project} caseStudy={caseStudy} client:load />
+</Base>

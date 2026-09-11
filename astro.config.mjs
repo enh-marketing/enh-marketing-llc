@@ -64,6 +64,15 @@ export default defineConfig({
     "/services/web-design-development/website-maintenance-and-support":
       "/services/web-design-development/website-maintenance-support",
 
+    // The hosting page's canonical slug is the one src/lib/sitemap.ts has named
+    // since the IA was resolved, and the one the pillar and ecommerce pages
+    // link to. Its own document is headed "Web Hosting Services in Dubai", so
+    // the "-services" variant is what gets typed and pasted by hand: it lands
+    // rather than 404s. Same arrangement, same reason, as the maintenance slug
+    // above.
+    "/services/web-design-development/web-hosting-services":
+      "/services/web-design-development/web-hosting",
+
     // The Industries slug for this page is "ecommerce-retail" in
     // src/lib/sitemap.ts, which is where the IA was resolved and what the
     // navbar and footer of every page link to. "ecommerce-and-retail" reads
@@ -93,6 +102,15 @@ export default defineConfig({
     // Clinics", which is what a reader types, so the slug it implies lands
     // rather than 404s.
     "/industries/healthcare-clinics": "/industries/healthcare",
+
+    // The consultation page is served at
+    // "/marketing-consultations-strategies-dubai", which is the route the team
+    // asked for. src/lib/sitemap.ts named the menu entry
+    // "/marketing-consultation" for as long as the page was unbuilt, so
+    // nothing ever linked to it. The nav label is "Marketing Consultation",
+    // which is what a reader types, so the slug it implies lands rather than
+    // 404s. Same reasoning as the two industry slugs above.
+    "/marketing-consultation": "/marketing-consultations-strategies-dubai",
 
     // The About page's canonical slug is "/about-us", which is what
     // src/lib/sitemap.ts now names and what the navbar and footer of every page
@@ -132,6 +150,44 @@ export default defineConfig({
   // its @theme block.
   vite: {
     plugins: [tailwindcss()],
+
+    /** THE BUILD GETS ITS OWN DEPENDENCY CACHE, so it cannot pull the rug out
+     *  from under a running dev server.
+     *
+     *  Vite pre-bundles dependencies into `node_modules/.vite`, and `astro
+     *  build` and `astro dev` both default to that one directory. So a build
+     *  run while the dev server is up rewrites the very files that server's
+     *  browser clients are still fetching by hash: the client then loads a dep
+     *  whose exports no longer match the module graph the server transformed
+     *  against, and every React island on the page dies at hydration with
+     *  `TypeError: _jsxDEV is not a function`.
+     *
+     *  What that looks like is not an error page. The server HTML is complete
+     *  and correct, React discards the island, and since <main> is inside the
+     *  island and the footer is not, the whole site renders as a bare footer.
+     *  It hit every page at once, including ones nobody had touched, which is
+     *  the tell that it is the server and not a component. Diagnosed twice
+     *  before the cause was found, because "only the footer shows" reads
+     *  exactly like a broken new section.
+     *
+     *  Splitting the two directories means a build is invisible to a running
+     *  dev server. Keyed off argv because the commands share this file and
+     *  Astro gives the config no other way to tell them apart.
+     *
+     *  `astro check` NEEDS THE SAME TREATMENT, AND FINDING THAT OUT COST A DEV
+     *  SERVER. On 2026-09-11 a plain `npx astro check` alongside a running
+     *  server printed "[vite] Re-optimizing dependencies because vite config
+     *  has changed" and rewrote `node_modules/.vite` -- and every page on 4321
+     *  immediately died at hydration with `TypeError: _jsxDEV is not a
+     *  function`, footer-only, exactly the symptom this comment describes for
+     *  builds. `astro check` runs its own Vite server to get diagnostics, so it
+     *  is a third writer to the one cache; it now gets a directory of its own
+     *  and a type check is invisible to a running dev server too. */
+    cacheDir: process.argv.includes("build")
+      ? "node_modules/.vite-build"
+      : process.argv.includes("check")
+        ? "node_modules/.vite-check"
+        : "node_modules/.vite",
 
     // WHY THIS LIST EXISTS. Vite pre-bundles dependencies when the dev server
     // starts, from what its scanner can reach. Anything it misses is

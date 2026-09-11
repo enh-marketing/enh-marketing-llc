@@ -183,7 +183,16 @@ const caseStudies: NavNode = { label: "Case Studies", href: "/case-studies" };
 const portfolio: NavNode = { label: "Portfolio", href: "/portfolio" };
 const testimonials: NavNode = { label: "Testimonials", href: "/testimonials" };
 const insights: NavNode = { label: "Insights", href: "/insights" };
-const consultation: NavNode = { label: "Marketing Consultation", href: "/marketing-consultation" };
+// The route the team asked for, and the one the page is served at. The IA
+// document named "/marketing-consultation" while the page was unbuilt, so no
+// link ever pointed at it -- `Crosslink` and `routeExists` rendered it as
+// plain text and nothing 404'd. The shorter slug is still what a reader types
+// after seeing the nav label, so astro.config.mjs redirects it here. Same
+// arrangement as the logistics slug.
+const consultation: NavNode = {
+  label: "Marketing Consultation",
+  href: "/marketing-consultations-strategies-dubai",
+};
 // Was "/contact", which no page ever served: the sitemap named it, every
 // menu presented it, and it 404'd from all 38 pages. The page that now serves
 // it is src/pages/contact-us.astro, so the node points there.
@@ -213,14 +222,23 @@ export const pages = {
 
 /* ------------------------------------------------------------------ menus */
 
-/** Header. Nine items, Services and Industries expand. */
+/** Header. Ten items, Services and Industries expand. */
 export const topNav: NavNode[] = [
   home,
   about,
   services,
   industries,
   aiHub,
+  // TEAM DIRECTION, 2026-09-11: below AI Hub and above Case Studies. It was
+  // in the footer only, which is where a page nothing links to goes to be
+  // uncrawled -- the same failure the AI Hub landing page had.
+  consultation,
   caseStudies,
+  // TEAM DIRECTION: between Case Studies and Testimonials, and nowhere else.
+  // It was in the footer only, which is where a page nothing links to goes to
+  // be uncrawled -- the same failure the AI Hub landing page and the
+  // consultation page both had before they were promoted here.
+  portfolio,
   testimonials,
   insights,
   contact,
@@ -307,6 +325,7 @@ const BUILT = new Set([
   "/services/social-media-marketing/tiktok-marketing",
   "/services/web-design-development/ecommerce-website-development",
   "/services/web-design-development/website-maintenance-support",
+  "/services/web-design-development/web-hosting",
   "/industries/ecommerce-retail",
   "/industries/hospitality-hotels",
   "/industries/automotive",
@@ -315,6 +334,8 @@ const BUILT = new Set([
   "/testimonials",
   "/insights",
   "/case-studies",
+  "/portfolio",
+  "/marketing-consultations-strategies-dubai",
 ]);
 
 /** Whether an internal path is served by a page that exists.

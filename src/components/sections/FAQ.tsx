@@ -18,7 +18,7 @@ export function FAQ() {
       <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div>
           <p className="mb-8 flex items-center gap-3 text-xs font-semibold uppercase text-fog">
-            <span className="text-brand">(10)</span> FAQ
+            FAQ
           </p>
           <RippleEmblem className="mb-8">
             <span className="font-display text-4xl font-extrabold text-brand">?</span>

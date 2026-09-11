@@ -131,19 +131,19 @@ export function Prose({
  *  rule that runs out to the measure. Used four times on a study page and once
  *  on the lead story, which is why it is not written inline five times. */
 export function SectionRule({
-  index,
   label,
   children,
 }: {
+  /** Accepted and ignored: the red section counter it used to print is gone
+   *  sitewide. Every page body still passes one, so the prop stays rather than
+   *  forcing a rename across fifty-odd files, and putting the numbering back
+   *  stays a one-line change. */
   index: string;
   label: string;
   children?: ReactNode;
 }) {
   return (
     <div className="mb-8 flex items-baseline gap-4">
-      <span className="font-display text-[0.6875rem] font-extrabold tabular-nums text-brand-text">
-        ({index})
-      </span>
       <h2 className="font-display text-[0.8rem] font-extrabold uppercase tracking-[0.14em] text-snow">
         {label}
       </h2>
