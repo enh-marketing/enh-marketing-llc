@@ -112,7 +112,21 @@ const canonicalUrl = canonical
 const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 ---
 
-<html lang="en" class={forceDark ? "h-full dark" : "h-full"}>
+{/* DARK IS THE DEFAULT, so `dark` is on the server-rendered <html> and the
+    script below takes it off for a reader who has chosen light. It is this way
+    round rather than the reverse because the class has to be right in the very
+    first byte: a page that renders light and is corrected by script flashes,
+    and the flash is the thing the script exists to prevent.
+
+    `data-force-dark` marks the pages that are pinned to dark and have no
+    toggle. The script reads it and leaves those alone, so a reader whose stored
+    preference is light still gets the AI Hub as it was designed rather than a
+    page whose own colours are written black against a pale shell. */}
+<html
+  lang="en"
+  class="h-full dark"
+  data-force-dark={forceDark ? "" : undefined}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -157,11 +171,14 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 
     {/* Was <Script strategy="beforeInteractive">. An inline is:raw script in
         the head is the Astro equivalent and runs at the same point: before
-        first paint, so the opted-in dark theme never flashes light. */}
+        first paint, so a reader who opted into light never sees dark first. */}
     <script is:inline>
       try {
-        if (localStorage.getItem("enh-theme") === "dark")
-          document.documentElement.classList.add("dark");
+        if (
+          localStorage.getItem("enh-theme") === "light" &&
+          !document.documentElement.hasAttribute("data-force-dark")
+        )
+          document.documentElement.classList.remove("dark");
       } catch {}
     </script>
 

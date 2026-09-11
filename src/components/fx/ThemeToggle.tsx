@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
-/** Light is the site's default, so the toggle tracks the opt-in state: dark.
- *  It starts false on the server and syncs on mount, because the class is set
- *  by the pre-hydration script in the layout and is not knowable during
- *  render. */
+/** DARK IS THE SITE'S DEFAULT, so the toggle starts true and tracks the opt-out
+ *  state: light. It still syncs on mount, because the class is settled by the
+ *  pre-hydration script in the layout and is not knowable during render -- but
+ *  the initial value has to match the common case, or the first paint shows a
+ *  sun on a dark page and swaps to a moon a moment later. */
 export function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
 
   useEffect(() => {
     setDark(document.documentElement.classList.contains("dark"));
