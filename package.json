@@ -23,7 +23,8 @@
     "check:recaptcha:live": "node scripts/check-recaptcha-live.mjs",
     "check:live": "node scripts/check-live.mjs",
     "check:site": "node scripts/check-site.mjs",
-    "check:responsive": "node scripts/check-responsive.mjs"
+    "check:responsive": "node scripts/check-responsive.mjs",
+    "check:mainthread": "node scripts/check-mainthread.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.5",

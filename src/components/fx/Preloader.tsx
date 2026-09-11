@@ -11,10 +11,23 @@ import { Logo } from "@/components/ui/Logo";
  * so a timer-based hard deadline force-unmounts the preloader regardless.
  */
 export function Preloader({ onDone }: { onDone: () => void }) {
-  const [count, setCount] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [gone, setGone] = useState(false);
   const doneRef = useRef(false);
+
+  /** THE COUNTER DOES NOT GO THROUGH REACT, AND THAT IS THE POINT.
+   *
+   *  It used to be `useState`, updated from the animation's onUpdate. That is
+   *  a re-render of this whole subtree on every frame of a 1.9s animation --
+   *  a hundred and more of them, landing in the same window as the page's
+   *  hydration, on the device least able to afford either.
+   *
+   *  A counter is two characters of text and one transform. Writing them to
+   *  the nodes directly costs a property assignment per frame and nothing
+   *  else. The markup below renders "0" and an empty bar on the server, which
+   *  is exactly where the animation starts from. */
+  const numRef = useRef<HTMLSpanElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fireDone = () => {
@@ -26,7 +39,6 @@ export function Preloader({ onDone }: { onDone: () => void }) {
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
-      setCount(100);
       setGone(true);
       fireDone();
       return;
@@ -57,21 +69,57 @@ export function Preloader({ onDone }: { onDone: () => void }) {
       fireDone();
     };
 
+    /** THE VEIL WAITS FOR A FREE MAIN THREAD, WHICH IS WHAT IT IS FOR.
+     *
+     *  Measured with `npm run check:mainthread` at 6x CPU throttle: the
+     *  homepage spends 1081ms in long tasks, and /contact-us -- which has no
+     *  preloader at all -- spends 846ms. So most of it is React hydrating, it
+     *  happens on every page, and on the homepage its tail ran from 2077ms to
+     *  2694ms. The curtain lifted at a fixed 2400ms, straight into the middle
+     *  of it, and the first thing the reader could do with the page was watch
+     *  it not respond for a second. That is the "freezes after the preloader"
+     *  report, and the veil was the one thing that could have prevented it.
+     *
+     *  So the exit asks for an idle callback first. The browser grants one when
+     *  the main thread has actually finished, so on a fast device this is the
+     *  same 2.4s it always was, and on a slow phone the veil holds a moment
+     *  longer and lifts onto a page that answers immediately. Waiting behind a
+     *  loading screen that is plainly still loading is not the same experience
+     *  as tapping a page that ignores you.
+     *
+     *  Every bound is kept. The idle request carries its own 1.2s timeout, and
+     *  `tHardLeave` hands over at 3.6s whatever happens, before the 4s
+     *  force-unmount -- so the veil can never outstay the safety net that
+     *  removes it, and `started` can never fail to fire. */
+    const leaveWhenReady = () => {
+      if (doneRef.current) return;
+      if (typeof window.requestIdleCallback === "function") {
+        window.requestIdleCallback(leave, { timeout: 1200 });
+      } else {
+        leave();
+      }
+    };
+
     const controls = animate(0, 100, {
       duration: 1.9,
       ease: [0.3, 0.6, 0.2, 1],
-      onUpdate: (v) => setCount(Math.round(v)),
-      onComplete: () => setTimeout(leave, 250),
+      onUpdate: (v) => {
+        if (numRef.current) numRef.current.textContent = String(Math.round(v));
+        if (barRef.current) barRef.current.style.transform = `scaleX(${v / 100})`;
+      },
+      onComplete: () => setTimeout(leaveWhenReady, 250),
     });
 
     // Timer-based safety net (timers fire even when rAF is throttled):
-    // start the exit and hand over by 2.4s, force-unmount by 4s.
-    const tLeave = setTimeout(leave, 2400);
+    // ask to leave by 2.4s, leave regardless by 3.6s, force-unmount by 4s.
+    const tLeave = setTimeout(leaveWhenReady, 2400);
+    const tHardLeave = setTimeout(leave, 3600);
     const tGone = setTimeout(() => setGone(true), 4000);
 
     return () => {
       controls.stop();
       clearTimeout(tLeave);
+      clearTimeout(tHardLeave);
       clearTimeout(tGone);
     };
   }, [onDone]);
@@ -146,14 +194,15 @@ export function Preloader({ onDone }: { onDone: () => void }) {
                   was about. */}
               <div className="mt-3 h-[3px] w-full overflow-hidden rounded-full bg-line">
                 <div
+                  ref={barRef}
                   className="h-full w-full origin-left rounded-full bg-brand"
-                  style={{ transform: `scaleX(${count / 100})` }}
+                  style={{ transform: "scaleX(0)" }}
                 />
               </div>
             </div>
 
             <span className="font-display shrink-0 text-5xl font-extrabold tabular-nums leading-none text-snow sm:text-6xl">
-              {count}
+              <span ref={numRef}>0</span>
               <span className="text-brand">%</span>
             </span>
           </div>
