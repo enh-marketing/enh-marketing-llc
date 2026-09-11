@@ -36,9 +36,10 @@ import * as studies from "@/content/case-studies";
 const SITE = "https://enhmedia.com";
 
 /** noindex, and therefore not ours to advertise. Each carries the tag itself,
- *  in src/pages/ai-hub/film.astro and src/pages/ai-hub/hero-robot.astro; this
+ *  in film.astro, hero-robot.astro and hero-rockets.astro under
+ *  src/pages/ai-hub; this
  *  keeps the two statements from disagreeing. */
-const EXCLUDE = new Set(["/ai-hub/film", "/ai-hub/hero-robot"]);
+const EXCLUDE = new Set(["/ai-hub/film", "/ai-hub/hero-robot", "/ai-hub/hero-rockets"]);
 
 export const GET: APIRoute = () => {
   const routes = [

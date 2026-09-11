@@ -271,6 +271,7 @@ const BUILT = new Set([
   "/ai-hub",
   "/ai-hub/film",
   "/ai-hub/hero-robot",
+  "/ai-hub/hero-rockets",
   "/ai-hub/ai-automation",
   "/ai-hub/campaign-intelligence",
   "/ai-hub/ai-search-visibility",

@@ -1,0 +1,25 @@
+---
+import Base from "@/layouts/Base.astro";
+import { AiHubRocketsPage } from "@/page-bodies/ai-hub-rockets";
+
+/* THE ROCKET FILM, ON A PAGE OF ITS OWN, so the openings can be compared.
+   Divij's footage, re-encoded from an 17.8MB raw export to 4.0MB of 720p and
+   served from our own origin with a poster cut from it.
+
+   NOINDEX. Same story as /ai-hub behind a different opening, which is a
+   duplicate, and nobody should arrive here from a search result. It is in
+   sitemap.ts's BUILT set only because check:routes requires every real route to
+   be listed, and excluded from the XML sitemap the way /ai-hub/film is. */
+
+const HREF = "/ai-hub/hero-rockets";
+---
+
+<Base
+  title="AI Hub, rocket opening | ENH Marketing"
+  description="ENH Marketing's AI Hub behind a looping rocket film, kept for review beside the other openings."
+  canonical={HREF}
+  robots="noindex, nofollow"
+  forceDark
+>
+  <AiHubRocketsPage client:load />
+</Base>
