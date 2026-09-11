@@ -225,13 +225,13 @@ export const industries = {
   items: [
     { label: "Healthcare and aesthetics clinics", href: "/industries/healthcare-clinics" },
     { label: "Real estate" },
-    { label: "Ecommerce and retail", href: "/industries/ecommerce-retail" },
+    { label: "Ecommerce and retail", href: "/e-commerce-marketing-agency" },
     { label: "Food and beverage" },
     { label: "Education and training" },
     { label: "Fitness and wellness" },
-    { label: "Automotive", href: "/industries/automotive" },
+    { label: "Automotive", href: "/automotive-digital-marketing-agency" },
     { label: "Home and professional services" },
-    { label: "Hospitality", href: "/industries/hospitality-hotels" },
+    { label: "Hospitality", href: "/hospitality-marketing-agency" },
   ],
 };
 
@@ -307,8 +307,8 @@ export const sources = [
 export const organicNote = {
   body: "See our",
   links: [
-    { label: "Instagram marketing", href: "/services/social-media-marketing/instagram-marketing" },
-    { label: "Facebook marketing", href: "/services/social-media-marketing/facebook-marketing" },
+    { label: "Instagram marketing", href: "/instagram-marketing-agency-dubai" },
+    { label: "Facebook marketing", href: "/facebook-marketing-agency-in-dubai" },
   ],
   suffix: "pages for the organic side.",
 };

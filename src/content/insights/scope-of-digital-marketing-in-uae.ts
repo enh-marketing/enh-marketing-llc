@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-05-29",
   hero: {
-    src: "/insights/scope-of-digital-marketing-in-uae/hero.webp",
+    src: "/blog/scope-of-digital-marketing-in-uae/hero.webp",
     alt: "digital marketing company in dubai",
     w: 500,
     h: 500
@@ -63,7 +63,7 @@ export const note: Note = {
       text: [
         "One of the key aspects of digital marketing in the UAE is search engine optimization (SEO). You can find the best SEO firms in Dubai that can optimize a website to rank higher in search engine results pages for relevant keywords. By improving a website’s ranking in search engine results, businesses can increase the chances of attracting qualified traffic and potential customers. The ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "best SEO companies in Dubai"
           ]
@@ -129,7 +129,7 @@ export const note: Note = {
       text: [
         "Get better results for your business website by working with ENH Media & Communications – the ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "best SEO company in Dubai"
           ]

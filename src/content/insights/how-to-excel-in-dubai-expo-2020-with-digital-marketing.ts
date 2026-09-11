@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-08-17",
   hero: {
-    src: "/insights/how-to-excel-in-dubai-expo-2020-with-digital-marketing/hero.webp",
+    src: "/blog/how-to-excel-in-dubai-expo-2020-with-digital-marketing/hero.webp",
     alt: "digital marketing company in dubai",
     w: 500,
     h: 500

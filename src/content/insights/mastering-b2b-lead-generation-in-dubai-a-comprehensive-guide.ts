@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-01-25",
   hero: {
-    src: "/insights/mastering-b2b-lead-generation-in-dubai-a-comprehensive-guide/hero.webp",
+    src: "/blog/mastering-b2b-lead-generation-in-dubai-a-comprehensive-guide/hero.webp",
     alt: "b2b lead generation companies in dubai",
     w: 1969,
     h: 1969
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "B2B lead generation is a process through which you can get business clients or a growing customer base within the SaaS industry. The entire process requires fostering interest through content, finding ",
         {
-          a: "/services/lead-generation/b2b-lead-generation",
+          a: "/b2b-lead-generation-dubai",
           children: [
             {
               b: [
@@ -89,7 +89,7 @@ export const note: Note = {
       text: [
         "The next step should be hosting webinars, workshops, seeking ",
         {
-          a: "/services/lead-generation/b2b-lead-generation",
+          a: "/b2b-lead-generation-dubai",
           children: [
             {
               b: [

@@ -25,7 +25,7 @@ import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 import { ResultStats } from "@/components/service/ResultStats";
 
-const HREF = "/services/lead-generation/b2b-lead-generation";
+const HREF = "/b2b-lead-generation-dubai";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 export function B2BLeadGenerationPage() {

@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-01-23",
   hero: {
-    src: "/insights/5-google-shares-strategies-for-enhancing-seo-through-internal-linking/hero.webp",
+    src: "/blog/5-google-shares-strategies-for-enhancing-seo-through-internal-linking/hero.webp",
     alt: "seo agency dubai",
     w: 1080,
     h: 1080
@@ -108,7 +108,7 @@ export const note: Note = {
       text: [
         "If you are seeking for ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "search engine optimization services Dubai"
           ]

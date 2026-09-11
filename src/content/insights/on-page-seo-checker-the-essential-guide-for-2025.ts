@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-08-18",
   hero: {
-    src: "/insights/on-page-seo-checker-the-essential-guide-for-2025/hero.webp",
+    src: "/blog/on-page-seo-checker-the-essential-guide-for-2025/hero.webp",
     alt: "onpage analysis 2025",
     w: 2048,
     h: 2048
@@ -122,7 +122,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/on-page-seo-checker-the-essential-guide-for-2025/01.png",
+        src: "/blog/on-page-seo-checker-the-essential-guide-for-2025/01.png",
         alt: "",
         w: 1086,
         h: 311,
@@ -283,7 +283,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/on-page-seo-checker-the-essential-guide-for-2025/02.png",
+        src: "/blog/on-page-seo-checker-the-essential-guide-for-2025/02.png",
         alt: "",
         w: 1072,
         h: 307,
@@ -458,7 +458,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/on-page-seo-checker-the-essential-guide-for-2025/03.png",
+        src: "/blog/on-page-seo-checker-the-essential-guide-for-2025/03.png",
         alt: "",
         w: 894,
         h: 192,
@@ -723,7 +723,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/on-page-seo-checker-the-essential-guide-for-2025/04.png",
+        src: "/blog/on-page-seo-checker-the-essential-guide-for-2025/04.png",
         alt: "",
         w: 954,
         h: 393,

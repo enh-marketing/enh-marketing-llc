@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-11-22",
   hero: {
-    src: "/insights/how-seo-can-help-impact-your-business-in-2022/hero.webp",
+    src: "/blog/how-seo-can-help-impact-your-business-in-2022/hero.webp",
     alt: "best seo company in dubai",
     w: 500,
     h: 500
@@ -133,14 +133,14 @@ export const note: Note = {
       text: [
         "We’re a well-known digital marketing company in Dubai that offers the ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "best SEO services in Dubai"
           ]
         },
         ". We are digital marketing and web design experts with a focus on internet marketing. If you are looking for an ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO agency in Dubai"
           ]

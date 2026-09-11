@@ -139,9 +139,9 @@ export const relatedServices = {
   links: [
     {
       label: "Website maintenance and support",
-      href: "/services/web-design-development/website-maintenance-support",
+      href: "/web-support-services-dubai",
     },
-    { label: "Web hosting", href: "/services/web-design-development/web-hosting" },
+    { label: "Web hosting", href: "/web-hosting-services" },
   ],
 };
 

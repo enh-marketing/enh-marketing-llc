@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-07-24",
   hero: {
-    src: "/insights/the-power-of-corporate-films-on-elevating-business-success-through-video-production/hero.webp",
+    src: "/blog/the-power-of-corporate-films-on-elevating-business-success-through-video-production/hero.webp",
     alt: "corporate video production company dubai uae",
     w: 1969,
     h: 1969
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Partnering with a leading ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [
@@ -93,7 +93,7 @@ export const note: Note = {
       text: [
         "From product launch videos to promotional ads - well-filmed videos maximize brand awareness and drive qualified leads. Share your unique selling proposition through a video on your website to grab attention. Videos embedded in sales or landing pages see higher conversion rates as multimedia engages prospects better. A reliable ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [

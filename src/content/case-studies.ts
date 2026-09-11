@@ -74,12 +74,12 @@ export type Metric = { value: string; label: string };
 export type ServiceKey = "seo" | "local" | "content" | "performance" | "social" | "web";
 
 export const SERVICES: Record<ServiceKey, { label: string; href: string }> = {
-  seo: { label: "SEO", href: "/services/seo" },
-  local: { label: "Local SEO", href: "/services/seo/local-seo-services" },
-  content: { label: "SEO Content", href: "/services/seo/seo-content-creation" },
-  performance: { label: "Performance Marketing", href: "/services/performance-marketing" },
-  social: { label: "Social Media", href: "/services/social-media-marketing" },
-  web: { label: "Web Design & Development", href: "/services/web-design-development" },
+  seo: { label: "SEO", href: "/seo-company-in-dubai" },
+  local: { label: "Local SEO", href: "/local-seo-services" },
+  content: { label: "SEO Content", href: "/content-creation-in-dubai" },
+  performance: { label: "Performance Marketing", href: "/performance-marketing-agency-dubai" },
+  social: { label: "Social Media", href: "/social-media-agency-in-dubai" },
+  web: { label: "Web Design & Development", href: "/web-design-company-dubai" },
 };
 
 /** A service tag and the sentence in the study that names it.

@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-07-04",
   hero: {
-    src: "/insights/are-you-ready-with-your-expo-digital-marketing-strategies/hero.webp",
+    src: "/blog/are-you-ready-with-your-expo-digital-marketing-strategies/hero.webp",
     alt: "digital marketing agency in dubai",
     w: 500,
     h: 500

@@ -1,0 +1,45 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/services/seo-content-creation";
+import { brand } from "@/lib/content";
+import { SeoContentCreationPage } from "@/page-bodies/services-seo-seo-content-creation";
+
+/* Head tags are handed to the layout as props; the structured data is emitted
+   below as static HTML rather than through the island.
+
+   serviceType is built from the document rather than written: it joins the five
+   card titles the document itself lists under "What Our SEO Content Creation
+   Covers", so no wording here is ours. */
+
+const HREF = "/content-creation-in-dubai";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "SEO Content Creation",
+  serviceType: c.covers.items.map((i) => i.title).join(", "),
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+  isPartOf: {
+    "@type": "Service",
+    name: "SEO",
+    url: "https://enhmedia.com/services/seo",
+  },
+};
+---
+
+<Base
+  title={c.meta.title}
+  description={c.meta.description}
+  canonical={HREF}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <SeoContentCreationPage client:load />
+</Base>

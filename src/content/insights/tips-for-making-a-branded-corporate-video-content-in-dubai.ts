@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-04-22",
   hero: {
-    src: "/insights/tips-for-making-a-branded-corporate-video-content-in-dubai/hero.webp",
+    src: "/blog/tips-for-making-a-branded-corporate-video-content-in-dubai/hero.webp",
     alt: "corporate video production company dubai",
     w: 500,
     h: 500
@@ -91,7 +91,7 @@ export const note: Note = {
         },
         "The most common mistake made after creating video content is failing to share it so that it can gain exposure. Remember this when sharing: People react differently to video content depending on the social platform or marketing channel.ENH Media & Communications LLC is a well-known digital marketing company in Dubai that provides a wide range of clients with unique digital marketing services to target the right audience. We specialize in digital marketing, ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             "corporate videography services"
           ]

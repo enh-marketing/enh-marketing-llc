@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-02-13",
   hero: {
-    src: "/insights/the-impact-of-social-media-on-b2b-marketing/hero.webp",
+    src: "/blog/the-impact-of-social-media-on-b2b-marketing/hero.webp",
     alt: "social media marketing services in dubai",
     w: 1969,
     h: 1969
@@ -42,7 +42,7 @@ export const note: Note = {
       text: [
         "For a budding ",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             {
               b: [
@@ -107,7 +107,7 @@ export const note: Note = {
       text: [
         "Invest in dedicated ",
         {
-          a: "/services/social-media-marketing",
+          a: "/social-media-agency-in-dubai",
           children: [
             {
               b: [

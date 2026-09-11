@@ -23,7 +23,7 @@ import { AttributionRecord } from "@/components/service/AttributionRecord";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 import { ResultStats } from "@/components/service/ResultStats";
 
-const HREF = "/services/performance-marketing/linkedin-ads";
+const HREF = "/linkedin-advertising-dubai";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 export function LinkedInAdsPage() {

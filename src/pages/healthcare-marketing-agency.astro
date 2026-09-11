@@ -1,0 +1,42 @@
+---
+import Base from "@/layouts/Base.astro";
+import * as c from "@/content/industries/healthcare";
+import { brand } from "@/lib/content";
+import { HealthcarePage } from "@/page-bodies/industries-healthcare";
+
+/* Head tags are handed to the layout as props; the structured data is emitted
+   below as static HTML rather than through the island.
+
+   THE SCHEMA IS BUILT FROM THE DOCUMENT, NOT WRITTEN. `serviceType` joins the
+   six service headings the client's own document lists, and `audience` is the
+   nine kinds of healthcare provider its "Who We Work With" section names, so no
+   wording here is ours. Like the other four industry pages, the Service is not
+   `isPartOf` a pillar: the document sells a combined programme -- "ENH
+   Marketing connects healthcare SEO, paid advertising, content, social media
+   and local search within one strategy" -- and filing it under one of those
+   pillars would contradict that sentence. */
+
+const HREF = "/healthcare-marketing-agency";
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Healthcare Digital Marketing",
+  serviceType: c.services.items.map((s) => s.title).join(", "),
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  audience: c.audience.items.map((a) => ({ "@type": "Audience", audienceType: a.label })),
+  provider: {
+    "@type": "Organization",
+    name: brand.legal,
+    url: "https://enhmedia.com",
+    telephone: brand.phone,
+    address: { "@type": "PostalAddress", streetAddress: brand.address, addressCountry: "AE" },
+  },
+};
+---
+
+<Base title={c.meta.title} description={c.meta.description} canonical={HREF}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(serviceSchema)} />
+
+  <HealthcarePage client:load />
+</Base>

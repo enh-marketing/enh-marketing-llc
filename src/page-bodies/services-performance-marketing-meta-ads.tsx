@@ -26,7 +26,7 @@ import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 import { ResultStats } from "@/components/service/ResultStats";
 
-const HREF = "/services/performance-marketing/meta-ads";
+const HREF = "/meta-ads-agency-dubai";
 
 export function MetaAdsPage() {
   const whatsapp = `https://wa.me/${brand.whatsapp}`;

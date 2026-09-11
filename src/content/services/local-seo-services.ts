@@ -159,7 +159,7 @@ export const discovery = {
     "Local SEO can support this wider discoverability, but it cannot guarantee that a business will be selected for a voice response or mentioned in an AI-generated answer.",
   referenceLead: "Our",
   referenceLabel: "AEO and GEO services",
-  referenceHref: "/services/seo/aeo-and-geo",
+  referenceHref: "/aeo-geo-optimization",
   referenceTail: "cover the broader work involved in AI search visibility.",
 };
 
@@ -185,7 +185,7 @@ export const sectors = {
   boundaryLead:
     "A business serving customers across the UAE without a local component may need a broader",
   boundaryLabel: "SEO services",
-  boundaryHref: "/services/seo",
+  boundaryHref: "/seo-company-in-dubai",
   boundaryTail: "strategy instead.",
 };
 

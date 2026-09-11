@@ -336,10 +336,10 @@ export const proposal = {
    *  them. Rendered through Crosslink, so an unbuilt destination keeps the word
    *  and loses only the link. */
   widerLinks: [
-    { label: "SEO", href: "/services/seo" },
-    { label: "content", href: "/services/seo/seo-content-creation" },
-    { label: "paid campaigns", href: "/services/performance-marketing" },
-    { label: "conversion", href: "/services/lead-generation/landing-page-development" },
+    { label: "SEO", href: "/seo-company-in-dubai" },
+    { label: "content", href: "/content-creation-in-dubai" },
+    { label: "paid campaigns", href: "/performance-marketing-agency-dubai" },
+    { label: "conversion", href: "/landing-page-development-services" },
   ],
   useful:
     "This is particularly useful when a campaign needs a new landing page, a tracking issue affects reporting or a website problem interrupts lead generation.",

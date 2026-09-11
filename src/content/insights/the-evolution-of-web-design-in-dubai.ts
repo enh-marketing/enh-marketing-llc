@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-08-22",
   hero: {
-    src: "/insights/the-evolution-of-web-design-in-dubai/hero.webp",
+    src: "/blog/the-evolution-of-web-design-in-dubai/hero.webp",
     alt: "best web design company in dubai",
     w: 500,
     h: 500
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "The evolution of ",
         {
-          a: "/services/web-design-development",
+          a: "/web-design-company-dubai",
           children: [
             "website design in Dubai "
           ]
@@ -79,7 +79,7 @@ export const note: Note = {
       text: [
         "As technology continued to advance, ",
         {
-          a: "/services/web-design-development",
+          a: "/web-design-company-dubai",
           children: [
             "web design companies in Dubai"
           ]
@@ -92,7 +92,7 @@ export const note: Note = {
       text: [
         "As technology continues to evolve, it’s likely that we’ll see even more exciting changes in the future of ",
         {
-          a: "/services/web-design-development",
+          a: "/web-design-company-dubai",
           children: [
             "web design in Dubai"
           ]

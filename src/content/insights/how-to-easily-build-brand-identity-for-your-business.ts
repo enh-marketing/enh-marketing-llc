@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-02-09",
   hero: {
-    src: "/insights/how-to-easily-build-brand-identity-for-your-business/hero.webp",
+    src: "/blog/how-to-easily-build-brand-identity-for-your-business/hero.webp",
     alt: "brand identity services",
     w: 500,
     h: 500

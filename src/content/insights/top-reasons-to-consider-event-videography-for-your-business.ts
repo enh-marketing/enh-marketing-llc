@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-06-21",
   hero: {
-    src: "/insights/top-reasons-to-consider-event-videography-for-your-business/hero.webp",
+    src: "/blog/top-reasons-to-consider-event-videography-for-your-business/hero.webp",
     alt: "video production company dubai",
     w: 500,
     h: 500

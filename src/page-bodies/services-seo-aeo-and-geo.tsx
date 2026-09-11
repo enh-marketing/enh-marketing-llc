@@ -25,7 +25,7 @@ import { GrowthCta } from "@/components/service/GrowthCta";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 import { ResultStats } from "@/components/service/ResultStats";
 
-const HREF = "/services/seo/aeo-and-geo";
+const HREF = "/aeo-geo-optimization";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 export function AeoGeoPage() {

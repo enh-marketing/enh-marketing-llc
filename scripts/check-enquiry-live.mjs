@@ -83,7 +83,7 @@ const { POST } = await import(pathToFileURL(path.resolve(outfile)).href);
 const payload = {
   formName: "TEST - website check",
   pageName: "Google Ads Agency in Dubai",
-  pagePath: "/services/performance-marketing/google-ads",
+  pagePath: "/google-adwords-company-dubai",
   pageUrl: "https://enhmedia.com/services/performance-marketing/google-ads",
   token: null,
   action: "submit_test_website_check",

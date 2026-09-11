@@ -112,14 +112,14 @@ export const services = {
       no: "02",
       title: "Ecommerce Website Development",
       glyph: "catalogue",
-      href: "/services/web-design-development/ecommerce-website-development",
+      href: "/ecommerce-web-development-dubai",
       body: "An online store has to load fast, look right on mobile and make checkout effortless. We build ecommerce sites on Shopify, WooCommerce and custom platforms, with payment gateways set up for the UAE market.",
     },
     {
       no: "03",
       title: "Landing Page Design",
       glyph: "form",
-      href: "/services/lead-generation/landing-page-development",
+      href: "/landing-page-development-services",
       body: "Advertising traffic needs a page built around the campaign. We create landing pages with focused content, clear calls to action and fewer distractions between the click and the enquiry.",
     },
     {
@@ -132,14 +132,14 @@ export const services = {
       no: "05",
       title: "Website Maintenance & Support",
       glyph: "repair",
-      href: "/services/web-design-development/website-maintenance-support",
+      href: "/web-support-services-dubai",
       body: "Websites break quietly. Plugins go out of date, forms stop sending and security gaps open up. We handle updates, backups, fixes and small content changes so your site stays online and secure.",
     },
     {
       no: "06",
       title: "Web Hosting Services",
       glyph: "heartbeat",
-      href: "/services/web-design-development/web-hosting",
+      href: "/web-hosting-services",
       body: "Hosting affects speed, uptime and search performance more than many businesses realise. We provide managed hosting with regional servers, SSL, daily backups and monitoring so your site stays fast and available.",
     },
     {

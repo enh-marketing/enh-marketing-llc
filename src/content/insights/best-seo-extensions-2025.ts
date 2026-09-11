@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-06-10",
   hero: {
-    src: "/insights/best-seo-extensions-2025/hero.webp",
+    src: "/blog/best-seo-extensions-2025/hero.webp",
     alt: "best google chrome extensions",
     w: 800,
     h: 800
@@ -72,7 +72,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/01.webp",
+        src: "/blog/best-seo-extensions-2025/01.webp",
         alt: "",
         w: 360,
         h: 264,
@@ -140,7 +140,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/02.webp",
+        src: "/blog/best-seo-extensions-2025/02.webp",
         alt: "",
         w: 800,
         h: 500,
@@ -208,7 +208,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/03.webp",
+        src: "/blog/best-seo-extensions-2025/03.webp",
         alt: "",
         w: 1135,
         h: 572,
@@ -276,7 +276,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/04.webp",
+        src: "/blog/best-seo-extensions-2025/04.webp",
         alt: "",
         w: 491,
         h: 429,
@@ -338,7 +338,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/05.webp",
+        src: "/blog/best-seo-extensions-2025/05.webp",
         alt: "",
         w: 1407,
         h: 724,
@@ -400,7 +400,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/06.webp",
+        src: "/blog/best-seo-extensions-2025/06.webp",
         alt: "",
         w: 1280,
         h: 800,
@@ -469,7 +469,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/07.webp",
+        src: "/blog/best-seo-extensions-2025/07.webp",
         alt: "",
         w: 800,
         h: 500,
@@ -531,7 +531,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/08.webp",
+        src: "/blog/best-seo-extensions-2025/08.webp",
         alt: "",
         w: 545,
         h: 379,
@@ -593,7 +593,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/09.webp",
+        src: "/blog/best-seo-extensions-2025/09.webp",
         alt: "",
         w: 640,
         h: 400,
@@ -661,7 +661,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/best-seo-extensions-2025/10.webp",
+        src: "/blog/best-seo-extensions-2025/10.webp",
         alt: "",
         w: 800,
         h: 500,

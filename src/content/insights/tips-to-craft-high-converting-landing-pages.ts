@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-09-03",
   hero: {
-    src: "/insights/tips-to-craft-high-converting-landing-pages/hero.webp",
+    src: "/blog/tips-to-craft-high-converting-landing-pages/hero.webp",
     alt: "b2b lead generation dubai",
     w: 500,
     h: 500
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Landing pages are a critical component of ",
         {
-          a: "/services/lead-generation/b2b-lead-generation",
+          a: "/b2b-lead-generation-dubai",
           children: [
             "lead generation services"
           ]

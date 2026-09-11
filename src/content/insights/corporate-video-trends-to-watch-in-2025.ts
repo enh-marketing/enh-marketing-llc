@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-04-16",
   hero: {
-    src: "/insights/corporate-video-trends-to-watch-in-2025/hero.webp",
+    src: "/blog/corporate-video-trends-to-watch-in-2025/hero.webp",
     alt: "corporate video production in dubai",
     w: 800,
     h: 800
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "The space of the corporate video is increasingly evolving and is driven by technological advancements and changing audience expectations. As the leading ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [
@@ -47,7 +47,7 @@ export const note: Note = {
         },
         ", and for any businesses that are thinking about leveraging the power of ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [
@@ -148,7 +148,7 @@ export const note: Note = {
       text: [
         "In conclusion, the corporate video landscape is defined with innovation, personalization and engagement. For especially a corporate video production company Dubai and any business that is utilising a ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [

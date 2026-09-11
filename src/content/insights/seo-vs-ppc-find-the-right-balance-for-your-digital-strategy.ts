@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-05-08",
   hero: {
-    src: "/insights/seo-vs-ppc-find-the-right-balance-for-your-digital-strategy/hero.webp",
+    src: "/blog/seo-vs-ppc-find-the-right-balance-for-your-digital-strategy/hero.webp",
     alt: "best seo company in dubai",
     w: 1969,
     h: 1969
@@ -36,14 +36,14 @@ export const note: Note = {
       text: [
         "Digital marketing techniques that are effective in increasing website traffic include ",
         {
-          a: "/services/performance-marketing/google-ads",
+          a: "/google-adwords-company-dubai",
           children: [
             "Pay-Per-Click (PPC) advertising"
           ]
         },
         " and Search Engine Optimisation (SEO). However, it might be difficult to strike the correct balance between sponsored PPC ads and organic SEO initiatives, if you’re not partnering with the ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "best SEO company in Dubai"
           ]
@@ -124,7 +124,7 @@ export const note: Note = {
       text: [
         "There is no one-size-fits-all ratio for SEO vs PPC allocation. Test different balances as per your industry and monitor results rigorously. With the right metrics and continuous optimizations led by the leading ",
         {
-          a: "/services/performance-marketing/google-ads",
+          a: "/google-adwords-company-dubai",
           children: [
             "Google Adwords company in Dubai"
           ]

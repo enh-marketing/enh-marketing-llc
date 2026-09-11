@@ -9,7 +9,7 @@ import { NoteRegister } from "@/components/insights/NoteRegister";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
-const HREF = "/insights";
+const HREF = "/blog";
 
 /** Insights — the archive.
  *

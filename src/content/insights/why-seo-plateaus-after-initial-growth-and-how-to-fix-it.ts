@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2026-04-15",
   hero: {
-    src: "/insights/why-seo-plateaus-after-initial-growth-and-how-to-fix-it/hero.webp",
+    src: "/blog/why-seo-plateaus-after-initial-growth-and-how-to-fix-it/hero.webp",
     alt: "SEO Plateaus After Initial Growth",
     w: 1254,
     h: 1254

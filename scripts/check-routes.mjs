@@ -47,7 +47,7 @@ const found = routes();
  *  which menu entries and cross-links may render as links. `/insights/[slug]`
  *  is not an IA node: it serves the articles, which are content, and no menu
  *  or breadcrumb ever points at one. Comparing it against BUILT would demand a
- *  literal "/insights/[slug]" entry, and then isPending() would answer
+ *  literal "/blog/[slug]" entry, and then isPending() would answer
  *  questions about a path no page ever serves.
  *
  *  WHAT IS CHECKED INSTEAD is the thing that can actually break: a dynamic

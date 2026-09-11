@@ -254,7 +254,7 @@ export const faqs: Faq[] = [
   {
     q: "TikTok Ads or Meta Ads?",
     a: "Different strengths. TikTok reaches more UAE adults, usually at lower media cost, and suits discovery and demonstration. Meta has deeper conversion tooling and formats such as click-to-WhatsApp. Many brands run both, producing once and cutting separately for each. See our Meta Ads page.",
-    aLink: { label: "Meta Ads page", href: "/services/performance-marketing/meta-ads" },
+    aLink: { label: "Meta Ads page", href: "/meta-ads-agency-dubai" },
   },
   {
     q: "Do we own the ad account?",

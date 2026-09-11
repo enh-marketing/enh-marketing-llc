@@ -26,7 +26,7 @@ import { OperationsReach } from "@/components/service/OperationsReach";
 /* Drives <Breadcrumbs href={HREF} />. This page is a subpage of the AI Hub,
    not of Services, so it lives at /ai-hub/ and the trail reads
    Home > AI Hub > AI & Automation. See sitemap.ts. */
-const HREF = "/ai-hub/ai-automation";
+const HREF = "/ai-automation-agency-dubai";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 export function AiAutomationPage() {

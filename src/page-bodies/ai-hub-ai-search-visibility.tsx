@@ -26,7 +26,7 @@ import { StickyCTABar } from "@/components/service/StickyCTABar";
 
 /* Drives <Breadcrumbs href={HREF} />. A subpage of the AI Hub, so the trail
    reads Home > AI Hub > AI Search Visibility. See sitemap.ts. */
-const HREF = "/ai-hub/ai-search-visibility";
+const HREF = "/ai-search-visibility-dubai";
 const FORM_TITLE = c.hero.primary;
 
 /* "Run a Free Visibility Check". The client's destination is the contact page.

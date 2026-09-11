@@ -23,7 +23,7 @@ import { StickyCTABar } from "@/components/service/StickyCTABar";
 
 /* Drives <Breadcrumbs href={HREF} />. A subpage of the AI Hub, so the trail
    reads Home > AI Hub > AI Workshops & Training. See sitemap.ts. */
-const HREF = "/ai-hub/ai-workshops-and-training";
+const HREF = "/ai-training-workshops-dubai";
 const FORM_TITLE = c.hero.primary;
 
 export function AiWorkshopsAndTrainingPage() {

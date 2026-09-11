@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2026-02-18",
   hero: {
-    src: "/insights/why-seo-traffic-doesnt-convert-for-b2b-companies-dubai/hero.webp",
+    src: "/blog/why-seo-traffic-doesnt-convert-for-b2b-companies-dubai/hero.webp",
     alt: "seo services in dubai",
     w: 1254,
     h: 1254
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Many B2B companies investing in ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO services in Dubai"
           ]
@@ -81,7 +81,7 @@ export const note: Note = {
       text: [
         "Most ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO agencies in Dubai "
           ]
@@ -186,7 +186,7 @@ export const note: Note = {
       text: [
         "If you are working with an ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO agency in Dubai "
           ]

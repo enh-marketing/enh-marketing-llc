@@ -22,7 +22,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
-const HREF = "/industries/logistics";
+const HREF = "/logistics-marketing-agency";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 /** Logistics — the fourth page under Industries.

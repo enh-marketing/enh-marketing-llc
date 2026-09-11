@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-06-05",
   hero: {
-    src: "/insights/benefits-of-using-corporate-video-production-services-in-dubai-increased-conversions-and-roi/hero.webp",
+    src: "/blog/benefits-of-using-corporate-video-production-services-in-dubai-increased-conversions-and-roi/hero.webp",
     alt: "corporate video production dubai",
     w: 1969,
     h: 1969
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "With the rise of visual content marketing, corporate video has emerged as a powerful communication tool for businesses. Research shows videos increase memorability by up to 650% compared to text alone. Yet, creating high-quality productions demands specialized resources and skills. That's where hiring a professional ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [
@@ -133,7 +133,7 @@ export const note: Note = {
       text: [
         "Enlisting a forward-thinking ",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             {
               b: [

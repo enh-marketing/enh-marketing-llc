@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2022-10-11",
   hero: {
-    src: "/insights/awesome-digital-marketing-trends-in-2022/hero.webp",
+    src: "/blog/awesome-digital-marketing-trends-in-2022/hero.webp",
     alt: "digital marketing company in dubai",
     w: 500,
     h: 500

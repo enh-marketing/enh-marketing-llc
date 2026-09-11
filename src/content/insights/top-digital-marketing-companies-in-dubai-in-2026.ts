@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2026-01-07",
   hero: {
-    src: "/insights/top-digital-marketing-companies-in-dubai-in-2026/hero.webp",
+    src: "/blog/top-digital-marketing-companies-in-dubai-in-2026/hero.webp",
     alt: "Top Digital Marketing Agencies in Dubai",
     w: 1254,
     h: 1254

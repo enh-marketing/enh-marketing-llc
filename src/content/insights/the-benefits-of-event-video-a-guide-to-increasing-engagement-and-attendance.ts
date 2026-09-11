@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2024-12-18",
   hero: {
-    src: "/insights/the-benefits-of-event-video-a-guide-to-increasing-engagement-and-attendance/hero.webp",
+    src: "/blog/the-benefits-of-event-video-a-guide-to-increasing-engagement-and-attendance/hero.webp",
     alt: "event video production in dubai",
     w: 1080,
     h: 1080
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Event organisers are often looking for different ways to better attendee experiences, increase engagement and boost attendance. It is becoming trendy to utilise video to increase engagement for events. Integrating video into event planning with a professional ",
         {
-          a: "/services/video-marketing/event-video",
+          a: "/event-video-production",
           children: [
             {
               b: [
@@ -65,7 +65,7 @@ export const note: Note = {
       text: [
         "Live stream the event with an ",
         {
-          a: "/services/video-marketing/event-video",
+          a: "/event-video-production",
           children: [
             {
               b: [

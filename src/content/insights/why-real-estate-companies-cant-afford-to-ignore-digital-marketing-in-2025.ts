@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-05-07",
   hero: {
-    src: "/insights/why-real-estate-companies-cant-afford-to-ignore-digital-marketing-in-2025/hero.jpg",
+    src: "/blog/why-real-estate-companies-cant-afford-to-ignore-digital-marketing-in-2025/hero.jpg",
     alt: "Digital Marketing Company in Dubai",
     w: 1080,
     h: 1080

@@ -167,7 +167,7 @@ function post(body) {
 const basePayload = {
   formName: "CTA Band",
   pageName: "Google Ads Agency Dubai",
-  pagePath: "/services/performance-marketing/google-ads",
+  pagePath: "/google-adwords-company-dubai",
   pageUrl: "https://enhmedia.com/services/performance-marketing/google-ads",
   token: null,
   action: "submit_cta_band",

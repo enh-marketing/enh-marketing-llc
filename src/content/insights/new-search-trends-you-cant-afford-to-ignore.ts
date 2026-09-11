@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-08-21",
   hero: {
-    src: "/insights/new-search-trends-you-cant-afford-to-ignore/hero.webp",
+    src: "/blog/new-search-trends-you-cant-afford-to-ignore/hero.webp",
     alt: "seo search trends",
     w: 1024,
     h: 1024

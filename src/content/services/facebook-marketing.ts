@@ -124,7 +124,7 @@ export const services = {
   referenceLead:
     "Original filming, photography, animation or presenter-led production can be added through our",
   referenceLabel: "social media content creation",
-  referenceHref: "/services/social-media-marketing/content-creation",
+  referenceHref: "/social-media-content-creation-agency",
   referenceTail: "service when required.",
 };
 
@@ -166,7 +166,7 @@ export const advertising = {
   referenceLead:
     "Detailed paid strategy, advertising budgets and campaign management are covered on our",
   referenceLabel: "Meta Ads services",
-  referenceHref: "/services/performance-marketing/meta-ads",
+  referenceHref: "/meta-ads-agency-dubai",
   referenceTail: "page.",
 };
 

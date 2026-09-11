@@ -162,8 +162,8 @@ export const relatedServices = {
   sentenceLead: "The campaigns driving the traffic sit under",
   sentenceMid: ", and the follow-up after someone enquires sits under",
   links: [
-    { label: "performance marketing", href: "/services/performance-marketing" },
-    { label: "lead generation", href: "/services/lead-generation" },
+    { label: "performance marketing", href: "/performance-marketing-agency-dubai" },
+    { label: "lead generation", href: "/lead-generation-company-dubai" },
   ],
 };
 

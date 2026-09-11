@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-08-06",
   hero: {
-    src: "/insights/3x-search-traffic-through-2-core-updates/hero.webp",
+    src: "/blog/3x-search-traffic-through-2-core-updates/hero.webp",
     alt: "seo agency",
     w: 1024,
     h: 1024

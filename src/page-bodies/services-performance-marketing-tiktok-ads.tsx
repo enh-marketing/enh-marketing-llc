@@ -23,7 +23,7 @@ import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 import { ResultStats } from "@/components/service/ResultStats";
 
-const HREF = "/services/performance-marketing/tiktok-ads";
+const HREF = "/tiktok-advertising-agency-dubai";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 export function TikTokAdsPage() {

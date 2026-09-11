@@ -23,7 +23,7 @@ import { FaqList } from "@/components/service/FaqList";
 import { CtaBand } from "@/components/service/CtaBand";
 import { StickyCTABar } from "@/components/service/StickyCTABar";
 
-const HREF = "/industries/hospitality-hotels";
+const HREF = "/hospitality-marketing-agency";
 const FORM_TITLE = `${c.finalCta.title} ${c.finalCta.strokeTitle}`;
 
 /** Hospitality & Hotels — the second page under Industries.

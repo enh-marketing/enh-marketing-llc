@@ -106,7 +106,7 @@ export const handle = {
   ] as Service[],
   /** The referenced page exists, so this phrase links. */
   reference: "Explore our influencer marketing service",
-  referenceHref: "/services/social-media-marketing/influencer-marketing",
+  referenceHref: "/influencer-marketing-agency-dubai",
 };
 
 /** The volume question, which the document refuses to answer with a number. */

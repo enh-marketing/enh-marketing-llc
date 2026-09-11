@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2026-01-16",
   hero: {
-    src: "/insights/roi-driven-seo-systems-uae/hero.webp",
+    src: "/blog/roi-driven-seo-systems-uae/hero.webp",
     alt: "seo agency in dubai",
     w: 1080,
     h: 1080
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "For many businesses investing in ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO services in Dubai"
           ]
@@ -246,7 +246,7 @@ export const note: Note = {
       text: [
         "If you are investing in ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO services in Dubai"
           ]

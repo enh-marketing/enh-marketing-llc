@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2025-08-21",
   hero: {
-    src: "/insights/search-everywhere-optimization-the-next-evolution-of-seo/hero.webp",
+    src: "/blog/search-everywhere-optimization-the-next-evolution-of-seo/hero.webp",
     alt: "Search Everywhere Optimization",
     w: 1080,
     h: 1080
@@ -50,7 +50,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/search-everywhere-optimization-the-next-evolution-of-seo/01.png",
+        src: "/blog/search-everywhere-optimization-the-next-evolution-of-seo/01.png",
         alt: "",
         w: 562,
         h: 471,
@@ -256,7 +256,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/search-everywhere-optimization-the-next-evolution-of-seo/02.png",
+        src: "/blog/search-everywhere-optimization-the-next-evolution-of-seo/02.png",
         alt: "",
         w: 694,
         h: 493,
@@ -483,7 +483,7 @@ export const note: Note = {
     {
       type: "figure",
       figure: {
-        src: "/insights/search-everywhere-optimization-the-next-evolution-of-seo/03.png",
+        src: "/blog/search-everywhere-optimization-the-next-evolution-of-seo/03.png",
         alt: "",
         w: 648,
         h: 489,
@@ -499,7 +499,7 @@ export const note: Note = {
       text: [
         "SEO is no longer a one-channel game. With Search Everywhere Optimization, your business becomes accessible across every touchpoint — from search engines to social feeds. By working with a forward-thinking ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             {
               b: [

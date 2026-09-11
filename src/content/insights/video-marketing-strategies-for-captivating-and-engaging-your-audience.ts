@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-12-11",
   hero: {
-    src: "/insights/video-marketing-strategies-for-captivating-and-engaging-your-audience/hero.webp",
+    src: "/blog/video-marketing-strategies-for-captivating-and-engaging-your-audience/hero.webp",
     alt: "corporate video production company dubai",
     w: 1653,
     h: 1653
@@ -108,7 +108,7 @@ export const note: Note = {
       text: [
         "By implementing these video marketing strategies with the help of a",
         {
-          a: "/services/video-marketing/corporate-video",
+          a: "/corporate-video-production",
           children: [
             " ",
             {

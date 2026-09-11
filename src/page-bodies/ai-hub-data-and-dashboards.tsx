@@ -26,7 +26,7 @@ import { StickyCTABar } from "@/components/service/StickyCTABar";
 
 /* Drives <Breadcrumbs href={HREF} />. A subpage of the AI Hub, so the trail
    reads Home > AI Hub > Data & Dashboards. See sitemap.ts. */
-const HREF = "/ai-hub/data-and-dashboards";
+const HREF = "/data-dashboard-services-dubai";
 const FORM_TITLE = c.hero.primary;
 
 export function DataAndDashboardsPage() {

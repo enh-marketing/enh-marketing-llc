@@ -25,7 +25,7 @@ export const note: Note = {
   sourceCategory: "News",
   date: "2023-05-10",
   hero: {
-    src: "/insights/tips-to-choose-the-right-seo-company-for-your-business/hero.webp",
+    src: "/blog/tips-to-choose-the-right-seo-company-for-your-business/hero.webp",
     alt: "best seo company in dubai",
     w: 500,
     h: 500
@@ -36,7 +36,7 @@ export const note: Note = {
       text: [
         "Choosing the right SEO company for your business can seem like a daunting task. There are so many companies out there that claim to be the best, and it can be hard to know who to trust. However, with a little research and a bit of luck, you can find a reputable ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "SEO company"
           ]
@@ -110,7 +110,7 @@ export const note: Note = {
       text: [
         "As one of the ",
         {
-          a: "/services/seo",
+          a: "/seo-company-in-dubai",
           children: [
             "best SEO services in Dubai"
           ]

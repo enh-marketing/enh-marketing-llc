@@ -110,7 +110,7 @@ export const types = {
   referenceLead:
     "When customer proof is the main objective, the project can also be scoped through our",
   referenceLabel: "Testimonial Video Production",
-  referenceHref: "/services/video-marketing/testimonial-video",
+  referenceHref: "/testimonial-video-production",
   referenceTail: "service.",
 };
 
