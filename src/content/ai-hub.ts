@@ -285,7 +285,7 @@ export const chart: Beat[] = [
       "Forecast Versus Actual Reporting",
     ],
     quotes: "campaign-intelligence",
-    href: "/campaign-intelligence-dubai",
+    href: "/ai-campaign-intelligence-dubai",
   },
   {
     at: 0.8,
@@ -302,7 +302,7 @@ export const chart: Beat[] = [
       "Data Integration and Preparation",
     ],
     quotes: "data-and-dashboards",
-    href: "/data-dashboard-services-dubai",
+    href: "/ai-data-dashboard-services-dubai",
   },
 ];
 /* ---------------------------------------------------------------- chapter 4 */

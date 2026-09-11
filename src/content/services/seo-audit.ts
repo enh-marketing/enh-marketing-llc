@@ -12,9 +12,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "SEO Audit Services in Dubai | ENH Marketing",
+  title: "SEO Audit Dubai | Technical & Free SEO Audit Services",
   description:
-    "Get a prioritised review of your website's technical health, on-page signals, content, authority and AI visibility, with clear owners and effort estimates for every fix.",
+    "Find SEO issues and improve rankings with SEO audit services in Dubai, including technical SEO audits, on-page checks and actionable recommendations.",
 };
 
 export const hero = {

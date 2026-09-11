@@ -10,9 +10,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Landing Page Development in Dubai | ENH Marketing",
+  title: "Landing Page Development Services Dubai | Expert Solutions",
   description:
-    "Give every paid click a focused, mobile-first destination built around your offer, campaign message and the action you want visitors to take.",
+    "Get high-converting landing page development services in Dubai. Build responsive, SEO-friendly landing pages designed to generate leads and drive conversions.",
 };
 
 export const hero = {

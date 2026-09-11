@@ -35,9 +35,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Event Video Production in Dubai | ENH Marketing",
+  title: "Event Video Production Company Dubai, UAE I Best Videography Services",
   description:
-    "Plan professional coverage for conferences, exhibitions, product launches, seminars, workshops, and corporate events, with every required video agreed before the event begins.",
+    "Looking for the best event video production company in Dubai? Trust the #1 agency to deliver proven results with expert videography services in UAE.",
 };
 
 export const hero = {

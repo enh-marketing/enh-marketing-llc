@@ -19,9 +19,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "B2B Lead Generation Services in Dubai | ENH Marketing",
+  title: "Top B2B Lead Generation Companies in Dubai | Get Leads",
   description:
-    "Reach the right companies and decision-makers through LinkedIn, Google, email and focused landing pages, with qualification and sales handoff agreed before launch.",
+    "Boost your sales pipeline with expert B2B lead generation in Dubai. Drive quality leads, maximize ROI & grow faster. Partner with our team today!",
 };
 
 export const hero = {

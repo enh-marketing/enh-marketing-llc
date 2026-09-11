@@ -13,9 +13,9 @@ import type { Faq, Stage } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Influencer Marketing Agency in Dubai | ENH Marketing",
+  title: "Influencer Marketing Agency Dubai | Expert Influencer Agency",
   description:
-    "Reach the right UAE audiences through carefully selected creators, compliant contracts, clear briefs, content approvals and reporting focused on genuine campaign response.",
+    "Grow your brand with an influencer marketing agency in Dubai. Connect with the right influencers, reach targeted audiences and drive meaningful engagement.",
 };
 
 export const hero = {

@@ -44,9 +44,9 @@
 import { brand, consultationServices } from "@/lib/content";
 
 export const meta = {
-  title: "Contact us | ENH Marketing LLC",
+  title: "Contact Digital Marketing Agency Dubai | ENH Marketing",
   description:
-    "Talk to ENH Marketing in Dubai. Email, phone, live chat, or book a free digital marketing consultation with our strategists.",
+    "Contact ENH Marketing, a leading digital marketing agency in Dubai, for SEO, PPC, web design, social media and AI marketing solutions tailored to your business.",
 };
 
 /* -------------------------------------------------------------------- hero */

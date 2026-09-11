@@ -20,9 +20,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Lead Generation Company in Dubai | ENH Marketing",
+  title: "Lead Generation Company Dubai | Lead Gen Agency & Services",
   description:
-    "Data-driven lead generation services that help UAE businesses attract qualified prospects, increase conversions, and drive consistent growth.",
+    "Generate more qualified leads with a trusted lead generation agency in Dubai. Get targeted lead generation services designed to increase conversions and sales.",
 };
 
 export const hero = {

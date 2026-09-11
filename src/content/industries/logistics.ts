@@ -37,9 +37,9 @@
 import type { Faq } from "@/content/services/performance-marketing";
 
 export const meta = {
-  title: "Logistics Digital Marketing Agency in Dubai | ENH Marketing",
+  title: "Logistics Digital Marketing in Dubai | SEO, PPC & Social Media for Freight Company",
   description:
-    "Generate qualified freight enquiries, requests for quotations and B2B opportunities through logistics SEO, paid advertising, content and LinkedIn marketing.",
+    "Generate qualified shipment enquiries with professional logistics digital marketing services. Expert logistics SEO, freight PPC management, and B2B social media strategies designed to increase visibility and freight requests.",
 };
 
 /* ---------------------------------------------------------------- banner --- */

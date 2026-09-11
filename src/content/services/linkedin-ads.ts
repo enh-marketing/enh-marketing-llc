@@ -18,9 +18,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "LinkedIn Ads Agency in Dubai | ENH Marketing",
+  title: "LinkedIn Advertising Dubai | LinkedIn Ads Agency & Services",
   description:
-    "Reach UAE decision-makers by job title, seniority, company and industry with LinkedIn campaigns planned around deal value, lead quality and pipeline.",
+    "Reach decision-makers with LinkedIn advertising services in Dubai. Drive quality B2B leads with targeted campaigns, engaging ads and measurable results.",
 };
 
 export const hero = {

@@ -34,10 +34,10 @@ import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 import type { Phase } from "@/components/service/CampaignSystem";
 
 export const meta = {
-  title: "Campaign Intelligence in Dubai | ENH Marketing",
+  title: "AI Campaign Intelligence Dubai | AI Campaign Services",
   // The banner's first sentence, verbatim.
   description:
-    "ENH Marketing helps UAE businesses plan campaign budgets using historical performance, relevant benchmarks and forecast ranges.",
+    "Enhance marketing performance with AI campaign intelligence in Dubai. Use AI-powered campaign services to optimize targeting, insights and results.",
 };
 
 /** The channels the document names in Media Mix Planning, in its order, and

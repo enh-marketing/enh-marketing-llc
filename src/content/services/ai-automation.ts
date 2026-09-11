@@ -34,9 +34,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "AI Automation Agency in Dubai | ENH Marketing",
+  title: "AI Automation Agency Dubai | AI Automation Services",
   description:
-    "ENH Marketing builds AI agents, automated workflows and custom tools for UAE businesses. Every project starts with a paid diagnostic that identifies what to automate and what should stay manual.",
+    "Automate business processes with an AI automation agency in Dubai. Get smart AI automation services and solutions designed to improve efficiency and growth.",
 };
 
 export const hero = {

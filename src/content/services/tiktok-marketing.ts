@@ -13,9 +13,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "TikTok Marketing Agency in Dubai | ENH Marketing",
+  title: "TikTok Marketing Agency | TikTok Marketing Services Dubai",
   description:
-    "Plan, film, publish and improve platform-native TikTok content through search-led ideas, community management and reporting shaped around audience response.",
+    "Grow your brand with TikTok marketing services in Dubai. Boost reach, engagement and conversions with creative content strategies tailored to your audience.",
 };
 
 export const hero = {

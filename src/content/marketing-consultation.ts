@@ -46,9 +46,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 export const meta = {
   // Both fields are the document's own H1 and banner sentence, with only the
   // site's standard title suffix added. No meta copy is written here.
-  title: "Digital Marketing Consultant in Dubai | ENH Marketing",
+  title: "Digital Marketing Consulting Services Dubai | Strategy",
   description:
-    "Get a clear digital marketing strategy based on your business goals, current performance, audience and available budget.",
+    "Grow your business with digital marketing consulting services in Dubai. Get expert marketing strategies, insights and actionable plans to drive growth.",
 };
 
 /* ---------------------------------------------------------------- banner --- */

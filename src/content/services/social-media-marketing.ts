@@ -30,9 +30,9 @@ import type { TrackStage } from "@/components/service/StageTrack";
 export type Sector = { label: string; parts: string[] };
 
 export const meta = {
-  title: "Social Media Marketing Agency in Dubai | ENH Marketing",
+  title: "Top Social Media Marketing Agency in Dubai | Hire Experts",
   description:
-    "Build a consistent presence with social media marketing services in Dubai covering strategy, content, account management, campaigns, influencers and paid advertising.",
+    "Boost your brand with leading social media marketing services in Dubai. Drive engagement, sales & growth. Partner with our expert agency today!",
 };
 
 export const hero = {

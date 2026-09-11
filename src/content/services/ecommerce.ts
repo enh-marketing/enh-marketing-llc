@@ -20,9 +20,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Ecommerce Website Development in Dubai | ENH Marketing",
+  title: "Ecommerce Web Development Dubai | Ecommerce Web Design",
   description:
-    "Build a fast, mobile-first ecommerce store with clear navigation, flexible payments, reliable integrations, and tracking designed around how customers in the UAE shop.",
+    "Build high-performing online stores with ecommerce web development in Dubai. Get responsive, user-friendly ecommerce websites designed to drive sales.",
 };
 
 export const hero = {

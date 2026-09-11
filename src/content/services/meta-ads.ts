@@ -7,9 +7,9 @@ import type { Reason, Stage, Faq } from "@/content/services/performance-marketin
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Meta Ads Agency in Dubai | Facebook & Instagram Ads | ENH Marketing",
+  title: "Meta Ads Agency Dubai | Meta Ads Company in Dubai",
   description:
-    "Drive targeted traffic, generate quality leads, and grow your business with high-performing Meta Ads campaigns built for the Dubai market.",
+    "Drive more leads and sales with a Meta Ads agency in Dubai. Create targeted Facebook and Instagram campaigns designed to maximize reach, conversions and ROI.",
 };
 
 export const hero = {

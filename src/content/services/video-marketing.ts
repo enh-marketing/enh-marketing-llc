@@ -24,9 +24,9 @@ import type { TrackStage } from "@/components/service/StageTrack";
 export type Sector = { label: string; parts: string[] };
 
 export const meta = {
-  title: "Video Production Services in Dubai | ENH Marketing",
+  title: "Video Production Company Dubai | Expert Video Agency",
   description:
-    "Create corporate films, event coverage, explainers, testimonials, interviews, animation and social videos planned around where they will be watched.",
+    "Create impactful videos with a leading video production agency in Dubai. From concept to production, we deliver engaging videos that strengthen your brand.",
 };
 
 export const hero = {

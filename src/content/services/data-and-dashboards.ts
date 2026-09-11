@@ -23,10 +23,10 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Data and Dashboard Services in Dubai | ENH Marketing",
+  title: "AI Data Dashboard Services in Dubai | AI Dashboards",
   // The banner's first sentence, verbatim.
   description:
-    "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
+    "Turn complex data into clear insights with AI data dashboard services in Dubai. Build smart, interactive dashboards for faster decisions and better growth.",
 };
 
 export const hero = {

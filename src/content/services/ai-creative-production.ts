@@ -35,10 +35,10 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "AI Creative Production for UAE Brands | ENH Marketing",
+  title: "AI Creative Production UAE | AI Creative Services",
   // The banner's first sentence, verbatim.
   description:
-    "ENH Marketing produces AI-generated videos, UGC-style ads, product imagery, and creative variants for UAE brands.",
+    "Create innovative, high-quality content with AI creative production services in the UAE. Deliver engaging visuals and creative assets faster with AI.",
 };
 
 export const hero = {

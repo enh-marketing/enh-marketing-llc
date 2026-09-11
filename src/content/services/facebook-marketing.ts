@@ -34,9 +34,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Facebook Marketing Agency in Dubai | ENH Marketing",
+  title: "Best Facebook Marketing Agency in Dubai | Get Results",
   description:
-    "Keep your Facebook presence accurate and active through content planning, page management, community support, reporting and paid campaign coordination where required.",
+    "Scale your business with expert Facebook marketing services in Dubai. Drive leads, sales & engagement with our top advertising agency. Start today!",
 };
 
 export const hero = {

@@ -45,9 +45,9 @@
 // source page or in this repository, so the page has no video section.
 
 export const meta = {
-  title: "Client Testimonials | ENH Marketing, Dubai",
+  title: "Digital Marketing Testimonials Dubai | ENH Marketing",
   description:
-    "Twenty ENH Marketing clients in their own words, from Gulf Radiant at fifteen years to Helpsters at two. Read what businesses across Dubai say about our SEO, websites, social media and support.",
+    "Read client testimonials for ENH Marketing and discover how our SEO, PPC, web design and digital marketing services help businesses achieve measurable growth.",
 };
 
 export const STARS = 5;

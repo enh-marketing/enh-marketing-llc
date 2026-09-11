@@ -108,9 +108,9 @@ export default defineConfig({
     "/ai-hub/ai-creative-production": "/ai-creative-production-uae",
     "/ai-hub/ai-search-visibility": "/ai-search-visibility-dubai",
     "/ai-hub/ai-workshops-and-training": "/ai-training-workshops-dubai",
-    "/ai-hub/campaign-intelligence": "/campaign-intelligence-dubai",
+    "/ai-hub/campaign-intelligence": "/ai-campaign-intelligence-dubai",
     "/ai-hub/conversational-ai": "/conversational-ai-services",
-    "/ai-hub/data-and-dashboards": "/data-dashboard-services-dubai",
+    "/ai-hub/data-and-dashboards": "/ai-data-dashboard-services-dubai",
     "/ai-hub/intelligent-web": "/ai-website-development-dubai",
 
     /* -------------------------------------------------------- INDUSTRIES */
@@ -132,6 +132,13 @@ export default defineConfig({
     // /testimonial -> /testimonials) are deleted, not kept: keeping either
     // alongside its reverse is an infinite loop that takes both URLs down.
     "/insights/[slug]": "/blog/[slug]",
+
+    // Added 2026-09-11, hours after the flattening: the meta sheet spells
+    // these two with an "ai-" prefix and the team confirmed it. The
+    // /ai-hub/... redirects above were repointed at the prefixed URLs in the
+    // same edit, so neither of these is a second hop.
+    "/campaign-intelligence-dubai": "/ai-campaign-intelligence-dubai",
+    "/data-dashboard-services-dubai": "/ai-data-dashboard-services-dubai",
 
     /* ------------------------------------------------------ LEGACY, REPOINTED */
     // These predate the flattening. Each one's old target has just moved, so

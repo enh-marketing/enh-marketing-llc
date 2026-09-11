@@ -20,9 +20,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Instagram Marketing Agency in Dubai | ENH Marketing",
+  title: "Instagram Marketing Company Dubai | Instagram Marketer",
   description:
-    "Build a consistent Instagram presence with clear strategy, original content, active community management and reporting focused on qualified enquiries.",
+    "Boost your brand’s visibility with expert Instagram marketing services in Dubai. Our company specializes in tailored strategies to grow your followers,engagement, and conversions.",
 };
 
 export const hero = {

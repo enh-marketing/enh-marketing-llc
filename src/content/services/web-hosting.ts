@@ -38,9 +38,9 @@
 import type { Faq } from "@/content/services/performance-marketing";
 
 export const meta = {
-  title: "Web Hosting Services in Dubai | ENH Marketing",
+  title: "Web Hosting Services UAE | Web Hosting Company Dubai",
   description:
-    "Managed website hosting with regional servers, SSL, daily backups, monitoring and technical support from ENH Marketing.",
+    "Get reliable web hosting services in the UAE with fast, secure hosting solutions from a trusted web hosting company in Dubai for your business website.",
 };
 
 export const hero = {
