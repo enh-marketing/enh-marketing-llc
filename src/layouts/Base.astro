@@ -187,6 +187,23 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
     <script is:inline>
       if (location.search.indexOf("perf") !== -1) {
         (function () {
+          /* ?perf=1&noblur=1 -- AN A/B FOR THE ONE REMAINING STALL.
+             The surviving gap starts while the opaque curtain is sliding off
+             the hero, after the page has finished loading and after the
+             headline has finished animating. That points at paint rather than
+             script: the blurred auroras and the navbar's backdrop-blur are
+             being rasterised for the first time as they are uncovered, and a
+             blur is the most expensive thing on that screen.
+             This switch turns those filters off and changes nothing else, so
+             running the page with and without it isolates paint cost from
+             everything else. It only exists alongside ?perf. */
+          if (location.search.indexOf("noblur") !== -1) {
+            const off = document.createElement("style");
+            off.textContent =
+              ".aurora-a,.aurora-b{filter:none!important}" +
+              "*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}";
+            document.head.appendChild(off);
+          }
           const gaps = [], marks = [], seen = {};
           let last = performance.now(), veil = null;
           function frame(now) {
@@ -243,6 +260,7 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
                 "font:12px/1.45 ui-monospace,Menlo,monospace;padding:10px 12px;border:1px solid #0f0;" +
                 "border-radius:6px;max-height:62vh;overflow:auto;white-space:pre-wrap;word-break:break-word");
               box.textContent =
+                (location.search.indexOf("noblur") !== -1 ? "*** BLURS OFF ***\n" : "*** blurs on ***\n") +
                 "UA " + navigator.userAgent +
                 "\nviewport " + innerWidth + "x" + innerHeight + " dpr" + devicePixelRatio +
                 "\nrequestIdleCallback " + (typeof requestIdleCallback === "function") +
