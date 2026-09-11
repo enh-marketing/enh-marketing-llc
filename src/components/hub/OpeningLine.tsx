@@ -60,6 +60,24 @@ const REST_Y = 0.46;
  *  bit seconds either side, which is what a reader is actually looking at. */
 const SWAP_EVERY = 4000;
 const SWAP_TURN = 600;
+/** HOW FAR UNDER THE HEADING THE SENTENCE SITS, in pixels.
+ *
+ *  A NUMBER OF PIXELS RATHER THAN A FRACTION OF THE WINDOW, AND THAT IS THE
+ *  FIX. Both used to be placed at fractions: the block centred at 0.46 and the
+ *  sentence at 0.66. Those were chosen when the heading was two lines. It is
+ *  three now at every width, which made the block taller, and measured at
+ *  1440x900 the heading's box ran 302 to 569 while the sentence started at
+ *  545: not tight, overlapping, by 24px. No pair of fractions can fix it,
+ *  because the display type is clamped against the viewport and the block's
+ *  height is 0.30 of a short desktop and 0.148 of a phone. So the sentence is
+ *  measured off the bottom of the heading instead and the gap is the same
+ *  optical distance everywhere.
+ *
+ *  38 is a little over two lines of the sentence's own leading, which is what
+ *  separates a standfirst from the heading it belongs to without letting it
+ *  drift off into the picture. */
+const STAND_GAP = 38;
+
 /** Where it gives up the frame, both inside the opener's one viewport. */
 const GO_FROM = 0.40;
 const GO_TO = 0.72;
@@ -250,6 +268,7 @@ export function OpeningLine() {
     <>
       <div
         ref={block}
+        data-hub-line-block
         /* THE COPY SITS LEFT OF THE ROBOT ON A WIDE SCREEN, and that is the
            picture's doing rather than a preference. The figure stands right of
            centre and it is large: centred, the heading ran straight through it
@@ -336,6 +355,21 @@ export function OpeningStandfirst() {
       const early = (1 - clamp(k / 0.35)).toFixed(3);
       el.style.opacity = early;
       el.setAttribute("aria-hidden", +early <= 0.01 ? "true" : "false");
+
+      /* AND WHERE IT SITS, WHICH IS UNDER THE HEADING AND NOT AT A NUMBER.
+         Both live in layers of the same stack on the same rate, so their boxes
+         carry the same transform and the difference between two of their rects
+         is the difference between their untransformed positions. Measuring the
+         heading's bottom against this one's own offsetParent therefore gives a
+         `top` in the layer's own coordinates with the parallax cancelled out.
+         See STAND_GAP. */
+      const line = document.querySelector<HTMLElement>("[data-hub-line-block]");
+      const layer = el.offsetParent as HTMLElement | null;
+      if (line && layer) {
+        const want = line.getBoundingClientRect().bottom - layer.getBoundingClientRect().top + STAND_GAP;
+        const px = `${Math.round(want)}px`;
+        if (el.style.top !== px) el.style.top = px;
+      }
     };
     let raf = 0;
     const loop = () => {
@@ -366,7 +400,8 @@ function Standfirst({ innerRef }: { innerRef?: React.RefObject<HTMLParagraphElem
          under the navbar at z-70. Depth is worth having on a sentence you read
          in one glance and not on one you read in three. */
       className="font-grotesk pointer-events-none absolute inset-x-0 mx-auto max-w-[42ch] px-6 text-center text-[0.95rem] leading-[1.6] text-white/80 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)] lg:right-[30vw]"
-      style={{ top: "66%", transform: "translateY(-50%)", willChange: "opacity" }}
+      /* `top` is written by the loop above, off the heading's own bottom. */
+      style={{ top: "66%", willChange: "opacity" }}
     >
       <Wash w="150%" h="320%" alpha={0.62} />
       <span className="relative">{ASCENT_STANDFIRST}</span>
