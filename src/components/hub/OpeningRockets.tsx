@@ -35,13 +35,17 @@ export function OpeningRockets() {
 
   /* REDUCED MOTION GETS THE POSTER AND NOTHING ELSE. A hero that loops for ever
      is the exact thing the setting is asking us not to do, and the still is a
-     complete picture on its own. */
+     complete picture on its own.
+
+     THERE IS NO `autoplay` ATTRIBUTE, WHICH IS WHY THIS EFFECT EXISTS. The
+     attribute would start the film before anything could ask whether the reader
+     wants motion, and it cannot be conditioned on a media query. Starting it
+     here means the reduced-motion branch never starts it at all. */
   useEffect(() => {
     const el = video.current;
     if (!el) return;
     if (reduced) {
       el.pause();
-      el.removeAttribute("autoplay");
       return;
     }
     /* Autoplay can be refused even muted; if it is, the poster stays, which is
