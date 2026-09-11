@@ -95,32 +95,64 @@ export function Preloader({ onDone }: { onDone: () => void }) {
             <span className="text-xs uppercase text-fog hidden sm:block">Dubai, UAE</span>
           </div>
 
-          {/* NOT AN H1. This is the wordmark on a loading veil, and it was
-              marked up as one -- so the homepage shipped two h1 elements,
-              "Explore." here and the real headline in the hero. Two h1s on the
-              page whose whole job is to rank for one phrase, and the one a
-              crawler met first belonged to a screen that is gone a second
-              later. A `div` with the same classes renders identically: `.mega`
-              is unlayered CSS that applies to any element, and Tailwind's
-              preflight had already reset the heading's own font-size, weight
-              and margin to inherit. */}
-          <div className="overflow-hidden">
-            <motion.div
-              initial={{ y: "110%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display mega font-extrabold uppercase text-snow"
-            >
-              Explore
-              <span className="text-brand">.</span>
-            </motion.div>
+          {/* TWO LINES, EACH RISING FROM ITS OWN MASK. The second is brand red
+              and carries the full stop, so the veil states the same words the
+              hero states underneath it -- "Explore / New Heights." -- rather
+              than the single "Explore." it used to show.
+
+              Each line needs its own overflow-hidden parent: one mask around
+              both would slide them as a block, and the stagger is the point of
+              the reveal.
+
+              AND NEITHER IS A HEADING. This is a wordmark on a loading veil. It
+              was once marked up as an h1, which shipped the homepage two of
+              them -- this one and the real headline in the hero -- on a page
+              whose whole job is to rank for one phrase, with the one a crawler
+              met first belonging to a screen that is gone a second later. A
+              `div` renders identically: `.mega` is unlayered CSS that applies
+              to any element, and Tailwind's preflight had already reset the
+              heading's own font-size, weight and margin to inherit. */}
+          <div>
+            {[
+              { text: "Explore", className: "text-snow", delay: 0.15 },
+              { text: "New Heights.", className: "text-brand", delay: 0.27 },
+            ].map((line) => (
+              <div key={line.text} className="overflow-hidden">
+                <motion.div
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.9, delay: line.delay, ease: [0.16, 1, 0.3, 1] }}
+                  className={`font-display mega font-extrabold uppercase ${line.className}`}
+                >
+                  {line.text}
+                </motion.div>
+              </div>
+            ))}
           </div>
 
-          <div className="flex items-end justify-between">
-            <span className="text-xs uppercase text-fog">
-              Loading the climb
-            </span>
-            <span className="font-display text-5xl font-extrabold tabular-nums text-snow sm:text-6xl">
+          <div className="flex items-end justify-between gap-8">
+            <div className="min-w-0 flex-1 sm:max-w-md">
+              <span className="text-xs uppercase text-fog">
+                Loading the climb
+              </span>
+
+              {/* THE BAR IS DRIVEN BY scaleX, NOT width, AND THAT IS DELIBERATE.
+                  `count` changes on nearly every frame of a 1.9s animation.
+                  Animating `width` puts a layout pass in each of those frames;
+                  a transform is compositor-only and costs none. It matters more
+                  here than almost anywhere on the site, because this element is
+                  on screen during the one stretch when the main thread is busy
+                  hydrating the page behind it -- the moment the iPhone report
+                  was about. */}
+              <div className="mt-3 h-[3px] w-full overflow-hidden rounded-full bg-line">
+                <div
+                  className="h-full w-full origin-left rounded-full bg-brand"
+                  style={{ transform: `scaleX(${count / 100})` }}
+                />
+              </div>
+            </div>
+
+            <span className="font-display shrink-0 text-5xl font-extrabold tabular-nums leading-none text-snow sm:text-6xl">
               {count}
               <span className="text-brand">%</span>
             </span>
