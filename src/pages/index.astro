@@ -1,6 +1,7 @@
 ---
 import Base from "@/layouts/Base.astro";
 import { Experience } from "@/components/Experience";
+import { HomeSections } from "@/components/HomeSections";
 import { availableBadges } from "@/lib/badges";
 
 /* Resolved here rather than in the island for the same reason it was resolved
@@ -30,9 +31,26 @@ const HREF = "/";
   ogTitle="ENH — Explore New Heights"
   ogDescription="A Dubai-based digital growth studio crafting brands, campaigns and experiences that move markets."
 >
-  {/* One island for the whole page. The Preloader hands `started` to the Hero
-      through React state, and nearly every section below runs its own
-      ScrollTrigger, so this tree cannot be split into separate islands without
-      inventing a shared store. See MIGRATION.md. */}
-  <Experience client:load badges={badges} />
+  {/* TWO ISLANDS, NOT ONE, AND THE SPLIT IS BETWEEN THE HERO AND THE REST.
+      This carried a note saying the page could not be split without inventing
+      a shared store. That was true of the state it named -- `started`, handed
+      from Preloader to Hero -- and that state stays inside <Experience>, on
+      one side of the cut. Nothing below the hero reads it, and nothing below
+      takes a React element as a prop either, which is the other thing
+      MIGRATION.md warns island boundaries cannot carry.
+
+      WHY IT HAD TO MOVE. The homepage pulls about a megabyte of uncompressed
+      JavaScript, motion/react alone being 358KB, and every byte of it hydrated
+      in one client:load block. On an iPhone that block runs 3-4 seconds, and
+      it began the instant the preloader's opaque veil lifted -- so the page
+      arrived and then sat there, unresponsive, exactly as reported.
+
+      The hero stays client:load because it has to answer the preloader. The
+      rest hydrates on idle: its markup is server-rendered either way, so
+      nothing is missing or late, only its JavaScript waits for a free main
+      thread. */}
+  <main>
+    <Experience client:load badges={badges} />
+    <HomeSections client:idle />
+  </main>
 </Base>

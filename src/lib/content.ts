@@ -17,12 +17,25 @@ export const brand = {
 
 // Site structure lives in @/lib/sitemap. This file is content only.
 
-// TODO(client): swap in the real profile URLs.
+/** The real profiles, supplied by the team on 2026-09-11.
+ *
+ *  These were four "#" placeholders behind a TODO, which is why the contact
+ *  page deliberately printed no social row at all: a link that goes nowhere is
+ *  worse than an absent one, and `isPending()` exists to catch exactly that.
+ *  Now that every href is a real destination, anything gated on that check
+ *  renders on its own.
+ *
+ *  NOTE THE YOUTUBE HANDLE IS enhmedia, NOT enhmarketing, and that is correct:
+ *  it is a legacy /user/ channel URL predating the rename. Do not "fix" it to
+ *  match the other three. */
+/*  `external: true` on each, which is what FooterLink reads to open the profile
+ *  in a new tab and attach rel="noopener noreferrer". Without it these would
+ *  render as same-tab internal links and navigate the visitor off the site. */
 export const social = [
-  { label: "Facebook", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "YouTube", href: "#" },
+  { label: "Facebook", href: "https://www.facebook.com/enhmarketing", external: true },
+  { label: "Instagram", href: "https://www.instagram.com/enhmarketing/", external: true },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/enh-marketing/", external: true },
+  { label: "YouTube", href: "https://www.youtube.com/user/enhmedia", external: true },
 ];
 
 /** The hero H1, split across the three treatments the design gives it:
@@ -260,6 +273,23 @@ export const crafts: Craft[] = [
   {
     no: "07",
     title: "AI Hub",
+    /*  THE ONLY CARD IN THIS LIST THAT HAD NO HREF, AND SO THE ONLY ONE THAT
+     *  DREW NO "Know More". Craft.tsx renders that link behind
+     *  `craft.href && routeExists(craft.href)`, so a missing href fails the
+     *  first half silently: the card still renders, still reads like the other
+     *  six, and simply cannot be clicked.
+     *
+     *  It dates from when the AI Hub had no landing page of its own and the
+     *  pillar was a heading rather than a destination. It has one now --
+     *  src/pages/ai-hub/index.astro, listed in sitemap.ts as AI_HUB_HREF --
+     *  which is the same omission the navigation carried until it was fixed
+     *  there. Same cause, same fix, one card later.
+     *
+     *  Written as a literal like the six above it. sitemap.ts holds the same
+     *  value as AI_HUB_HREF, but it is a module-local const there and this file
+     *  imports nothing, which is what keeps content and sitemap free of each
+     *  other. routeExists() is what actually guards the link. */
+    href: "/ai-hub",
     tag: "Applied AI",
     body: "Explore AI solutions for marketing, automation and search visibility that improve efficiency, connect systems and support smarter business growth across your organisation.",
     items: ["AI Search Visibility", "AI & Automation", "Conversational AI", "Campaign Intelligence"],

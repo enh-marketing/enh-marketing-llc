@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { cn } from "@/lib/cn";
 import { usePrefersReducedMotion } from "@/lib/useEnhanced";
+import { getLenis } from "@/components/fx/SmoothScroll";
 
 /* Reusable animated SVG adornments — the decorative motion language of V3. */
 
@@ -262,12 +263,27 @@ export function RippleEmblem({ children, className }: { children: React.ReactNod
   );
 }
 
-/** Back-to-top: rotating dashed ring + bouncing arrow. */
+/** Back-to-top: rotating dashed ring + bouncing arrow.
+ *
+ *  IT GOES THROUGH LENIS, NOT window.scrollTo, AND THAT IS NOT OPTIONAL.
+ *  Lenis keeps its own animated scroll position and drives the page from it.
+ *  A bare window.scrollTo moves the document out from under it, the two
+ *  disagree, and Lenis glides the page straight back to where it was -- so the
+ *  button appears to do nothing. src/components/fx/SmoothScroll.tsx exports
+ *  getLenis() for exactly this case and says so in its own comment.
+ *
+ *  The fallback still matters: getLenis() is null before SmoothScroll mounts
+ *  and under prefers-reduced-motion, where Lenis never starts at all. There
+ *  native scrolling is in charge and window.scrollTo is the right call. */
 export function BackToTop() {
   return (
     <button
       aria-label="Back to top"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      onClick={() => {
+        const lenis = getLenis();
+        if (lenis) lenis.scrollTo(0);
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
       className="group relative flex h-12 w-12 items-center justify-center text-snow transition-colors hover:text-brand"
     >
       <motion.svg

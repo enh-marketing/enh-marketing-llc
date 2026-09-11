@@ -246,9 +246,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="grain">
       {chrome && <Navbar client:load pathname={Astro.url.pathname} showThemeToggle={!forceDark} />}
       <slot />
-      {/* Footer carries no state or effects, so it is rendered to plain HTML
-          with no client directive and ships no JavaScript at all. */}
-      {chrome && <Footer />}
+      {/* FOOTER HYDRATES, AND THE COMMENT HERE USED TO SAY IT DID NOT.
+          "Footer carries no state or effects" was true when it was written and
+          has not been since: it renders <BackToTop />, which has an onClick and
+          two infinite motion animations. With no client directive Astro
+          rendered it to static HTML, so the ring never turned and the button
+          did nothing at all -- on every page.
+
+          client:visible rather than client:load: it is the last thing on the
+          page, so it costs nothing until someone scrolls to it, which is also
+          the only moment a back-to-top button is any use. */}
+      {chrome && <Footer client:visible />}
       <FloatingContact client:visible />
     </div>
   </body>

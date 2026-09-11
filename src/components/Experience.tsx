@@ -4,18 +4,25 @@ import { useCallback, useEffect, useState } from "react";
 import type { PartnerBadge } from "@/lib/content";
 import { Preloader } from "@/components/fx/Preloader";
 import { Hero } from "@/components/sections/Hero";
-import { Manifesto } from "@/components/sections/Manifesto";
-import { Craft } from "@/components/sections/Craft";
-import { Work } from "@/components/sections/Work";
-import { AuditStrip } from "@/components/sections/AuditStrip";
-import { WhyENH } from "@/components/sections/WhyENH";
-import { Industries } from "@/components/sections/Industries";
-import { AISection } from "@/components/sections/AISection";
-import { Voices } from "@/components/sections/Voices";
-import { Insights } from "@/components/sections/Insights";
-import { FAQ } from "@/components/sections/FAQ";
-import { LetsTalk } from "@/components/sections/LetsTalk";
 
+/** The preloader and the hero: the only part of the homepage that has to be
+ *  interactive the moment the page arrives.
+ *
+ *  THIS USED TO BE THE WHOLE PAGE. Every section from Manifesto down to FAQ was
+ *  in this one tree, hydrated as a single client:load island. The homepage
+ *  pulls about a megabyte of uncompressed JavaScript -- motion/react alone is
+ *  358KB -- and all of it was parsed and hydrated in one uninterruptible block.
+ *
+ *  On an iPhone that block is 3-4 seconds, and it landed at the worst possible
+ *  instant. The preloader is an opaque fixed veil, so while it covers the
+ *  screen the compositor and the main thread are nearly idle; the entire cost
+ *  arrived the moment it lifted. It read as the page freezing right after the
+ *  preloader, because that is precisely what it did.
+ *
+ *  Everything below the hero now lives in HomeSections and hydrates on idle.
+ *  The split is safe because `started` -- the one piece of shared state
+ *  MIGRATION.md warns about -- never leaves this file: Preloader hands it to
+ *  Hero and nothing else reads it. */
 export function Experience({ badges = [] }: { badges?: PartnerBadge[] }) {
   const [started, setStarted] = useState(false);
 
@@ -30,8 +37,7 @@ export function Experience({ badges = [] }: { badges?: PartnerBadge[] }) {
 
   /** The page hands over on its own, whatever the preloader does.
    *
-   *  Everything below waits on `started`: the hero headline is not rendered
-   *  until it flips, and the trust strip is held at opacity 0. So if the
+   *  The hero headline is not rendered until `started` flips, so if the
    *  handover never arrives the page is left with no headline, which is
    *  exactly what was reported on mobile. The preloader already carries timer
    *  based safety nets of its own, but they are its to run and they only work
@@ -45,31 +51,7 @@ export function Experience({ badges = [] }: { badges?: PartnerBadge[] }) {
   return (
     <>
       <Preloader onDone={handleDone} />
-      <main>
-        <Hero started={started} badges={badges} />
-        <Manifesto />
-        <Craft />
-        {/* "Our Work" is the heading the homepage document gives this
-            section. Passed here rather than changed inside the component,
-            which the seventeen service pages also render. */}
-        <Work heading="Our Work" />
-        <AuditStrip />
-        <WhyENH />
-        {/* The homepage document places the industries section between the
-            Google Partner band and the AI section, so that is where it sits,
-            and the section indices below it all move up one. */}
-        <Industries />
-        <AISection />
-        {/* The enquiry form sits above the route rather than closing the page.
-            Its id is still "contact", so the anchors that point at it -- the
-            carousel's end card, the AI section's CTA and the navbar button --
-            all still land here; they now land mid-page instead of at the
-            bottom. The page closes on the FAQ, with the footer after it. */}
-        <LetsTalk />
-        <Voices />
-        <Insights index="09" />
-        <FAQ />
-      </main>
+      <Hero started={started} badges={badges} />
     </>
   );
 }
