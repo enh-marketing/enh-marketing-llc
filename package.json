@@ -21,7 +21,8 @@
     "check:enquiry:live": "node scripts/check-enquiry-live.mjs",
     "check:recaptcha": "node scripts/check-recaptcha.mjs",
     "check:recaptcha:live": "node scripts/check-recaptcha-live.mjs",
-    "check:live": "node scripts/check-live.mjs"
+    "check:live": "node scripts/check-live.mjs",
+    "check:site": "node scripts/check-site.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.5",
