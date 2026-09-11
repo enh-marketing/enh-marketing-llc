@@ -1,0 +1,32 @@
+---
+import Base from "@/layouts/Base.astro";
+import { AiHubRobotPage } from "@/page-bodies/ai-hub-robot";
+
+/* THE POINTER-REACTIVE OPENING, ON A PAGE OF ITS OWN. The particle field from
+   @avanishverma4 and the Spline robot from @serafimcloud, both answering the
+   cursor, over the same story every other opening tells. Asked for as a version
+   to compare against the cupola rather than as a replacement for it.
+
+   IT IS NOT SHIPPABLE AS IT STANDS AND THE REASON IS IN hub/SplineScene: the
+   robot is Spline's own public demo scene, 1.29MB served from
+   prod.spline.design. Someone else's asset on someone else's origin, which is
+   the dependency that came out of the mountain hero and out of the airlock.
+   Comparing it costs nothing; shipping it would mean commissioning a scene.
+
+   NOINDEX. Same story as /ai-hub behind a different opening, which is a
+   duplicate, and nobody should arrive here from a search result. It is in
+   sitemap.ts's BUILT set only because check:routes requires every real route to
+   be listed, and excluded from the XML sitemap the way /ai-hub/film is. */
+
+const HREF = "/ai-hub/hero-robot";
+---
+
+<Base
+  title="AI Hub, robot opening | ENH Marketing"
+  description="ENH Marketing's AI Hub behind a pointer-reactive opening, kept for review beside the other openings."
+  canonical={HREF}
+  robots="noindex, nofollow"
+  forceDark
+>
+  <AiHubRobotPage client:load />
+</Base>

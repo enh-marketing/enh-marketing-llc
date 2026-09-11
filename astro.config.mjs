@@ -164,7 +164,22 @@ export default defineConfig({
         "gsap/Draggable",
         "three",
         "three/examples/jsm/environments/RoomEnvironment.js",
+        // Lazily imported by hub/SplineScene, so the scanner cannot see it at
+        // start-up at all: it is behind a dynamic import inside a Suspense
+        // boundary on one route. Discovered late it re-optimises mid-flight and
+        // the island hydrates against a second copy of React, which shows as
+        // "Invalid hook call ... more than one copy of React in the same app".
+        "@splinetool/react-spline",
       ],
+    },
+
+    // ONE REACT, WHICH IS NOT THE DEFAULT ONCE A PACKAGE IS PRE-BUNDLED
+    // SEPARATELY. npm has these deduped to a single 19.2.4 - checked - but the
+    // optimiser can still hand a late-discovered package its own copy, and two
+    // Reacts in one tree means every hook in the island throws. Naming them
+    // here makes the resolver collapse them whatever order things load in.
+    resolve: {
+      dedupe: ["react", "react-dom"],
     },
   },
 

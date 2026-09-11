@@ -35,9 +35,10 @@ import * as studies from "@/content/case-studies";
 
 const SITE = "https://enhmedia.com";
 
-/** noindex, and therefore not ours to advertise. It carries the tag itself in
- *  src/pages/ai-hub/film.astro; this keeps the two from disagreeing. */
-const EXCLUDE = new Set(["/ai-hub/film"]);
+/** noindex, and therefore not ours to advertise. Each carries the tag itself,
+ *  in src/pages/ai-hub/film.astro and src/pages/ai-hub/hero-robot.astro; this
+ *  keeps the two statements from disagreeing. */
+const EXCLUDE = new Set(["/ai-hub/film", "/ai-hub/hero-robot"]);
 
 export const GET: APIRoute = () => {
   const routes = [
