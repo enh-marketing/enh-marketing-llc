@@ -309,10 +309,24 @@ export default function AirlockHero({
       window.scrollTo(0, y);
       // Hand scrolling back to Lenis, and tell it where the page actually is
       // so it does not glide back to the position it remembered.
+      //
+      // start() AND resize() DO NOT DO THAT, WHICH IS WHAT THIS COMMENT USED
+      // TO CLAIM. resize() re-reads the document's height and start() lifts
+      // the pause; neither touches the position Lenis has cached, and
+      // fx/SmoothScroll says so in its own note: a bare window.scrollTo leaves
+      // the two disagreeing and Lenis glides the page back. It did exactly
+      // that here, and it was not a cosmetic glide: the page was handed back
+      // at 0, the reader wheeled down to 84, Lenis pulled it to 2 and then 1,
+      // and a falling scroll position at the top is this component's own
+      // signal to take the lock again. Released, re-armed, released, on a page
+      // that would not move. Setting the position immediately is the fix, and
+      // `force` is required because the instance is still stopped at this
+      // point.
       const lenis = getLenis();
       if (lenis) {
-        lenis.start();
         lenis.resize();
+        lenis.scrollTo(y, { immediate: true, force: true });
+        lenis.start();
       }
       released = true;
       lastY = y;

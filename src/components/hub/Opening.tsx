@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import AirlockHero from "@/components/hub/AirlockHero";
 import { HeroHeadline, HeroStandfirst } from "@/components/hub/HeroCopy";
 
@@ -74,25 +74,24 @@ const ease = (v: number) => v * v * (3 - 2 * v);
 
 export function Opening() {
   const cover = useRef<HTMLDivElement>(null);
-  /** THE HATCH OPENS ONCE, AND THAT IS NOT A SIMPLIFICATION.
+  /** THE HATCH CLOSES AGAIN, AND THE FIRST ATTEMPT AT THIS TOOK IT AWAY.
    *
-   *  The component is built to take the lock again when the reader climbs back
-   *  to the top, so the film runs backwards and the hatch closes. That works
-   *  when the hero is a block of the page, because there is a viewport of it to
-   *  climb through before the rule can fire. Fixed over the page there is not:
-   *  the page is handed back at scrollY 0, which is also the position the rule
-   *  re-arms at, so the first scroll event that reports a lower number than the
-   *  last one takes the lock straight back. Measured: released, wheeled down to
-   *  84, and the next samples read 2 and then 1 with the body pinned again. The
-   *  reader is on a page that will not move.
+   *  The component is built to take the lock back when the reader climbs to
+   *  the top, so the film runs backwards and the hatch closes on them. That
+   *  broke when the opening stopped being a block of the page: the page is
+   *  handed back at scrollY 0, which is also where the rule re-arms, so it
+   *  seized the wheel again the moment it let go. The answer was to unmount it,
+   *  which cured the trap by removing the behaviour: scroll down once and the
+   *  opening was gone for the rest of the visit.
    *
-   *  So it leaves when its push is finished. The component's own effect cleanup
-   *  is what does the work: it releases the lock, restores the body, the scroll
-   *  position and Lenis. The reader never sees it go, because by then the cover
-   *  is at zero and what is behind it has been on screen for a moment already.
-   *  It also saves a gesture: the component otherwise waits for one more push
-   *  before handing the page back, and that push has nothing left to move. */
-  const [gone, setGone] = useState(false);
+   *  It was the wrong cure and it was treating a symptom. What pulled the page
+   *  back up to 0 was Lenis, gliding to the position it had cached before the
+   *  lock, because releaseLock told it to start without telling it where the
+   *  page now was. That is fixed where it happens, in hub/AirlockHero, and the
+   *  component keeps its own behaviour: climb to the top and it takes the
+   *  wheel again at full progress, and every gesture upward from there rewinds
+   *  the push and then the film. The way out and the way back in are the same
+   *  move in opposite directions. */
 
   /** The push, 0 to 1 across the hold. Written on the component's own painted
    *  frame rather than on a ticker of our own, so it cannot land a frame away
@@ -135,7 +134,6 @@ export function Opening() {
   const onProgress = (p: number) => {
     push.current = ease(clamp((p - REVEAL_FROM) / (1 - REVEAL_FROM)));
     draw();
-    if (push.current >= CLEAR_AT) setGone(true);
   };
 
   useEffect(() => {
@@ -166,7 +164,6 @@ export function Opening() {
       className="fixed inset-0 z-40 origin-center will-change-transform"
       style={{ transformOrigin: "50% 50%" }}
     >
-      {gone ? null : (
       <AirlockHero
         /* Ours, on our origin. The component's defaults are the author's files
            on jsDelivr. See the note at the top of hub/AirlockHero. */
@@ -186,7 +183,6 @@ export function Opening() {
         skipLabel="Skip the intro"
         onProgress={onProgress}
       />
-      )}
     </div>
   );
 }
