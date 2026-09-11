@@ -372,20 +372,39 @@ summary {
   }
 }
 
-/* Aurora blobs behind hero */
+/* Aurora blobs behind hero.
+ *
+ *  THESE DRIFT, THEY NO LONGER SCALE, AND THAT IS THE WHOLE FIX FOR iOS.
+ *
+ *  Every one of them is a 36-46vw square carrying filter: blur(120-150px), and
+ *  184 of the site's 188 pages render three or four of them. A blur is
+ *  resolution-dependent, so `scale()` inside the keyframes meant the GPU could
+ *  never reuse a rasterisation: it re-rendered a 150px-radius blur on three or
+ *  four layers, every frame, forever.
+ *
+ *  Desktop and most Android absorb that. iOS Safari enforces a hard per-tab
+ *  GPU memory budget and does not error when it is exceeded -- the renderer
+ *  simply hangs, leaving a page that is painted and present in the DOM but
+ *  will not respond to touch. That is the "freezes after the preloader" report:
+ *  the preloader is an opaque fixed veil, so the compositor is nearly idle
+ *  while it covers the screen, and the whole cost lands the instant it lifts.
+ *
+ *  translate() alone is compositor-only: the blurred layer is rasterised once
+ *  and then just moved. The drift is unchanged; only the size pulse is gone,
+ *  which is not visible on a shape with a 150px blur on its edge. */
 @keyframes drift-a {
 
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate(0, 0);
   }
 
   33% {
-    transform: translate(8vw, -6vh) scale(1.15);
+    transform: translate(8vw, -6vh);
   }
 
   66% {
-    transform: translate(-6vw, 5vh) scale(0.92);
+    transform: translate(-6vw, 5vh);
   }
 }
 
@@ -393,15 +412,15 @@ summary {
 
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate(0, 0);
   }
 
   40% {
-    transform: translate(-9vw, 7vh) scale(1.2);
+    transform: translate(-9vw, 7vh);
   }
 
   70% {
-    transform: translate(5vw, -5vh) scale(0.9);
+    transform: translate(5vw, -5vh);
   }
 }
 
@@ -411,6 +430,25 @@ summary {
 
 .aurora-b {
   animation: drift-b 21s ease-in-out infinite;
+}
+
+/* AND ON A PHONE, NOTHING MOVES AT ALL.
+ *
+ *  A phone has the least GPU headroom and the smallest viewport, so it both
+ *  suffers most and shows the drift least -- at 390px wide an 8vw excursion is
+ *  31px, behind a 150px blur. Holding the blobs still lets the compositor
+ *  rasterise each one once for the life of the page, and halving the radius
+ *  cuts the offscreen buffer each one needs to about a quarter.
+ *
+ *  The glow itself is untouched: same colour, same size, same opacity, same
+ *  position. This removes work, never the design. */
+@media (max-width: 768px), (pointer: coarse) {
+
+  .aurora-a,
+  .aurora-b {
+    animation: none;
+    filter: blur(70px);
+  }
 }
 
 /* Marching dashes for decorative SVG routes */
