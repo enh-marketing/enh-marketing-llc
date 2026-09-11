@@ -52,7 +52,31 @@ import { HeroHeadline, HeroStandfirst } from "@/components/hub/HeroCopy";
  *  of stopping dead, and the standfirst is fully up for all of it. The push is
  *  what that landing is for. Before it, the film is still running and pushing
  *  the frame would fight the shot. */
-const REVEAL_FROM = 3200 / (3200 + 1100);
+/** The component's own default scrub, restated because the split between the
+ *  film and the hold is arithmetic here and cannot be allowed to drift. */
+const SCRUB = 3200;
+/** LONGER THAN THE COMPONENT'S 1100, because the hold now has two jobs in
+ *  order rather than one. At 1100 the sentence had to clear and the push had
+ *  to run inside the same 1100px of wheel, and one of them was always rushed.
+ *  1800 gives the sentence about 680 and the push about 1120. */
+const HOLD = 1800;
+const REVEAL_FROM = SCRUB / (SCRUB + HOLD);
+
+/** THE SENTENCE GOES FIRST, THEN THE PICTURE. IN THAT ORDER, AND IT WAS NOT.
+ *
+ *  The two used to run together: the cover faded from the first pixel of the
+ *  hold, so half way through it the standfirst was still legible at half
+ *  opacity and the first chapter's card was legible behind it, scaled across
+ *  each other. Two documents at once, which is not a dissolve, it is a
+ *  collision. Reported as the second section starting before the text had
+ *  faded.
+ *
+ *  So the hold is cut in two. For this much of it the only thing that happens
+ *  is the sentence going out, with the picture held still and opaque. The push
+ *  starts on an empty frame, and from there the only things crossing are a
+ *  photograph and a scene. */
+const TEXT_OUT = 0.38;
+
 /** How far in, at the end. 2.6 reads as going through the gap rather than as
  *  the picture growing: at 1.4 the Earth simply gets bigger and stays. */
 const PUSH_TO = 2.6;
@@ -70,10 +94,11 @@ const CLEAR_AT = 0.98;
 const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 /** Smooth at both ends. The reader's input is already lerped by the component,
  *  so what this has to do is start and stop without a corner. */
-const ease = (v: number) => v * v * (3 - 2 * v);
+const smooth = (v: number) => v * v * (3 - 2 * v);
 
 export function Opening() {
   const cover = useRef<HTMLDivElement>(null);
+  const stand = useRef<HTMLSpanElement>(null);
   /** THE HATCH CLOSES AGAIN, AND THE FIRST ATTEMPT AT THIS TOOK IT AWAY.
    *
    *  The component is built to take the lock back when the reader climbs to
@@ -101,7 +126,12 @@ export function Opening() {
   const draw = () => {
     const el = cover.current;
     if (!el) return;
-    const k = push.current;
+    const held = push.current;
+    /* The sentence out over the first stretch, the picture through the screen
+       over the rest. Smoothed, so neither starts or stops on a corner. */
+    const text = smooth(clamp(held / TEXT_OUT));
+    const k = smooth(clamp((held - TEXT_OUT) / (CLEAR_AT - TEXT_OUT)));
+    if (stand.current) stand.current.style.opacity = (1 - text).toFixed(3);
     /* NOT IN CHARGE UNLESS THE PAGE IS AT THE TOP, and this is not a nicety.
        A cover is only safe to be opaque while something is holding the page
        still underneath it. The component takes its lock on mount only if the
@@ -113,7 +143,7 @@ export function Opening() {
        off the scroll instead: pinned means scrollY is 0, so at the top it is
        either in charge or about to be, and anywhere else it is not. */
     const atTop = window.scrollY <= 1;
-    const shown = atTop ? 1 - clamp(k / CLEAR_AT) : 0;
+    const shown = atTop ? 1 - k : 0;
     /* ONE `transform`, NOT A `scale` UTILITY. Tailwind v4 writes scale and
        translate as their own CSS properties, so a utility and an inline
        transform compose instead of one overriding the other, and the element
@@ -132,7 +162,9 @@ export function Opening() {
   };
 
   const onProgress = (p: number) => {
-    push.current = ease(clamp((p - REVEAL_FROM) / (1 - REVEAL_FROM)));
+    /* Raw here, eased where it is spent: the two halves of the hold have their
+       own curves and easing twice would flatten both. */
+    push.current = clamp((p - REVEAL_FROM) / (1 - REVEAL_FROM));
     draw();
   };
 
@@ -144,6 +176,7 @@ export function Opening() {
     window.addEventListener("scroll", onScroll, { passive: true });
     draw();
     const el = cover.current;
+    const text = stand.current;
     return () => {
       window.removeEventListener("scroll", onScroll);
       /* The reader can leave mid-push and come back to a cover still scaled
@@ -154,6 +187,7 @@ export function Opening() {
         el.style.opacity = "";
         el.style.visibility = "";
       }
+      if (text) text.style.opacity = "";
     };
   }, []);
 
@@ -174,8 +208,10 @@ export function Opening() {
            #0d0705 is a warm brown that would show as a seam at both ends. The
            warmth on this page is carnelian and it belongs to one word. */
         theme="vacuum"
+        scrubDistance={SCRUB}
+        holdDistance={HOLD}
         title={<HeroHeadline />}
-        tagline={<HeroStandfirst />}
+        tagline={<HeroStandfirst innerRef={stand} />}
         /* NO WORD UNDER THE ARROW, asked for. The arrow is the instruction and
            it is already moving; a label under it is the page explaining its own
            interface, which is the one thing a hero like this cannot afford. */

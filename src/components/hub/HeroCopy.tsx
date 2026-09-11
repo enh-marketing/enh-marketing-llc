@@ -269,9 +269,25 @@ export function HeroHeadline() {
  *  one piece of written copy on a page of quoted copy. The slot sets it bold at
  *  up to 40px, which is a statement and not a paragraph; four lines at that
  *  size is a wall. This is the size it was on the mountain. */
-export function HeroStandfirst() {
+export function HeroStandfirst({
+  innerRef,
+}: {
+  /** THE SENTENCE GOES BEFORE THE PICTURE DOES, and the caller owns that.
+   *  The component brings this in over the last fifth of the film and then
+   *  holds it up for the whole of the hold, which is right until the hold is
+   *  also where the page pushes through to the next scene: the sentence was
+   *  still fully legible while the first chapter's card was legible behind it,
+   *  two blocks of copy crossing each other. hub/Opening writes this one's
+   *  opacity down to nothing before it starts the push. Multiplied, not
+   *  fought: the component keeps writing the wrapper's opacity every frame and
+   *  this is a span inside it. */
+  innerRef?: React.RefObject<HTMLSpanElement | null>;
+}) {
   return (
-    <span className="font-grotesk mx-auto block max-w-[42ch] text-[0.95rem] font-normal leading-[1.6] tracking-normal text-white/85 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)] sm:text-[1.05rem]">
+    <span
+      ref={innerRef}
+      className="font-grotesk mx-auto block max-w-[42ch] text-[0.95rem] font-normal leading-[1.6] tracking-normal text-white/85 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)] sm:text-[1.05rem]"
+    >
       {ASCENT_STANDFIRST}
     </span>
   );
