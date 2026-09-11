@@ -187,7 +187,7 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
     <script is:inline>
       if (location.search.indexOf("perf") !== -1) {
         (function () {
-          const gaps = [], marks = [];
+          const gaps = [], marks = [], seen = {};
           let last = performance.now(), veil = null;
           function frame(now) {
             const d = now - last;
@@ -198,6 +198,35 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
               const t = getComputedStyle(c).transform;
               const y = t && t.indexOf("matrix") === 0 ? parseFloat(t.split(",")[5]) : 0;
               if (y < -2) { veil = Math.round(now); marks.push("veil lifts " + veil + "ms"); }
+            }
+            /* NAME WHAT IS RUNNING, not just when the page stalls. One 1648ms
+               gap survived at 5525ms and the candidates all fire within a few
+               hundred ms of each other -- the hero's per-character reveal, the
+               curtain unmounting, and the below-fold island hydrating. These
+               marks put a timestamp on each so the gap can be attributed to one
+               of them instead of argued about. */
+            /* The animated glyph is the innermost span, and it carries a
+               rotation as well as the rise, so read ty out of the matrix
+               rather than matching on a string. */
+            const ch = document.querySelector('h2 span[aria-hidden="true"]');
+            if (ch) {
+              const t2 = getComputedStyle(ch).transform;
+              const y2 = t2 && t2.indexOf("matrix") === 0 ? parseFloat(t2.split(",")[5]) : 0;
+              if (!seen.charsMove && Math.abs(y2) > 0.5) {
+                seen.charsMove = 1; marks.push("hero chars masked at " + Math.round(now) + "ms");
+              }
+              if (!seen.charsDone && Math.abs(y2) <= 0.5) {
+                seen.charsDone = 1; marks.push("hero chars revealed " + Math.round(now) + "ms");
+              }
+            }
+            if (!seen.curtainGone && veil !== null && !c) {
+              seen.curtainGone = 1; marks.push("curtain unmounted " + Math.round(now) + "ms");
+            }
+            const pend = document.querySelectorAll("astro-island[ssr]").length;
+            if (seen.pend === undefined) seen.pend = pend;
+            if (pend < seen.pend) {
+              seen.pend = pend;
+              marks.push("an island hydrated " + Math.round(now) + "ms (" + pend + " left)");
             }
             requestAnimationFrame(frame);
           }
