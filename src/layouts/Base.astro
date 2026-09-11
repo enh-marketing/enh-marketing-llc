@@ -169,6 +169,72 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
     <Font cssVariable="--font-inter" preload />
     <Font cssVariable="--font-cabinet" preload={[{ weight: 800 }]} />
 
+    {/* ON-DEVICE PERFORMANCE READOUT, off unless the URL carries ?perf=1.
+        Nothing below runs, and no listener is registered, on a normal visit.
+
+        WHY IT EXISTS. The iPhone stall could not be reproduced here: there is
+        no full Xcode on the build machine, so no iOS Simulator, and the
+        headless-Chromium harness in scripts/check-mainthread.mjs leans on the
+        longtask PerformanceObserver, which SAFARI DOES NOT IMPLEMENT. It was
+        therefore never measuring the browser being complained about. Four
+        rounds of fixes went out on inference.
+
+        So this measures the one thing every browser can report: the gap
+        between animation frames. A frozen main thread cannot paint, so a
+        freeze IS a long gap, whatever caused it -- script, layout, GPU or
+        WebKit's own compositor. It needs no cable, no Mac and no Web
+        Inspector; load the page with ?perf=1 and screenshot the panel. */}
+    <script is:inline>
+      if (location.search.indexOf("perf") !== -1) {
+        (function () {
+          var gaps = [], last = performance.now(), marks = [], veil = null;
+          function frame(now) {
+            var d = now - last;
+            if (d > 100) gaps.push({ at: Math.round(last), ms: Math.round(d) });
+            last = now;
+            var c = document.querySelector('div[class*="z-[100]"]');
+            if (c && veil === null) {
+              var t = getComputedStyle(c).transform;
+              var y = t && t.indexOf("matrix") === 0 ? parseFloat(t.split(",")[5]) : 0;
+              if (y < -2) { veil = Math.round(now); marks.push("veil lifts " + veil + "ms"); }
+            }
+            requestAnimationFrame(frame);
+          }
+          requestAnimationFrame(frame);
+
+          addEventListener("load", function () {
+            setTimeout(function () {
+              var n = performance.getEntriesByType("navigation")[0] || {};
+              var after = gaps.filter(function (g) { return veil !== null && g.at >= veil; });
+              var worst = gaps.slice().sort(function (a, b) { return b.ms - a.ms; })[0];
+              var box = document.createElement("div");
+              box.setAttribute("style",
+                "position:fixed;inset:auto 8px 8px 8px;z-index:2147483647;background:#000;color:#0f0;" +
+                "font:12px/1.45 ui-monospace,Menlo,monospace;padding:10px 12px;border:1px solid #0f0;" +
+                "border-radius:6px;max-height:62vh;overflow:auto;white-space:pre-wrap;word-break:break-word");
+              box.textContent =
+                "UA " + navigator.userAgent +
+                "\nviewport " + innerWidth + "x" + innerHeight + " dpr" + devicePixelRatio +
+                "\nrequestIdleCallback " + (typeof requestIdleCallback === "function") +
+                "\nlongtask API " + (typeof PerformanceObserver === "function" &&
+                  (PerformanceObserver.supportedEntryTypes || []).indexOf("longtask") !== -1) +
+                "\ndomInteractive " + Math.round(n.domInteractive || 0) + "ms" +
+                "\ndomComplete " + Math.round(n.domComplete || 0) + "ms" +
+                "\n" + marks.join("\n") +
+                "\n\nFRAME GAPS >100ms  (a freeze is a gap)" +
+                "\ntotal " + gaps.length + "   worst " + (worst ? worst.ms + "ms at " + worst.at + "ms" : "none") +
+                "\nAFTER THE VEIL: " + (veil === null ? "veil not seen" :
+                  after.length + " gap(s), " + after.reduce(function (s, g) { return s + g.ms; }, 0) + "ms total") +
+                "\n\n" + gaps.slice(0, 22).map(function (g) {
+                  return String(g.at) + "ms  " + g.ms + "ms" + (veil !== null && g.at >= veil ? "  <-- after veil" : "");
+                }).join("\n");
+              document.body.appendChild(box);
+            }, 6000);
+          });
+        })();
+      }
+    </script>
+
     {/* Was <Script strategy="beforeInteractive">. An inline is:raw script in
         the head is the Astro equivalent and runs at the same point: before
         first paint, so a reader who opted into light never sees dark first. */}
