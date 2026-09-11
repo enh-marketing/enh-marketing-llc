@@ -432,22 +432,114 @@ summary {
   animation: drift-b 21s ease-in-out infinite;
 }
 
-/* AND ON A PHONE, NOTHING MOVES AT ALL.
+/* AND ON A PHONE THE GLOW IS DRAWN, NOT BLURRED.
  *
  *  A phone has the least GPU headroom and the smallest viewport, so it both
  *  suffers most and shows the drift least -- at 390px wide an 8vw excursion is
  *  31px, behind a 150px blur. Holding the blobs still lets the compositor
- *  rasterise each one once for the life of the page, and halving the radius
- *  cuts the offscreen buffer each one needs to about a quarter.
+ *  rasterise each one once for the life of the page.
  *
- *  The glow itself is untouched: same colour, same size, same opacity, same
- *  position. This removes work, never the design. */
+ *  HOLDING THEM STILL WAS NOT ENOUGH, AND THE DEVICE SAID SO. `?perf=1`
+ *  against `?perf=1&noblur=1` -- same iPhone on iOS 18.7, same page, minutes
+ *  apart, the switch turning off these two filters and nothing else:
+ *
+ *      blurs on    AFTER THE VEIL: 1 gap, 1634ms  (the worst gap of the load)
+ *      blurs off   AFTER THE VEIL: 5 gaps, 808ms  (worst of them 163ms)
+ *
+ *  So the whole 1.6s stall is these filters being rasterised as the opaque
+ *  preloader uncovers them. It lands on the curtain's unmount, which is why it
+ *  was never script and never hydration: the page had finished loading 2.7s
+ *  earlier and the headline had finished animating 300ms before it.
+ *
+ *  A disc convolved with a Gaussian is radially symmetric with a smooth
+ *  falloff, which is the definition of a radial gradient. So on a phone the
+ *  glow stops being a blurred disc and becomes the shape a blurred disc HAS.
+ *  A gradient is painted straight into the tile: no offscreen buffer, no
+ *  convolution, and nothing to allocate at the moment the curtain lifts.
+ *
+ *  The numbers are that convolution integrated, not taste:
+ *
+ *    --aurora-peak  the centre value, 1 - exp(-R^2 / 2s^2). A blur this wide
+ *                   relative to its disc does not preserve the authored alpha
+ *                   -- at 25%, a 44vw disc peaks at 15% and a 30vw one at 8.7%
+ *                   -- so it is the one number that has to vary by size, and
+ *                   the size is already there in the class attribute.
+ *    scale 3.26     a blurred disc dies out around R + 3s, which is about
+ *                   3.3x the authored box at every size the site uses.
+ *    the stops      the profile itself, sampled every tenth.
+ *
+ *  Checked against the real blur across all 31 auroras in src/: worst
+ *  difference 4/255, typically 1/255. Same colour, same size, same position,
+ *  same opacity. This removes work, never the design. */
 @media (max-width: 768px), (pointer: coarse) {
 
   .aurora-a,
   .aurora-b {
+    --aurora-peak: 0.53;
+    --aurora-falloff: radial-gradient(closest-side,
+        rgb(0 0 0 / calc(var(--aurora-peak) * 1)) 0%,
+        rgb(0 0 0 / calc(var(--aurora-peak) * 0.944)) 10%,
+        rgb(0 0 0 / calc(var(--aurora-peak) * 0.791)) 20%,
+        rgb(0 0 0 / calc(var(--aurora-peak) * 0.585)) 30%,
+        rgb(0 0 0 / calc(var(--aurora-peak) * 0.380)) 40%,
+        rgb(0 0 0 / calc(var(--aurora-peak) * 0.214)) 50%,
+        rgb(0 0 0 / calc(var(--aurora-peak) * 0.104)) 60%,
+        rgb(0 0 0 / calc(var(--aurora-peak) * 0.043)) 70%,
+        rgb(0 0 0 / calc(var(--aurora-peak) * 0.008)) 85%,
+        transparent 100%);
+
     animation: none;
-    filter: blur(70px);
+    filter: none;
+    /* `scale` is its own property in Tailwind v4, so this composes with the
+       `-translate-x-1/2` some of these carry rather than cancelling it. */
+    scale: 3.26;
+    -webkit-mask-image: var(--aurora-falloff);
+    mask-image: var(--aurora-falloff);
+  }
+
+  .aurora-a[class~="h-[30vw]"],
+  .aurora-b[class~="h-[30vw]"] {
+    --aurora-peak: 0.346;
+  }
+
+  .aurora-a[class~="h-[32vw]"],
+  .aurora-b[class~="h-[32vw]"] {
+    --aurora-peak: 0.383;
+  }
+
+  .aurora-a[class~="h-[34vw]"],
+  .aurora-b[class~="h-[34vw]"] {
+    --aurora-peak: 0.420;
+  }
+
+  .aurora-a[class~="h-[36vw]"],
+  .aurora-b[class~="h-[36vw]"] {
+    --aurora-peak: 0.457;
+  }
+
+  .aurora-a[class~="h-[38vw]"],
+  .aurora-b[class~="h-[38vw]"] {
+    --aurora-peak: 0.494;
+  }
+
+  .aurora-a[class~="h-[40vw]"],
+  .aurora-b[class~="h-[40vw]"] {
+    --aurora-peak: 0.530;
+  }
+
+  .aurora-a[class~="h-[42vw]"],
+  .aurora-b[class~="h-[42vw]"] {
+    --aurora-peak: 0.565;
+  }
+
+  .aurora-a[class~="h-[44vw]"],
+  .aurora-b[class~="h-[44vw]"] {
+    --aurora-peak: 0.599;
+  }
+
+  .aurora-a[class~="h-[46vw]"],
+  .aurora-b[class~="h-[46vw]"] {
+    --aurora-peak: 0.631;
   }
 }
 
