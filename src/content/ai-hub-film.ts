@@ -67,7 +67,7 @@ export const filmCategories: Beat[] = [
     title: "Campaign Intelligence",
     body: "ENH Marketing helps UAE businesses plan campaign budgets using historical performance, relevant benchmarks and forecast ranges.",
     quotes: "campaign-intelligence",
-    href: "/campaign-intelligence-dubai",
+    href: "/ai-campaign-intelligence-dubai",
   },
   {
     at: 0.72,
@@ -83,7 +83,7 @@ export const filmCategories: Beat[] = [
     title: "Data & Dashboards",
     body: "ENH Marketing builds live reporting dashboards and marketing attribution systems for UAE businesses.",
     quotes: "data-and-dashboards",
-    href: "/data-dashboard-services-dubai",
+    href: "/ai-data-dashboard-services-dubai",
   },
   {
     at: 0.94,
