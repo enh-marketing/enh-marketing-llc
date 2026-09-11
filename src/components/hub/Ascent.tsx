@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { ParallaxLayers } from "@/components/fx/ParallaxLayers";
 import { OpeningLine, OpeningStandfirst } from "@/components/hub/OpeningLine";
-import { BACK, FRONT, LAYER_IMG } from "@/components/hub/parallaxAssets";
+import { BACK, FRONT, LAYER_IMG, LAYER_POS } from "@/components/hub/parallaxAssets";
 import { SunBridge } from "@/components/hub/SunBridge";
 import { BACK_RATE } from "@/components/hub/sun";
 
@@ -53,7 +53,7 @@ export function Ascent() {
         className="h-screen w-full"
         stageClassName="bg-[#0b0f14]"
         layers={[
-          { y: BACK_RATE, children: <img src={BACK} alt="" aria-hidden loading="eager" className={LAYER_IMG} /> },
+          { y: BACK_RATE, children: <img src={BACK} alt="" aria-hidden loading="eager" className={LAYER_IMG} style={LAYER_POS} /> },
           // The sun's own light, at the sun's own rate, behind everything the
           // photograph puts in front of it.
           { y: BACK_RATE, children: <SunBridge frame={frame} /> },
@@ -75,16 +75,28 @@ export function Ascent() {
              line lags by 55, which is the rate it was already using. What is
              new is that the stack's ScrollTrigger writes it, on the frame it
              writes the mountain, so the two can no longer disagree. */
-          { y: LINE_RATE, children: <OpeningLine /> },
           {
-            y: 10,
+            y: 0,
             className: "hub-foreground",
-            children: <img src={FRONT} alt="" aria-hidden loading="eager" className={LAYER_IMG} />,
+            children: <img src={FRONT} alt="" aria-hidden loading="eager" className={LAYER_IMG} style={LAYER_POS} />,
           },
-          /* AND THE STANDFIRST OVER THE TOP OF IT, on the same rate so the two
-             travel together. The heading wants the man in front of it; a
-             paragraph with a shoulder through the middle is just words the
-             reader cannot have. */
+          /* THE LINE AND THE SENTENCE BOTH GO OVER THE NEAR PLATE NOW, and on
+             the mountain the line went under it. That was the effect and it
+             was asked for: the heading passed behind the climber, one
+             photograph deep rather than type laid on a picture.
+
+             THE CUPOLA CANNOT DO IT. The mountain's near plate was the bottom
+             quarter of the frame and the line sat at 0.46, clear above it.
+             This one is the window we are looking out of: 66 per cent of the
+             frame is opaque, mullions and sill and robot, and the line's own
+             rows are most of the way through it. Put under it the heading
+             simply did not paint - measured at 390x844, laid out at top 347
+             and 278 wide, at full opacity, and not a letter of it on screen.
+
+             So the depth is bought elsewhere. The line has its own ground now
+             (see Wash in hub/OpeningLine) and the picture keeps its structure
+             in front of the view rather than in front of the words. */
+          { y: LINE_RATE, children: <OpeningLine /> },
           { y: LINE_RATE, children: <OpeningStandfirst /> },
         ]}
       />

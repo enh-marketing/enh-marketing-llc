@@ -250,19 +250,45 @@ export function OpeningLine() {
     <>
       <div
         ref={block}
-        className="pointer-events-none absolute inset-x-0 flex flex-col items-center justify-center px-6 text-center"
+        /* THE COPY SITS LEFT OF THE ROBOT ON A WIDE SCREEN, and that is the
+           picture's doing rather than a preference. The figure stands right of
+           centre and it is large: centred, the heading ran straight through it
+           and lost a letter of NEW HEIGHTS behind a shoulder. The line passing
+           behind the figure is the effect and was asked for, but a word the
+           reader cannot have is not an effect. Padding the right of the box
+           moving the box's right edge in moves the centre of the copy left
+           without moving the copy off centre within its own box, so the three
+           lines still balance on each other.
+
+           `right`, NOT PADDING AND NOT A TRANSFORM. Padding the box squeezed
+           the content instead of moving it: the heading carries max-w-[15ch]
+           and the sentence max-w-[42ch], so the first overflowed off the left
+           edge and the second collapsed to one word a line. A transform would
+           have worked and would have composed with the inline translateY the
+           hard way, because Tailwind v4 writes `translate` as its own property
+           rather than into `transform`. Moving the edge is the plain answer.
+
+           Below lg the picture is cropped to its middle and the figure is at
+           the edge of the frame, so there is nothing to move away from. */
+        className="pointer-events-none absolute inset-x-0 flex flex-col items-center justify-center px-6 text-center lg:right-[30vw]"
         style={{
           top: `${REST_Y * 100}%`,
           transform: "translateY(-50%)",
           willChange: "opacity",
         }}
       >
+        {/* Wider than it is tall and generous on both, because what it has to
+            cover is three lines of display type and the label over them, and a
+            wash that stops at the words has an edge. */}
+        <Wash w="128%" h="190%" alpha={0.66} />
         {/* The label goes as the line starts to travel: it belongs to the
             photograph, not to the sentence. It travels with the line rather than
             sitting in its own layer because laid out separately the two
             collided, and the label printed through the middle of the heading. */}
-        <Eyebrow innerRef={brow} />
-        <Line p={intro} fromRef={from} toRef={to} />
+        <span className="relative block">
+          <Eyebrow innerRef={brow} />
+          <Line p={intro} fromRef={from} toRef={to} />
+        </span>
       </div>
 
       {/* THE STANDFIRST IS ITS OWN LAYER, and that is not tidiness. The block
@@ -339,11 +365,43 @@ function Standfirst({ innerRef }: { innerRef?: React.RefObject<HTMLParagraphElem
          across the middle of all three lines. So this sits over him, at z-50,
          under the navbar at z-70. Depth is worth having on a sentence you read
          in one glance and not on one you read in three. */
-      className="font-grotesk pointer-events-none absolute inset-x-0 mx-auto max-w-[42ch] px-6 text-center text-[0.95rem] leading-[1.6] text-white/80 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)]"
+      className="font-grotesk pointer-events-none absolute inset-x-0 mx-auto max-w-[42ch] px-6 text-center text-[0.95rem] leading-[1.6] text-white/80 [text-shadow:0_2px_28px_rgba(0,0,0,0.85)] lg:right-[30vw]"
       style={{ top: "66%", transform: "translateY(-50%)", willChange: "opacity" }}
     >
-      {ASCENT_STANDFIRST}
+      <Wash w="150%" h="320%" alpha={0.62} />
+      <span className="relative">{ASCENT_STANDFIRST}</span>
     </p>
+  );
+}
+
+/** A soft dark wash, sized to whatever it is put behind.
+ *
+ *  THE PICTURE UNDER THE TYPE IS NOT ONE TONE AND THAT IS THE PROBLEM. The
+ *  cupola is a dark frame with bright glass in it: measured across the rows the
+ *  heading sits on, the mean luminance is 129 and between a quarter and a third
+ *  of each row is near-black window frame. So a line of white type crosses the
+ *  boundary three or four times and its contrast changes with it, which reads
+ *  as striped rather than as lit. The drop shadow answers brightness; it cannot
+ *  answer a background that keeps changing.
+ *
+ *  So the type brings its own ground. Feathered to nothing at the edges, so it
+ *  is a deepening of the picture rather than a panel laid on it, and inside the
+ *  same element as the words so it fades on whatever ramp they fade on and
+ *  there is never a wash on an empty frame. */
+function Wash({ w, h, alpha }: { w: string; h: string; alpha: number }) {
+  return (
+    <span
+      aria-hidden
+      className="pointer-events-none absolute left-1/2 top-1/2"
+      style={{
+        width: w,
+        height: h,
+        /* One `translate`, written the way Tailwind v4 writes it. A utility and
+           an inline transform compose here rather than one winning. */
+        translate: "-50% -50%",
+        background: `radial-gradient(closest-side, rgba(6,8,12,${alpha}), rgba(6,8,12,${(alpha * 0.62).toFixed(2)}) 52%, rgba(6,8,12,0) 100%)`,
+      }}
+    />
   );
 }
 

@@ -1,3 +1,5 @@
+import { CROP_X } from "@/components/hub/parallaxAssets";
+
 /** The sun in the opening photograph, and where it lands on screen.
  *
  *  MEASURED, NOT EYEBALLED, AND MEASURED AGAIN FOR THE NEW ART. The plate is
@@ -17,15 +19,22 @@
  *  arrives have to agree on where it is, to the pixel. That agreement lives
  *  here rather than being written out twice. */
 
-/** Its centre, as a fraction of the image. */
-export const SUN = { x: 0.6653, y: 0.3041 };
+/** Its centre, as a fraction of the image.
+ *
+ *  MEASURED, NOT PLACED. Every pixel over luminance 240, then the largest
+ *  connected blob of those, which is the sun rather than the lit rim of a
+ *  window or a highlight on the robot: 4,528 pixels in a 76 by 78 box,
+ *  centroid at 0.7662 across and 0.2929 down. The mountain's was 1,733 pixels
+ *  22 across at 0.6653 and 0.3041, so the hinge has barely moved sideways; the
+ *  sun is softer and larger, which the glow only benefits from. */
+export const SUN = { x: 0.7662, y: 0.2929 };
 
 /** The image it was measured in. */
 export const SUN_IMAGE = { w: 2000, h: 2000 };
 
 /** How far the back layer travels, as a percentage of its own height, across
  *  the opener. The original component's furthest rate, and the sun's. */
-export const BACK_RATE = 70;
+export const BACK_RATE = 8;
 
 /** Where the sun lands, in pixels, in a `w` by `h` box showing the image under
  *  `object-fit: cover`. Cover scales to the larger ratio and centres the
@@ -36,8 +45,12 @@ export function sunInBox(w: number, h: number) {
   const scale = Math.max(w / SUN_IMAGE.w, h / SUN_IMAGE.h);
   const drawnW = SUN_IMAGE.w * scale;
   const drawnH = SUN_IMAGE.h * scale;
+  /* CROP_X, NOT A HALF. The plates are drawn with object-position biased right
+     so a phone keeps the sun; the overflow is therefore not centred, and this
+     has to use the same number the picture does or it will point the next
+     scene at a sun that is not there. See parallaxAssets. */
   return {
-    x: (w - drawnW) / 2 + SUN.x * drawnW,
+    x: (w - drawnW) * CROP_X + SUN.x * drawnW,
     y: (h - drawnH) / 2 + SUN.y * drawnH,
   };
 }
