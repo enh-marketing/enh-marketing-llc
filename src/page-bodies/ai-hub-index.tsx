@@ -1,7 +1,7 @@
 "use client";
 
 import { Journey, type Chapter } from "@/components/hub/Journey";
-import { Ascent } from "@/components/hub/Ascent";
+import { Opening } from "@/components/hub/Opening";
 import { Horizon } from "@/components/hub/chapters/Horizon";
 import { System } from "@/components/hub/chapters/System";
 import { Uplink } from "@/components/hub/chapters/Uplink";
@@ -10,16 +10,12 @@ import { chart, horizon, system, uplink } from "@/content/ai-hub";
 
 /** The AI Hub landing page.
  *
- *  The mountain opens the page as an ordinary scrolling block, because the
- *  parallax it runs on is built from the block travelling past the viewport and
- *  stops dead the moment it is pinned. See the note in hub/Ascent.tsx. The
- *  journey, which does pin, begins underneath it.
- *
- *  THE AIRLOCK IS NOT HERE YET, AND CANNOT BE UNTIL IT CHANGES. It works by
- *  pinning the body and taking the wheel, which is the opposite of what a
- *  scroll-driven machine needs: two things cannot own the scroll. It becomes
- *  chapter two once its video is scrubbed from chapter progress instead of
- *  from its own lock, which deletes most of it rather than adding anything.
+ *  THE AIRLOCK OPENS IT, and it is the one place on this page where something
+ *  other than the chapter machine may own the scroll. It pins the body and
+ *  spends the wheel on a video's currentTime; first on the page there is
+ *  nothing above it to fight, and it hands the page back when the film runs
+ *  out. Anywhere else it is a second scroll controller. See hub/Opening for
+ *  what was here before it and how to get that back.
  *
  *  THERE IS NO BEAT WINDOW TO TUNE ANY MORE. This page used to pass one,
  *  narrowed so that no two headlines were ever legible at once, because every
@@ -57,14 +53,13 @@ const CHAPTERS: Chapter[] = [
 export function AiHubPage() {
   return (
     <main data-hub-story>
-      <Ascent />
+      <Opening />
       <Journey chapters={CHAPTERS} />
-      {/* THE OPENING LINE IS NOT HERE ANY MORE AND NEITHER IS THE ECHO. Both
-          were, because the line was fixed to the window so it could outlive the
-          opener, and a second copy of the near ground had to be painted over it
-          to put it back behind the man. The line finishes inside the opener
-          now, so it is one of that block's own parallax layers and the man in
-          front of it is the real one. See hub/Ascent. */}
+      {/* THE OPENING LINE IS NOT HERE EITHER. It lives in the airlock's own
+          title slot, which fades and blurs it out over the first third of the
+          scrub, and the sentence under it lives in the tagline slot, which
+          brings it up over the last fifth. Nothing about the copy measures the
+          page any more. See hub/HeroCopy. */}
     </main>
   );
 }

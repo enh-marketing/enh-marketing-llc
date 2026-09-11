@@ -8,7 +8,6 @@ import {
 } from "@/components/hub/OrbitalHeroSection";
 import { HANDOVER_X, HANDOVER_Y } from "@/components/hub/chartPath";
 import { type TrackCamera } from "@/components/hub/TrackChart";
-import { ENTRY_ON_SCREEN, sunScreenX } from "@/components/hub/sun";
 
 /** Chapter two: the system.
  *
@@ -382,16 +381,22 @@ export function System({
      the whole box moves the picture and everything drawn in it together, and
      nothing inside has to know.
 
-     IT RAMPS IN AFTER THE ARRIVAL, never during it. The opener hands the page
-     over on the Sun's exact position, so for the first sixth of the chapter the
-     scene has to be where the photograph left it, to the pixel. The lift starts
-     once that is done and is complete a tenth of the chapter later. */
+     IT RAMPS IN AFTER THE ARRIVAL, never during it. The scene has to be where
+     the opener left it for the first sixth of the chapter. The lift starts once
+     that is done and is complete a tenth of the chapter later. */
 
-  /* The handover point is where the photograph's sun actually lands on this
-     window, not the fraction it occupies in its own file. See sunScreenX. */
-  const entryX = typeof window === "undefined" ? 0.5 : sunScreenX(window.innerWidth, window.innerHeight);
-  const focusX = mix(cam.focusX, entryX - biasX, entry);
-  const focusY = mix(cam.focusY, ENTRY_ON_SCREEN.y, entry) - stageOffset;
+  /* WHERE THE OPENER LEAVES THE READER. The mountain left them looking at a sun
+     that sat off-centre in a square photograph, and where that landed on the
+     window depended on the window: object-fit: cover crops the sides, so on a
+     390x844 phone a sun at 0.665 of the picture showed at 0.858 of the screen
+     and a constant here would have started the system 75px off it. That is why
+     there was a sunScreenX to compute, and it went with the photograph.
+
+     The airlock ends outside the ship, centred, framed the same way at every
+     size. So this is the middle of the frame and it is a constant again. */
+  const ENTRY = { x: 0.5, y: 0 };
+  const focusX = mix(cam.focusX, ENTRY.x - biasX, entry);
+  const focusY = mix(cam.focusY, ENTRY.y, entry) - stageOffset;
   const lead = mix(cam.lead, 0, entry);
 
   return (
