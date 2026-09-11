@@ -94,7 +94,21 @@ const {
 
 const og = ogTitle ?? title;
 const ogDesc = ogDescription ?? description;
-const canonicalUrl = canonical ? new URL(canonical, Astro.site).href : undefined;
+/** NO TRAILING SLASH, INCLUDING ON THE HOMEPAGE.
+ *
+ *  `new URL("/", site).href` returns "https://enhmedia.com/" -- the URL spec
+ *  requires that slash, so the homepage was the one page whose canonical ended
+ *  in one while every other page's did not. Team direction on 2026-09-11 is to
+ *  publish the bare origin, so the slash is stripped and the whole site now
+ *  states its canonical the same way.
+ *
+ *  The strip is written for every path rather than special-cased to the root,
+ *  so the rule stays one rule. No other page is affected today: every `canonical`
+ *  prop on the site is a slashless path such as "/seo-company-in-dubai", and
+ *  `new URL` only appends a slash when the path is empty. */
+const canonicalUrl = canonical
+  ? new URL(canonical, Astro.site).href.replace(/\/$/, "")
+  : undefined;
 const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 ---
 
