@@ -80,24 +80,44 @@ export function Preloader({ onDone }: { onDone: () => void }) {
      *  it not respond for a second. That is the "freezes after the preloader"
      *  report, and the veil was the one thing that could have prevented it.
      *
-     *  So the exit asks for an idle callback first. The browser grants one when
-     *  the main thread has actually finished, so on a fast device this is the
-     *  same 2.4s it always was, and on a slow phone the veil holds a moment
-     *  longer and lifts onto a page that answers immediately. Waiting behind a
-     *  loading screen that is plainly still loading is not the same experience
-     *  as tapping a page that ignores you.
+     *  So the exit waits for the thread to be free -- see leaveWhenReady below
+     *  for how that is detected without the API Safari lacks. On a fast device
+     *  this is the same 2.4s it always was; on a slow phone the veil holds a
+     *  moment longer and lifts onto a page that answers immediately. Waiting
+     *  behind a loading screen that is plainly still loading is not the same
+     *  experience as tapping a page that ignores you.
      *
-     *  Every bound is kept. The idle request carries its own 1.2s timeout, and
-     *  `tHardLeave` hands over at 3.6s whatever happens, before the 4s
-     *  force-unmount -- so the veil can never outstay the safety net that
-     *  removes it, and `started` can never fail to fire. */
+     *  Every bound is kept: `tHardLeave` hands over at 3.6s whatever happens,
+     *  before the 4s force-unmount, so the veil can never outstay the safety
+     *  net that removes it and `started` can never fail to fire. */
+    let probeRaf = 0;
+
+    /** SAFARI HAS NO requestIdleCallback, SO READINESS IS MEASURED DIRECTLY.
+     *
+     *  This asked for an idle callback and fell back to leaving immediately if
+     *  there was none. An iPhone on iOS 18.7 reports `requestIdleCallback` as
+     *  false -- Safari still has not shipped it -- so on the device the whole
+     *  report was about, the gate was never anything but the fallback.
+     *
+     *  A blocked main thread cannot deliver an animation frame. So instead of
+     *  asking the browser whether it is idle, watch the frames: once three in a
+     *  row arrive inside ~34ms of each other, nothing long is running and the
+     *  page can be handed over. While the thread IS blocked no frame arrives at
+     *  all, which is precisely the wait wanted, and it needs no API that one
+     *  engine is missing. */
     const leaveWhenReady = () => {
       if (doneRef.current) return;
-      if (typeof window.requestIdleCallback === "function") {
-        window.requestIdleCallback(leave, { timeout: 1200 });
-      } else {
-        leave();
-      }
+      let prev = performance.now();
+      let calm = 0;
+      const probe = (now: number) => {
+        if (doneRef.current) return;
+        const delta = now - prev;
+        prev = now;
+        calm = delta < 34 ? calm + 1 : 0;
+        if (calm >= 3) leave();
+        else probeRaf = requestAnimationFrame(probe);
+      };
+      probeRaf = requestAnimationFrame(probe);
     };
 
     const controls = animate(0, 100, {
@@ -118,6 +138,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
 
     return () => {
       controls.stop();
+      cancelAnimationFrame(probeRaf);
       clearTimeout(tLeave);
       clearTimeout(tHardLeave);
       clearTimeout(tGone);

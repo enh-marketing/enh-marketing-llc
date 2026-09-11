@@ -51,6 +51,21 @@ const HREF = "/";
       thread. */}
   <main>
     <Experience client:load badges={badges} />
-    <HomeSections client:idle />
+    {/* client:visible, NOT client:idle, AND THE DEVICE SETTLED IT.
+        Astro builds client:idle on requestIdleCallback, and an iPhone on iOS
+        18.7 reports requestIdleCallback as false -- Safari still does not have
+        it. So the directive fell back to a timer and this tree's hydration
+        landed AFTER the veil rather than behind it. Measured on the phone with
+        ?perf=1: three frame gaps of 810ms, 872ms and 848ms, all after the veil
+        lifted, 2530ms of frozen page in a row.
+
+        IntersectionObserver is fifteen years old and works everywhere, so
+        client:visible is the directive that behaves the same on both engines.
+        This tree begins below the fold, which means its JavaScript now waits
+        until someone scrolls toward it -- and never competes with the hero's
+        own arrival. The markup is server-rendered either way, so nothing here
+        is missing or late; only its interactivity waits, and it waits for the
+        moment it is actually wanted. */}
+    <HomeSections client:visible />
   </main>
 </Base>
