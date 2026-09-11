@@ -1,0 +1,31 @@
+---
+import Base from "@/layouts/Base.astro";
+import { AiHubPage } from "@/page-bodies/ai-hub-index";
+
+/* THE AIRLOCK OPENING, ON A PAGE OF ITS OWN, so the openings can be compared
+   without one of them having to be live to be looked at. /ai-hub renders this
+   same opening today; when there is a second option it gets
+   /ai-hub/hero-<name> beside this one and the live page is a one line change
+   in page-bodies/ai-hub-index.
+
+   NOINDEX. It is the same story as /ai-hub behind the same opening, which is a
+   duplicate, and nobody should arrive here from a search result. It is in
+   sitemap.ts's BUILT set only because check:routes requires every real route to
+   be listed there, and it is excluded from the XML sitemap the same way
+   /ai-hub/film is. */
+
+const HREF = "/ai-hub/hero-airlock";
+---
+
+<!-- forceDark, as /ai-hub is. Without it the navigation renders light over a
+     page that is black from the first frame to the last, and the comparison is
+     no longer a comparison of openings. -->
+<Base
+  title="AI Hub, airlock opening | ENH Marketing"
+  description="ENH Marketing's AI Hub behind the airlock opening, kept for review beside the other openings."
+  canonical={HREF}
+  robots="noindex, nofollow"
+  forceDark
+>
+  <AiHubPage client:load />
+</Base>

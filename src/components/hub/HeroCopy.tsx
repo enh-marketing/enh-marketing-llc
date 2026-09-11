@@ -183,15 +183,21 @@ export function HeroHeadline() {
         {/* EACH GROUP IS AN inline-block, SO IT CANNOT BREAK INSIDE ITSELF. A
             break in the middle of NEW HEIGHTS would leave half of one weight at
             the end of a line and half at the start of the next, which reads as
-            a mistake rather than as a treatment. The <br> forces the three
-            lines on a phone; above sm the groups flow and the measure decides.
-            A space left at the end of a line is dropped by the browser before
-            the line is centred, so the ones in front of the breaks cost
-            nothing. */}
+            a mistake rather than as a treatment.
+
+            THE BREAKS ARE UNCONDITIONAL NOW AND THEY WERE A PHONE THING. Above
+            sm the groups used to flow and the measure decided, which happened
+            to give three lines at 1280 and at 1600 and was luck rather than
+            typesetting: a wider window, a different face, or a longer word and
+            it becomes two lines with the weights landing mid-line. Asked for
+            three lines on the desktop as well, so it is set rather than
+            observed. A space left at the end of a line is dropped by the
+            browser before the line is centred, so the ones in front of the
+            breaks cost nothing. */}
         <span className="inline-block font-extrabold uppercase">
           <WordReveal text={OPEN} p={p} from={0} total={WORDS} />
         </span>{" "}
-        <br aria-hidden className="sm:hidden" />
+        <br aria-hidden />
         {/* 500 RATHER THAN 600, AND THE FONT IS THE REASON. Cabinet Grotesk
             ships 500, 700, 800 and 900 and has no 600: asked for 600 the
             browser matches upward to 700, which beside the 800 either side is a
@@ -199,7 +205,7 @@ export function HeroHeadline() {
         <span className="inline-block font-medium uppercase">
           <WordReveal text={MIDDLE} p={p} from={1} total={WORDS} />
         </span>{" "}
-        <br aria-hidden className="sm:hidden" />
+        <br aria-hidden />
         <span className="inline-block font-extrabold uppercase">
           <span style={wordStyle(wordLit(p, WORDS - 2, WORDS))}>{JOIN}</span>{" "}
           {/* BOTH WORDS ARE RED, asked for, and it is the page's own carnelian

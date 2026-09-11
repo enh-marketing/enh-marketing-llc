@@ -28,6 +28,10 @@ import * as studies from "@/content/case-studies";
  *  PRIORITIES ARE NOT SET EITHER, for the same reason: they are ignored, and a
  *  hand-assigned ranking of your own pages is a claim rather than information.
  *
+ *  THE OPENINGS UNDER /ai-hub/hero-* ARE THE SAME STORY BEHIND DIFFERENT FIRST
+ *  SCREENS, kept so they can be compared. They are duplicates of /ai-hub by
+ *  every measure a crawler has, and they carry noindex themselves.
+ *
  *  URLS ARE WRITTEN EXACTLY AS THE CANONICALS ARE, with no trailing slash. The
  *  layout emits `https://enhmedia.com/ai-hub`, and a sitemap that offered
  *  `/ai-hub/` would be naming a second URL for the same page and asking a
@@ -35,9 +39,10 @@ import * as studies from "@/content/case-studies";
 
 const SITE = "https://enhmedia.com";
 
-/** noindex, and therefore not ours to advertise. It carries the tag itself in
- *  src/pages/ai-hub/film.astro; this keeps the two from disagreeing. */
-const EXCLUDE = new Set(["/ai-hub/film"]);
+/** noindex, and therefore not ours to advertise. Each carries the tag itself,
+ *  in src/pages/ai-hub/film.astro and src/pages/ai-hub/hero-airlock.astro;
+ *  this keeps the two statements from disagreeing. */
+const EXCLUDE = new Set(["/ai-hub/film", "/ai-hub/hero-airlock"]);
 
 export const GET: APIRoute = () => {
   const routes = [

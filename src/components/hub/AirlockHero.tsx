@@ -108,6 +108,9 @@ export interface AirlockHeroProps {
   theme?: AirlockTheme;
   /** Label for the control that hands the page back without scrubbing. */
   skipLabel?: string;
+  /** The scrub, 0 to 1 across scrubDistance and holdDistance together, on
+   *  every painted frame. A read: nothing here waits on what it is used for. */
+  onProgress?: (p: number) => void;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -153,6 +156,7 @@ export default function AirlockHero({
   holdDistance = 1100,
   theme = "vacuum",
   skipLabel = "Skip intro",
+  onProgress,
   className,
   style,
 }: AirlockHeroProps) {
@@ -164,6 +168,15 @@ export default function AirlockHero({
   const barRef = useRef<HTMLDivElement>(null);
   const scrimRef = useRef<HTMLDivElement>(null);
   const releaseRef = useRef<() => void>(() => {});
+  /* The effect is keyed to the two distances and would otherwise close over
+     whichever callback was passed on the render that set it up. Kept current
+     in an effect rather than written during render, which is a ref mutation
+     the linter refuses and React's own rules do too; declared above the main
+     effect so it is already up to date before the first frame is painted. */
+  const progressRef = useRef(onProgress);
+  useEffect(() => {
+    progressRef.current = onProgress;
+  }, [onProgress]);
   const [ready, setReady] = useState(false);
 
   const palette = PALETTES[theme];
@@ -262,6 +275,7 @@ export default function AirlockHero({
       if (barRef.current) {
         barRef.current.style.transform = `scaleX(${p})`;
       }
+      progressRef.current?.(p);
     }
 
     /* --- The lock ------------------------------------------------------ */
@@ -519,7 +533,7 @@ export default function AirlockHero({
           letterSpacing: "0.3em",
         }}
       >
-        <span>{scrollHint}</span>
+        {scrollHint ? <span>{scrollHint}</span> : null}
         <svg
           width="14"
           height="18"

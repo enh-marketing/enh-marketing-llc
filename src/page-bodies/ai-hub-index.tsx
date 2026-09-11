@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Journey, type Chapter } from "@/components/hub/Journey";
 import { Opening } from "@/components/hub/Opening";
 import { Horizon } from "@/components/hub/chapters/Horizon";
@@ -16,6 +17,20 @@ import { chart, horizon, system, uplink } from "@/content/ai-hub";
  *  nothing above it to fight, and it hands the page back when the film runs
  *  out. Anywhere else it is a second scroll controller. See hub/Opening for
  *  what was here before it and how to get that back.
+ *
+ *  IT IS NOT IN THE FLOW. The opening is fixed over the page rather than being
+ *  the first block of it, so the journey's first chapter is at the top of the
+ *  document from the moment it loads and is simply covered. The cover is
+ *  pushed through the screen and faded off over the last stretch of the scrub,
+ *  which is how the hatch opens on to the next scene instead of the next scene
+ *  scrolling up underneath it. Nothing here has to know: the journey is the
+ *  whole document either way.
+ *
+ *  THE HERO IS A PROP SO THE OPTIONS CAN BE COMPARED SIDE BY SIDE. Pass one and
+ *  the page is the same story behind a different opening; pass nothing and it
+ *  is the airlock, which is what /ai-hub renders. Each option gets a page of
+ *  its own under /ai-hub/hero-*, noindex, listed in sitemap.ts only because
+ *  check:routes will not build a route it has not been told about.
  *
  *  THERE IS NO BEAT WINDOW TO TUNE ANY MORE. This page used to pass one,
  *  narrowed so that no two headlines were ever legible at once, because every
@@ -50,10 +65,10 @@ const CHAPTERS: Chapter[] = [
   { id: "chart", viewports: 6, Scene: Chart, beats: chart },
   { id: "horizon", viewports: 4, Scene: Horizon, beats: horizon },
 ];
-export function AiHubPage() {
+export function AiHubPage({ hero }: { hero?: ReactNode } = {}) {
   return (
     <main data-hub-story>
-      <Opening />
+      {hero ?? <Opening />}
       <Journey chapters={CHAPTERS} />
       {/* THE OPENING LINE IS NOT HERE EITHER. It lives in the airlock's own
           title slot, which fades and blurs it out over the first third of the
