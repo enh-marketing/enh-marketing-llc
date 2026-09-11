@@ -19,9 +19,9 @@ export type Faq = {
 };
 
 export const meta = {
-  title: "Performance Marketing Agency in Dubai | ENH Marketing",
+  title: "Performance Marketing Agency in Dubai | Results-Driven Growth",
   description:
-    "Drive measurable growth with data-driven performance marketing campaigns designed to increase leads, conversions, and revenue for your Dubai business.",
+    "Grow your business with a performance marketing agency in Dubai. Drive qualified leads, boost conversions and maximize ROI with data-driven campaigns.",
 };
 
 export const hero = {

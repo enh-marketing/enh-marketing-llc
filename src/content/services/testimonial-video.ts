@@ -29,9 +29,9 @@ import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 import type { TrackStage } from "@/components/service/StageTrack";
 
 export const meta = {
-  title: "Testimonial Video Production in Dubai | ENH Marketing",
+  title: "Testimonial Video Production Dubai – Showcase Real Stories",
   description:
-    "Record genuine client and customer stories through carefully prepared interviews, supporting footage and branded edits produced for your website, sales material, social media and advertising.",
+    "ENH provides high-quality testimonial video production services in Dubai, UAE. Get stunning customer & client testimonial videos to boost credibility.",
 };
 
 export const hero = {

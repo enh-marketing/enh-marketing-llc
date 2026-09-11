@@ -28,9 +28,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Ecommerce SEO Services in Dubai | ENH Marketing",
+  title: "Ecommerce SEO Agency in Dubai | Boost Your Online Sales",
   description:
-    "Improve how shoppers find your categories and products through stronger store architecture, useful product content, technical SEO and accurate product data.",
+    "Boost your online store's sales with our eCommerce SEO agency in Dubai. Optimize your website, drive traffic, and increase conversions.",
 };
 
 export const hero = {

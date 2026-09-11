@@ -13,9 +13,9 @@ import type { Capability } from "@/content/services/meta-ads";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "AEO & GEO Services in Dubai | AI Search Visibility | ENH Marketing",
+  title: "AEO & GEO Optimization Services in Dubai | Expert Agency",
   description:
-    "See how your brand appears across Google AI Overviews, ChatGPT, Perplexity, Gemini, and Copilot, then strengthen the content, technical access, and third-party signals that influence those answers.",
+    "Improve AI search visibility with AEO and GEO optimization services in Dubai. Get expert strategies to boost brand visibility across AI search platforms.",
 };
 
 export const hero = {

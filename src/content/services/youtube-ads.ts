@@ -12,9 +12,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "YouTube Ads Agency in Dubai | ENH Marketing",
+  title: "YouTube Advertising Agency Dubai | YouTube Ads Services",
   description:
-    "Run YouTube campaigns through Google Ads with shared audiences, conversion tracking, creative guidance and a clear assessment of whether your existing video is ready.",
+    "Reach your target audience with YouTube advertising services in Dubai. Drive brand awareness, engagement and leads with targeted video ad campaigns.",
 };
 
 export const hero = {

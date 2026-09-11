@@ -28,9 +28,9 @@
 import type { Faq } from "@/content/services/performance-marketing";
 
 export const meta = {
-  title: "Ecommerce Growth Marketing Agency in Dubai | ENH Marketing",
+  title: "E-commerce Digital Marketing Services in Dubai | SEO, PPC & Social Media Advertising",
   description:
-    "Build stronger visibility, attract customers with genuine buying intent and turn more of your ecommerce traffic into sales, enquiries and repeat business.",
+    "Turn clicks into customers with a performance-driven ecommerce digital marketing services in Dubai. Expert SEO, ecommerce PPC management, and paid social built to scale B2B & B2C brands.",
 };
 
 /* ---------------------------------------------------------------- banner --- */

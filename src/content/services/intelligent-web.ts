@@ -30,10 +30,10 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "AI Website Development in Dubai | ENH Marketing",
+  title: "AI Website Development Company Dubai | AI Web Services",
   // The banner's first sentence, verbatim.
   description:
-    "ENH Marketing designs and develops intelligent websites for UAE businesses that personalise content, display live information and use a clear structure.",
+    "Build smarter websites with AI website development services in Dubai. Get scalable, high-performing AI-powered websites designed for business growth.",
 };
 
 export const hero = {

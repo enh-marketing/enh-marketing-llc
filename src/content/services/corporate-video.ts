@@ -27,9 +27,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Corporate Video Production in Dubai | ENH Marketing",
+  title: "Expert Corporate Video Production Company in Dubai, UAE",
   description:
-    "Create company profile films, training videos, brand stories, explainers, testimonials and event videos with every shoot planned around its audience, purpose and distribution.",
+    "Looking for a reliable corporate video production company in Dubai, UAE? Our specialized services help enhance your brand’s presence. Free consultation.",
 };
 
 export const hero = {

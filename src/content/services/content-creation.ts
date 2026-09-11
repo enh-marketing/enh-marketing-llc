@@ -12,9 +12,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Social Media Content Creation in Dubai | ENH Marketing",
+  title: "Social Media Content Creation Agency | Services & Packages",
   description:
-    "Plan, film, photograph, design, and write original social content through one connected production process, with clear deliverables and platform-ready edits.",
+    "Create engaging social media content with expert content creation services, flexible packages and creative strategies designed to grow your brand online.",
 };
 
 export const hero = {

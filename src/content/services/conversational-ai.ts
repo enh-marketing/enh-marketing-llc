@@ -28,10 +28,10 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { PinnedItem } from "@/components/service/PinnedExplorer";
 
 export const meta = {
-  title: "Conversational AI Services in Dubai | ENH Marketing",
+  title: "Conversational AI Services | AI Solutions for Businesses",
   // The banner's first sentence, verbatim.
   description:
-    "ENH Marketing builds AI chatbots, voice agents and customer service systems for UAE businesses. Every project starts with a paid diagnostic.",
+    "Enhance customer experiences with conversational AI services. Automate interactions, provide instant support and deliver smarter AI-powered communication.",
 };
 
 export const hero = {

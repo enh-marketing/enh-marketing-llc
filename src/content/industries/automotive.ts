@@ -42,9 +42,9 @@
 import type { Faq } from "@/content/services/performance-marketing";
 
 export const meta = {
-  title: "Automotive Digital Marketing Agency in Dubai | ENH Marketing",
+  title: "Automotive Digital Marketing Services in Dubai | SEO, PPC & Social Media",
   description:
-    "Generate qualified enquiries, test-drive requests, showroom visits and service bookings through automotive SEO, paid advertising, social media and local search.",
+    "Convert searches into customers with expert automotive digital marketing services including SEO, PPC, social media management, and advertising for dealerships and auto shops.",
 };
 
 /* ---------------------------------------------------------------- banner --- */

@@ -17,9 +17,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "On-Page SEO Services in Dubai | ENH Marketing",
+  title: "On-Page SEO Services Dubai | SEO Agency & Optimisation",
   description:
-    "Strengthen existing pages with clearer titles, headings, content structure, internal links and schema, guided by a page-by-page action plan.",
+    "Boost rankings with on-page SEO services in Dubai, including meta tag optimisation, content improvements, technical SEO and on-page optimisation.",
 };
 
 export const hero = {

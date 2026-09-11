@@ -246,9 +246,9 @@ export function holdings(project: Project): string[] {
 // Nothing here makes a claim about any client.
 
 export const meta = {
-  title: "Portfolio | ENH Marketing, Dubai",
+  title: "Digital Marketing Portfolio Dubai | ENH Marketing",
   description:
-    "Thirty-five projects from ENH Marketing in Dubai, filed under digital marketing, video production and web design. The films, the websites and the campaign work themselves.",
+    "Explore ENH Marketing’s portfolio of digital marketing, web design and video production projects, showcasing creative solutions and business results.",
   ogTitle: "Portfolio — ENH Marketing",
   ogDescription:
     "The work itself: thirty-five UAE projects across digital marketing, video production and web design, each with the film, the site or the artwork it produced.",

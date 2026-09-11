@@ -33,10 +33,10 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "AI Search Visibility Services in Dubai | ENH Marketing",
+  title: "AI Search Visibility Services in Dubai | AEO & GEO",
   // The banner's first sentence, verbatim.
   description:
-    "ENH Marketing helps UAE brands improve how they appear in AI-generated search results.",
+    "Improve your AI search presence with AI search visibility services in Dubai. Boost brand visibility and citations across AI-powered search platforms.",
 };
 
 export const hero = {

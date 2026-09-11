@@ -30,9 +30,9 @@ import type { TrackStage } from "@/components/service/StageTrack";
 export type Sector = { label: string; parts: string[] };
 
 export const meta = {
-  title: "Website Design & Development in Dubai | ENH Marketing",
+  title: "Best Web Design Company in Dubai |  ENH Marketing LLC",
   description:
-    "Build a fast, responsive website that represents your brand clearly, supports your marketing and gives visitors an easier route to enquire or buy.",
+    "ENH is a professional Web Design Company in Dubai, offering amazing web designs while being cost effective. Call Us Today!",
 };
 
 export const hero = {

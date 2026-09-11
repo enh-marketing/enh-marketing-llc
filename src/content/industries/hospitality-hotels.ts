@@ -35,9 +35,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GuestSurfaceKind } from "@/components/service/GuestSurface";
 
 export const meta = {
-  title: "Hospitality Digital Marketing Agency in Dubai | ENH Marketing",
+  title: "Hospitality Digital Marketing Services | Restaurant, Hotels & Resorts SEO, PPC, Social Media",
   description:
-    "Increase direct bookings, restaurant reservations and guest enquiries through hospitality SEO, paid advertising, social media and conversion-focused digital campaigns.",
+    "Grow your restaurant, hotel, or resort with expert hospitality digital marketing services specializing in SEO, social media, and performance marketing. Get a quote!",
 };
 
 /* ---------------------------------------------------------------- banner --- */

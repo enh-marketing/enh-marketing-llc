@@ -39,10 +39,10 @@
 import type { Faq } from "@/content/services/performance-marketing";
 
 export const meta = {
-  title: "TikTok Ads Agency in Dubai | Spark Ads & Creative Production | ENH Marketing",
+  title: "TikTok Advertising Agency Dubai | TikTok Ads Services",
   // Assembled from the document's own second paragraph.
   description:
-    "ENH Marketing manages TikTok advertising for UAE brands. Campaign structure, creative production at the volume TikTok requires, Spark Ads, audience setup, pixel and Events API tracking, and reporting.",
+    "Grow your brand with TikTok advertising services in Dubai. Reach the right audience, drive engagement and generate leads with targeted TikTok ad campaigns.",
 };
 
 export const hero = {

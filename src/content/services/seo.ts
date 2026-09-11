@@ -29,9 +29,9 @@ import type { TrackStage } from "@/components/service/StageTrack";
 export type Sector = { label: string; parts: string[] };
 
 export const meta = {
-  title: "SEO Services in Dubai | ENH Marketing",
+  title: "Best SEO Agency in Dubai UAE | #1 SEO Company in Dubai",
   description:
-    "Improve your search visibility with technical SEO, content, local optimisation and search strategies built around the customers your business wants to reach.",
+    "Looking for the best SEO company in Dubai? Our expert SEO agency in Dubai delivers proven SEO services to increase rankings, traffic, and ROI.",
 };
 
 export const hero = {

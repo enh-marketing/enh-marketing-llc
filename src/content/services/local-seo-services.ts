@@ -36,9 +36,9 @@ import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 import type { PromiseMark } from "@/components/service/LocalPromiseIcon";
 
 export const meta = {
-  title: "Local SEO Services in Dubai | ENH Marketing",
+  title: "Local SEO company in Dubai, UAE, Al Garhoud | Local SEO Services",
   description:
-    "Improve how your business appears across Google Search and Maps through an accurate Business Profile, relevant location pages, local content, reviews and measurable conversion tracking.",
+    "Looking for the best local seo services in Dubai? Trust the #1 local SEO agency to deliver proven results with expert SEO services in UAE. Contact now!",
 };
 
 export const hero = {

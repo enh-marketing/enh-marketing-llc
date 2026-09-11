@@ -31,9 +31,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Explainer Video Production in Dubai | ENH Marketing",
+  title: "Explainer Video Production Company in Dubai | Corporate Explainer Video Production",
   description:
-    "Explain a product, service, platform or process through clear scripts, storyboards, animation, motion graphics, voiceover and channel-ready edits.",
+    "Looking for a top explainer video production company in Dubai? We specialize in corporate explainer videos that simplify concepts and engage audiences. Let's bring your story to life!",
 };
 
 export const hero = {

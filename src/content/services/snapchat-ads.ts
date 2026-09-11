@@ -14,9 +14,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Snapchat Ads Agency in Dubai | ENH Marketing",
+  title: "Snapchat Advertising Dubai | Snapchat Ads Agency & Services",
   description:
-    "Reach younger audiences across the UAE and Saudi Arabia through full-screen video, AR Lenses, geofilters and campaigns measured with Snap Pixel tracking.",
+    "Reach your target audience with Snapchat advertising services in Dubai. Drive engagement, leads and sales through targeted Snapchat ads and campaigns.",
 };
 
 export const hero = {

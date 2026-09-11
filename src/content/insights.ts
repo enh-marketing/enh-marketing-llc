@@ -376,9 +376,9 @@ export function matches(note: Note, query: string): boolean {
 // so the reader still arrives at the words they clicked.
 
 export const meta = {
-  title: "Insights | ENH Marketing, Dubai",
+  title: "Digital Marketing Blog Dubai | SEO & Marketing Insights",
   description:
-    "Field notes from fifteen years of digital marketing in the UAE — SEO, paid media, AI and the strategy behind them, from the ENH Marketing team in Dubai.",
+    "Explore the ENH Marketing blog for the latest SEO, digital marketing, AI, PPC, social media and web development insights, trends and strategies.",
   ogTitle: "Insights — ENH Marketing",
   ogDescription:
     "The ENH archive: what we have learned building search, paid media and AI systems for brands across the UAE.",

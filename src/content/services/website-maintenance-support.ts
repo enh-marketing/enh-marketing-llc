@@ -27,9 +27,9 @@
 import type { Faq } from "@/content/services/performance-marketing";
 
 export const meta = {
-  title: "Website Maintenance Services in Dubai | ENH Marketing",
+  title: "Web Support Services in Dubai UAE | ENH Marketing LLC",
   description:
-    "Keep your website updated, secure and working properly with ongoing technical support from ENH Marketing.",
+    "Elevate your online presence with Dubai's finest web support services. Unleash your website's true potential!",
 };
 
 export const hero = {

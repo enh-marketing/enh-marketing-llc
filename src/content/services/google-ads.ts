@@ -24,9 +24,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Google Ads Agency in Dubai | Search, Shopping & Performance Max | ENH Marketing",
+  title: "Top Google Adwords Company in Dubai | Boost ROI Today",
   description:
-    "ENH Marketing manages Google Ads for businesses across the UAE. Conversion tracking is built around the actions that matter to your business, and reporting leads with cost per acquisition.",
+    "Get powerful Google Adwords services in Dubai to drive leads, sales & growth. Maximize ROI with our expert PPC team. Start your campaign today!",
 };
 
 export const hero = {

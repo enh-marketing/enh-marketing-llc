@@ -47,9 +47,9 @@
 import type { Faq } from "@/content/services/performance-marketing";
 
 export const meta = {
-  title: "Healthcare Digital Marketing Agency in Dubai | ENH Marketing",
+  title: "Healthcare Digital Marketing Services for Clinics & Hospitals | SEO, PPC & Social Media",
   description:
-    "Increase treatment visibility, patient enquiries and appointment bookings through healthcare SEO, paid advertising, social media and local search.",
+    "Partner with a leading healthcare digital marketing company. We specialize in SEO, PPC, and social media for clinics & hospitals. Contact us today for results-driven growth!",
 };
 
 /* ---------------------------------------------------------------- banner --- */

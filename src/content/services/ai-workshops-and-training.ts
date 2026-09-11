@@ -21,10 +21,10 @@
 import type { Faq } from "@/content/services/performance-marketing";
 
 export const meta = {
-  title: "AI Workshops & Training in Dubai | ENH Marketing",
+  title: "AI Training Workshops Dubai | Practical AI Training",
   // The banner's first sentence, verbatim.
   description:
-    "ENH Marketing runs practical corporate AI training in Dubai and across the UAE. Each session is built around the team’s actual workflows, tools and responsibilities.",
+    "Build practical AI skills with AI training workshops in Dubai. Learn AI tools, automation and real-world applications through expert-led training sessions.",
 };
 
 export const hero = {

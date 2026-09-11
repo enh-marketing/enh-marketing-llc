@@ -27,9 +27,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "Interview Video Production in Dubai | ENH Marketing",
+  title: "Interview Video Production in Dubai – Expert Services",
   description:
-    "Film leadership interviews, expert insights, employee stories, training content and video podcasts with every speaker prepared to give clear, natural answers on camera.",
+    "Looking for expert interview video production in Dubai? We offer high-quality filming, editing, corporate interviews, documentaries, and promotional content. Contact now!",
 };
 
 export const hero = {

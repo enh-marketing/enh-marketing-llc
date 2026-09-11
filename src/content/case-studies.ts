@@ -241,9 +241,9 @@ export function describe(study: Study, limit = 155): string {
 // figure.
 
 export const meta = {
-  title: "Case Studies | ENH Marketing, Dubai",
+  title: "Digital Marketing Case Studies Dubai | ENH Marketing",
   description:
-    "Twenty-two client engagements from ENH Marketing in Dubai, each with the figures the work actually produced. Search, local, paid media and websites across industrial supply, IT, retail, healthcare and more.",
+    "Explore ENH Marketing case studies featuring successful SEO, PPC, web design and digital marketing campaigns that deliver measurable business results.",
   ogTitle: "Case Studies — ENH Marketing",
   ogDescription:
     "The work, with its numbers attached: twenty-two ENH client engagements across the UAE, each recorded as the brief, the approach and what changed.",

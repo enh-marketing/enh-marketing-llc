@@ -49,9 +49,9 @@ import type { Faq } from "@/content/services/performance-marketing";
  *  Dubai" plus the legal name, the description from the banner paragraph and
  *  the founding year. Nothing is claimed here that the page does not say. */
 export const meta = {
-  title: "About ENH Marketing | Digital Marketing Agency in Dubai",
+  title: "About ENH Marketing | 15 Years of Digital Expertise",
   description:
-    "Established in 2011, ENH Marketing is a digital agency in Dubai serving national and global brands. A certified Google Partner with a multi-disciplined team.",
+    "Discover ENH Marketing with 15 years of experience delivering digital growth, SEO, and performance-driven strategies for businesses across industries.",
 };
 
 /* ---------------------------------------------------------------- banner --- */

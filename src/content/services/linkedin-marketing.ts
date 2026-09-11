@@ -12,9 +12,9 @@ import type { Faq } from "@/content/services/performance-marketing";
 import type { GlyphVariant } from "@/components/service/CapabilityGlyph";
 
 export const meta = {
-  title: "LinkedIn Marketing Agency in Dubai | ENH Marketing",
+  title: "Instagram Marketing Agency Dubai | Instagram Marketing",
   description:
-    "Build a stronger B2B presence through company page management, founder-led content, targeted LinkedIn Ads, personalised outreach and reporting tied to meetings and pipeline.",
+    "Grow your brand with an Instagram marketing agency in Dubai. Build engagement, reach targeted audiences and generate leads with effective Instagram strategies.",
 };
 
 export const hero = {
