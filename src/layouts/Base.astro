@@ -187,15 +187,16 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
     <script is:inline>
       if (location.search.indexOf("perf") !== -1) {
         (function () {
-          var gaps = [], last = performance.now(), marks = [], veil = null;
+          const gaps = [], marks = [];
+          let last = performance.now(), veil = null;
           function frame(now) {
-            var d = now - last;
+            const d = now - last;
             if (d > 100) gaps.push({ at: Math.round(last), ms: Math.round(d) });
             last = now;
-            var c = document.querySelector('div[class*="z-[100]"]');
+            const c = document.querySelector('div[class*="z-[100]"]');
             if (c && veil === null) {
-              var t = getComputedStyle(c).transform;
-              var y = t && t.indexOf("matrix") === 0 ? parseFloat(t.split(",")[5]) : 0;
+              const t = getComputedStyle(c).transform;
+              const y = t && t.indexOf("matrix") === 0 ? parseFloat(t.split(",")[5]) : 0;
               if (y < -2) { veil = Math.round(now); marks.push("veil lifts " + veil + "ms"); }
             }
             requestAnimationFrame(frame);
@@ -204,10 +205,10 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 
           addEventListener("load", function () {
             setTimeout(function () {
-              var n = performance.getEntriesByType("navigation")[0] || {};
-              var after = gaps.filter(function (g) { return veil !== null && g.at >= veil; });
-              var worst = gaps.slice().sort(function (a, b) { return b.ms - a.ms; })[0];
-              var box = document.createElement("div");
+              const n = performance.getEntriesByType("navigation")[0] || {};
+              const after = gaps.filter(function (g) { return veil !== null && g.at >= veil; });
+              const worst = gaps.slice().sort(function (a, b) { return b.ms - a.ms; })[0];
+              const box = document.createElement("div");
               box.setAttribute("style",
                 "position:fixed;inset:auto 8px 8px 8px;z-index:2147483647;background:#000;color:#0f0;" +
                 "font:12px/1.45 ui-monospace,Menlo,monospace;padding:10px 12px;border:1px solid #0f0;" +
